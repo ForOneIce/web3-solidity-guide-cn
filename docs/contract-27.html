@@ -1,0 +1,748 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YieldFarming - 收益农场 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第27天 - 收益农场</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 27 天 🌾</div>
+                    <h1>YieldFarming - 收益农场</h1>
+                    <p class="subtitle">实现流动性挖矿和质押奖励机制</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--expert);">
+                        🏆 专家
+                    </div>
+                    <span class="tag">质押</span>
+                    <span class="tag">奖励</span>
+                    <span class="tag">流动性挖矿</span>
+                    <span class="tag">时间加权</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握收益农场和质押奖励机制</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>质押合约、奖励计算、时间加权分配</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>70分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★★★</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">🌾 收益农场原理</div>
+                <p>收益农场（Yield Farming）是DeFi中的核心机制，用户通过质押代币获得奖励：</p>
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #155724;">✅ 基本流程</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px; color: #155724;">
+                        <li>用户质押代币到合约</li>
+                        <li>合约记录质押数量和时间</li>
+                        <li>根据时间和数量计算奖励</li>
+                        <li>用户可随时领取奖励</li>
+                        <li>用户可取回质押的代币</li>
+                    </ol>
+                </div>
+                <p><strong>奖励计算公式：</strong></p>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center;">
+                    <code style="font-size: 1.2rem; color: #856404;">
+                        奖励 = 质押数量 × 奖励率 × 时间
+                    </code>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">⏰ 时间加权奖励系统</div>
+                <p>智能的奖励分配需要精确的时间计算：</p>
+                <pre><code class="language-solidity">struct StakerInfo {
+    uint256 stakedAmount;      // 质押数量
+    uint256 rewardDebt;        // 累积未领取奖励
+    uint256 lastUpdateTime;    // 上次更新时间
+}
+
+function updateRewards(address user) internal {
+    StakerInfo storage staker = stakers[user];
+    
+    if (staker.stakedAmount > 0) {
+        uint256 pending = pendingRewards(user);
+        staker.rewardDebt += pending;
+    }
+    
+    staker.lastUpdateTime = block.timestamp;
+}</code></pre>
+                <p><strong>关键机制：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><strong>实时更新：</strong>每次操作都更新奖励</li>
+                    <li><strong>累积计算：</strong>奖励不断累积到rewardDebt</li>
+                    <li><strong>时间精度：</strong>使用区块时间戳计算</li>
+                    <li><strong>Gas优化：</strong>只在必要时计算</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔒 安全机制设计</div>
+                <p>收益农场合约需要多重安全保护：</p>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #721c24;">⚠️ 潜在风险</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #721c24;">
+                        <li>重入攻击</li>
+                        <li>奖励池耗尽</li>
+                        <li>时间操纵</li>
+                        <li>整数溢出</li>
+                    </ul>
+                </div>
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #155724;">🛡️ 防护措施</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #155724;">
+                        <li>ReentrancyGuard防重入</li>
+                        <li>奖励池余额检查</li>
+                        <li>紧急提取功能</li>
+                        <li>SafeMath防溢出</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 收益农场合约</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+interface IERC20Metadata {
+    function decimals() external view returns (uint8);
+}
+
+contract YieldFarming is ReentrancyGuard {
+    IERC20 public stakingToken;
+    IERC20 public rewardToken;
+    uint256 public rewardRatePerSecond;
+    address public owner;
+    
+    uint8 public stakingTokenDecimals;
+    
+    struct StakerInfo {
+        uint256 stakedAmount;
+        uint256 rewardDebt;
+        uint256 lastUpdateTime;
+    }
+    
+    mapping(address => StakerInfo) public stakers;
+    
+    event Staked(address indexed user, uint256 amount);
+    event Unstaked(address indexed user, uint256 amount);
+    event RewardClaimed(address indexed user, uint256 reward);
+    event EmergencyWithdraw(address indexed user, uint256 amount);
+    event RewardRefilled(uint256 amount);
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
+        _;
+    }
+    
+    constructor(
+        address _stakingToken,
+        address _rewardToken,
+        uint256 _rewardRatePerSecond
+    ) {
+        require(_stakingToken != address(0), "Invalid staking token");
+        require(_rewardToken != address(0), "Invalid reward token");
+        require(_rewardRatePerSecond > 0, "Invalid reward rate");
+        
+        stakingToken = IERC20(_stakingToken);
+        rewardToken = IERC20(_rewardToken);
+        rewardRatePerSecond = _rewardRatePerSecond;
+        owner = msg.sender;
+        
+        stakingTokenDecimals = IERC20Metadata(_stakingToken).decimals();
+    }
+    
+    // 质押代币
+    function stake(uint256 amount) external nonReentrant {
+        require(amount > 0, "Cannot stake 0");
+        
+        updateRewards(msg.sender);
+        
+        stakingToken.transferFrom(msg.sender, address(this), amount);
+        stakers[msg.sender].stakedAmount += amount;
+        
+        emit Staked(msg.sender, amount);
+    }
+    
+    // 取消质押
+    function unstake(uint256 amount) external nonReentrant {
+        require(amount > 0, "Cannot unstake 0");
+        require(stakers[msg.sender].stakedAmount >= amount, "Insufficient balance");
+        
+        updateRewards(msg.sender);
+        
+        stakers[msg.sender].stakedAmount -= amount;
+        stakingToken.transfer(msg.sender, amount);
+        
+        emit Unstaked(msg.sender, amount);
+    }
+    
+    // 领取奖励
+    function claimRewards() external nonReentrant {
+        updateRewards(msg.sender);
+        
+        uint256 reward = stakers[msg.sender].rewardDebt;
+        require(reward > 0, "No rewards");
+        
+        stakers[msg.sender].rewardDebt = 0;
+        rewardToken.transfer(msg.sender, reward);
+        
+        emit RewardClaimed(msg.sender, reward);
+    }
+    
+    // 紧急提取（放弃奖励）
+    function emergencyWithdraw() external nonReentrant {
+        uint256 amount = stakers[msg.sender].stakedAmount;
+        require(amount > 0, "No stake");
+        
+        stakers[msg.sender].stakedAmount = 0;
+        stakers[msg.sender].rewardDebt = 0;
+        stakers[msg.sender].lastUpdateTime = 0;
+        
+        stakingToken.transfer(msg.sender, amount);
+        
+        emit EmergencyWithdraw(msg.sender, amount);
+    }
+    
+    // 管理员充值奖励
+    function refillRewards(uint256 amount) external onlyOwner {
+        require(amount > 0, "Cannot refill 0");
+        
+        rewardToken.transferFrom(msg.sender, address(this), amount);
+        
+        emit RewardRefilled(amount);
+    }
+    
+    // 更新用户奖励
+    function updateRewards(address user) internal {
+        StakerInfo storage staker = stakers[user];
+        
+        if (staker.stakedAmount > 0) {
+            uint256 pending = pendingRewards(user);
+            staker.rewardDebt += pending;
+        }
+        
+        staker.lastUpdateTime = block.timestamp;
+    }
+    
+    // 计算待领取奖励
+    function pendingRewards(address user) public view returns (uint256) {
+        StakerInfo memory staker = stakers[user];
+        
+        if (staker.stakedAmount == 0) return 0;
+        
+        uint256 timeElapsed = block.timestamp - staker.lastUpdateTime;
+        if (timeElapsed == 0) return 0;
+        
+        // 奖励 = 质押量 × 奖励率 × 时间
+        uint256 reward = (staker.stakedAmount * rewardRatePerSecond * timeElapsed)
+            / (10 ** stakingTokenDecimals);
+        
+        return reward;
+    }
+    
+    // 获取用户总奖励（包括待领取）
+    function getTotalRewards(address user) external view returns (uint256) {
+        return stakers[user].rewardDebt + pendingRewards(user);
+    }
+    
+    // 获取质押代币小数位数
+    function getStakingTokenDecimals() external view returns (uint8) {
+        return stakingTokenDecimals;
+    }
+    
+    // 获取合约奖励余额
+    function getRewardBalance() external view returns (uint256) {
+        return rewardToken.balanceOf(address(this));
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 收益农场机制</strong>
+                <p style="margin-top: 10px; color: #155724;">
+                    用户质押代币 → 合约记录质押信息 → 基于时间和数量计算奖励 → 用户随时领取奖励 → 可紧急提取本金。整个过程透明、自动化，无需信任第三方。
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 准备代币</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>部署质押代币（如STAKE）和奖励代币（如REWARD）</li>
+                    <li>给自己铸造足够的代币用于测试</li>
+                    <li>记录代币合约地址</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 部署农场合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>使用代币地址和奖励率部署YieldFarming合约</li>
+                    <li>设置合理的奖励率（如每秒0.1个代币）</li>
+                    <li>管理员向合约充值奖励代币</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 质押测试</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>批准农场合约使用你的质押代币</li>
+                    <li>调用<code class="inline-code">stake(1000)</code>质押代币</li>
+                    <li>等待一段时间，观察奖励累积</li>
+                    <li>调用<code class="inline-code">pendingRewards()</code>查看待领取奖励</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 奖励领取</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">claimRewards()</code>领取奖励</li>
+                    <li>检查奖励代币余额增加</li>
+                    <li>验证rewardDebt重置为0</li>
+                    <li>继续等待，观察新奖励累积</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤5: 取消质押</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">unstake(500)</code>部分取消质押</li>
+                    <li>观察质押数量和奖励率变化</li>
+                    <li>测试紧急提取功能</li>
+                    <li>验证所有资金安全返回</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>实现多池质押（支持多种代币）</li>
+                    <li>添加锁定期机制（提前取出有惩罚）</li>
+                    <li>实现推荐奖励系统</li>
+                    <li>添加质押等级和加成</li>
+                    <li>实现复利机制（自动复投奖励）</li>
+                    <li>创建治理代币分配</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">复利计算实现</h4>
+                <pre><code class="language-solidity">function compound() external nonReentrant {
+    updateRewards(msg.sender);
+    
+    uint256 reward = stakers[msg.sender].rewardDebt;
+    require(reward > 0, "No rewards to compound");
+    
+    // 将奖励转换为质押代币并重新质押
+    stakers[msg.sender].rewardDebt = 0;
+    stakers[msg.sender].stakedAmount += reward;
+    
+    emit Compounded(msg.sender, reward);
+}</code></pre>
+                <p style="margin-top: 10px;">复利机制可以显著提高长期收益，但需要考虑代币转换和滑点问题。</p>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-26.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">NFT Marketplace - NFT市场</div>
+            </a>
+            <a href="contract-28.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">DAO - 去中心化治理</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

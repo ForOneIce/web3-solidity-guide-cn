@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LendingPool 借贷池合约 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #fff5f5, #ffe6e6);
+            border-left: 5px solid var(--hard);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-card.important {
+            background: linear-gradient(135deg, #fff9e6, #ffedd5);
+            border-left-color: var(--medium);
+        }
+        
+        .concept-card.tip {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left-color: var(--primary);
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .warning-box strong {
+            color: #ff6b35;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .steps-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .steps-list li {
+            counter-increment: step-counter;
+            margin-bottom: 20px;
+            padding-left: 60px;
+            position: relative;
+        }
+        
+        .steps-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--accent);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        .formula-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid var(--primary);
+            margin: 15px 0;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第23天</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 练习</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 23 天</div>
+                    <h1>💰 LendingPool 借贷池合约</h1>
+                    <p class="subtitle">构建基础DeFi借贷平台 - 探索去中心化金融的核心机制</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--expert);">
+                        困难 ⭐⭐⭐⭐
+                    </div>
+                    <span class="tag">DeFi</span>
+                    <span class="tag">借贷协议</span>
+                    <span class="tag">抵押机制</span>
+                    <span class="tag">利息计算</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">🎯 学习目标</div>
+                    <div>构建基础DeFi借贷协议，理解去中心化金融核心机制</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🛠️ 核心技能</div>
+                    <div>基点计算、利息累积、抵押率管理、流动性控制</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏰ 预计时间</div>
+                    <div>4-5小时 (理解+编码+测试)</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">📊 主观感受难度</div>
+                    <div>⭐⭐⭐⭐⭐ 极难 - 复杂的DeFi金融逻辑和精确数学计算</div>
+                </div>
+            </div>
+            
+            <div class="key-points" style="margin-top: 20px;">
+                <div class="key-point">
+                    <div class="key-point-title">📊 双重账本系统</div>
+                    <div>分别追踪用户的存款余额、借款余额和抵押品余额</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏰ 利率机制</div>
+                    <div>设置5%的年化利率,基于时间计算利息</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔐 过度抵押</div>
+                    <div>采用75%的抵押率,要求借款必须有充足抵押</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">💧 流动性管理</div>
+                    <div>跟踪合约总流动性,确保有足够资金供借款</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">🏦 DeFi借贷机制</div>
+                <p>去中心化借贷与传统金融的对比:</p>
+                
+                <ol class="steps-list">
+                    <li>
+                        <strong>存款人存入ETH</strong><br>
+                        提供流动性,成为资金供给方,未来可赚取利息
+                    </li>
+                    <li>
+                        <strong>借款人存入抵押品</strong><br>
+                        锁定ETH作为抵押,建立信用基础
+                    </li>
+                    <li>
+                        <strong>借款人借出ETH</strong><br>
+                        基于抵押品价值计算可借额度,支付利息
+                    </li>
+                    <li>
+                        <strong>借款人偿还贷款</strong><br>
+                        归还本金+利息,释放抵押品
+                    </li>
+                    <li>
+                        <strong>提取抵押品/存款</strong><br>
+                        借款还清后取回抵押品,或提取存款
+                    </li>
+                </ol>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>对比维度</th>
+                            <th>传统借贷</th>
+                            <th>DeFi借贷</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>信用审核</strong></td>
+                            <td>需要信用记录、收入证明</td>
+                            <td>无需KYC,仅需抵押品</td>
+                        </tr>
+                        <tr>
+                            <td><strong>审批时间</strong></td>
+                            <td>数天到数周</td>
+                            <td>即时(一笔交易)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>抵押率</strong></td>
+                            <td>通常80-100%</td>
+                            <td>超额抵押(本例133%)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>透明度</strong></td>
+                            <td>低,条款复杂</td>
+                            <td>高,代码公开</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="concept-card important">
+                <div class="concept-title">📊 基点(Basis Points)系统</div>
+                <p>金融领域常用的精确百分比表示方法:</p>
+                
+                <div class="success-box">
+                    <strong>基点换算关系</strong><br>
+                    1 Basis Point = 0.01% = 0.0001<br>
+                    100 Basis Points = 1%<br>
+                    10000 Basis Points = 100%
+                </div>
+
+                <pre><code class="language-solidity">// 利率: 500 基点 = 5%
+uint256 public interestRateBasisPoints = 500;
+
+// 抵押率: 7500 基点 = 75%
+uint256 public collateralFactorBasisPoints = 7500;
+
+// 计算实际金额
+uint256 maxBorrow = (collateral * 7500) / 10000;
+// 如果抵押 100 ETH: 100 * 7500 / 10000 = 75 ETH</code></pre>
+
+                <div class="success-box">
+                    <strong>💡 为什么使用基点?</strong><br>
+                    Solidity不支持小数运算,基点系统提供了一种整数表示百分比的方法,同时保持精确度。使用10000作为基数可以精确到0.01%。
+                </div>
+            </div>
+
+            <div class="concept-card tip">
+                <div class="concept-title">🔐 抵押率与清算机制</div>
+                <p>理解过度抵押的必要性:</p>
+                
+                <div class="formula-box">
+                    抵押率 = 借款额 / 抵押品价值 × 100%
+                </div>
+
+                <div class="success-box">
+                    <strong>抵押率75%的含义</strong><br>
+                    如果你有 <strong>100 ETH</strong> 抵押品:<br>
+                    最大可借: <strong>100 × 75% = 75 ETH</strong><br>
+                    实际抵押率: <strong>100 / 75 = 133%</strong> (超额抵押)
+                </div>
+
+                <pre><code class="language-solidity">function getMaxBorrowAmount(address user) 
+    public view returns (uint256) 
+{
+    uint256 collateral = collateralBalances[user];
+    uint256 currentBorrow = borrowBalances[user];
+    
+    // 计算最大可借金额
+    uint256 maxBorrow = (collateral * collateralFactorBasisPoints) / 10000;
+    
+    // 减去已借金额,得到剩余可借额度
+    if (maxBorrow <= currentBorrow) return 0;
+    return maxBorrow - currentBorrow;
+}</code></pre>
+
+                <div class="warning-box">
+                    <strong>⚠️ 本合约的简化之处:</strong><br>
+                    真实DeFi协议(如Aave)会在抵押率不足时触发清算,自动出售抵押品偿还债务。本合约仅在提取抵押品时检查,没有实现主动清算功能。
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">⏰ 利息计算机制</div>
+                <p>基于时间的复利计算:</p>
+                
+                <div class="formula-box">
+                    利息 = 本金 × 年利率 × 时间(秒) / (365天的秒数 × 10000)
+                </div>
+
+                <pre><code class="language-solidity">function calculateInterestAccrued(address user) 
+    public view returns (uint256) 
+{
+    if (lastInterestAccrualTimestamp == 0) return 0;
+    
+    // 计算经过的时间(秒)
+    uint256 timeElapsed = block.timestamp - lastInterestAccrualTimestamp;
+    uint256 principal = borrowBalances[user];
+    
+    // 简化利息公式: principal * rate * time / (365 days * 10000)
+    uint256 interest = (principal * interestRateBasisPoints * timeElapsed) 
+                      / (365 days * 10000);
+    return interest;
+}</code></pre>
+
+                <div class="success-box">
+                    <strong>实际计算示例</strong><br>
+                    <strong>借款:</strong> 10 ETH<br>
+                    <strong>年利率:</strong> 5% (500基点)<br>
+                    <strong>时间:</strong> 30天<br>
+                    <strong>利息 = 10 × 500 × (30×24×3600) / (365×24×3600 × 10000)</strong><br>
+                    = 10 × 500 × 2,592,000 / 315,360,000,000<br>
+                    ≈ 0.041 ETH
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 代码详解
+            </h2>
+            
+            <h3>📦 状态变量设计</h3>
+            <pre><code class="language-solidity">// 用户存款余额 - 流动性提供者的资金
+mapping(address => uint256) public depositBalances;
+
+// 用户借款余额 - 借款人欠款
+mapping(address => uint256) public borrowBalances;
+
+// 用户抵押品余额 - 借款的担保
+mapping(address => uint256) public collateralBalances;
+
+// 年化利率: 500基点 = 5%
+uint256 public interestRateBasisPoints = 500;
+
+// 抵押因子: 7500基点 = 75%
+uint256 public collateralFactorBasisPoints = 7500;
+
+// 上次计息时间戳
+uint256 public lastInterestAccrualTimestamp;</code></pre>
+
+            <div class="success-box">
+                <strong>💡 设计思路:</strong> 三个独立的mapping分别追踪存款、借款和抵押品,这样同一个地址可以既是存款人又是借款人,互不影响。
+            </div>
+
+            <h3>💰 存款与提款功能</h3>
+            <pre><code class="language-solidity">function deposit() external payable {
+    require(msg.value > 0, "Must deposit something");
+    
+    // 增加用户的存款余额
+    depositBalances[msg.sender] += msg.value;
+}
+
+function withdraw(uint256 amount) external {
+    // 检查存款余额是否充足
+    require(depositBalances[msg.sender] >= amount, 
+            "Insufficient balance");
+    
+    // 先减少余额(CEI模式)
+    depositBalances[msg.sender] -= amount;
+    
+    // 再转账ETH
+    payable(msg.sender).transfer(amount);
+}</code></pre>
+
+            <div class="success-box">
+                <strong>✅ 流动性提供:</strong> 用户存入ETH,为平台提供流动性,这些资金可以被其他人借走。在真实协议中,存款人会获得利息代币(如Compound的cToken)。
+            </div>
+
+            <h3>🔒 抵押品管理</h3>
+            <pre><code class="language-solidity">// 存入抵押品
+function depositCollateral() external payable {
+    require(msg.value > 0, "Must deposit collateral");
+    collateralBalances[msg.sender] += msg.value;
+}
+
+// 提取抵押品
+function withdrawCollateral(uint256 amount) external {
+    require(collateralBalances[msg.sender] >= amount, 
+            "Insufficient collateral");
+    
+    // 计算保留最低抵押后的最大可提取金额
+    // 公式: 当前抵押 - (借款额 / 抵押率)
+    uint256 maxWithdraw = collateralBalances[msg.sender] - 
+        (borrowBalances[msg.sender] * 10000) / collateralFactorBasisPoints;
+    
+    // 确保不会导致抵押不足
+    require(amount <= maxWithdraw, 
+            "Would under-collateralize loan");
+    
+    collateralBalances[msg.sender] -= amount;
+    payable(msg.sender).transfer(amount);
+}</code></pre>
+
+            <div class="success-box">
+                <strong>抵押品提取逻辑详解</strong><br>
+                假设: 用户抵押了 100 ETH, 借了 50 ETH, 抵押率 75%<br>
+                最低需要的抵押 = 50 × 10000 / 7500 = 66.67 ETH<br>
+                最大可提取 = 100 - 66.67 = 33.33 ETH
+            </div>
+
+            <h3>📤 借款与还款功能</h3>
+            <pre><code class="language-solidity">function borrow(uint256 amount) external {
+    // 计算用户最大可借金额
+    uint256 maxBorrow = getMaxBorrowAmount(msg.sender);
+    
+    // 检查是否超过可借额度
+    require(amount <= maxBorrow, "Insufficient collateral");
+    
+    // 增加借款余额
+    borrowBalances[msg.sender] += amount;
+    
+    // 转账ETH给借款人
+    payable(msg.sender).transfer(amount);
+}
+
+function repay() external payable {
+    require(msg.value > 0, "Must repay something");
+    require(borrowBalances[msg.sender] > 0, "No loan to repay");
+    
+    uint256 repayAmount = msg.value;
+    
+    // 如果还款金额超过欠款,退回多余部分
+    if (repayAmount > borrowBalances[msg.sender]) {
+        repayAmount = borrowBalances[msg.sender];
+        // 退回多付的金额
+        payable(msg.sender).transfer(msg.value - repayAmount);
+    }
+    
+    // 减少借款余额
+    borrowBalances[msg.sender] -= repayAmount;
+}</code></pre>
+
+            <div class="warning-box">
+                <strong>⚠️ 流动性风险:</strong> 本合约没有检查池子里是否有足够的ETH可借。真实协议会检查可用流动性,如果流动性不足会拒绝借款。
+            </div>
+
+            <h3>📊 查询函数</h3>
+            <pre><code class="language-solidity">// 获取总流动性
+function getTotalLiquidity() public view returns (uint256) {
+    // 合约地址的ETH余额 = 存款总额 - 借出总额 + 抵押品总额
+    return address(this).balance;
+}</code></pre>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践要点
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">📝 完整的借贷流程</div>
+                <p><strong>任务:</strong> 模拟Alice和Bob的借贷场景</p>
+                <ol class="steps-list">
+                    <li>Alice存入100 ETH作为流动性</li>
+                    <li>Bob存入50 ETH作为抵押品</li>
+                    <li>Bob借出30 ETH(低于75% × 50 = 37.5的最大额度)</li>
+                    <li>30天后Bob计算应付利息</li>
+                    <li>Bob归还本金+利息</li>
+                    <li>Bob提取抵押品</li>
+                </ol>
+                
+                <pre><code class="language-solidity">// 步骤1: Alice存款
+lendingPool.deposit{value: 100 ether}();
+
+// 步骤2: Bob存入抵押品
+lendingPool.depositCollateral{value: 50 ether}();
+
+// 步骤3: Bob借款
+uint256 maxBorrow = lendingPool.getMaxBorrowAmount(bob);
+// maxBorrow = 50 * 7500 / 10000 = 37.5 ETH
+lendingPool.borrow(30 ether);
+
+// 步骤4: 30天后查询利息
+uint256 interest = lendingPool.calculateInterestAccrued(bob);
+// 预期: ~0.123 ETH
+
+// 步骤5: 还款(注意:本合约只还本金,真实场景应该还本金+利息)
+lendingPool.repay{value: 30 ether}();
+
+// 步骤6: 提取抵押品
+lendingPool.withdrawCollateral(50 ether);</code></pre>
+            </div>
+
+            <div class="concept-card important">
+                <div class="concept-title">🔧 计算实际可借金额</div>
+                <p><strong>场景:</strong> 给定不同的抵押和借款状态,计算可借额度</p>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>抵押品</th>
+                            <th>已借金额</th>
+                            <th>计算过程</th>
+                            <th>可借额度</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>100 ETH</td>
+                            <td>0 ETH</td>
+                            <td>100 × 75% - 0</td>
+                            <td>75 ETH</td>
+                        </tr>
+                        <tr>
+                            <td>100 ETH</td>
+                            <td>50 ETH</td>
+                            <td>100 × 75% - 50</td>
+                            <td>25 ETH</td>
+                        </tr>
+                        <tr>
+                            <td>100 ETH</td>
+                            <td>75 ETH</td>
+                            <td>100 × 75% - 75</td>
+                            <td>0 ETH</td>
+                        </tr>
+                        <tr>
+                            <td>50 ETH</td>
+                            <td>40 ETH</td>
+                            <td>50 × 75% - 40</td>
+                            <td>0 ETH (实际-2.5)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="warning-box">
+                    <strong>⚠️ 注意:</strong> 最后一行的情况是抵押不足,理论上应该被清算!
+                </div>
+            </div>
+
+            <div class="concept-card tip">
+                <div class="concept-title">🎯 改进合约 - 添加清算功能</div>
+                <p><strong>目标:</strong> 实现一个 <span class="inline-code">liquidate()</span> 函数,当借款人抵押不足时可以被清算</p>
+                <pre><code class="language-solidity">function liquidate(address borrower) external payable {
+    // TODO: 实现清算逻辑
+    // 1. 检查借款人是否抵押不足
+    // 2. 清算人代为偿还部分债务
+    // 3. 清算人获得抵押品(含奖励)
+    // 4. 更新借款人的余额
+    
+    // 提示: 健康因子 = 抵押品价值 × 抵押率 / 借款金额
+    // 如果健康因子 < 1,可以被清算
+}</code></pre>
+                <div class="success-box">
+                    <strong>💡 思考题:</strong><br>
+                    • 清算人应该获得多少奖励?(通常5-10%)<br>
+                    • 是否允许部分清算?<br>
+                    • 如何防止清算人抢跑(front-running)?
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">⚡ 添加利息自动累积</div>
+                <p><strong>任务:</strong> 改造合约,使利息自动累加到借款余额</p>
+                <pre><code class="language-solidity">// 需要添加的功能
+function accrueInterest() public {
+    // TODO: 实现利息累积逻辑
+}
+
+// 修改borrowBalances使其包含累积利息
+function getCurrentBorrowBalance(address user) 
+    public view returns (uint256) 
+{
+    // TODO: 返回本金 + 利息
+}</code></pre>
+            </div>
+
+            <div class="concept-card important">
+                <div class="concept-title">🌟 挑战: 多币种支持</div>
+                <p><strong>高级任务:</strong> 扩展合约支持多种ERC20代币作为抵押品和借贷资产</p>
+                <ul style="margin-left: 20px; line-height: 1.8;">
+                    <li>用户可以存入USDC、DAI等稳定币</li>
+                    <li>可以用WETH、WBTC作为抵押品</li>
+                    <li>需要集成预言机获取价格</li>
+                    <li>不同资产有不同的抵押率</li>
+                </ul>
+                <div class="warning-box">
+                    <strong>⚠️ 额外挑战:</strong> 如何处理价格波动?如何防止预言机操纵?
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-22.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">DecentralisedLottery - 去中心化彩票</div>
+            </a>
+            <a href="contract-24.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">DecentraliseEscrow - 去中心化托管</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

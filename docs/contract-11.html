@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masterkey - 主密钥合约 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第11天 - 继承与事件</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 11 天 🔑</div>
+                    <h1>Masterkey - 主密钥合约</h1>
+                    <p class="subtitle">通过继承和事件构建可重用的访问控制系统</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--medium);">
+                        🌿 中级
+                    </div>
+                    <span class="tag">继承</span>
+                    <span class="tag">事件</span>
+                    <span class="tag">OpenZeppelin</span>
+                    <span class="tag">Ownable</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握Solidity继承机制和事件系统</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>继承、事件、修饰符复用、OpenZeppelin</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>50分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★☆☆</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">🧬 继承 (Inheritance)</div>
+                <p>继承允许一个合约获得另一个合约的所有功能:</p>
+                <pre><code class="language-solidity">contract VaultMaster is Ownable {
+    // VaultMaster继承了Ownable的所有功能
+    // 可以使用owner、onlyOwner等
+}</code></pre>
+                <p><strong>继承的好处:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><strong>代码复用:</strong> 不需要重复写相同的逻辑</li>
+                    <li><strong>模块化:</strong> 将通用功能抽象到基础合约</li>
+                    <li><strong>可维护性:</strong> 修改基础合约,所有子合约都受益</li>
+                    <li><strong>标准化:</strong> 使用经过验证的模式</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📢 事件 (Events)</div>
+                <p>事件是合约与外部世界通信的主要方式:</p>
+                <pre><code class="language-solidity">event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+// 触发事件
+emit OwnershipTransferred(previousOwner, _newOwner);</code></pre>
+                <p><strong>事件的特点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><strong>低成本:</strong> 比存储数据便宜很多</li>
+                    <li><strong>可搜索:</strong> indexed参数可以被过滤</li>
+                    <li><strong>历史记录:</strong> 永久保存在区块链上</li>
+                    <li><strong>前端友好:</strong> 前端可以监听事件更新UI</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔍 indexed 关键字</div>
+                <p><code class="inline-code">indexed</code>参数可以被高效搜索和过滤:</p>
+                <pre><code class="language-solidity">event Transfer(address indexed from, address indexed to, uint256 value);
+
+// 前端可以这样过滤:
+// 查找所有从特定地址发出的转账
+contract.getPastEvents('Transfer', {
+    filter: {from: '0x123...'},
+    fromBlock: 0,
+    toBlock: 'latest'
+});</code></pre>
+                <p><strong>限制:</strong> 每个事件最多3个indexed参数</p>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🛡️ OpenZeppelin Ownable</div>
+                <p>OpenZeppelin提供了经过审计的标准实现:</p>
+                <pre><code class="language-solidity">import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract MyContract is Ownable {
+    constructor() Ownable(msg.sender) {}
+    
+    function restrictedFunction() public onlyOwner {
+        // 只有owner能调用
+    }
+}</code></pre>
+                <p><strong>为什么使用OpenZeppelin?</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>经过多次安全审计</li>
+                    <li>被数千个项目使用</li>
+                    <li>持续更新和维护</li>
+                    <li>节省开发时间</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 Ownable 基础合约</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract Ownable {
+    address private owner;
+    
+    // 事件:记录所有权转移
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    
+    constructor() {
+        owner = msg.sender;
+        emit OwnershipTransferred(address(0), msg.sender);
+    }
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not the owner");
+        _;
+    }
+    
+    function ownerAddress() public view returns (address) {
+        return owner;
+    }
+    
+    function transferOwnership(address _newOwner) public onlyOwner {
+        require(_newOwner != address(0), "Invalid address");
+        address previousOwner = owner;
+        owner = _newOwner;
+        emit OwnershipTransferred(previousOwner, _newOwner);
+    }
+}</code></pre>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">📄 VaultMaster 继承合约</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "./Ownable.sol";
+
+contract VaultMaster is Ownable {
+    // 新的事件
+    event DepositSuccessful(address indexed account, uint256 value);
+    event WithdrawSuccessful(address indexed recipient, uint256 value);
+    
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+    
+    function deposit() public payable {
+        require(msg.value > 0, "Must send ETH");
+        emit DepositSuccessful(msg.sender, msg.value);
+    }
+    
+    // 使用继承的onlyOwner修饰符
+    function withdraw(address _to, uint256 _amount) public onlyOwner {
+        require(_amount <= address(this).balance, "Insufficient balance");
+        payable(_to).transfer(_amount);
+        emit WithdrawSuccessful(_to, _amount);
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 继承的威力</strong>
+                <p style="margin-top: 10px; color: #155724;">VaultMaster自动获得了Ownable的所有功能:owner变量、onlyOwner修饰符、transferOwnership函数等。这就是继承的威力!</p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">🔍 事件工作流程</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">场景1: 部署合约</h4>
+                <pre><code class="language-solidity">// 部署时自动执行:
+constructor() {
+    owner = msg.sender;  // 设置owner
+    emit OwnershipTransferred(address(0), msg.sender);  // 触发事件
+}
+
+// 区块链上会记录:
+// Event: OwnershipTransferred
+// - previousOwner: 0x0000000000000000000000000000000000000000
+// - newOwner: 0xYourAddress</code></pre>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">场景2: 存款操作</h4>
+                <pre><code class="language-solidity">// 用户调用 deposit() 并发送1 ETH:
+deposit{value: 1 ether}();
+
+// 触发事件:
+emit DepositSuccessful(msg.sender, 1 ether);
+
+// 前端可以监听:
+contract.on('DepositSuccessful', (account, value) => {
+    console.log(`${account} 存入了 ${value} wei`);
+    updateUI();
+});</code></pre>
+            </div>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #856404;">💡 最佳实践</strong>
+                <p style="margin-top: 10px; color: #856404;">
+                    1. 重要操作都应该触发事件<br>
+                    2. 使用indexed参数便于搜索<br>
+                    3. 事件名使用过去时(如Transferred而不是Transfer)<br>
+                    4. 优先使用OpenZeppelin的标准实现
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 创建Ownable合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>在Remix中创建<code class="inline-code">Ownable.sol</code>文件</li>
+                    <li>复制粘贴Ownable合约代码</li>
+                    <li>编译并部署</li>
+                    <li>测试<code class="inline-code">ownerAddress()</code>函数</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 创建VaultMaster合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>创建<code class="inline-code">VaultMaster.sol</code>文件</li>
+                    <li>添加import语句</li>
+                    <li>编译并部署VaultMaster</li>
+                    <li>验证继承:调用<code class="inline-code">ownerAddress()</code> - 应该能工作!</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 测试存款和事件</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">deposit</code>并发送一些ETH</li>
+                    <li>在Remix的终端查看事件日志</li>
+                    <li>调用<code class="inline-code">getBalance()</code>确认余额</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 测试提取和权限</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>作为owner调用<code class="inline-code">withdraw</code> - 应该成功</li>
+                    <li>切换账户,再次尝试withdraw - 应该失败</li>
+                    <li>测试<code class="inline-code">transferOwnership</code>功能</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>添加<code class="inline-code">pause</code>功能:合约可以被暂停</li>
+                    <li>实现多重签名:需要多个owner确认才能提取</li>
+                    <li>添加提取限额:每天最多提取一定数量</li>
+                    <li>创建<code class="inline-code">AdminRole</code>合约,支持多个管理员</li>
+                    <li>使用OpenZeppelin的<code class="inline-code">AccessControl</code>实现角色管理</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">多重继承</h4>
+                <pre><code class="language-solidity">contract A {
+    function foo() public virtual returns (string memory) {
+        return "A";
+    }
+}
+
+contract B {
+    function bar() public virtual returns (string memory) {
+        return "B";
+    }
+}
+
+contract C is A, B {
+    // C继承了A和B的所有功能
+}</code></pre>
+                <p style="margin-top: 10px;">Solidity支持多重继承,但要注意钻石问题!</p>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">事件 vs 存储对比</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="background: var(--light);">
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">特性</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">事件</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">存储</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">Gas成本</td>
+                        <td style="padding: 10px;">很低 (~375 gas)</td>
+                        <td style="padding: 10px;">很高 (~20,000 gas)</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;">合约内访问</td>
+                        <td style="padding: 10px;">❌ 不能</td>
+                        <td style="padding: 10px;">✅ 可以</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">历史查询</td>
+                        <td style="padding: 10px;">✅ 可以</td>
+                        <td style="padding: 10px;">❌ 只能查当前</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;">前端监听</td>
+                        <td style="padding: 10px;">✅ 实时</td>
+                        <td style="padding: 10px;">❌ 需要轮询</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-10.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">ActivityTracker - 活动追踪器</div>
+            </a>
+            <a href="contract-12.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">MyFirstToken - 我的第一个代币</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

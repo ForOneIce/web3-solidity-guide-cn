@@ -1,0 +1,842 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oracle - 预言机合约 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第18天 - 预言机</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 18 天 🔮</div>
+                    <h1>Oracle - 预言机合约</h1>
+                    <p class="subtitle">连接区块链与真实世界数据的桥梁</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--hard);">
+                        🌳 高级
+                    </div>
+                    <span class="tag">Chainlink</span>
+                    <span class="tag">预言机</span>
+                    <span class="tag">价格馈送</span>
+                    <span class="tag">外部数据</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>理解预言机的作用和Chainlink集成</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>AggregatorV3Interface、数据馈送、模拟预言机</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>65分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★★☆</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">🌐 什么是预言机？</div>
+                <p>预言机是连接区块链和外部世界的桥梁，解决了区块链无法直接访问外部数据的问题：</p>
+                <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #856404;">🔹 区块链的限制</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #856404;">
+                        <li>无法访问互联网</li>
+                        <li>无法获取实时价格</li>
+                        <li>无法读取天气数据</li>
+                        <li>无法调用外部API</li>
+                    </ul>
+                </div>
+                <div style="background: #e6f7ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #0066cc;">🔹 预言机的作用</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #0066cc;">
+                        <li>获取外部数据并上链</li>
+                        <li>验证数据的真实性</li>
+                        <li>提供去中心化的数据源</li>
+                        <li>触发智能合约执行</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔗 Chainlink 预言机网络</div>
+                <p>Chainlink是最大的去中心化预言机网络，提供可靠的外部数据：</p>
+                <pre><code class="language-solidity">import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+contract PriceConsumer {
+    AggregatorV3Interface internal priceFeed;
+    
+    constructor() {
+        // ETH/USD 价格馈送地址 (Sepolia测试网)
+        priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
+    }
+    
+    function getLatestPrice() public view returns (int) {
+        (, int price, , , ) = priceFeed.latestRoundData();
+        return price;  // 价格有8位小数
+    }
+}</code></pre>
+                <p><strong>Chainlink特点：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><strong>去中心化：</strong>多个节点提供数据，避免单点故障</li>
+                    <li><strong>高质量：</strong>数据来源经过验证</li>
+                    <li><strong>广泛支持：</strong>价格、天气、体育等各种数据</li>
+                    <li><strong>实时更新：</strong>数据及时更新</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📊 AggregatorV3Interface</div>
+                <p>这是Chainlink价格馈送的标准接口：</p>
+                <pre><code class="language-solidity">interface AggregatorV3Interface {
+    function decimals() external view returns (uint8);
+    function description() external view returns (string memory);
+    function version() external view returns (uint256);
+    
+    function getRoundData(uint80 _roundId) external view returns (
+        uint80 roundId,
+        int256 answer,
+        uint256 startedAt,
+        uint256 updatedAt,
+        uint80 answeredInRound
+    );
+    
+    function latestRoundData() external view returns (
+        uint80 roundId,
+        int256 answer,        // 价格数据
+        uint256 startedAt,
+        uint256 updatedAt,    // 最后更新时间
+        uint80 answeredInRound
+    );
+}</code></pre>
+                <p><strong>关键函数说明：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">latestRoundData()</code>: 获取最新价格数据</li>
+                    <li><code class="inline-code">decimals()</code>: 价格的小数位数</li>
+                    <li><code class="inline-code">description()</code>: 数据馈送描述</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🎭 模拟预言机</div>
+                <p>在开发和测试中，我们经常需要创建模拟预言机：</p>
+                <pre><code class="language-solidity">contract MockWeatherOracle is AggregatorV3Interface {
+    int256 private rainfall;
+    uint256 private lastUpdate;
+    
+    function updateRainfall(int256 _rainfall) external {
+        rainfall = _rainfall;
+        lastUpdate = block.timestamp;
+    }
+    
+    function latestRoundData() external view override returns (
+        uint80 roundId,
+        int256 answer,
+        uint256 startedAt,
+        uint256 updatedAt,
+        uint80 answeredInRound
+    ) {
+        return (1, rainfall, lastUpdate, lastUpdate, 1);
+    }
+    
+    // 模拟随机降雨量
+    function _rainfall() private view returns (int256) {
+        return int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % 100);
+    }
+}</code></pre>
+                <p><strong>模拟预言机的用途：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>本地开发测试</li>
+                    <li>单元测试</li>
+                    <li>演示和教学</li>
+                    <li>成本控制</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 模拟天气预言机</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+contract MockWeatherOracle is AggregatorV3Interface {
+    uint8 private _decimals;
+    string private _description;
+    uint80 private _roundId;
+    uint256 private _timestamp;
+    
+    constructor() {
+        _decimals = 0;
+        _description = "Mock Rainfall Oracle";
+        _roundId = 1;
+        _timestamp = block.timestamp;
+    }
+    
+    function decimals() external view override returns (uint8) {
+        return _decimals;
+    }
+    
+    function description() external view override returns (string memory) {
+        return _description;
+    }
+    
+    function version() external pure override returns (uint256) {
+        return 1;
+    }
+    
+    function getRoundData(uint80) external view override returns (
+        uint80 roundId,
+        int256 answer,
+        uint256 startedAt,
+        uint256 updatedAt,
+        uint80 answeredInRound
+    ) {
+        return (_roundId, _rainfall(), _timestamp, _timestamp, _roundId);
+    }
+    
+    function latestRoundData() external view override returns (
+        uint80 roundId,
+        int256 answer,
+        uint256 startedAt,
+        uint256 updatedAt,
+        uint80 answeredInRound
+    ) {
+        return (_roundId, _rainfall(), _timestamp, _timestamp, _roundId);
+    }
+    
+    // 模拟降雨量数据 (0-100mm)
+    function _rainfall() private view returns (int256) {
+        uint256 pseudoRandom = uint256(keccak256(abi.encodePacked(
+            block.timestamp,
+            block.difficulty,
+            msg.sender
+        )));
+        return int256(pseudoRandom % 101);  // 0-100mm
+    }
+    
+    // 手动更新数据 (用于测试)
+    function updateData() external {
+        _roundId++;
+        _timestamp = block.timestamp;
+    }
+}</code></pre>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">📄 农作物保险合约</h3>
+            <pre><code class="language-solidity">contract CropInsurance {
+    AggregatorV3Interface public weatherOracle;
+    
+    struct Policy {
+        address farmer;
+        uint256 premium;        // 保费
+        uint256 coverage;       // 保额
+        uint256 startTime;
+        uint256 endTime;
+        bool active;
+        bool claimed;
+    }
+    
+    mapping(uint256 => Policy) public policies;
+    uint256 public nextPolicyId = 1;
+    uint256 public constant DROUGHT_THRESHOLD = 20;  // 20mm以下算干旱
+    
+    event PolicyCreated(uint256 indexed policyId, address indexed farmer, uint256 coverage);
+    event ClaimPaid(uint256 indexed policyId, address indexed farmer, uint256 amount);
+    
+    constructor(address _weatherOracle) {
+        weatherOracle = AggregatorV3Interface(_weatherOracle);
+    }
+    
+    // 购买保险
+    function buyInsurance(uint256 _coverage, uint256 _duration) external payable {
+        require(msg.value > 0, "Premium required");
+        require(_coverage > 0, "Coverage must be positive");
+        
+        policies[nextPolicyId] = Policy({
+            farmer: msg.sender,
+            premium: msg.value,
+            coverage: _coverage,
+            startTime: block.timestamp,
+            endTime: block.timestamp + _duration,
+            active: true,
+            claimed: false
+        });
+        
+        emit PolicyCreated(nextPolicyId, msg.sender, _coverage);
+        nextPolicyId++;
+    }
+    
+    // 申请理赔
+    function claimInsurance(uint256 _policyId) external {
+        Policy storage policy = policies[_policyId];
+        
+        require(policy.farmer == msg.sender, "Not policy owner");
+        require(policy.active, "Policy not active");
+        require(!policy.claimed, "Already claimed");
+        require(block.timestamp <= policy.endTime, "Policy expired");
+        
+        // 获取降雨量数据
+        (, int256 rainfall, , uint256 updatedAt, ) = weatherOracle.latestRoundData();
+        
+        require(updatedAt > policy.startTime, "No recent weather data");
+        require(rainfall >= 0, "Invalid rainfall data");
+        
+        // 检查是否符合理赔条件 (干旱)
+        if (uint256(rainfall) < DROUGHT_THRESHOLD) {
+            policy.claimed = true;
+            policy.active = false;
+            
+            // 支付理赔金
+            payable(msg.sender).transfer(policy.coverage);
+            emit ClaimPaid(_policyId, msg.sender, policy.coverage);
+        } else {
+            revert("Claim conditions not met");
+        }
+    }
+    
+    // 获取当前天气数据
+    function getCurrentWeather() external view returns (int256 rainfall, uint256 timestamp) {
+        (, int256 answer, , uint256 updatedAt, ) = weatherOracle.latestRoundData();
+        return (answer, updatedAt);
+    }
+    
+    // 检查理赔资格
+    function checkClaimEligibility(uint256 _policyId) external view returns (bool eligible, string memory reason) {
+        Policy storage policy = policies[_policyId];
+        
+        if (!policy.active) return (false, "Policy not active");
+        if (policy.claimed) return (false, "Already claimed");
+        if (block.timestamp > policy.endTime) return (false, "Policy expired");
+        
+        (, int256 rainfall, , uint256 updatedAt, ) = weatherOracle.latestRoundData();
+        
+        if (updatedAt <= policy.startTime) return (false, "No recent weather data");
+        if (rainfall < 0) return (false, "Invalid rainfall data");
+        
+        if (uint256(rainfall) < DROUGHT_THRESHOLD) {
+            return (true, "Drought conditions met");
+        } else {
+            return (false, "Sufficient rainfall");
+        }
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 实际应用场景</strong>
+                <p style="margin-top: 10px; color: #155724;">
+                    这个农作物保险合约展示了预言机的强大应用：根据真实天气数据自动触发保险理赔。类似的应用还包括：航班延误保险、体育博彩、DeFi价格预言机等。
+                </p>
+            </div>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #856404;">⚠️ 预言机风险</strong>
+                <p style="margin-top: 10px; color: #856404;">
+                    - <strong>预言机问题：</strong>数据来源的可信度<br>
+                    - <strong>价格操纵：</strong>恶意操纵数据源<br>
+                    - <strong>网络延迟：</strong>数据更新不及时<br>
+                    - <strong>单点故障：</strong>依赖单一数据源<br>
+                    - <strong>解决方案：</strong>使用多个预言机、时间加权平均价格(TWAP)
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署模拟预言机</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>创建并部署MockWeatherOracle合约</li>
+                    <li>调用<code class="inline-code">latestRoundData()</code>查看初始数据</li>
+                    <li>调用<code class="inline-code">updateData()</code>更新时间戳</li>
+                    <li>再次查看数据，观察降雨量变化</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 部署保险合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>使用预言机地址部署CropInsurance合约</li>
+                    <li>调用<code class="inline-code">getCurrentWeather()</code>验证连接</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 购买保险</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">buyInsurance(1000000000000000000, 86400)</code> (1 ETH保额, 1天期限)</li>
+                    <li>发送一些ETH作为保费</li>
+                    <li>检查policies映射确认保单创建</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 测试理赔</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">checkClaimEligibility(1)</code>检查理赔资格</li>
+                    <li>如果降雨量>20mm，多次调用预言机的<code class="inline-code">updateData()</code>直到获得干旱条件</li>
+                    <li>调用<code class="inline-code">claimInsurance(1)</code>申请理赔</li>
+                    <li>检查余额变化和事件日志</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤5: 测试真实Chainlink预言机</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>在Sepolia测试网部署合约</li>
+                    <li>使用ETH/USD价格馈送地址: <code class="inline-code">0x694AA1769357215DE4FAC081bf1f309aDC325306</code></li>
+                    <li>获取实时ETH价格数据</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>创建价格保险：当ETH价格跌破某个值时自动理赔</li>
+                    <li>实现多预言机聚合：使用多个数据源求平均值</li>
+                    <li>添加时间加权平均价格(TWAP)防止价格操纵</li>
+                    <li>创建体育博彩合约：根据比赛结果自动分配奖金</li>
+                    <li>实现航班延误保险：根据航班数据自动理赔</li>
+                    <li>添加预言机健康检查：验证数据新鲜度和合理性</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">Chainlink VRF (可验证随机函数)</h4>
+                <pre><code class="language-solidity">import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
+import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
+
+contract RandomNumberConsumer is VRFConsumerBaseV2 {
+    VRFCoordinatorV2Interface COORDINATOR;
+    uint64 s_subscriptionId;
+    bytes32 keyHash;
+    
+    function requestRandomWords() external {
+        uint256 requestId = COORDINATOR.requestRandomWords(
+            keyHash,
+            s_subscriptionId,
+            3, // confirmations
+            100000, // gas limit
+            1 // number of random words
+        );
+    }
+}</code></pre>
+                <p style="margin-top: 10px;">VRF提供可验证的链上随机数，用于游戏、抽奖等需要公平随机性的场景。</p>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">预言机类型对比</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="background: var(--light);">
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">类型</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">优点</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">缺点</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">价格馈送</td>
+                        <td style="padding: 10px;">实时、准确</td>
+                        <td style="padding: 10px;">成本较高</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;">VRF随机数</td>
+                        <td style="padding: 10px;">可验证、公平</td>
+                        <td style="padding: 10px;">需要订阅</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">自定义预言机</td>
+                        <td style="padding: 10px;">灵活、便宜</td>
+                        <td style="padding: 10px;">安全性较低</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-17.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">UpgradeHub - 升级中心</div>
+            </a>
+            <a href="contract-19.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">SignThis - 签名验证</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

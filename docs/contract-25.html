@@ -1,0 +1,817 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMM - 自动做市商 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第25天 - 自动做市商</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 25 天 🔄</div>
+                    <h1>AMM - 自动做市商</h1>
+                    <p class="subtitle">构建Uniswap风格的去中心化交易引擎</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--expert);">
+                        🏆 专家
+                    </div>
+                    <span class="tag">AMM</span>
+                    <span class="tag">流动性池</span>
+                    <span class="tag">x*y=k</span>
+                    <span class="tag">LP代币</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握AMM原理和流动性池机制</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>常数乘积公式、LP代币、滑点控制</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>80分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★★★</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">🏛️ 从订单簿到AMM的革命</div>
+                <p>传统交易所使用订单簿匹配买卖双方，但在区块链上存在问题：</p>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #721c24;">❌ 订单簿的问题</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #721c24;">
+                        <li>每次下单都需要Gas费用</li>
+                        <li>需要等待交易对手方</li>
+                        <li>流动性分散，价格发现困难</li>
+                        <li>中心化程度高</li>
+                    </ul>
+                </div>
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #155724;">✅ AMM的优势</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #155724;">
+                        <li>无需等待对手方，即时交易</li>
+                        <li>数学公式自动定价</li>
+                        <li>流动性集中在池中</li>
+                        <li>完全去中心化</li>
+                    </ul>
+                </div>
+                <p><strong>核心思想：</strong>用数学公式替代人工订单匹配！</p>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📐 常数乘积公式 x × y = k</div>
+                <p>AMM的核心是一个简单而强大的数学公式：</p>
+                <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin: 15px 0; text-align: center;">
+                    <h3 style="color: #856404; font-size: 1.8rem; margin-bottom: 10px;">x × y = k</h3>
+                    <p style="color: #856404;">
+                        <strong>x</strong> = 代币A的数量<br>
+                        <strong>y</strong> = 代币B的数量<br>
+                        <strong>k</strong> = 常数（不变）
+                    </p>
+                </div>
+                <p><strong>工作原理：</strong></p>
+                <ol style="margin-left: 25px; margin-top: 10px; line-height: 2;">
+                    <li>池中有1000个ETH和2000个DAI，k = 1000 × 2000 = 2,000,000</li>
+                    <li>用户想用100个ETH换DAI</li>
+                    <li>新的ETH数量：1000 + 100 = 1100</li>
+                    <li>为保持k不变：1100 × y = 2,000,000，所以 y = 1818.18</li>
+                    <li>用户得到：2000 - 1818.18 = 181.82个DAI</li>
+                </ol>
+                <p><strong>关键特性：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>交易量越大，价格影响越大（滑点）</li>
+                    <li>池子永远不会完全耗尽</li>
+                    <li>价格自动调整，无需人工干预</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🏊‍♂️ 流动性池和LP代币</div>
+                <p>流动性提供者（LP）为池子提供资金，获得LP代币作为凭证：</p>
+                <pre><code class="language-solidity">// 添加流动性
+function addLiquidity(uint256 amountA, uint256 amountB) external {
+    // 转入代币
+    tokenA.transferFrom(msg.sender, address(this), amountA);
+    tokenB.transferFrom(msg.sender, address(this), amountB);
+    
+    uint256 liquidity;
+    if (totalSupply() == 0) {
+        // 首次添加：LP = sqrt(amountA * amountB)
+        liquidity = sqrt(amountA * amountB);
+    } else {
+        // 后续添加：按比例计算
+        liquidity = min(
+            amountA * totalSupply() / reserveA,
+            amountB * totalSupply() / reserveB
+        );
+    }
+    
+    _mint(msg.sender, liquidity);  // 铸造LP代币
+}</code></pre>
+                <p><strong>LP代币特点：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><strong>所有权证明：</strong>代表在池中的份额</li>
+                    <li><strong>可赎回：</strong>随时换回底层资产</li>
+                    <li><strong>收益来源：</strong>交易手续费分成</li>
+                    <li><strong>可转让：</strong>LP代币本身可以交易</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">💹 滑点和价格影响</div>
+                <p>滑点是AMM中的重要概念，影响交易体验：</p>
+                <pre><code class="language-solidity">function getAmountOut(uint256 amountIn, uint256 reserveIn, uint256 reserveOut) 
+    public pure returns (uint256 amountOut) {
+    
+    // 应用0.3%手续费
+    uint256 amountInWithFee = amountIn * 997;
+    uint256 numerator = amountInWithFee * reserveOut;
+    uint256 denominator = reserveIn * 1000 + amountInWithFee;
+    
+    amountOut = numerator / denominator;
+}</code></pre>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong>滑点计算示例：</strong>
+                    <p style="margin-top: 10px;">
+                        池子：1000 ETH ↔ 2000 DAI<br>
+                        交易：100 ETH → ? DAI<br>
+                        预期价格：1 ETH = 2 DAI<br>
+                        实际获得：~181.82 DAI<br>
+                        <strong style="color: var(--hard);">滑点：(200-181.82)/200 = 9.09%</strong>
+                    </p>
+                </div>
+                <p><strong>滑点保护：</strong></p>
+                <pre><code class="language-solidity">function swapAforB(uint256 amountAIn, uint256 minBOut) external {
+    uint256 amountBOut = getAmountOut(amountAIn, reserveA, reserveB);
+    require(amountBOut >= minBOut, "Slippage too high");
+    // 执行交换...
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 AMM合约完整实现</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+contract AutomatedMarketMaker is ERC20 {
+    IERC20 public tokenA;
+    IERC20 public tokenB;
+    
+    uint256 public reserveA;
+    uint256 public reserveB;
+    
+    address public owner;
+    
+    event LiquidityAdded(address indexed provider, uint256 amountA, uint256 amountB, uint256 liquidity);
+    event LiquidityRemoved(address indexed provider, uint256 amountA, uint256 amountB, uint256 liquidity);
+    event TokensSwapped(address indexed trader, address tokenIn, uint256 amountIn, address tokenOut, uint256 amountOut);
+    
+    constructor(address _tokenA, address _tokenB, string memory _name, string memory _symbol)
+        ERC20(_name, _symbol)
+    {
+        tokenA = IERC20(_tokenA);
+        tokenB = IERC20(_tokenB);
+        owner = msg.sender;
+    }
+    
+    // 添加流动性
+    function addLiquidity(uint256 amountA, uint256 amountB) external {
+        require(amountA > 0 && amountB > 0, "Amounts must be > 0");
+        
+        tokenA.transferFrom(msg.sender, address(this), amountA);
+        tokenB.transferFrom(msg.sender, address(this), amountB);
+        
+        uint256 liquidity;
+        if (totalSupply() == 0) {
+            // 首次添加流动性
+            liquidity = sqrt(amountA * amountB);
+        } else {
+            // 按现有比例添加
+            liquidity = min(
+                amountA * totalSupply() / reserveA,
+                amountB * totalSupply() / reserveB
+            );
+        }
+        
+        _mint(msg.sender, liquidity);
+        
+        reserveA += amountA;
+        reserveB += amountB;
+        
+        emit LiquidityAdded(msg.sender, amountA, amountB, liquidity);
+    }
+    
+    // 移除流动性
+    function removeLiquidity(uint256 liquidityToRemove) external returns (uint256 amountAOut, uint256 amountBOut) {
+        require(liquidityToRemove > 0, "Liquidity to remove must be > 0");
+        require(balanceOf(msg.sender) >= liquidityToRemove, "Insufficient liquidity tokens");
+        
+        uint256 totalLiquidity = totalSupply();
+        require(totalLiquidity > 0, "No liquidity in the pool");
+        
+        // 按比例计算可提取的代币数量
+        amountAOut = liquidityToRemove * reserveA / totalLiquidity;
+        amountBOut = liquidityToRemove * reserveB / totalLiquidity;
+        
+        require(amountAOut > 0 && amountBOut > 0, "Insufficient reserves");
+        
+        reserveA -= amountAOut;
+        reserveB -= amountBOut;
+        
+        _burn(msg.sender, liquidityToRemove);
+        
+        tokenA.transfer(msg.sender, amountAOut);
+        tokenB.transfer(msg.sender, amountBOut);
+        
+        emit LiquidityRemoved(msg.sender, amountAOut, amountBOut, liquidityToRemove);
+        return (amountAOut, amountBOut);
+    }
+    
+    // A换B
+    function swapAforB(uint256 amountAIn, uint256 minBOut) external {
+        require(amountAIn > 0, "Amount must be > 0");
+        require(reserveA > 0 && reserveB > 0, "Insufficient reserves");
+        
+        // 计算输出数量（扣除0.3%手续费）
+        uint256 amountAInWithFee = amountAIn * 997 / 1000;
+        uint256 amountBOut = reserveB * amountAInWithFee / (reserveA + amountAInWithFee);
+        
+        require(amountBOut >= minBOut, "Slippage too high");
+        
+        tokenA.transferFrom(msg.sender, address(this), amountAIn);
+        tokenB.transfer(msg.sender, amountBOut);
+        
+        reserveA += amountAInWithFee;  // 手续费留在池中
+        reserveB -= amountBOut;
+        
+        emit TokensSwapped(msg.sender, address(tokenA), amountAIn, address(tokenB), amountBOut);
+    }
+    
+    // B换A
+    function swapBforA(uint256 amountBIn, uint256 minAOut) external {
+        require(amountBIn > 0, "Amount must be > 0");
+        require(reserveA > 0 && reserveB > 0, "Insufficient reserves");
+        
+        uint256 amountBInWithFee = amountBIn * 997 / 1000;
+        uint256 amountAOut = reserveA * amountBInWithFee / (reserveB + amountBInWithFee);
+        
+        require(amountAOut >= minAOut, "Slippage too high");
+        
+        tokenB.transferFrom(msg.sender, address(this), amountBIn);
+        tokenA.transfer(msg.sender, amountAOut);
+        
+        reserveB += amountBInWithFee;
+        reserveA -= amountAOut;
+        
+        emit TokensSwapped(msg.sender, address(tokenB), amountBIn, address(tokenA), amountAOut);
+    }
+    
+    // 获取储备量
+    function getReserves() external view returns (uint256, uint256) {
+        return (reserveA, reserveB);
+    }
+    
+    // 计算交换输出
+    function getAmountOut(uint256 amountIn, uint256 reserveIn, uint256 reserveOut) 
+        public pure returns (uint256 amountOut) {
+        require(amountIn > 0, "Amount in must be > 0");
+        require(reserveIn > 0 && reserveOut > 0, "Insufficient reserves");
+        
+        uint256 amountInWithFee = amountIn * 997;
+        uint256 numerator = amountInWithFee * reserveOut;
+        uint256 denominator = reserveIn * 1000 + amountInWithFee;
+        
+        amountOut = numerator / denominator;
+    }
+    
+    // 工具函数
+    function min(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a < b ? a : b;
+    }
+    
+    function sqrt(uint256 y) internal pure returns (uint256 z) {
+        if (y > 3) {
+            z = y;
+            uint256 x = y / 2 + 1;
+            while (x < z) {
+                z = x;
+                x = (y / x + x) / 2;
+            }
+        } else if (y != 0) {
+            z = 1;
+        }
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ AMM核心机制</strong>
+                <p style="margin-top: 10px; color: #155724;">
+                    1. 流动性提供者存入代币对，获得LP代币 → 2. 交易者使用常数乘积公式进行代币交换 → 3. 手续费留在池中，增加LP收益 → 4. LP可随时赎回代币和累积收益
+                </p>
+            </div>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #856404;">⚠️ 无常损失风险</strong>
+                <p style="margin-top: 10px; color: #856404;">
+                    当代币价格比例发生变化时，LP可能面临无常损失。例如：存入1 ETH + 2000 DAI，如果ETH涨到4000 DAI，LP的资产价值可能低于单纯持有代币。这是AMM的固有风险。
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 准备代币</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>部署两个ERC-20测试代币（TokenA和TokenB）</li>
+                    <li>给自己铸造足够的代币用于测试</li>
+                    <li>记录代币合约地址</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 部署AMM合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>使用代币地址部署AMM合约</li>
+                    <li>设置LP代币名称和符号</li>
+                    <li>验证合约部署成功</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 添加初始流动性</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>批准AMM合约使用你的代币</li>
+                    <li>调用<code class="inline-code">addLiquidity(1000, 2000)</code>建立1:2的价格比例</li>
+                    <li>检查获得的LP代币数量</li>
+                    <li>验证池子储备量</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 测试代币交换</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>使用<code class="inline-code">getAmountOut()</code>预估交换结果</li>
+                    <li>调用<code class="inline-code">swapAforB(100, 180)</code>进行交换</li>
+                    <li>观察滑点和价格变化</li>
+                    <li>尝试反向交换验证价格机制</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤5: 移除流动性</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">removeLiquidity()</code>移除部分LP</li>
+                    <li>检查获得的代币数量</li>
+                    <li>验证手续费收益</li>
+                    <li>观察池子储备变化</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>实现多代币池（支持3个或更多代币）</li>
+                    <li>添加动态手续费机制</li>
+                    <li>实现价格预言机功能</li>
+                    <li>添加流动性挖矿奖励</li>
+                    <li>实现闪电贷功能</li>
+                    <li>创建AMM工厂合约</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">不同AMM模型对比</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="background: var(--light);">
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">模型</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">公式</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">特点</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">Uniswap V2</td>
+                        <td style="padding: 10px;">x * y = k</td>
+                        <td style="padding: 10px;">简单、通用</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;">Curve</td>
+                        <td style="padding: 10px;">稳定币优化</td>
+                        <td style="padding: 10px;">低滑点</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">Balancer</td>
+                        <td style="padding: 10px;">加权池</td>
+                        <td style="padding: 10px;">多代币、自定义权重</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">无常损失计算</h4>
+                <pre><code class="language-javascript">// 无常损失计算公式
+function calculateImpermanentLoss(priceRatio) {
+    // priceRatio = 当前价格 / 初始价格
+    const loss = 2 * Math.sqrt(priceRatio) / (1 + priceRatio) - 1;
+    return Math.abs(loss) * 100; // 转换为百分比
+}
+
+// 示例：ETH价格翻倍
+console.log(calculateImpermanentLoss(2)); // ~5.72%</code></pre>
+                <p style="margin-top: 10px;">价格变化越大，无常损失越严重。这是LP需要考虑的主要风险。</p>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-24.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">DecentraliseEscrow - 去中心化托管</div>
+            </a>
+            <a href="contract-26.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">NFT Marketplace - NFT市场</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

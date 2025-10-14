@@ -1,0 +1,828 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DecentraliseEscrow - 去中心化托管 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第24天 - 托管合约</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 24 天 🤝</div>
+                    <h1>DecentraliseEscrow - 去中心化托管</h1>
+                    <p class="subtitle">构建安全的去中心化托管服务</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--hard);">
+                        🌳 高级
+                    </div>
+                    <span class="tag">托管</span>
+                    <span class="tag">状态机</span>
+                    <span class="tag">争议解决</span>
+                    <span class="tag">超时机制</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握托管合约设计和状态管理</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>枚举、状态机、角色权限、超时处理</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>60分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★★☆</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">🤝 托管服务原理</div>
+                <p>托管服务是一种中介机制，确保交易双方的资金安全：</p>
+                <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #856404;">🔹 传统托管问题</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #856404;">
+                        <li>需要信任第三方机构</li>
+                        <li>高昂的手续费</li>
+                        <li>处理时间长</li>
+                        <li>可能存在欺诈风险</li>
+                    </ul>
+                </div>
+                <div style="background: #e6f7ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #0066cc;">🔹 去中心化托管优势</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #0066cc;">
+                        <li>代码即法律，透明可验证</li>
+                        <li>自动化执行，降低成本</li>
+                        <li>全球可访问，无地域限制</li>
+                        <li>资金安全，智能合约保护</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔄 状态机设计</div>
+                <p>托管合约使用枚举实现清晰的状态管理：</p>
+                <pre><code class="language-solidity">enum EscrowState {
+    AWAITING_PAYMENT,    // 等待付款
+    AWAITING_DELIVERY,   // 等待交付
+    COMPLETE,           // 完成
+    DISPUTED,           // 争议中
+    CANCELLED           // 已取消
+}</code></pre>
+                <p><strong>状态转换流程：</strong></p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <pre style="background: none; color: var(--dark); font-size: 0.9rem;">AWAITING_PAYMENT → AWAITING_DELIVERY → COMPLETE
+                     ↓
+                   DISPUTED → COMPLETE
+                     ↓
+                   CANCELLED</pre>
+                </div>
+                <p><strong>枚举的优势：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>类型安全，防止无效状态</li>
+                    <li>代码可读性强</li>
+                    <li>Gas效率高（相比字符串）</li>
+                    <li>编译时检查</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">👥 角色权限管理</div>
+                <p>托管合约涉及三个关键角色：</p>
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #155724;">🔹 买家 (Buyer)</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #155724;">
+                        <li>存入资金启动托管</li>
+                        <li>确认收到商品/服务</li>
+                        <li>超时后可以取消</li>
+                        <li>可以提起争议</li>
+                    </ul>
+                </div>
+                <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #0c5460;">🔹 卖家 (Seller)</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #0c5460;">
+                        <li>提供商品或服务</li>
+                        <li>交付完成后等待确认</li>
+                        <li>可以提起争议</li>
+                        <li>同意取消交易</li>
+                    </ul>
+                </div>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #856404;">🔹 仲裁者 (Arbiter)</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #856404;">
+                        <li>中立的第三方</li>
+                        <li>解决争议</li>
+                        <li>决定资金归属</li>
+                        <li>维护交易公平</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">⏰ 超时机制</div>
+                <p>超时机制保护买家免受不交付的损失：</p>
+                <pre><code class="language-solidity">function cancelAfterTimeout() external {
+    require(msg.sender == buyer, "Only buyer");
+    require(state == EscrowState.AWAITING_DELIVERY, "Wrong state");
+    require(
+        block.timestamp >= depositTime + deliveryTimeout,
+        "Timeout not reached"
+    );
+    
+    state = EscrowState.CANCELLED;
+    payable(buyer).transfer(amount);
+    
+    emit DeliveryTimeoutReached(buyer);
+}</code></pre>
+                <p><strong>超时机制特点：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><strong>时间计算：</strong>基于区块时间戳</li>
+                    <li><strong>权限控制：</strong>只有买家可以执行</li>
+                    <li><strong>状态检查：</strong>必须在等待交付状态</li>
+                    <li><strong>自动退款：</strong>资金返还给买家</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 托管合约完整实现</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract EnhancedSimpleEscrow {
+    enum EscrowState {
+        AWAITING_PAYMENT,
+        AWAITING_DELIVERY,
+        COMPLETE,
+        DISPUTED,
+        CANCELLED
+    }
+    
+    address public buyer;
+    address public seller;
+    address public arbiter;
+    uint256 public amount;
+    EscrowState public state;
+    uint256 public depositTime;
+    uint256 public deliveryTimeout;
+    
+    event PaymentDeposited(address indexed buyer, uint256 amount);
+    event DeliveryConfirmed(address indexed buyer, address indexed seller, uint256 amount);
+    event DisputeRaised(address indexed raisedBy);
+    event DisputeResolved(address indexed winner, uint256 amount);
+    event EscrowCancelled(address indexed canceledBy);
+    event DeliveryTimeoutReached(address indexed buyer);
+    event MutualCancellation(address indexed buyer, address indexed seller);
+    
+    constructor(
+        address _seller,
+        address _arbiter,
+        uint256 _deliveryTimeout
+    ) {
+        require(_seller != address(0), "Invalid seller");
+        require(_arbiter != address(0), "Invalid arbiter");
+        require(_deliveryTimeout > 0, "Invalid timeout");
+        
+        buyer = msg.sender;
+        seller = _seller;
+        arbiter = _arbiter;
+        deliveryTimeout = _deliveryTimeout;
+        state = EscrowState.AWAITING_PAYMENT;
+    }
+    
+    // 阻止直接ETH转账
+    receive() external payable {
+        revert("Use deposit() function");
+    }
+    
+    // 买家存款
+    function deposit() external payable {
+        require(msg.sender == buyer, "Only buyer");
+        require(state == EscrowState.AWAITING_PAYMENT, "Wrong state");
+        require(msg.value > 0, "Must send ETH");
+        
+        amount = msg.value;
+        depositTime = block.timestamp;
+        state = EscrowState.AWAITING_DELIVERY;
+        
+        emit PaymentDeposited(buyer, amount);
+    }
+    
+    // 买家确认交付
+    function confirmDelivery() external {
+        require(msg.sender == buyer, "Only buyer");
+        require(state == EscrowState.AWAITING_DELIVERY, "Wrong state");
+        
+        state = EscrowState.COMPLETE;
+        payable(seller).transfer(amount);
+        
+        emit DeliveryConfirmed(buyer, seller, amount);
+    }
+    
+    // 提起争议
+    function raiseDispute() external {
+        require(msg.sender == buyer || msg.sender == seller, "Only parties");
+        require(state == EscrowState.AWAITING_DELIVERY, "Wrong state");
+        
+        state = EscrowState.DISPUTED;
+        emit DisputeRaised(msg.sender);
+    }
+    
+    // 仲裁者解决争议
+    function resolveDispute(address winner) external {
+        require(msg.sender == arbiter, "Only arbiter");
+        require(state == EscrowState.DISPUTED, "Not disputed");
+        require(winner == buyer || winner == seller, "Invalid winner");
+        
+        state = EscrowState.COMPLETE;
+        payable(winner).transfer(amount);
+        
+        emit DisputeResolved(winner, amount);
+    }
+    
+    // 超时后取消
+    function cancelAfterTimeout() external {
+        require(msg.sender == buyer, "Only buyer");
+        require(state == EscrowState.AWAITING_DELIVERY, "Wrong state");
+        require(
+            block.timestamp >= depositTime + deliveryTimeout,
+            "Timeout not reached"
+        );
+        
+        state = EscrowState.CANCELLED;
+        payable(buyer).transfer(amount);
+        
+        emit DeliveryTimeoutReached(buyer);
+        emit EscrowCancelled(buyer);
+    }
+    
+    // 双方同意取消
+    function cancelMutual() external {
+        require(msg.sender == buyer || msg.sender == seller, "Only parties");
+        require(state == EscrowState.AWAITING_DELIVERY, "Wrong state");
+        
+        // 简化版本：任何一方都可以取消
+        // 生产版本应该需要双方签名
+        state = EscrowState.CANCELLED;
+        payable(buyer).transfer(amount);
+        
+        emit MutualCancellation(buyer, seller);
+        emit EscrowCancelled(msg.sender);
+    }
+    
+    // 获取剩余时间
+    function getTimeLeft() external view returns (uint256) {
+        if (state != EscrowState.AWAITING_DELIVERY) {
+            return 0;
+        }
+        
+        uint256 deadline = depositTime + deliveryTimeout;
+        if (block.timestamp >= deadline) {
+            return 0;
+        }
+        
+        return deadline - block.timestamp;
+    }
+    
+    // 获取合约信息
+    function getEscrowInfo() external view returns (
+        address _buyer,
+        address _seller,
+        address _arbiter,
+        uint256 _amount,
+        EscrowState _state,
+        uint256 _timeLeft
+    ) {
+        uint256 timeLeft = 0;
+        if (state == EscrowState.AWAITING_DELIVERY) {
+            uint256 deadline = depositTime + deliveryTimeout;
+            if (block.timestamp < deadline) {
+                timeLeft = deadline - block.timestamp;
+            }
+        }
+        
+        return (buyer, seller, arbiter, amount, state, timeLeft);
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 托管流程总结</strong>
+                <p style="margin-top: 10px; color: #155724;">
+                    1. 买家部署合约并存入资金 → 2. 卖家提供商品/服务 → 3. 买家确认收货，资金释放给卖家 → 4. 如有争议，仲裁者介入解决 → 5. 超时机制保护买家权益
+                </p>
+            </div>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #856404;">⚠️ 安全注意事项</strong>
+                <p style="margin-top: 10px; color: #856404;">
+                    - 仲裁者选择至关重要，需要公正可信<br>
+                    - 超时时间设置要合理，考虑交付复杂度<br>
+                    - 生产环境中应实现真正的多签取消机制<br>
+                    - 考虑添加部分退款功能<br>
+                    - 可以引入仲裁费用机制
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署托管合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>准备三个不同的账户（买家、卖家、仲裁者）</li>
+                    <li>使用买家账户部署合约</li>
+                    <li>构造函数参数：卖家地址、仲裁者地址、超时时间（如3600秒）</li>
+                    <li>验证合约状态为AWAITING_PAYMENT</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 买家存款</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>使用买家账户调用<code class="inline-code">deposit()</code></li>
+                    <li>发送一定数量的ETH（如0.1 ETH）</li>
+                    <li>观察状态变为AWAITING_DELIVERY</li>
+                    <li>检查<code class="inline-code">depositTime</code>和<code class="inline-code">amount</code></li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 正常交易流程</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>模拟卖家交付商品（链下行为）</li>
+                    <li>买家调用<code class="inline-code">confirmDelivery()</code></li>
+                    <li>观察状态变为COMPLETE</li>
+                    <li>检查卖家余额增加</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 争议处理流程</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>重新部署合约并存款</li>
+                    <li>买家或卖家调用<code class="inline-code">raiseDispute()</code></li>
+                    <li>观察状态变为DISPUTED</li>
+                    <li>仲裁者调用<code class="inline-code">resolveDispute(winner)</code></li>
+                    <li>检查获胜方收到资金</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤5: 超时取消测试</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>部署合约时设置很短的超时时间（如60秒）</li>
+                    <li>买家存款后等待超时</li>
+                    <li>调用<code class="inline-code">getTimeLeft()</code>查看剩余时间</li>
+                    <li>超时后调用<code class="inline-code">cancelAfterTimeout()</code></li>
+                    <li>验证买家收到退款</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>实现真正的多签取消机制（需要双方确认）</li>
+                    <li>添加部分退款功能（争议时可以分配资金）</li>
+                    <li>实现多个里程碑付款</li>
+                    <li>添加仲裁费用机制</li>
+                    <li>支持ERC-20代币托管</li>
+                    <li>实现托管工厂合约</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">多签取消实现</h4>
+                <pre><code class="language-solidity">mapping(address => bool) public cancelApproval;
+uint256 public cancelApprovalCount;
+
+function approveCancellation() external {
+    require(msg.sender == buyer || msg.sender == seller, "Only parties");
+    require(!cancelApproval[msg.sender], "Already approved");
+    
+    cancelApproval[msg.sender] = true;
+    cancelApprovalCount++;
+    
+    if (cancelApprovalCount == 2) {
+        // 执行取消逻辑
+        state = EscrowState.CANCELLED;
+        payable(buyer).transfer(amount);
+    }
+}</code></pre>
+                <p style="margin-top: 10px;">真正的多签机制需要双方都同意才能取消。</p>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">托管应用场景</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="background: var(--light);">
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">场景</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">特点</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">适用性</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">电商交易</td>
+                        <td style="padding: 10px;">买家保护</td>
+                        <td style="padding: 10px;">高</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;">服务外包</td>
+                        <td style="padding: 10px;">里程碑付款</td>
+                        <td style="padding: 10px;">高</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">房产交易</td>
+                        <td style="padding: 10px;">大额资金</td>
+                        <td style="padding: 10px;">中</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-23.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">LendingPool - 借贷池</div>
+            </a>
+            <a href="contract-25.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">AMM - 自动做市商</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

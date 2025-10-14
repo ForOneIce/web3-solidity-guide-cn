@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习路线图 - Solidity 30天挑战</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .header {
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--easy), var(--medium), var(--hard), var(--expert));
+            transform: translateX(-50%);
+        }
+        
+        .week-section {
+            margin-bottom: 60px;
+        }
+        
+        .week-title {
+            text-align: center;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+        
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .timeline-content {
+            width: 45%;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 3px 3px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .timeline-content:hover {
+            transform: scale(1.05);
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .timeline-content.easy { border-color: var(--easy); }
+        .timeline-content.medium { border-color: var(--medium); }
+        .timeline-content.hard { border-color: var(--hard); }
+        .timeline-content.expert { border-color: var(--expert); }
+        
+        .timeline-dot {
+            width: 30px;
+            height: 30px;
+            background: white;
+            border: 5px solid;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            color: white;
+        }
+        
+        .timeline-dot.easy { border-color: var(--easy); background: var(--easy); }
+        .timeline-dot.medium { border-color: var(--medium); background: var(--medium); }
+        .timeline-dot.hard { border-color: var(--hard); background: var(--hard); }
+        .timeline-dot.expert { border-color: var(--expert); background: var(--expert); }
+        
+        .day-number {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .contract-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        
+        .contract-desc {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+        
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .skill-tag {
+            background: var(--light);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: var(--secondary);
+        }
+        
+        .milestone {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border: 4px solid #ff6b35;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 40px 0;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .milestone-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .milestone-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 968px) {
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item, .timeline-item:nth-child(even) {
+                flex-direction: row !important;
+            }
+            
+            .timeline-content {
+                width: calc(100% - 80px);
+                margin-left: 60px;
+            }
+            
+            .timeline-dot {
+                left: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🗺️ 30天学习路线图</h1>
+        <p class="subtitle">从新手到DeFi开发者的完整旅程</p>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-home"></i> 返回首页
+        </a>
+    </div>
+
+    <div class="container">
+        <!-- 第一周: 基础入门 (1-7天) -->
+        <div class="week-section">
+            <div class="week-title">📅 第一周: 基础入门 (1-7天)</div>
+            <div class="timeline">
+                <div class="timeline-item" onclick="location.href='contract-1.html'">
+                    <div class="timeline-content easy">
+                        <div class="day-number">Day 1</div>
+                        <div class="contract-name">点击计数器</div>
+                        <div class="contract-desc">学习最基础的合约结构、状态变量和函数</div>
+                        <div class="skills">
+                            <span class="skill-tag">基础语法</span>
+                            <span class="skill-tag">状态变量</span>
+                            <span class="skill-tag">函数</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot easy">1</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-2.html'">
+                    <div class="timeline-content easy">
+                        <div class="day-number">Day 2</div>
+                        <div class="contract-name">保存我的名字</div>
+                        <div class="contract-desc">字符串存储、memory关键字和视图函数</div>
+                        <div class="skills">
+                            <span class="skill-tag">字符串</span>
+                            <span class="skill-tag">memory</span>
+                            <span class="skill-tag">view</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot easy">2</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-3.html'">
+                    <div class="timeline-content easy">
+                        <div class="day-number">Day 3</div>
+                        <div class="contract-name">投票站</div>
+                        <div class="contract-desc">数组和映射的深入使用</div>
+                        <div class="skills">
+                            <span class="skill-tag">数组</span>
+                            <span class="skill-tag">映射</span>
+                            <span class="skill-tag">投票</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot easy">3</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-4.html'">
+                    <div class="timeline-content easy">
+                        <div class="day-number">Day 4</div>
+                        <div class="contract-name">拍卖行</div>
+                        <div class="contract-desc">全局变量、block.timestamp和复杂逻辑</div>
+                        <div class="skills">
+                            <span class="skill-tag">拍卖</span>
+                            <span class="skill-tag">timestamp</span>
+                            <span class="skill-tag">竞价</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot easy">4</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-5.html'">
+                    <div class="timeline-content easy">
+                        <div class="day-number">Day 5</div>
+                        <div class="contract-name">仅管理员合约</div>
+                        <div class="contract-desc">访问控制、修饰符和所有权管理</div>
+                        <div class="skills">
+                            <span class="skill-tag">modifier</span>
+                            <span class="skill-tag">访问控制</span>
+                            <span class="skill-tag">onlyOwner</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot easy">5</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-6.html'">
+                    <div class="timeline-content easy">
+                        <div class="day-number">Day 6</div>
+                        <div class="contract-name">以太坊存钱罐</div>
+                        <div class="contract-desc">处理真实ETH、payable和msg.value</div>
+                        <div class="skills">
+                            <span class="skill-tag">ETH</span>
+                            <span class="skill-tag">payable</span>
+                            <span class="skill-tag">msg.value</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot easy">6</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-7.html'">
+                    <div class="timeline-content easy">
+                        <div class="day-number">Day 7</div>
+                        <div class="contract-name">简单欠条</div>
+                        <div class="contract-desc">嵌套映射和ETH转账方法</div>
+                        <div class="skills">
+                            <span class="skill-tag">嵌套映射</span>
+                            <span class="skill-tag">transfer</span>
+                            <span class="skill-tag">call</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot easy">7</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="milestone">
+            <div class="milestone-icon">🎉</div>
+            <div class="milestone-title">第一周完成!</div>
+            <p style="font-size: 1.1rem;">你已经掌握了Solidity的基础语法!</p>
+        </div>
+
+        <!-- 第二周: 进阶技能 (8-13天) -->
+        <div class="week-section">
+            <div class="week-title">📅 第二周: 进阶技能 (8-13天)</div>
+            <div class="timeline">
+                <div class="timeline-item" onclick="location.href='contract-8.html'">
+                    <div class="timeline-content medium">
+                        <div class="day-number">Day 8</div>
+                        <div class="contract-name">小费罐</div>
+                        <div class="contract-desc">货币转换、wei单位和复杂计算</div>
+                        <div class="skills">
+                            <span class="skill-tag">货币</span>
+                            <span class="skill-tag">wei</span>
+                            <span class="skill-tag">计算</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot medium">8</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-9.html'">
+                    <div class="timeline-content medium">
+                        <div class="day-number">Day 9</div>
+                        <div class="contract-name">智能计算器</div>
+                        <div class="contract-desc">合约间通信和函数调用</div>
+                        <div class="skills">
+                            <span class="skill-tag">合约调用</span>
+                            <span class="skill-tag">接口</span>
+                            <span class="skill-tag">ABI</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot medium">9</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-10.html'">
+                    <div class="timeline-content medium">
+                        <div class="day-number">Day 10</div>
+                        <div class="contract-name">活动追踪器</div>
+                        <div class="contract-desc">结构体、事件和复杂数据管理</div>
+                        <div class="skills">
+                            <span class="skill-tag">结构体</span>
+                            <span class="skill-tag">事件</span>
+                            <span class="skill-tag">数据管理</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot medium">10</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-11.html'">
+                    <div class="timeline-content medium">
+                        <div class="day-number">Day 11</div>
+                        <div class="contract-name">主密钥</div>
+                        <div class="contract-desc">继承、事件和OpenZeppelin</div>
+                        <div class="skills">
+                            <span class="skill-tag">继承</span>
+                            <span class="skill-tag">事件</span>
+                            <span class="skill-tag">OpenZeppelin</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot medium">11</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-12.html'">
+                    <div class="timeline-content medium">
+                        <div class="day-number">Day 12</div>
+                        <div class="contract-name">我的第一个代币</div>
+                        <div class="contract-desc">完整实现ERC-20标准</div>
+                        <div class="skills">
+                            <span class="skill-tag">ERC-20</span>
+                            <span class="skill-tag">代币</span>
+                            <span class="skill-tag">标准</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot medium">12</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-13.html'">
+                    <div class="timeline-content medium">
+                        <div class="day-number">Day 13</div>
+                        <div class="contract-name">预购代币</div>
+                        <div class="contract-desc">代币销售、时间锁和override</div>
+                        <div class="skills">
+                            <span class="skill-tag">代币销售</span>
+                            <span class="skill-tag">时间锁</span>
+                            <span class="skill-tag">virtual</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot medium">13</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="milestone">
+            <div class="milestone-icon">🚀</div>
+            <div class="milestone-title">第二周完成!</div>
+            <p style="font-size: 1.1rem;">你现在可以创建自己的加密代币了!</p>
+        </div>
+
+        <!-- 第三周: 高级特性 (14-20天) -->
+        <div class="week-section">
+            <div class="week-title">📅 第三周: 高级特性 (14-20天)</div>
+            <div class="timeline">
+                <div class="timeline-item" onclick="location.href='contract-14.html'">
+                    <div class="timeline-content hard">
+                        <div class="day-number">Day 14</div>
+                        <div class="contract-name">安全保管箱</div>
+                        <div class="contract-desc">接口、抽象合约和继承体系</div>
+                        <div class="skills">
+                            <span class="skill-tag">接口</span>
+                            <span class="skill-tag">抽象</span>
+                            <span class="skill-tag">继承</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot hard">14</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-15.html'">
+                    <div class="timeline-content hard">
+                        <div class="day-number">Day 15</div>
+                        <div class="contract-name">Gas优化投票</div>
+                        <div class="contract-desc">Gas优化技术和位运算</div>
+                        <div class="skills">
+                            <span class="skill-tag">Gas优化</span>
+                            <span class="skill-tag">位运算</span>
+                            <span class="skill-tag">存储</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot hard">15</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-16.html'">
+                    <div class="timeline-content hard">
+                        <div class="day-number">Day 16</div>
+                        <div class="contract-name">插件商店</div>
+                        <div class="contract-desc">call、delegatecall和模块化设计</div>
+                        <div class="skills">
+                            <span class="skill-tag">call</span>
+                            <span class="skill-tag">delegatecall</span>
+                            <span class="skill-tag">模块化</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot hard">16</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-17.html'">
+                    <div class="timeline-content hard">
+                        <div class="day-number">Day 17</div>
+                        <div class="contract-name">升级中心</div>
+                        <div class="contract-desc">可升级合约和代理模式</div>
+                        <div class="skills">
+                            <span class="skill-tag">代理</span>
+                            <span class="skill-tag">升级</span>
+                            <span class="skill-tag">delegatecall</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot hard">17</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-18.html'">
+                    <div class="timeline-content hard">
+                        <div class="day-number">Day 18</div>
+                        <div class="contract-name">预言机合约</div>
+                        <div class="contract-desc">Chainlink集成和真实世界数据</div>
+                        <div class="skills">
+                            <span class="skill-tag">Chainlink</span>
+                            <span class="skill-tag">预言机</span>
+                            <span class="skill-tag">价格馈送</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot hard">18</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-19.html'">
+                    <div class="timeline-content hard">
+                        <div class="day-number">Day 19</div>
+                        <div class="contract-name">签名验证</div>
+                        <div class="contract-desc">数字签名、ecrecover和认证</div>
+                        <div class="skills">
+                            <span class="skill-tag">签名</span>
+                            <span class="skill-tag">ecrecover</span>
+                            <span class="skill-tag">认证</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot hard">19</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-20.html'">
+                    <div class="timeline-content hard">
+                        <div class="day-number">Day 20</div>
+                        <div class="contract-name">金库堡垒</div>
+                        <div class="contract-desc">重入攻击和防御策略</div>
+                        <div class="skills">
+                            <span class="skill-tag">重入</span>
+                            <span class="skill-tag">安全</span>
+                            <span class="skill-tag">ReentrancyGuard</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot hard">20</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="milestone">
+            <div class="milestone-icon">⚡</div>
+            <div class="milestone-title">第三周完成!</div>
+            <p style="font-size: 1.1rem;">你已经掌握了高级安全和优化技术!</p>
+        </div>
+
+        <!-- 第四周: DeFi大师 (21-30天) -->
+        <div class="week-section">
+            <div class="week-title">📅 第四周: DeFi大师 (21-30天)</div>
+            <div class="timeline">
+                <div class="timeline-item" onclick="location.href='contract-21.html'">
+                    <div class="timeline-content expert">
+                        <div class="day-number">Day 21</div>
+                        <div class="contract-name">简单NFT</div>
+                        <div class="contract-desc">ERC-721从零实现</div>
+                        <div class="skills">
+                            <span class="skill-tag">ERC-721</span>
+                            <span class="skill-tag">NFT</span>
+                            <span class="skill-tag">标准</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot expert">21</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-22.html'">
+                    <div class="timeline-content expert">
+                        <div class="day-number">Day 22</div>
+                        <div class="contract-name">去中心化彩票</div>
+                        <div class="contract-desc">Chainlink VRF和可证明随机性</div>
+                        <div class="skills">
+                            <span class="skill-tag">VRF</span>
+                            <span class="skill-tag">随机数</span>
+                            <span class="skill-tag">Chainlink</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot expert">22</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-23.html'">
+                    <div class="timeline-content expert">
+                        <div class="day-number">Day 23</div>
+                        <div class="contract-name">借贷池</div>
+                        <div class="contract-desc">DeFi借贷、利息和抵押</div>
+                        <div class="skills">
+                            <span class="skill-tag">借贷</span>
+                            <span class="skill-tag">DeFi</span>
+                            <span class="skill-tag">利息</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot expert">23</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-24.html'">
+                    <div class="timeline-content expert">
+                        <div class="day-number">Day 24</div>
+                        <div class="contract-name">去中心化托管</div>
+                        <div class="contract-desc">安全托管和争议解决</div>
+                        <div class="skills">
+                            <span class="skill-tag">托管</span>
+                            <span class="skill-tag">安全</span>
+                            <span class="skill-tag">仲裁</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot expert">24</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-25.html'">
+                    <div class="timeline-content expert">
+                        <div class="day-number">Day 25</div>
+                        <div class="contract-name">自动做市商</div>
+                        <div class="contract-desc">AMM核心机制和x*y=k公式</div>
+                        <div class="skills">
+                            <span class="skill-tag">AMM</span>
+                            <span class="skill-tag">DEX</span>
+                            <span class="skill-tag">流动性</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot expert">25</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-26.html'">
+                    <div class="timeline-content expert">
+                        <div class="day-number">Day 26</div>
+                        <div class="contract-name">NFT市场</div>
+                        <div class="contract-desc">完整的NFT交易市场</div>
+                        <div class="skills">
+                            <span class="skill-tag">市场</span>
+                            <span class="skill-tag">NFT</span>
+                            <span class="skill-tag">交易</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot expert">26</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-27.html'">
+                    <div class="timeline-content expert">
+                        <div class="day-number">Day 27</div>
+                        <div class="contract-name">收益农场</div>
+                        <div class="contract-desc">质押、奖励和收益机制</div>
+                        <div class="skills">
+                            <span class="skill-tag">质押</span>
+                            <span class="skill-tag">收益</span>
+                            <span class="skill-tag">奖励</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot expert">27</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-28.html'">
+                    <div class="timeline-content expert">
+                        <div class="day-number">Day 28</div>
+                        <div class="contract-name">去中心化治理</div>
+                        <div class="contract-desc">DAO投票和治理机制</div>
+                        <div class="skills">
+                            <span class="skill-tag">DAO</span>
+                            <span class="skill-tag">治理</span>
+                            <span class="skill-tag">投票</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot expert">28</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-29.html'">
+                    <div class="timeline-content expert">
+                        <div class="day-number">Day 29</div>
+                        <div class="contract-name">稳定币</div>
+                        <div class="contract-desc">抵押型稳定币和Chainlink价格</div>
+                        <div class="skills">
+                            <span class="skill-tag">稳定币</span>
+                            <span class="skill-tag">抵押</span>
+                            <span class="skill-tag">Chainlink</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot expert">29</div>
+                </div>
+
+                <div class="timeline-item" onclick="location.href='contract-30.html'">
+                    <div class="timeline-content expert">
+                        <div class="day-number">Day 30</div>
+                        <div class="contract-name">🎯 最终项目: 迷你DEX</div>
+                        <div class="contract-desc">综合所有知识,构建完整的去中心化交易所</div>
+                        <div class="skills">
+                            <span class="skill-tag">DEX</span>
+                            <span class="skill-tag">Factory</span>
+                            <span class="skill-tag">综合项目</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot expert">30</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="milestone" style="background: linear-gradient(135deg, #FF6B6B, #FFE66D); border-color: #4ECDC4;">
+            <div class="milestone-icon">🏆</div>
+            <div class="milestone-title">恭喜毕业!</div>
+            <p style="font-size: 1.2rem; font-weight: bold;">你已经完成30天挑战!</p>
+            <p style="margin-top: 10px;">现在你是一名真正的Solidity开发者了! 🎉</p>
+        </div>
+    </div>
+
+    <script>
+        // 所有timeline-item都已经有onclick事件了，不需要额外添加
+    </script>
+</body>
+</html>

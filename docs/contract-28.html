@@ -1,0 +1,812 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAO - 去中心化治理 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第28天 - 去中心化治理</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 28 天 🏛️</div>
+                    <h1>DAO - 去中心化治理</h1>
+                    <p class="subtitle">构建完整的DAO治理系统</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--expert);">
+                        🏆 专家
+                    </div>
+                    <span class="tag">DAO</span>
+                    <span class="tag">提案</span>
+                    <span class="tag">投票治理</span>
+                    <span class="tag">时间锁</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握DAO治理机制和投票系统</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>提案创建、加权投票、法定人数、时间锁</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>75分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★★★</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">🏛️ DAO治理原理</div>
+                <p>去中心化自治组织（DAO）通过智能合约实现民主治理：</p>
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #155724;">✅ DAO核心特征</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #155724;">
+                        <li>代码即法律，规则透明</li>
+                        <li>代币持有者参与治理</li>
+                        <li>提案投票决定重大事项</li>
+                        <li>自动执行通过的提案</li>
+                        <li>无需中心化管理</li>
+                    </ul>
+                </div>
+                <p><strong>治理流程：</strong></p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <pre style="background: none; color: var(--dark); font-size: 0.9rem;">创建提案 → 投票期 → 计票 → 时间锁 → 执行</pre>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🗳️ 加权投票机制</div>
+                <p>基于代币持有量的加权投票确保利益相关者的话语权：</p>
+                <pre><code class="language-solidity">function vote(uint256 proposalId, bool support) external {
+    Proposal storage proposal = proposals[proposalId];
+    require(!hasVoted[proposalId][msg.sender], "Already voted");
+    
+    // 投票权重 = 代币余额
+    uint256 weight = governanceToken.balanceOf(msg.sender);
+    require(weight > 0, "No voting power");
+    
+    hasVoted[proposalId][msg.sender] = true;
+    
+    if (support) {
+        proposal.forVotes += weight;
+    } else {
+        proposal.againstVotes += weight;
+    }
+    
+    emit Voted(proposalId, msg.sender, support, weight);
+}</code></pre>
+                <p><strong>投票权重计算：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><strong>持币投票：</strong>代币数量 = 投票权重</li>
+                    <li><strong>防重复投票：</strong>hasVoted映射记录</li>
+                    <li><strong>实时权重：</strong>基于当前余额</li>
+                    <li><strong>透明记录：</strong>所有投票公开可查</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📊 法定人数机制</div>
+                <p>法定人数确保提案有足够的参与度才能通过：</p>
+                <pre><code class="language-solidity">function finalizeProposal(uint256 proposalId) external {
+    Proposal storage proposal = proposals[proposalId];
+    require(block.timestamp > proposal.endTime, "Voting not ended");
+    
+    uint256 totalVotes = proposal.forVotes + proposal.againstVotes;
+    uint256 totalSupply = governanceToken.totalSupply();
+    uint256 quorumRequired = (totalSupply * quorumPercentage) / 100;
+    
+    if (totalVotes >= quorumRequired && proposal.forVotes > proposal.againstVotes) {
+        // 提案通过，进入时间锁
+        proposal.timelockEnd = block.timestamp + timelockDuration;
+        emit ProposalTimelockStarted(proposalId);
+    } else {
+        proposal.canceled = true;
+        emit QuorumNotMet(proposalId);
+    }
+}</code></pre>
+                <p><strong>通过条件：</strong></p>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #856404;">双重检查机制</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px; color: #856404;">
+                        <li>总投票数 ≥ 法定人数</li>
+                        <li>赞成票 > 反对票</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">⏰ 时间锁保护</div>
+                <p>时间锁为社区提供反应时间，防止恶意提案：</p>
+                <pre><code class="language-solidity">function executeProposal(uint256 proposalId) external {
+    Proposal storage proposal = proposals[proposalId];
+    
+    require(proposal.timelockEnd > 0, "No timelock set");
+    require(block.timestamp >= proposal.timelockEnd, "Timelock not ended");
+    require(!proposal.executed, "Already executed");
+    
+    proposal.executed = true;
+    
+    // 退还提案押金
+    if (proposalDepositAmount > 0) {
+        governanceToken.transfer(proposal.proposer, proposalDepositAmount);
+    }
+    
+    emit ProposalExecuted(proposalId);
+}</code></pre>
+                <p><strong>时间锁作用：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><strong>缓冲期：</strong>给社区时间审查提案</li>
+                    <li><strong>退出机会：</strong>不同意者可以退出</li>
+                    <li><strong>安全保障：</strong>防止闪电攻击</li>
+                    <li><strong>透明执行：</strong>执行时间可预期</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 DAO治理合约</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+contract DecentralizedGovernance is ReentrancyGuard {
+    IERC20 public governanceToken;
+    
+    struct Proposal {
+        address proposer;
+        string description;
+        uint256 forVotes;
+        uint256 againstVotes;
+        uint256 startTime;
+        uint256 endTime;
+        bool executed;
+        bool canceled;
+        uint256 timelockEnd;
+    }
+    
+    mapping(uint256 => Proposal) public proposals;
+    mapping(uint256 => mapping(address => bool)) public hasVoted;
+    
+    uint256 public nextProposalId;
+    uint256 public votingDuration;
+    uint256 public timelockDuration;
+    address public admin;
+    uint256 public quorumPercentage;
+    uint256 public proposalDepositAmount;
+    
+    event ProposalCreated(uint256 indexed proposalId, address indexed proposer, string description);
+    event Voted(uint256 indexed proposalId, address indexed voter, bool support, uint256 weight);
+    event ProposalExecuted(uint256 indexed proposalId);
+    event QuorumNotMet(uint256 indexed proposalId);
+    event ProposalTimelockStarted(uint256 indexed proposalId);
+    
+    modifier onlyAdmin() {
+        require(msg.sender == admin, "Not admin");
+        _;
+    }
+    
+    constructor(
+        address _governanceToken,
+        uint256 _votingDuration,
+        uint256 _timelockDuration,
+        uint256 _quorumPercentage,
+        uint256 _proposalDepositAmount
+    ) {
+        require(_governanceToken != address(0), "Invalid token");
+        require(_votingDuration > 0, "Invalid duration");
+        require(_quorumPercentage > 0 && _quorumPercentage <= 100, "Invalid quorum");
+        
+        governanceToken = IERC20(_governanceToken);
+        votingDuration = _votingDuration;
+        timelockDuration = _timelockDuration;
+        admin = msg.sender;
+        quorumPercentage = _quorumPercentage;
+        proposalDepositAmount = _proposalDepositAmount;
+    }
+    
+    // 创建提案
+    function createProposal(string memory description) external returns (uint256) {
+        require(bytes(description).length > 0, "Empty description");
+        
+        // 收取提案押金
+        if (proposalDepositAmount > 0) {
+            governanceToken.transferFrom(msg.sender, address(this), proposalDepositAmount);
+        }
+        
+        uint256 proposalId = nextProposalId++;
+        
+        proposals[proposalId] = Proposal({
+            proposer: msg.sender,
+            description: description,
+            forVotes: 0,
+            againstVotes: 0,
+            startTime: block.timestamp,
+            endTime: block.timestamp + votingDuration,
+            executed: false,
+            canceled: false,
+            timelockEnd: 0
+        });
+        
+        emit ProposalCreated(proposalId, msg.sender, description);
+        return proposalId;
+    }
+    
+    // 投票
+    function vote(uint256 proposalId, bool support) external {
+        Proposal storage proposal = proposals[proposalId];
+        
+        require(block.timestamp >= proposal.startTime, "Not started");
+        require(block.timestamp <= proposal.endTime, "Ended");
+        require(!proposal.executed, "Already executed");
+        require(!proposal.canceled, "Canceled");
+        require(!hasVoted[proposalId][msg.sender], "Already voted");
+        
+        uint256 weight = governanceToken.balanceOf(msg.sender);
+        require(weight > 0, "No voting power");
+        
+        hasVoted[proposalId][msg.sender] = true;
+        
+        if (support) {
+            proposal.forVotes += weight;
+        } else {
+            proposal.againstVotes += weight;
+        }
+        
+        emit Voted(proposalId, msg.sender, support, weight);
+    }
+    
+    // 完成提案（进入时间锁或取消）
+    function finalizeProposal(uint256 proposalId) external {
+        Proposal storage proposal = proposals[proposalId];
+        
+        require(block.timestamp > proposal.endTime, "Voting not ended");
+        require(!proposal.executed, "Already executed");
+        require(!proposal.canceled, "Canceled");
+        
+        uint256 totalVotes = proposal.forVotes + proposal.againstVotes;
+        uint256 totalSupply = governanceToken.totalSupply();
+        uint256 quorumRequired = (totalSupply * quorumPercentage) / 100;
+        
+        if (totalVotes >= quorumRequired && proposal.forVotes > proposal.againstVotes) {
+            if (timelockDuration > 0) {
+                proposal.timelockEnd = block.timestamp + timelockDuration;
+                emit ProposalTimelockStarted(proposalId);
+            } else {
+                proposal.executed = true;
+                _refundDeposit(proposalId);
+                emit ProposalExecuted(proposalId);
+            }
+        } else {
+            proposal.canceled = true;
+            emit QuorumNotMet(proposalId);
+        }
+    }
+    
+    // 执行提案
+    function executeProposal(uint256 proposalId) external {
+        Proposal storage proposal = proposals[proposalId];
+        
+        require(proposal.timelockEnd > 0, "No timelock set");
+        require(block.timestamp >= proposal.timelockEnd, "Timelock not ended");
+        require(!proposal.executed, "Already executed");
+        require(!proposal.canceled, "Canceled");
+        
+        proposal.executed = true;
+        _refundDeposit(proposalId);
+        
+        emit ProposalExecuted(proposalId);
+    }
+    
+    // 退还押金
+    function _refundDeposit(uint256 proposalId) internal {
+        if (proposalDepositAmount > 0) {
+            Proposal storage proposal = proposals[proposalId];
+            governanceToken.transfer(proposal.proposer, proposalDepositAmount);
+        }
+    }
+    
+    // 获取提案结果
+    function getProposalResult(uint256 proposalId) external view returns (
+        bool passed,
+        uint256 forVotes,
+        uint256 againstVotes,
+        bool executed
+    ) {
+        Proposal memory proposal = proposals[proposalId];
+        passed = proposal.forVotes > proposal.againstVotes;
+        return (passed, proposal.forVotes, proposal.againstVotes, proposal.executed);
+    }
+    
+    // 管理员设置参数
+    function setQuorumPercentage(uint256 _newQuorum) external onlyAdmin {
+        require(_newQuorum > 0 && _newQuorum <= 100, "Invalid quorum");
+        quorumPercentage = _newQuorum;
+    }
+    
+    function setProposalDepositAmount(uint256 _newAmount) external onlyAdmin {
+        proposalDepositAmount = _newAmount;
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ DAO治理流程</strong>
+                <p style="margin-top: 10px; color: #155724;">
+                    任何人创建提案 → 代币持有者投票 → 达到法定人数且多数赞成 → 进入时间锁 → 社区审查期 → 自动执行。整个过程透明、民主、不可篡改。
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 准备治理代币</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>部署ERC-20治理代币（如GOV）</li>
+                    <li>给多个账户分发代币</li>
+                    <li>确保代币分布合理</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 部署DAO合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>设置投票期（如3600秒）</li>
+                    <li>设置时间锁（如1800秒）</li>
+                    <li>设置法定人数（如20%）</li>
+                    <li>设置提案押金（如100个代币）</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 创建提案</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>批准DAO合约使用治理代币</li>
+                    <li>调用<code class="inline-code">createProposal("增加开发预算")</code></li>
+                    <li>检查提案ID和详情</li>
+                    <li>验证押金被扣除</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 投票测试</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>使用不同账户调用<code class="inline-code">vote(0, true)</code></li>
+                    <li>观察投票权重和累积票数</li>
+                    <li>测试重复投票保护</li>
+                    <li>确保达到法定人数</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤5: 执行流程</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>投票期结束后调用<code class="inline-code">finalizeProposal(0)</code></li>
+                    <li>观察提案进入时间锁状态</li>
+                    <li>等待时间锁结束</li>
+                    <li>调用<code class="inline-code">executeProposal(0)</code>完成执行</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>实现委托投票机制</li>
+                    <li>添加提案类别和不同投票规则</li>
+                    <li>实现链上提案执行（调用其他合约）</li>
+                    <li>添加紧急暂停功能</li>
+                    <li>实现多签管理员机制</li>
+                    <li>创建DAO财库管理</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">委托投票实现</h4>
+                <pre><code class="language-solidity">mapping(address => address) public delegates;
+
+function delegate(address delegatee) external {
+    delegates[msg.sender] = delegatee;
+    emit DelegateChanged(msg.sender, delegatee);
+}
+
+function getVotingPower(address voter) public view returns (uint256) {
+    uint256 power = governanceToken.balanceOf(voter);
+    
+    // 加上委托给该地址的投票权
+    // 这里需要遍历或使用更复杂的数据结构
+    return power;
+}</code></pre>
+                <p style="margin-top: 10px;">委托投票允许代币持有者将投票权委托给专业的治理参与者。</p>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-27.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">YieldFarming - 收益农场</div>
+            </a>
+            <a href="contract-29.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">StableCoin - 稳定币</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

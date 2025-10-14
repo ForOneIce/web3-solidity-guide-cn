@@ -1,0 +1,718 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ether Piggy Bank - 以太坊存钱罐 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第6天 - 处理ETH</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 6 天 💰</div>
+                    <h1>Ether Piggy Bank - 以太坊存钱罐</h1>
+                    <p class="subtitle">构建一个共享储蓄池,处理真实的ETH</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--easy);">
+                        🌱 初级
+                    </div>
+                    <span class="tag">payable</span>
+                    <span class="tag">msg.value</span>
+                    <span class="tag">ETH转账</span>
+                    <span class="tag">数组</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>学会处理真实的以太币(ETH)</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>payable、msg.value、address[]</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>50分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★☆☆</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">💸 payable - 可支付函数</div>
+                <p><code class="inline-code">payable</code>修饰符允许函数接收ETH:</p>
+                <pre><code class="language-solidity">function depositAmountEther() public payable onlyRegisteredMember {
+    balance[msg.sender] += msg.value;
+}</code></pre>
+                <p><strong>关键特点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>只有<code class="inline-code">payable</code>函数才能接收ETH</li>
+                    <li>如果向非payable函数发送ETH,交易会失败</li>
+                    <li>constructor也可以是payable</li>
+                    <li>address类型也有payable和non-payable之分</li>
+                </ul>
+                
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong style="color: #856404;">⚠️ 重要:</strong>
+                    <span style="color: #856404;"> 声明payable但不使用msg.value是合法的,但不推荐,容易让用户损失ETH!</span>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">💰 msg.value - 发送的ETH数量</div>
+                <p><code class="inline-code">msg.value</code>包含当前交易发送的ETH数量(以wei为单位):</p>
+                <pre><code class="language-solidity">function depositAmountEther() public payable onlyRegisteredMember {
+    balance[msg.sender] += msg.value;  // msg.value是发送的wei数量
+}</code></pre>
+                <p><strong>ETH单位转换:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>1 ETH = 1,000,000,000,000,000,000 wei (10^18)</li>
+                    <li>1 ETH = 1,000,000,000 gwei (10^9) - gas价格常用单位</li>
+                    <li>Solidity中可以使用:<code class="inline-code">1 ether</code>, <code class="inline-code">1 gwei</code>, <code class="inline-code">1 wei</code></li>
+                    <li>msg.value始终是wei单位</li>
+                </ul>
+                
+                <div style="background: white; border: 2px solid var(--accent); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <h4 style="color: var(--primary); margin-bottom: 10px;">单位示例:</h4>
+                    <pre style="background: #f8f9fa; color: var(--dark); box-shadow: none;"><code>1 ether == 1000000000000000000 wei
+0.1 ether == 100000000000000000 wei
+1 gwei == 1000000000 wei</code></pre>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📋 动态数组 (address[])</div>
+                <p>动态数组可以在运行时改变大小:</p>
+                <pre><code class="language-solidity">address[] members;  // 动态数组
+
+function addMembers(address _member) public onlyBankManager {
+    members.push(_member);  // 添加元素
+}</code></pre>
+                <p><strong>数组操作:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">push(element)</code>: 在数组末尾添加元素</li>
+                    <li><code class="inline-code">pop()</code>: 移除并返回最后一个元素</li>
+                    <li><code class="inline-code">length</code>: 获取数组长度</li>
+                    <li><code class="inline-code">array[index]</code>: 访问指定索引的元素</li>
+                    <li>删除中间元素很困难(需要移动后面的元素或留空)</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔄 多个modifier组合</div>
+                <p>一个函数可以使用多个modifier,按顺序执行:</p>
+                <pre><code class="language-solidity">function deposit(uint256 _amount) public onlyRegisteredMember {
+    balance[msg.sender] += _amount;
+}
+
+function depositAmountEther() public payable onlyRegisteredMember {
+    balance[msg.sender] += msg.value;
+}</code></pre>
+                <p><strong>modifier执行顺序:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>modifier从左到右依次执行</li>
+                    <li>每个modifier的<code class="inline-code">_;</code>会执行下一个modifier或函数体</li>
+                    <li>可以组合多个modifier实现复杂的访问控制</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 完整合约代码</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract EtherPiggyBank {
+    address public bankManager;  // 银行管理员
+    address[] members;  // 成员列表
+    mapping(address => bool) public registeredMembers;  // 注册状态
+    mapping(address => uint256) balance;  // 余额记录
+    
+    constructor() {
+        bankManager = msg.sender;
+    }
+    
+    // 修饰符:只有管理员
+    modifier onlyBankManager() {
+        require(msg.sender == bankManager, "Not the bank manager");
+        _;
+    }
+    
+    // 修饰符:只有注册成员
+    modifier onlyRegisteredMember() {
+        require(registeredMembers[msg.sender], "Not a registered member");
+        _;
+    }
+    
+    // 添加成员(只有管理员)
+    function addMembers(address _member) public onlyBankManager {
+        require(!registeredMembers[_member], "Already registered");
+        registeredMembers[_member] = true;
+        members.push(_member);
+    }
+    
+    // 获取所有成员
+    function getMembers() public view returns (address[] memory) {
+        return members;
+    }
+    
+    // 记录存款(不真实转ETH,仅记账)
+    function deposit(uint256 _amount) public onlyRegisteredMember {
+        balance[msg.sender] += _amount;
+    }
+    
+    // 真实存入ETH
+    function depositAmountEther() public payable onlyRegisteredMember {
+        balance[msg.sender] += msg.value;
+    }
+    
+    // 提取(仅记账,不真实转ETH)
+    function withdraw(uint256 _amount) public onlyRegisteredMember {
+        require(balance[msg.sender] >= _amount, "Insufficient balance");
+        balance[msg.sender] -= _amount;
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 这个合约做什么?</strong>
+                <p style="margin-top: 10px; color: #155724;">这是一个共享储蓄池。管理员可以添加成员,成员可以存入ETH并查看余额。注意:这个简化版本只记录余额,没有实现真实的ETH提取功能(实际应用需要使用<code class="inline-code">address.transfer()</code>或<code class="inline-code">address.call{value: amount}("")</code>)。</p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">🔍 两种存款方式对比</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">方式1: deposit() - 仅记账</h4>
+                <pre><code class="language-solidity">function deposit(uint256 _amount) public onlyRegisteredMember {
+    balance[msg.sender] += _amount;
+}</code></pre>
+                <ul style="margin-top: 10px; line-height: 1.8;">
+                    <li>❌ 不接收真实的ETH</li>
+                    <li>✅ 只是在mapping中记录数字</li>
+                    <li>📝 用于测试或虚拟积分系统</li>
+                    <li>⚠️ 调用时发送ETH会失败(没有payable)</li>
+                </ul>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">方式2: depositAmountEther() - 真实存入</h4>
+                <pre><code class="language-solidity">function depositAmountEther() public payable onlyRegisteredMember {
+    balance[msg.sender] += msg.value;
+}</code></pre>
+                <ul style="margin-top: 10px; line-height: 1.8;">
+                    <li>✅ 真实接收ETH到合约地址</li>
+                    <li>✅ msg.value记录发送的wei数量</li>
+                    <li>💰 ETH存储在合约中</li>
+                    <li>🔒 需要提取函数才能取回</li>
+                </ul>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">💡 实战场景</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">场景: Alice存入0.5 ETH</h4>
+                <pre><code class="language-solidity">// Alice在Remix中:
+1. 在"VALUE"输入框输入: 0.5
+2. 选择单位: Ether (而不是Wei)
+3. 点击depositAmountEther按钮
+
+// 合约执行:
+msg.value = 500000000000000000 wei  // 0.5 ETH转为wei
+balance[0xAlice] += 500000000000000000
+
+// 结果:
+- 合约余额增加0.5 ETH
+- Alice的余额记录为500000000000000000 wei</code></pre>
+            </div>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #856404;">⚠️ 安全提醒</strong>
+                <p style="margin-top: 10px; color: #856404;">
+                    这个合约缺少真实的提取功能!实际应用中,提取函数应该这样写:
+                </p>
+                <pre style="margin-top: 10px; background: #fff;"><code class="language-solidity">function withdrawEther(uint256 _amount) public onlyRegisteredMember {
+    require(balance[msg.sender] >= _amount, "Insufficient balance");
+    balance[msg.sender] -= _amount;
+    
+    // 方式1: transfer (gas限制2300,失败会revert)
+    payable(msg.sender).transfer(_amount);
+    
+    // 方式2: call (推荐,更安全)
+    (bool success, ) = payable(msg.sender).call{value: _amount}("");
+    require(success, "Transfer failed");
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署合约</h4>
+                <p>确保选择了Remix VM环境,部署合约。你会成为bankManager。</p>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 注册自己为成员</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>复制你的地址(在Account下拉框中显示)</li>
+                    <li>调用<code class="inline-code">addMembers("你的地址")</code></li>
+                    <li>调用<code class="inline-code">getMembers</code>确认</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 测试存入ETH</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>在Remix顶部找到"VALUE"输入框</li>
+                    <li>输入<code class="inline-code">1</code>,选择单位<code class="inline-code">Ether</code></li>
+                    <li>点击<code class="inline-code">depositAmountEther</code>按钮</li>
+                    <li>查看交易日志,确认发送了1 ETH</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 查看合约余额</h4>
+                <p>在Remix左侧"Deploy & Run"面板,找到你的合约实例,旁边会显示合约的ETH余额(应该是1 ETH)。</p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>添加真实的<code class="inline-code">withdrawEther()</code>函数(参考上面的代码)</li>
+                    <li>添加<code class="inline-code">getBalance()</code>函数返回调用者的余额</li>
+                    <li>添加<code class="inline-code">getTotalBalance()</code>函数返回合约总余额</li>
+                    <li>添加成员移除功能<code class="inline-code">removeMember(address)</code></li>
+                    <li>添加事件记录存款和提取操作</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 深入理解</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">为什么需要payable(msg.sender)?</h4>
+                <p style="line-height: 1.8;">
+                    在Solidity 0.8+中,address有两种类型:
+                </p>
+                <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+                    <li><code class="inline-code">address</code>: 普通地址,不能接收ETH</li>
+                    <li><code class="inline-code">address payable</code>: 可支付地址,能接收ETH</li>
+                </ul>
+                <p style="margin-top: 10px;"><code class="inline-code">msg.sender</code>默认是<code class="inline-code">address</code>类型,需要转换为<code class="inline-code">address payable</code>才能发送ETH:</p>
+                <pre style="margin-top: 10px;"><code class="language-solidity">payable(msg.sender).transfer(amount);</code></pre>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">三种转账方式对比</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="background: var(--light);">
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">方式</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">Gas限制</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">失败处理</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">推荐度</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><code class="inline-code">transfer()</code></td>
+                        <td style="padding: 10px;">2300 gas</td>
+                        <td style="padding: 10px;">自动revert</td>
+                        <td style="padding: 10px;">⭐⭐</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;"><code class="inline-code">send()</code></td>
+                        <td style="padding: 10px;">2300 gas</td>
+                        <td style="padding: 10px;">返回false</td>
+                        <td style="padding: 10px;">⭐</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><code class="inline-code">call{value}()</code></td>
+                        <td style="padding: 10px;">所有gas</td>
+                        <td style="padding: 10px;">返回bool</td>
+                        <td style="padding: 10px;">⭐⭐⭐⭐⭐</td>
+                    </tr>
+                </table>
+                <p style="margin-top: 15px; color: #28a745; font-weight: bold;">✅ 推荐使用call,更灵活安全!</p>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-5.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">Admin-Only - 仅管理员合约</div>
+            </a>
+            <a href="contract-7.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">Simple IOU - 简单欠条</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

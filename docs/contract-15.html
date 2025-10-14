@@ -1,0 +1,853 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gas-Efficient Voting - Gas优化投票 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--hard);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--hard), #c72828);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #ffe6e6, #ffd6d6);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--hard);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--hard);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #fff0f0, #ffe6e6);
+            border-left: 5px solid var(--hard);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--hard);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第15天 - Gas优化技术</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 15 天 ⚡</div>
+                    <h1>Gas-Efficient Voting</h1>
+                    <p class="subtitle">Gas优化投票 - 位运算与存储优化</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--hard);">
+                        🌳 高级
+                    </div>
+                    <span class="tag">Gas优化</span>
+                    <span class="tag">位运算</span>
+                    <span class="tag">bytes32</span>
+                    <span class="tag">存储打包</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握Gas优化技术和位运算</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>uint8/uint32、位掩码、打包</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>90分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">📊 主观感受难度</div>
+                    <div>⭐⭐⭐⭐⭐ 极难 - Gas优化技巧和位运算操作</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">⚡ 为什么需要Gas优化?</div>
+                <p>Gas成本直接影响用户体验和应用可行性:</p>
+                
+                <table style="width: 100%; margin: 15px 0; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden;">
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 12px; text-align: left;">操作</th>
+                        <th style="padding: 12px; text-align: left;">Gas成本</th>
+                        <th style="padding: 12px; text-align: left;">说明</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">SSTORE (新值)</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">20,000</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">存储新数据</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">SLOAD</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">800</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">读取存储</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">Memory操作</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">3-10</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">临时存储</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;">基础运算</td>
+                        <td style="padding: 10px;">3-5</td>
+                        <td style="padding: 10px;">加减乘除</td>
+                    </tr>
+                </table>
+                
+                <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong style="color: #856404;">💡 优化目标:</strong>
+                    <span style="color: #856404;"> 减少存储操作、使用更小的数据类型、批量处理数据</span>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔢 使用更小的数据类型</div>
+                <pre><code class="language-solidity">// ❌ Gas浪费
+uint256 public proposalCount;  // 使用32字节存储一个小数字
+
+// ✅ Gas优化
+uint8 public proposalCount;    // 只用1字节,节省31字节!
+
+// 其他优化示例
+uint32 public timestamp;       // 足够存储时间戳到2106年
+uint32 public voteCount;       // 最大值42亿,通常够用
+bytes32 public proposalName;   // 固定大小,比string便宜</code></pre>
+                
+                <p style="margin-top: 15px;"><strong>数据类型大小:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">uint8</code>: 1 byte (0 ~ 255)</li>
+                    <li><code class="inline-code">uint16</code>: 2 bytes (0 ~ 65,535)</li>
+                    <li><code class="inline-code">uint32</code>: 4 bytes (0 ~ 4,294,967,295)</li>
+                    <li><code class="inline-code">uint256</code>: 32 bytes (默认)</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📦 存储打包 (Storage Packing)</div>
+                <p>Solidity按32字节槽位存储数据,多个小变量可以打包到一个槽位:</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                    <div style="background: white; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: var(--hard); margin-bottom: 10px;">❌ 未优化 (3个槽位)</h4>
+                        <pre><code class="language-solidity">struct Proposal {
+    uint256 voteCount;  // 槽位0
+    uint256 startTime;  // 槽位1
+    bool executed;      // 槽位2
+}</code></pre>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: #28a745; margin-bottom: 10px;">✅ 优化后 (1个槽位!)</h4>
+                        <pre><code class="language-solidity">struct Proposal {
+    uint32 voteCount;   // |
+    uint32 startTime;   // | 全在槽位0
+    uint32 endTime;     // |
+    bool executed;      // |
+}</code></pre>
+                    </div>
+                </div>
+                
+                <p><strong>Gas节省:</strong> 读写一个槽位 vs 三个槽位 = 节省约40,000 gas!</p>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🎭 位运算 - 用一个uint256存储256个布尔值</div>
+                <p>传统方式需要256个存储槽位,位运算只需要1个!</p>
+                
+                <pre><code class="language-solidity">// 存储投票状态: 每个提案一个bit
+mapping(address => uint256) private voterRegistry;
+
+// 检查是否投过票 (提案ID = 5)
+uint256 mask = 1 << 5;              // 创建掩码: 0000...0100000
+bool hasVoted = (voterData & mask) != 0;
+
+// 记录投票
+voterRegistry[msg.sender] = voterData | mask;</code></pre>
+                
+                <div style="background: white; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                    <h4 style="color: var(--primary); margin-bottom: 10px;">位运算示例:</h4>
+                    <pre><code>uint256 data = 0;  // 0000 0000
+
+// 设置第3位为1
+data = data | (1 << 3);  // 0000 1000
+
+// 检查第3位
+bool isSet = (data & (1 << 3)) != 0;  // true
+
+// 设置第5位
+data = data | (1 << 5);  // 0010 1000
+
+// 清除第3位
+data = data & ~(1 << 3);  // 0010 0000</code></pre>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📝 bytes32 vs string</div>
+                <pre><code class="language-solidity">// ❌ string (动态大小,昂贵)
+string public proposalName = "Build new park";
+// 每次读写都需要额外gas
+
+// ✅ bytes32 (固定大小,便宜)
+bytes32 public proposalName = "Build new park";
+// 固定32字节,单次读写
+
+// 转换: string -> bytes32
+bytes32 nameBytes = bytes32(bytes("Build new park"));</code></pre>
+                
+                <p style="margin-top: 15px;"><strong>限制:</strong> bytes32最多存储32个ASCII字符(或11个汉字UTF-8)</p>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 Gas优化投票合约</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract GasEfficientVoting {
+    // ✅ 使用uint8而不是uint256
+    uint8 public proposalCount;
+    
+    // ✅ 结构体打包
+    struct Proposal {
+        bytes32 name;       // 32 bytes
+        uint32 voteCount;   // 4 bytes  |
+        uint32 startTime;   // 4 bytes  | 打包在同一槽位
+        uint32 endTime;     // 4 bytes  |
+        bool executed;      // 1 byte   |
+    }
+    
+    // ✅ 映射代替数组(O(1)查找)
+    mapping(uint8 => Proposal) public proposals;
+    
+    // ✅ 位运算存储投票状态
+    mapping(address => uint256) private voterRegistry;
+    mapping(uint8 => uint32) public proposalVoterCount;
+    
+    // 事件
+    event ProposalCreated(uint8 indexed proposalId, bytes32 name);
+    event Voted(address indexed voter, uint8 indexed proposalId);
+    event ProposalExecuted(uint8 indexed proposalId);
+    
+    // 创建提案
+    function createProposal(bytes32 name, uint32 duration) external {
+        uint8 proposalId = proposalCount;
+        proposalCount++;
+        
+        Proposal memory newProposal = Proposal({
+            name: name,
+            voteCount: 0,
+            startTime: uint32(block.timestamp),
+            endTime: uint32(block.timestamp + duration),
+            executed: false
+        });
+        
+        proposals[proposalId] = newProposal;
+        emit ProposalCreated(proposalId, name);
+    }
+    
+    // 投票 (使用位运算)
+    function vote(uint8 proposalId) external {
+        require(proposalId < proposalCount, "Invalid proposal");
+        require(block.timestamp >= proposals[proposalId].startTime, "Not started");
+        require(block.timestamp <= proposals[proposalId].endTime, "Ended");
+        require(!proposals[proposalId].executed, "Already executed");
+        
+        uint256 voterData = voterRegistry[msg.sender];
+        uint256 mask = 1 << proposalId;
+        
+        // 检查是否已投票
+        require((voterData & mask) == 0, "Already voted");
+        
+        // 记录投票
+        voterRegistry[msg.sender] = voterData | mask;
+        proposals[proposalId].voteCount++;
+        proposalVoterCount[proposalId]++;
+        
+        emit Voted(msg.sender, proposalId);
+    }
+    
+    // 执行提案
+    function executeProposal(uint8 proposalId) external {
+        require(proposalId < proposalCount, "Invalid proposal");
+        require(block.timestamp > proposals[proposalId].endTime, "Not ended");
+        require(!proposals[proposalId].executed, "Already executed");
+        
+        proposals[proposalId].executed = true;
+        emit ProposalExecuted(proposalId);
+    }
+    
+    // 检查投票状态
+    function hasVoted(address voter, uint8 proposalId) external view returns (bool) {
+        return (voterRegistry[voter] & (1 << proposalId)) != 0;
+    }
+    
+    // 获取提案详情
+    function getProposal(uint8 proposalId) external view returns (
+        bytes32 name,
+        uint32 voteCount,
+        uint32 startTime,
+        uint32 endTime,
+        bool executed
+    ) {
+        Proposal memory p = proposals[proposalId];
+        return (p.name, p.voteCount, p.startTime, p.endTime, p.executed);
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ Gas优化总结</strong>
+                <ul style="margin-top: 10px; color: #155724; line-height: 2;">
+                    <li>✅ 使用uint8/uint32替代uint256 - 节省存储空间</li>
+                    <li>✅ 结构体成员打包到同一槽位 - 减少SLOAD/SSTORE</li>
+                    <li>✅ bytes32替代string - 固定大小更便宜</li>
+                    <li>✅ 位运算存储布尔值 - 1个uint256存256个状态</li>
+                    <li>✅ 映射替代数组 - O(1)查找,不需要遍历</li>
+                </ul>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">🔍 位运算详解</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">位运算操作示例</h4>
+                <pre><code class="language-solidity">// 假设voterData初始为0
+uint256 voterData = 0;
+// 二进制: 0000 0000 0000 0000
+
+// 场景1: 投票给提案3
+uint256 mask = 1 << 3;      // 0000 0000 0000 1000
+voterData = voterData | mask;
+// 结果: 0000 0000 0000 1000
+
+// 场景2: 投票给提案7
+mask = 1 << 7;              // 0000 0000 1000 0000
+voterData = voterData | mask;
+// 结果: 0000 0000 1000 1000
+
+// 场景3: 检查是否投给提案3
+mask = 1 << 3;              // 0000 0000 0000 1000
+bool voted = (voterData & mask) != 0;
+// (0000 0000 1000 1000) & (0000 0000 0000 1000) = 0000 0000 0000 1000
+// 不等于0,所以voted = true
+
+// 场景4: 检查是否投给提案5
+mask = 1 << 5;              // 0000 0000 0010 0000
+voted = (voterData & mask) != 0;
+// (0000 0000 1000 1000) & (0000 0000 0010 0000) = 0000 0000 0000 0000
+// 等于0,所以voted = false</code></pre>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">📊 Gas对比</h3>
+            
+            <table style="width: 100%; margin: 20px 0; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden;">
+                <tr style="background: var(--primary); color: white;">
+                    <th style="padding: 12px; text-align: left;">操作</th>
+                    <th style="padding: 12px; text-align: left;">未优化</th>
+                    <th style="padding: 12px; text-align: left;">优化后</th>
+                    <th style="padding: 12px; text-align: left;">节省</th>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">创建提案</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">~65,000 gas</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">~45,000 gas</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #e9ecef; color: #28a745;">-30%</td>
+                </tr>
+                <tr style="background: #f8f9fa;">
+                    <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">投票</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">~50,000 gas</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">~35,000 gas</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #e9ecef; color: #28a745;">-30%</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px;">存储布尔数组(100个)</td>
+                    <td style="padding: 10px;">~2,000,000 gas</td>
+                    <td style="padding: 10px;">~20,000 gas</td>
+                    <td style="padding: 10px; color: #28a745;">-99%!</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署合约并创建提案</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>部署GasEfficientVoting合约</li>
+                    <li>转换字符串为bytes32:<code class="inline-code">web3.utils.asciiToHex("Proposal 1")</code></li>
+                    <li>调用<code class="inline-code">createProposal(bytes32值, 86400)</code> (1天)</li>
+                    <li>查看Gas消耗</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 测试投票和位运算</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>切换到不同账户</li>
+                    <li>调用<code class="inline-code">vote(0)</code>投票给提案0</li>
+                    <li>尝试再次投票 - 应该失败"Already voted"</li>
+                    <li>调用<code class="inline-code">hasVoted(你的地址, 0)</code> - 应返回true</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 多提案投票测试</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>创建多个提案(0-5)</li>
+                    <li>对提案0、2、4投票</li>
+                    <li>检查<code class="inline-code">hasVoted</code>:
+                        <ul style="margin-left: 20px;">
+                            <li>提案0: true ✅</li>
+                            <li>提案1: false ❌</li>
+                            <li>提案2: true ✅</li>
+                            <li>提案3: false ❌</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>添加提案描述(使用IPFS哈希存储详情)</li>
+                    <li>实现委托投票(A可以将投票权委托给B)</li>
+                    <li>添加投票权重(根据代币持有量)</li>
+                    <li>实现二次投票(Quadratic Voting)</li>
+                    <li>添加提案类别和标签</li>
+                    <li>实现批量投票(一次对多个提案投票)</li>
+                    <li>对比优化前后的Gas消耗</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 深入理解</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">位运算操作符</h4>
+                <table style="width: 100%; margin-top: 10px; border-collapse: collapse;">
+                    <tr style="background: #f8f9fa;">
+                        <th style="padding: 10px; text-align: left;">操作符</th>
+                        <th style="padding: 10px; text-align: left;">说明</th>
+                        <th style="padding: 10px; text-align: left;">示例</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-top: 1px solid #e9ecef;"><code class="inline-code">&</code></td>
+                        <td style="padding: 10px; border-top: 1px solid #e9ecef;">按位与</td>
+                        <td style="padding: 10px; border-top: 1px solid #e9ecef;">1010 & 1100 = 1000</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><code class="inline-code">|</code></td>
+                        <td style="padding: 10px;">按位或</td>
+                        <td style="padding: 10px;">1010 | 1100 = 1110</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><code class="inline-code">^</code></td>
+                        <td style="padding: 10px;">按位异或</td>
+                        <td style="padding: 10px;">1010 ^ 1100 = 0110</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><code class="inline-code">~</code></td>
+                        <td style="padding: 10px;">按位非</td>
+                        <td style="padding: 10px;">~1010 = 0101</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><code class="inline-code"><<</code></td>
+                        <td style="padding: 10px;">左移</td>
+                        <td style="padding: 10px;">1010 << 2 = 101000</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><code class="inline-code">>></code></td>
+                        <td style="padding: 10px;">右移</td>
+                        <td style="padding: 10px;">1010 >> 2 = 10</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">更多Gas优化技巧</h4>
+                <ul style="margin: 10px 0 0 20px; line-height: 1.8;">
+                    <li><strong>缓存storage到memory</strong>: 多次读取同一变量时先缓存</li>
+                    <li><strong>使用calldata</strong>: 外部函数参数用calldata而不是memory</li>
+                    <li><strong>短路求值</strong>: 将便宜的条件放在require前面</li>
+                    <li><strong>循环优化</strong>: 缓存array.length,避免重复计算</li>
+                    <li><strong>删除不需要的变量</strong>: delete可以退还gas</li>
+                    <li><strong>使用事件而非存储</strong>: 历史数据用事件记录</li>
+                </ul>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">存储槽位布局示例</h4>
+                <pre><code class="language-solidity">contract StorageLayout {
+    // 槽位0 (完全填满!)
+    uint128 a;  // 16 bytes
+    uint64 b;   // 8 bytes
+    uint32 c;   // 4 bytes
+    uint16 d;   // 2 bytes
+    uint8 e;    // 1 byte
+    uint8 f;    // 1 byte
+    
+    // 槽位1 (新槽位,因为g太大放不下)
+    uint256 g;  // 32 bytes
+    
+    // 最佳实践: 将相关的小类型组合在一起
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-14.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">SafeDeposit 安全保管箱</div>
+            </a>
+            <a href="contract-16.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">PluginStore - 插件商店</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

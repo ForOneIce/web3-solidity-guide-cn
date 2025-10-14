@@ -1,0 +1,728 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple IOU - 简单欠条 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第7天 - 嵌套映射</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 7 天 📝</div>
+                    <h1>Simple IOU - 简单欠条</h1>
+                    <p class="subtitle">创建链上账本,追踪朋友间的债务关系</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--medium);">
+                        🌿 中级
+                    </div>
+                    <span class="tag">嵌套映射</span>
+                    <span class="tag">transfer vs call</span>
+                    <span class="tag">债务追踪</span>
+                    <span class="tag">ETH转账</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握嵌套映射和ETH转账方法</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>mapping嵌套、transfer()、call()</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>60分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★☆☆</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">🗺️🗺️ 嵌套映射 (Nested Mapping)</div>
+                <p>映射的值可以是另一个映射,用于表示两方之间的关系:</p>
+                <pre><code class="language-solidity">mapping(address => mapping(address => uint256)) public debts;
+
+// debts[债务人][债权人] = 欠款金额
+// 例如: debts[Alice][Bob] = 100 表示Alice欠Bob 100</code></pre>
+                <p><strong>理解嵌套映射:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>第一层键:债务人地址</li>
+                    <li>第二层键:债权人地址</li>
+                    <li>值:欠款金额</li>
+                    <li>访问:<code class="inline-code">debts[debtor][creditor]</code></li>
+                    <li>可以有任意层嵌套,但gas消耗会增加</li>
+                </ul>
+                
+                <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong style="color: #856404;">💡 应用场景:</strong>
+                    <span style="color: #856404;"> 社交网络(关注关系)、借贷系统、授权管理、多对多关系等</span>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">💸 transfer() - 传统转账方式</div>
+                <pre><code class="language-solidity">function transferEther(address payable _to, uint256 _amount) public {
+    require(balances[msg.sender] >= _amount, "Insufficient balance");
+    balances[msg.sender] -= _amount;
+    _to.transfer(_amount);  // 转账
+}</code></pre>
+                <p><strong>transfer()特点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>Gas限制:2300(只够记录事件)</li>
+                    <li>失败会自动revert整个交易</li>
+                    <li>简单直接,不需要检查返回值</li>
+                    <li>接收方必须是<code class="inline-code">address payable</code></li>
+                    <li>⚠️ 如果接收方是合约且fallback函数复杂,会失败</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📞 call() - 推荐的转账方式</div>
+                <pre><code class="language-solidity">function transferEtherViaCall(address payable _to, uint256 _amount) public {
+    require(balances[msg.sender] >= _amount, "Insufficient balance");
+    balances[msg.sender] -= _amount;
+    
+    (bool success, ) = _to.call{value: _amount}("");
+    require(success, "Transfer failed");
+}</code></pre>
+                <p><strong>call()特点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>Gas限制:传递所有可用gas</li>
+                    <li>返回bool值,需要手动检查</li>
+                    <li>更灵活,适合复杂场景</li>
+                    <li>✅ OpenZeppelin和大多数协议推荐使用</li>
+                    <li>可以调用接收方的fallback/receive函数</li>
+                </ul>
+                
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong style="color: #155724;">✅ 最佳实践:</strong>
+                    <span style="color: #155724;"> 使用call()而不是transfer(),更安全和灵活!</span>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔄 防重入攻击模式</div>
+                <p>在转账前更新余额,防止重入攻击:</p>
+                <pre><code class="language-solidity">function withdraw(uint256 _amount) public {
+    require(balances[msg.sender] >= _amount, "Insufficient balance");
+    
+    // ✅ 先更新状态
+    balances[msg.sender] -= _amount;
+    
+    // ✅ 再转账
+    (bool success, ) = payable(msg.sender).call{value: _amount}("");
+    require(success, "Transfer failed");
+}</code></pre>
+                <p><strong>为什么这样做?</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>如果先转账,接收方可以在receive函数中再次调用withdraw</li>
+                    <li>先更新余额,重入时余额已为0,无法提取</li>
+                    <li>这是"检查-效果-交互"(CEI)模式</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 简化的核心代码</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SimpleIOU {
+    address public owner;
+    mapping(address => bool) public registeredFriends;
+    address[] public friendList;
+    mapping(address => uint256) public balances;
+    
+    // 嵌套映射:记录债务关系
+    mapping(address => mapping(address => uint256)) public debts;
+    
+    constructor() {
+        owner = msg.sender;
+    }
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not the owner");
+        _;
+    }
+    
+    modifier onlyRegistered() {
+        require(registeredFriends[msg.sender], "Not registered");
+        _;
+    }
+    
+    // 添加朋友
+    function addFriend(address _friend) public onlyOwner {
+        require(!registeredFriends[_friend], "Already registered");
+        registeredFriends[_friend] = true;
+        friendList.push(_friend);
+    }
+    
+    // 存入ETH到钱包
+    function depositIntoWallet() public payable onlyRegistered {
+        balances[msg.sender] += msg.value;
+    }
+    
+    // 记录债务(谁欠谁多少钱)
+    function recordDebt(address _debtor, uint256 _amount) public onlyRegistered {
+        debts[_debtor][msg.sender] += _amount;
+    }
+    
+    // 从钱包支付债务
+    function payFromWallet(address _creditor, uint256 _amount) public onlyRegistered {
+        require(balances[msg.sender] >= _amount, "Insufficient balance");
+        require(debts[msg.sender][_creditor] >= _amount, "No debt to pay");
+        
+        balances[msg.sender] -= _amount;
+        balances[_creditor] += _amount;
+        debts[msg.sender][_creditor] -= _amount;
+    }
+    
+    // 使用transfer转账
+    function transferEther(address payable _to, uint256 _amount) public onlyRegistered {
+        require(balances[msg.sender] >= _amount, "Insufficient balance");
+        balances[msg.sender] -= _amount;
+        _to.transfer(_amount);
+    }
+    
+    // 使用call转账(推荐)
+    function transferEtherViaCall(address payable _to, uint256 _amount) public onlyRegistered {
+        require(balances[msg.sender] >= _amount, "Insufficient balance");
+        balances[msg.sender] -= _amount;
+        
+        (bool success, ) = _to.call{value: _amount}("");
+        require(success, "Transfer failed");
+    }
+    
+    // 提取余额
+    function withdraw(uint256 _amount) public onlyRegistered {
+        require(balances[msg.sender] >= _amount, "Insufficient balance");
+        balances[msg.sender] -= _amount;
+        
+        (bool success, ) = payable(msg.sender).call{value: _amount}("");
+        require(success, "Transfer failed");
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 合约功能</strong>
+                <p style="margin-top: 10px; color: #155724;">这是一个朋友间的账本系统。朋友可以存入ETH、记录谁欠谁钱、用余额支付债务、互相转账。所有债务关系都透明记录在链上。</p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">🔍 嵌套映射使用示例</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">场景:Alice欠Bob 100元</h4>
+                <pre><code class="language-solidity">// Bob(债权人)调用recordDebt
+recordDebt(0xAlice, 100);
+
+// 存储结构:
+debts[0xAlice][0xBob] = 100
+
+// Alice查看欠Bob多少:
+uint256 debt = debts[msg.sender][0xBob];  // 返回100
+
+// Bob查看Alice欠自己多少:
+uint256 debt = debts[0xAlice][msg.sender];  // 返回100</code></pre>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">Alice用余额还债</h4>
+                <pre><code class="language-solidity">// Alice调用(假设钱包里有150)
+payFromWallet(0xBob, 100);
+
+// 执行过程:
+1. 检查: balances[Alice] >= 100? ✅
+2. 检查: debts[Alice][Bob] >= 100? ✅
+3. balances[Alice] -= 100  // 150 -> 50
+4. balances[Bob] += 100     // 增加Bob的余额
+5. debts[Alice][Bob] -= 100 // 100 -> 0</code></pre>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">⚔️ transfer() vs call() 对比</h3>
+            
+            <table style="width: 100%; border-collapse: collapse; margin: 20px 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <tr style="background: var(--primary); color: white;">
+                    <th style="padding: 15px; text-align: left;">特性</th>
+                    <th style="padding: 15px; text-align: left;">transfer()</th>
+                    <th style="padding: 15px; text-align: left;">call()</th>
+                </tr>
+                <tr>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e9ecef;">Gas限制</td>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e9ecef;">2300 gas</td>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e9ecef;">所有可用gas</td>
+                </tr>
+                <tr style="background: #f8f9fa;">
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e9ecef;">失败处理</td>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e9ecef;">自动revert</td>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e9ecef;">返回false</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e9ecef;">复杂接收方</td>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e9ecef;">❌ 可能失败</td>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e9ecef;">✅ 可以处理</td>
+                </tr>
+                <tr style="background: #f8f9fa;">
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e9ecef;">推荐度</td>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e9ecef;">⭐⭐</td>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e9ecef;">⭐⭐⭐⭐⭐</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署并添加朋友</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>部署合约(你成为owner)</li>
+                    <li>复制另外两个账户地址</li>
+                    <li>调用<code class="inline-code">addFriend(地址1)</code></li>
+                    <li>调用<code class="inline-code">addFriend(地址2)</code></li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 存入ETH</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>切换到朋友账户1</li>
+                    <li>在VALUE输入框输入1,选择Ether</li>
+                    <li>调用<code class="inline-code">depositIntoWallet</code></li>
+                    <li>查看<code class="inline-code">balances(你的地址)</code></li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 记录债务</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>账户2想记录:账户1欠自己0.5 ETH</li>
+                    <li>切换到账户2</li>
+                    <li>调用<code class="inline-code">recordDebt(账户1地址, 500000000000000000)</code></li>
+                    <li>注意:金额单位是wei,0.5 ETH = 5*10^17 wei</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 偿还债务</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>切换回账户1</li>
+                    <li>调用<code class="inline-code">payFromWallet(账户2地址, 500000000000000000)</code></li>
+                    <li>查看债务已清零:<code class="inline-code">debts(账户1, 账户2)</code></li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>添加<code class="inline-code">getTotalDebt(address debtor)</code>返回某人总欠款</li>
+                    <li>实现部分还款功能</li>
+                    <li>添加事件记录所有债务变更</li>
+                    <li>实现债务转移(A欠B,B欠C,直接让A欠C)</li>
+                    <li>添加利息计算(使用时间戳)</li>
+                    <li>实现债务清算功能</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 深入理解</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">为什么call()更好?</h4>
+                <p style="line-height: 1.8;">
+                    2019年的"伊斯坦布尔"硬分叉后,某些操作的gas成本增加,导致使用<code class="inline-code">transfer()</code>的许多合约无法向其他合约转账。<code class="inline-code">call()</code>传递所有可用gas,避免了这个问题。OpenZeppelin在2019年底就推荐使用<code class="inline-code">call()</code>。
+                </p>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">send() 方法</h4>
+                <pre><code class="language-solidity">bool success = _to.send(_amount);
+require(success, "Send failed");</code></pre>
+                <p style="margin-top: 10px;">
+                    <code class="inline-code">send()</code>类似<code class="inline-code">transfer()</code>,但失败时返回false而不是revert。现在很少使用,不推荐。
+                </p>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-6.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">Ether Piggy Bank - 以太坊存钱罐</div>
+            </a>
+            <a href="contract-8.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">TipJar - 小费罐</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Marketplace - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #fff5f5, #ffe6e6);
+            border-left: 5px solid var(--hard);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-card.important {
+            background: linear-gradient(135deg, #fff9e6, #ffedd5);
+            border-left-color: var(--medium);
+        }
+        
+        .concept-card.tip {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left-color: var(--primary);
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .warning-box strong {
+            color: #ff6b35;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .steps-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .steps-list li {
+            counter-increment: step-counter;
+            margin-bottom: 20px;
+            padding-left: 60px;
+            position: relative;
+        }
+        
+        .steps-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--accent);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第26天</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 练习</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 26 天</div>
+                    <h1>🛒 NFT Marketplace</h1>
+                    <p class="subtitle">完整链上NFT市场 - 挂单、购买、版税与手续费分配</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--hard);">
+                        ⭐⭐⭐⭐ 困难
+                    </div>
+                    <span class="tag">NFT交易</span>
+                    <span class="tag">费用分配</span>
+                    <span class="tag">ReentrancyGuard</span>
+                    <span class="tag">IERC721接口</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">🎯 学习目标</div>
+                    <div>构建完整的链上NFT交易市场，掌握费用分配和安全机制</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🛠️ 核心技能</div>
+                    <div>IERC721接口、ReentrancyGuard、费用计算、事件记录</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏰ 预计时间</div>
+                    <div>3-4小时 (理解+编码+测试)</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">📊 主观感受难度</div>
+                    <div>⭐⭐⭐⭐⭐ 极难 - 复杂的费用分配逻辑和多重安全考虑</div>
+                </div>
+            </div>
+            
+            <div class="key-points" style="margin-top: 20px;">
+                <div class="key-point">
+                    <div class="key-point-title">🏪 挂单系统</div>
+                    <div>支持自定义价格和版税挂单NFT</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">💰 三层费用分配</div>
+                    <div>平台手续费 + 创作者版税 + 卖家收益</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🛡️ 安全机制</div>
+                    <div>ReentrancyGuard防重入攻击</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔗 标准集成</div>
+                    <div>通过IERC721接口与任何NFT合约交互</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念
+            </h2>
+            
+            <div class="concept-card important">
+                <div class="concept-title">🎯 NFT市场工作流程</div>
+                <ul class="steps-list">
+                    <li>
+                        <strong>卖家挂单</strong><br>
+                        授权市场合约操作NFT,设置价格和版税比例
+                    </li>
+                    <li>
+                        <strong>买家购买</strong><br>
+                        发送ETH,市场合约转移NFT并分配资金
+                    </li>
+                    <li>
+                        <strong>费用分配</strong><br>
+                        平台抽取手续费,创作者获得版税,卖家获得剩余金额
+                    </li>
+                    <li>
+                        <strong>取消挂单</strong><br>
+                        卖家可随时取消未售出的挂单
+                    </li>
+                </ul>
+            </div>
+
+            <div class="concept-card tip">
+                <div class="concept-title">💸 费用分配机制</div>
+                <p><strong>示例:</strong> NFT售价 100 ETH</p>
+                <pre style="background: #f8f9fa; color: #333; padding: 15px;">总价 = 100 ETH
+├─ 平台费 (2%) = 2 ETH → 平台
+├─ 版税 (10%) = 10 ETH → 卖家(创作者)
+└─ 卖家收入 = 88 ETH → 卖家</pre>
+                <div class="success-box" style="margin-top: 15px;">
+                    <strong>✅ 公式:</strong><br>
+                    卖家收入 = 总价 - (总价 × 平台费率) - (总价 × 版税费率)
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔑 ListingID 生成机制</div>
+                <p>使用keccak256哈希确保每个挂单的唯一性:</p>
+                <pre><code class="language-solidity">bytes32 listingId = keccak256(abi.encodePacked(
+    nftContract,  // NFT合约地址
+    tokenId,      // NFT的ID
+    seller        // 卖家地址
+));</code></pre>
+                <p style="margin-top: 10px;">这样即使同一个NFT被多次挂单,每次的listingId也是唯一的。</p>
+            </div>
+
+            <div class="concept-card important">
+                <div class="concept-title">🛡️ 安全措施</div>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>安全特性</th>
+                            <th>实现方式</th>
+                            <th>防范风险</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ReentrancyGuard</strong></td>
+                            <td>nonReentrant修饰符</td>
+                            <td>防止重入攻击</td>
+                        </tr>
+                        <tr>
+                            <td><strong>购买前删除挂单</strong></td>
+                            <td>delete listings[listingId]</td>
+                            <td>防止双重消费</td>
+                        </tr>
+                        <tr>
+                            <td><strong>所有权检查</strong></td>
+                            <td>nft.ownerOf(tokenId)</td>
+                            <td>验证卖家拥有NFT</td>
+                        </tr>
+                        <tr>
+                            <td><strong>批准检查</strong></td>
+                            <td>getApproved/isApprovedForAll</td>
+                            <td>确保市场可转移NFT</td>
+                        </tr>
+                        <tr>
+                            <td><strong>价格验证</strong></td>
+                            <td>require(msg.value == price)</td>
+                            <td>确保付款金额正确</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 代码详解
+            </h2>
+
+            <h3 style="color: var(--primary); margin: 20px 0;">1️⃣ 状态变量与数据结构</h3>
+            <pre><code class="language-solidity">address public owner;
+uint256 public marketplaceFeePercent;
+address public feeRecipient;
+
+struct Listing {
+    address seller;
+    address nftContract;
+    uint256 tokenId;
+    uint256 price;
+    uint256 royaltyPercent;
+}
+
+mapping(bytes32 => Listing) public listings;</code></pre>
+
+            <h3 style="color: var(--primary); margin: 20px 0;">2️⃣ 挂单NFT</h3>
+            <pre><code class="language-solidity">function listNFT(
+    address nftContract,
+    uint256 tokenId,
+    uint256 price,
+    uint256 royaltyPercent
+) external {
+    require(price > 0, "Price must be > 0");
+    require(royaltyPercent <= 100, "Royalty too high");
+    
+    // 验证所有权
+    IERC721 nft = IERC721(nftContract);
+    require(nft.ownerOf(tokenId) == msg.sender, "Not owner");
+    
+    // 验证批准
+    require(
+        nft.getApproved(tokenId) == address(this) || 
+        nft.isApprovedForAll(msg.sender, address(this)),
+        "Not approved"
+    );
+    
+    // 生成唯一ID
+    bytes32 listingId = keccak256(abi.encodePacked(nftContract, tokenId, msg.sender));
+    
+    // 保存挂单
+    listings[listingId] = Listing({
+        seller: msg.sender,
+        nftContract: nftContract,
+        tokenId: tokenId,
+        price: price,
+        royaltyPercent: royaltyPercent
+    });
+    
+    emit Listed(listingId, msg.sender, nftContract, tokenId, price, royaltyPercent);
+}</code></pre>
+            <div class="warning-box">
+                <strong>⚠️ 重要:</strong> 卖家必须先调用NFT合约的 <code class="inline-code">approve()</code> 或 <code class="inline-code">setApprovalForAll()</code> 授权市场合约!
+            </div>
+
+            <h3 style="color: var(--primary); margin: 20px 0;">3️⃣ 购买NFT</h3>
+            <pre><code class="language-solidity">function buyNFT(bytes32 listingId) external payable nonReentrant {
+    Listing memory listing = listings[listingId];
+    require(listing.price > 0, "Not listed");
+    require(msg.value == listing.price, "Incorrect price");
+    
+    // 先删除挂单(防止重入)
+    delete listings[listingId];
+    
+    // 计算费用分配
+    uint256 marketplaceFee = (listing.price * marketplaceFeePercent) / 100;
+    uint256 royaltyFee = (listing.price * listing.royaltyPercent) / 100;
+    uint256 sellerProceeds = listing.price - marketplaceFee - royaltyFee;
+    
+    // 转移NFT
+    IERC721(listing.nftContract).transferFrom(
+        listing.seller,
+        msg.sender,
+        listing.tokenId
+    );
+    
+    // 分配付款
+    if (marketplaceFee > 0) {
+        payable(feeRecipient).transfer(marketplaceFee);
+    }
+    
+    if (royaltyFee > 0) {
+        payable(listing.seller).transfer(royaltyFee);
+    }
+    
+    payable(listing.seller).transfer(sellerProceeds);
+    
+    emit Purchase(listingId, msg.sender, listing.seller, listing.price);
+}</code></pre>
+
+            <div class="concept-card tip">
+                <div class="concept-title">💡 为什么先删除挂单?</div>
+                <p>在CEI模式(Checks-Effects-Interactions)中:</p>
+                <ol style="margin-left: 20px; line-height: 1.8;">
+                    <li><strong>Checks:</strong> require验证</li>
+                    <li><strong>Effects:</strong> 修改状态(delete listings)</li>
+                    <li><strong>Interactions:</strong> 外部调用(transfer)</li>
+                </ol>
+                <p style="margin-top: 10px;">先修改状态可防止重入攻击!</p>
+            </div>
+
+            <h3 style="color: var(--primary); margin: 20px 0;">4️⃣ 取消挂单</h3>
+            <pre><code class="language-solidity">function cancelListing(bytes32 listingId) external {
+    Listing memory listing = listings[listingId];
+    require(listing.seller == msg.sender, "Not seller");
+    
+    delete listings[listingId];
+    emit Unlisted(listingId);
+}</code></pre>
+
+            <h3 style="color: var(--primary); margin: 20px 0;">5️⃣ 管理函数</h3>
+            <pre><code class="language-solidity">function setMarketplaceFeePercent(uint256 _newFeePercent) external onlyOwner {
+    require(_newFeePercent <= 100, "Fee too high");
+    marketplaceFeePercent = _newFeePercent;
+    emit FeeUpdated(_newFeePercent);
+}
+
+function setFeeRecipient(address _newRecipient) external onlyOwner {
+    require(_newRecipient != address(0), "Invalid address");
+    feeRecipient = _newRecipient;
+}</code></pre>
+
+            <h3 style="color: var(--primary); margin: 20px 0;">6️⃣ Fallback 函数</h3>
+            <pre><code class="language-solidity">receive() external payable {
+    revert("Direct payments not accepted");
+}
+
+fallback() external payable {
+    revert("Invalid function call");
+}</code></pre>
+            <div class="warning-box">
+                <strong>⚠️ 安全设计:</strong> 拒绝直接发送ETH,所有交易必须通过 <code class="inline-code">buyNFT()</code> 进行!
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践要点
+            </h2>
+
+            <div class="concept-card important">
+                <div class="concept-title">🎯 关键知识点</div>
+                <ul style="margin-left: 20px; line-height: 2;">
+                    <li><strong>IERC721接口使用:</strong> 通过接口与任何ERC-721合约交互</li>
+                    <li><strong>批准流程:</strong> 理解approve vs setApprovalForAll的区别</li>
+                    <li><strong>费用计算:</strong> 掌握百分比计算和整数除法</li>
+                    <li><strong>重入防护:</strong> 使用nonReentrant和CEI模式</li>
+                    <li><strong>事件记录:</strong> 用事件追踪所有重要操作</li>
+                </ul>
+            </div>
+
+            <div class="concept-card tip">
+                <div class="concept-title">💪 练习任务</div>
+                <ol style="margin-left: 20px; line-height: 2;">
+                    <li>添加出价(offer)功能,允许买家出价低于挂单价</li>
+                    <li>实现拍卖功能,支持英式拍卖和荷兰式拍卖</li>
+                    <li>添加批量购买功能</li>
+                    <li>实现ERC-2981版税标准集成</li>
+                    <li>添加白名单功能,只允许特定NFT合约</li>
+                </ol>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🚀 扩展方向</div>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>功能</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>支持ERC-1155</strong></td>
+                            <td>半同质化代币,支持批量交易</td>
+                        </tr>
+                        <tr>
+                            <td><strong>跨链桥接</strong></td>
+                            <td>支持多链NFT交易</td>
+                        </tr>
+                        <tr>
+                            <td><strong>租赁功能</strong></td>
+                            <td>NFT时间租赁</td>
+                        </tr>
+                        <tr>
+                            <td><strong>碎片化</strong></td>
+                            <td>将昂贵NFT分割为多份</td>
+                        </tr>
+                        <tr>
+                            <td><strong>元数据缓存</strong></td>
+                            <td>链下索引加速查询</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ 完成标志:</strong> 你已掌握NFT市场合约的核心机制!这是OpenSea、Blur等主流市场的基础实现。
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-25.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">AMM - 自动做市商</div>
+            </a>
+            <a href="contract-27.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">YieldFarming - 收益农场</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyFirstToken - 我的第一个代币 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第12天 - ERC-20代币</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 12 天  🪙</div>
+                    <h1>MyFirstToken - 我的第一个代币</h1>
+                    <p class="subtitle">从零实现ERC-20代币标准</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--medium);">
+                        🌿 中级
+                    </div>
+                    <span class="tag">ERC-20</span>
+                    <span class="tag">代币</span>
+                    <span class="tag">标准</span>
+                    <span class="tag">转账</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>深入理解ERC-20代币标准和实现</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>代币元数据、转账、授权、事件</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>60分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★☆☆</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">📋 ERC-20 标准</div>
+                <p>ERC-20是以太坊上最重要的代币标准,定义了所有代币必须实现的接口:</p>
+                <pre><code class="language-solidity">interface IERC20 {
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address to, uint256 amount) external returns (bool);
+    function allowance(address owner, address spender) external view returns (uint256);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+    
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+}</code></pre>
+                <p><strong>为什么需要标准?</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>钱包可以统一处理所有ERC-20代币</li>
+                    <li>交易所可以轻松上线新代币</li>
+                    <li>DeFi协议可以无缝集成</li>
+                    <li>开发者知道如何与代币交互</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🏷️ 代币元数据</div>
+                <p>代币的基本信息,虽然不是ERC-20强制要求,但几乎所有代币都有:</p>
+                <pre><code class="language-solidity">string public name = "SimpleToken";     // 代币全名
+string public symbol = "SIM";           // 代币符号(通常3-4个字符)
+uint8 public decimals = 18;             // 小数位数
+uint256 public totalSupply;             // 总供应量</code></pre>
+                <p><strong>关于decimals:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>18是最常见的值(与ETH相同)</li>
+                    <li>表示代币可以分割到小数点后18位</li>
+                    <li>1个代币 = 10^18 个最小单位</li>
+                    <li>类似于1元 = 100分的概念</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">💰 余额和授权映射</div>
+                <p>两个核心映射存储代币的状态:</p>
+                <pre><code class="language-solidity">// 每个地址的代币余额
+mapping(address => uint256) public balanceOf;
+
+// 授权额度: owner => spender => amount
+mapping(address => mapping(address => uint256)) public allowance;</code></pre>
+                <p><strong>嵌套映射解释:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">allowance[Alice][Bob] = 100</code>: Alice授权Bob花费100个代币</li>
+                    <li>Alice是owner(代币所有者)</li>
+                    <li>Bob是spender(被授权者)</li>
+                    <li>100是授权额度</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔄 转账机制</div>
+                <p>ERC-20有两种转账方式:</p>
+                <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #856404;">1. 直接转账 (transfer)</strong>
+                    <pre style="margin-top: 10px;"><code class="language-solidity">// Alice直接给Bob转账
+token.transfer(Bob, 100);</code></pre>
+                </div>
+                <div style="background: #e6f7ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #0066cc;">2. 授权转账 (approve + transferFrom)</strong>
+                    <pre style="margin-top: 10px;"><code class="language-solidity">// Alice授权Bob花费100个代币
+token.approve(Bob, 100);
+
+// Bob使用授权额度转账给Charlie
+token.transferFrom(Alice, Charlie, 50);</code></pre>
+                </div>
+                <p><strong>为什么需要两种方式?</strong> 授权机制允许智能合约代表用户操作代币,这是DeFi的基础!</p>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 完整ERC-20实现</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SimpleToken {
+    // 代币元数据
+    string public name = "SimpleToken";
+    string public symbol = "SIM";
+    uint8 public decimals = 18;
+    uint256 public totalSupply;
+    
+    // 核心映射
+    mapping(address => uint256) public balanceOf;
+    mapping(address => mapping(address => uint256)) public allowance;
+    
+    // 事件
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+    
+    // 构造函数
+    constructor(uint256 _initialSupply) {
+        totalSupply = _initialSupply * (10 ** uint256(decimals));
+        balanceOf[msg.sender] = totalSupply;
+        emit Transfer(address(0), msg.sender, totalSupply);
+    }
+    
+    // 直接转账
+    function transfer(address _to, uint256 _value) public returns (bool) {
+        require(_to != address(0), "Invalid address");
+        _transfer(msg.sender, _to, _value);
+        return true;
+    }
+    
+    // 内部转账逻辑
+    function _transfer(address _from, address _to, uint256 _value) internal {
+        require(balanceOf[_from] >= _value, "Insufficient balance");
+        
+        balanceOf[_from] -= _value;
+        balanceOf[_to] += _value;
+        
+        emit Transfer(_from, _to, _value);
+    }
+    
+    // 授权
+    function approve(address _spender, uint256 _value) public returns (bool) {
+        require(_spender != address(0), "Invalid address");
+        
+        allowance[msg.sender][_spender] = _value;
+        emit Approval(msg.sender, _spender, _value);
+        return true;
+    }
+    
+    // 授权转账
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool) {
+        require(_value <= allowance[_from][msg.sender], "Allowance exceeded");
+        
+        allowance[_from][msg.sender] -= _value;
+        _transfer(_from, _to, _value);
+        return true;
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 代码亮点</strong>
+                <p style="margin-top: 10px; color: #155724;">这个实现包含了ERC-20的所有核心功能:元数据、余额管理、转账、授权。使用内部_transfer函数避免代码重复,是很好的设计模式!</p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">🔍 关键函数详解</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">构造函数 - 初始化代币</h4>
+                <pre><code class="language-solidity">constructor(uint256 _initialSupply) {
+    totalSupply = _initialSupply * (10 ** uint256(decimals));
+    balanceOf[msg.sender] = totalSupply;
+    emit Transfer(address(0), msg.sender, totalSupply);
+}</code></pre>
+                <p style="margin-top: 10px;">
+                    <strong>解释:</strong><br>
+                    - 计算总供应量(考虑decimals)<br>
+                    - 将所有代币分配给部署者<br>
+                    - 触发Transfer事件(从0地址到部署者)
+                </p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">_transfer - 内部转账逻辑</h4>
+                <pre><code class="language-solidity">function _transfer(address _from, address _to, uint256 _value) internal {
+    require(balanceOf[_from] >= _value, "Insufficient balance");
+    
+    balanceOf[_from] -= _value;  // 减少发送者余额
+    balanceOf[_to] += _value;    // 增加接收者余额
+    
+    emit Transfer(_from, _to, _value);
+}</code></pre>
+                <p style="margin-top: 10px;">
+                    <strong>为什么用内部函数?</strong><br>
+                    - transfer()和transferFrom()都需要相同的转账逻辑<br>
+                    - 避免代码重复<br>
+                    - 集中管理转账逻辑,便于维护
+                </p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">授权机制工作流程</h4>
+                <pre><code class="language-solidity">// 步骤1: Alice授权Bob花费100个代币
+approve(Bob, 100);
+// allowance[Alice][Bob] = 100
+
+// 步骤2: Bob使用授权转账50个代币给Charlie
+transferFrom(Alice, Charlie, 50);
+// allowance[Alice][Bob] = 50 (减少了50)
+// Alice余额 -= 50
+// Charlie余额 += 50</code></pre>
+                <p style="margin-top: 10px;">这种机制让智能合约可以代表用户操作代币,是DEX、借贷协议等DeFi应用的基础!</p>
+            </div>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #856404;">⚠️ 安全考虑</strong>
+                <p style="margin-top: 10px; color: #856404;">
+                    这是一个简化版本,实际项目中还需要考虑:<br>
+                    - 防止重入攻击<br>
+                    - 处理approve的竞态条件<br>
+                    - 添加暂停功能<br>
+                    - 实现铸造和销毁功能<br>
+                    - 使用OpenZeppelin的标准实现
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署代币合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>在Remix中创建SimpleToken合约</li>
+                    <li>部署时输入初始供应量,如1000</li>
+                    <li>检查你的余额:<code class="inline-code">balanceOf(你的地址)</code></li>
+                    <li>应该显示1000 * 10^18 = 1000000000000000000000</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 测试直接转账</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>复制另一个账户地址</li>
+                    <li>调用<code class="inline-code">transfer(地址, 100000000000000000000)</code> (100个代币)</li>
+                    <li>检查双方余额变化</li>
+                    <li>在事件日志中查看Transfer事件</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 测试授权机制</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">approve(另一个地址, 50000000000000000000)</code></li>
+                    <li>检查授权额度:<code class="inline-code">allowance(你的地址, 另一个地址)</code></li>
+                    <li>切换到另一个账户</li>
+                    <li>调用<code class="inline-code">transferFrom(你的地址, 第三个地址, 25000000000000000000)</code></li>
+                    <li>检查余额和剩余授权额度</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 在MetaMask中添加代币</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>复制合约地址</li>
+                    <li>在MetaMask中点击"导入代币"</li>
+                    <li>粘贴合约地址</li>
+                    <li>MetaMask会自动识别代币信息</li>
+                    <li>现在你可以在钱包中看到你的代币!</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>添加<code class="inline-code">mint()</code>函数,只有owner能铸造新代币</li>
+                    <li>添加<code class="inline-code">burn()</code>函数,销毁代币</li>
+                    <li>实现<code class="inline-code">increaseAllowance()</code>和<code class="inline-code">decreaseAllowance()</code></li>
+                    <li>添加暂停功能,紧急情况下停止所有转账</li>
+                    <li>实现代币锁定功能,防止早期投资者抛售</li>
+                    <li>添加交易手续费机制</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">OpenZeppelin ERC20实现</h4>
+                <pre><code class="language-solidity">import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract MyToken is ERC20 {
+    constructor() ERC20("MyToken", "MTK") {
+        _mint(msg.sender, 1000000 * 10**decimals());
+    }
+}</code></pre>
+                <p style="margin-top: 10px;">实际项目中,强烈建议使用OpenZeppelin的实现,它经过了充分测试和审计!</p>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">常见代币类型对比</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="background: var(--light);">
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">类型</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">特点</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">用途</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">ERC-20</td>
+                        <td style="padding: 10px;">同质化代币</td>
+                        <td style="padding: 10px;">货币、积分、股权</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;">ERC-721</td>
+                        <td style="padding: 10px;">非同质化代币(NFT)</td>
+                        <td style="padding: 10px;">艺术品、收藏品、游戏道具</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">ERC-1155</td>
+                        <td style="padding: 10px;">多代币标准</td>
+                        <td style="padding: 10px;">游戏中的多种道具</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-11.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">Masterkey - 主密钥合约</div>
+            </a>
+            <a href="contract-13.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">PreorderTokens - 预购代币</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

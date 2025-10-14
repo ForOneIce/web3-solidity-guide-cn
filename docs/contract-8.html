@@ -1,0 +1,854 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TipJar - 小费罐 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第8天 - 货币转换</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 8 天 💰</div>
+                    <h1>TipJar - 小费罐</h1>
+                    <p class="subtitle">多货币小费系统 - Wei单位与货币转换</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--medium);">
+                        🌿 中级
+                    </div>
+                    <span class="tag">Wei单位</span>
+                    <span class="tag">货币转换</span>
+                    <span class="tag">keccak256</span>
+                    <span class="tag">数学计算</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握Wei单位和货币转换计算</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>1 ether、keccak256、数学运算</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>60分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★☆☆</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">💎 Wei - 以太坊的最小单位</div>
+                <p>以太坊的货币单位体系:</p>
+                <table style="width: 100%; margin: 15px 0; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden;">
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 12px; text-align: left;">单位</th>
+                        <th style="padding: 12px; text-align: left;">Wei值</th>
+                        <th style="padding: 12px; text-align: left;">说明</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">wei</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">1</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">最小单位</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">gwei</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">10^9</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">Gas价格单位</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">ether</td>
+                        <td style="padding: 10px;">10^18</td>
+                        <td style="padding: 10px;">常用单位</td>
+                    </tr>
+                </table>
+                
+                <pre><code class="language-solidity">// Solidity中的单位常量
+1 wei == 1;
+1 gwei == 1e9;  // 1000000000
+1 ether == 1e18; // 1000000000000000000
+
+// 例子
+uint256 amount = 0.5 ether;  // 500000000000000000 wei
+uint256 gasPrice = 20 gwei;  // 20000000000 wei</code></pre>
+                
+                <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong style="color: #856404;">💡 为什么需要Wei?</strong>
+                    <p style="color: #856404; margin-top: 5px;">Solidity不支持小数!所有计算都用整数。Wei让我们可以精确表示任意小数金额。</p>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔄 货币转换计算</div>
+                <p>如何将USD、EUR等货币转换为ETH:</p>
+                <pre><code class="language-solidity">// 假设汇率: 1 ETH = 2000 USD
+mapping(string => uint256) public conversionRates;
+conversionRates["USD"] = 2000;  // 2000 USD = 1 ETH
+
+// 用户想给10 USD的小费,需要多少ETH?
+function convertToEth(string memory currency, uint256 amount) public view returns (uint256) {
+    uint256 rate = conversionRates[currency];
+    // amount USD / rate (USD per ETH) * 1 ETH
+    return (amount * 1 ether) / rate;
+}
+
+// 示例: convertToEth("USD", 10)
+// = (10 * 10^18) / 2000
+// = 5 * 10^15 wei
+// = 0.005 ETH</code></pre>
+                
+                <p style="margin-top: 15px;"><strong>数学推导:</strong></p>
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <code>10 USD ÷ (2000 USD/ETH) = 0.005 ETH</code><br>
+                    <code>= 0.005 × 10^18 wei</code><br>
+                    <code>= 5,000,000,000,000,000 wei</code>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔐 keccak256 - 字符串比较</div>
+                <p>Solidity不能直接比较字符串,需要比较它们的哈希:</p>
+                <pre><code class="language-solidity">// ❌ 错误: 字符串不能直接比较
+if (currencyCode == "USD") { ... }
+
+// ✅ 正确: 比较哈希值
+if (keccak256(bytes(currencyCode)) == keccak256(bytes("USD"))) { ... }</code></pre>
+                
+                <p><strong>工作原理:</strong></p>
+                <ol style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">bytes(currencyCode)</code> - 将字符串转为字节数组</li>
+                    <li><code class="inline-code">keccak256(...)</code> - 计算Keccak-256哈希</li>
+                    <li>比较两个哈希值(bytes32类型)</li>
+                </ol>
+                
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong style="color: #155724;">✅ Keccak256的其他用途:</strong>
+                    <ul style="margin: 5px 0 0 20px; color: #155724;">
+                        <li>生成唯一ID</li>
+                        <li>Merkle树验证</li>
+                        <li>签名验证</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">💸 msg.value 验证</div>
+                <p>确保用户发送了正确金额的ETH:</p>
+                <pre><code class="language-solidity">function tipInCurrency(string memory currency, uint256 amount) public payable {
+    // 1. 计算需要的ETH
+    uint256 requiredEth = convertToEth(currency, amount);
+    
+    // 2. 验证用户发送的ETH是否匹配
+    require(msg.value == requiredEth, "Incorrect ETH amount");
+    
+    // 3. 接受小费
+    totalTips += msg.value;
+}</code></pre>
+                
+                <p><strong>为什么需要验证?</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>防止用户少付</li>
+                    <li>防止用户多付(会损失)</li>
+                    <li>确保汇率正确应用</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 TipJar 完整合约</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract TipJar {
+    address public owner;
+    mapping(string => uint256) public conversionRates;
+    string[] public supportedCurrencies;
+    uint256 public totalTipsReceived;
+    mapping(address => uint256) public tipperContributions;
+    mapping(string => uint256) public tipsPerCurrency;
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not the owner");
+        _;
+    }
+    
+    constructor() {
+        owner = msg.sender;
+        addCurrency("ETH", 1 ether);
+    }
+    
+    // 添加支持的货币
+    function addCurrency(string memory _currencyCode, uint256 _rateToEth) public onlyOwner {
+        bool exists = false;
+        for (uint i = 0; i < supportedCurrencies.length; i++) {
+            if (keccak256(bytes(supportedCurrencies[i])) == keccak256(bytes(_currencyCode))) {
+                exists = true;
+                break;
+            }
+        }
+        
+        if (!exists) {
+            supportedCurrencies.push(_currencyCode);
+        }
+        
+        conversionRates[_currencyCode] = _rateToEth;
+    }
+    
+    // 货币转换为ETH
+    function convertToEth(string memory _currencyCode, uint256 _amount) public view returns (uint256) {
+        uint256 rate = conversionRates[_currencyCode];
+        require(rate > 0, "Currency not supported");
+        return (_amount * 1 ether) / rate;
+    }
+    
+    // 直接ETH小费
+    function tipInEth() public payable {
+        require(msg.value > 0, "Must send ETH");
+        
+        totalTipsReceived += msg.value;
+        tipperContributions[msg.sender] += msg.value;
+        tipsPerCurrency["ETH"] += msg.value;
+    }
+    
+    // 其他货币小费
+    function tipInCurrency(string memory _currencyCode, uint256 _amount) public payable {
+        uint256 ethAmount = convertToEth(_currencyCode, _amount);
+        require(msg.value == ethAmount, "Sent ETH doesn't match the converted amount");
+        
+        totalTipsReceived += ethAmount;
+        tipperContributions[msg.sender] += ethAmount;
+        tipsPerCurrency[_currencyCode] += _amount;
+    }
+    
+    // 提取小费
+    function withdrawTips() public onlyOwner {
+        uint256 contractBalance = address(this).balance;
+        require(contractBalance > 0, "No tips to withdraw");
+        
+        (bool success, ) = payable(owner).call{value: contractBalance}("");
+        require(success, "Transfer failed");
+    }
+    
+    // 转移所有权
+    function transferOwnership(address _newOwner) public onlyOwner {
+        require(_newOwner != address(0), "Invalid address");
+        owner = _newOwner;
+    }
+    
+    // 查询函数
+    function getSupportedCurrencies() public view returns (string[] memory) {
+        return supportedCurrencies;
+    }
+    
+    function getContractBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+    
+    function getTipperContribution(address _tipper) public view returns (uint256) {
+        return tipperContributions[_tipper];
+    }
+    
+    function getTipsInCurrency(string memory _currencyCode) public view returns (uint256) {
+        return tipsPerCurrency[_currencyCode];
+    }
+    
+    function getConversionRate(string memory _currencyCode) public view returns (uint256) {
+        return conversionRates[_currencyCode];
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 合约功能</strong>
+                <p style="margin-top: 10px; color: #155724;">这是一个支持多货币的小费罐。用户可以用ETH或其他货币(USD、EUR等)给小费,合约会自动转换为ETH。Owner可以提取所有小费。</p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">🔍 关键代码解析</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">1. 添加货币(避免重复)</h4>
+                <pre><code class="language-solidity">function addCurrency(string memory _currencyCode, uint256 _rateToEth) public onlyOwner {
+    bool exists = false;
+    
+    // 检查货币是否已存在
+    for (uint i = 0; i < supportedCurrencies.length; i++) {
+        if (keccak256(bytes(supportedCurrencies[i])) == keccak256(bytes(_currencyCode))) {
+            exists = true;
+            break;
+        }
+    }
+    
+    // 如果不存在,添加到数组
+    if (!exists) {
+        supportedCurrencies.push(_currencyCode);
+    }
+    
+    // 更新或设置汇率
+    conversionRates[_currencyCode] = _rateToEth;
+}</code></pre>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">2. 货币转换计算详解</h4>
+                <pre><code class="language-solidity">// 例子: 1 ETH = 2000 USD
+conversionRates["USD"] = 2000;
+
+// 用户想给10 USD
+convertToEth("USD", 10);
+
+// 计算过程:
+amount = 10
+rate = 2000
+result = (10 * 10^18) / 2000
+       = 10000000000000000000 / 2000
+       = 5000000000000000 wei
+       = 0.005 ETH
+
+// 验证: 0.005 ETH * 2000 USD/ETH = 10 USD ✅</code></pre>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">3. 完整的小费流程</h4>
+                <pre><code class="language-solidity">// 场景: Alice想用USD给10美元小费
+
+// 步骤1: Alice调用
+tipInCurrency("USD", 10);
+
+// 步骤2: 计算需要的ETH
+ethAmount = convertToEth("USD", 10) = 0.005 ETH
+
+// 步骤3: 验证Alice发送的ETH
+require(msg.value == 0.005 ETH);  ✅
+
+// 步骤4: 记录数据
+totalTipsReceived += 0.005 ETH;
+tipperContributions[Alice] += 0.005 ETH;
+tipsPerCurrency["USD"] += 10;  // 记录原始货币金额
+
+// 结果:
+// - 合约收到0.005 ETH
+// - Alice的贡献记录为0.005 ETH
+// - USD小费统计增加10</code></pre>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">💡 汇率管理</h3>
+            
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: #856404; margin-bottom: 10px;">设置常见货币汇率</h4>
+                <pre><code class="language-solidity">// 部署后,owner调用:
+addCurrency("USD", 2000);    // 1 ETH = 2000 USD
+addCurrency("EUR", 1800);    // 1 ETH = 1800 EUR
+addCurrency("JPY", 300000);  // 1 ETH = 300000 JPY
+addCurrency("GBP", 1600);    // 1 ETH = 1600 GBP
+
+// 更新汇率(市场价格变化时)
+addCurrency("USD", 2100);  // 更新为2100</code></pre>
+                
+                <p style="color: #856404; margin-top: 10px;">
+                    ⚠️ 注意:这个合约中的汇率是手动设置的。真实应用应该使用Chainlink等预言机获取实时价格!
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署并添加货币</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>部署TipJar合约</li>
+                    <li>调用<code class="inline-code">addCurrency("USD", 2000)</code></li>
+                    <li>调用<code class="inline-code">addCurrency("EUR", 1800)</code></li>
+                    <li>调用<code class="inline-code">getSupportedCurrencies()</code>查看支持的货币</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 测试货币转换</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">convertToEth("USD", 10)</code></li>
+                    <li>应该返回5000000000000000 (0.005 ETH)</li>
+                    <li>调用<code class="inline-code">convertToEth("EUR", 9)</code></li>
+                    <li>应该返回5000000000000000 (0.005 ETH)</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 给ETH小费</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>在VALUE输入框输入0.1,选择Ether</li>
+                    <li>调用<code class="inline-code">tipInEth</code></li>
+                    <li>调用<code class="inline-code">getContractBalance()</code> - 应该返回0.1 ETH</li>
+                    <li>调用<code class="inline-code">totalTipsReceived()</code>验证</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 用USD给小费</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>先计算: 10 USD需要多少ETH?<code class="inline-code">convertToEth("USD", 10)</code></li>
+                    <li>复制返回值: 5000000000000000</li>
+                    <li>在VALUE输入框输入5000000000000000,选择Wei</li>
+                    <li>调用<code class="inline-code">tipInCurrency("USD", 10)</code></li>
+                    <li>调用<code class="inline-code">getTipsInCurrency("USD")</code> - 应该返回10</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤5: 提取小费</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>记录你的初始ETH余额</li>
+                    <li>调用<code class="inline-code">withdrawTips()</code></li>
+                    <li>检查你的账户余额增加</li>
+                    <li>调用<code class="inline-code">getContractBalance()</code> - 应该返回0</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>添加事件记录每次小费</li>
+                    <li>实现<code class="inline-code">removeCurrency()</code>移除不支持的货币</li>
+                    <li>添加最小小费金额限制</li>
+                    <li>实现部分提取功能(不是全部提取)</li>
+                    <li>集成Chainlink获取实时汇率</li>
+                    <li>添加退款功能(如果用户发送错误金额)</li>
+                    <li>实现小费排行榜(最慷慨的打赏者)</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 深入理解</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">整数除法的陷阱</h4>
+                <pre><code class="language-solidity">// ❌ 错误顺序
+uint256 result = (_amount / rate) * 1 ether;
+// 如果 _amount < rate, 结果是 0!
+
+// ✅ 正确顺序
+uint256 result = (_amount * 1 ether) / rate;
+// 先乘再除,避免精度丢失</code></pre>
+                <p style="margin-top: 10px;">
+                    总是先乘后除,避免整数除法导致的精度丢失!
+                </p>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">Wei单位便捷写法</h4>
+                <pre><code class="language-solidity">// 这些是等价的:
+1 ether
+1e18
+1000000000000000000
+
+// 小数表示:
+0.5 ether  // 500000000000000000
+2.5 ether  // 2500000000000000000
+
+// Gwei (gas价格):
+20 gwei    // 20000000000</code></pre>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">真实世界的汇率</h4>
+                <p>在生产环境中,应该使用Chainlink Price Feeds:</p>
+                <pre><code class="language-solidity">import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+contract RealTipJar {
+    AggregatorV3Interface internal priceFeed;
+    
+    constructor() {
+        // ETH/USD price feed on Sepolia testnet
+        priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
+    }
+    
+    function getLatestPrice() public view returns (int) {
+        (,int price,,,) = priceFeed.latestRoundData();
+        return price;  // 返回ETH的USD价格
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-7.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">Simple IOU - 简单欠条</div>
+            </a>
+            <a href="contract-9.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">Smart Calculator - 智能计算器</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

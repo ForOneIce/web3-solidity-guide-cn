@@ -1,0 +1,994 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PluginStore - 插件商店 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--hard);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--hard), #c72828);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #ffe6e6, #ffd6d6);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--hard);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--hard);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #fff0f0, #ffe6e6);
+            border-left: 5px solid var(--hard);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--hard);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第16天 - 模块化与低级调用</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 16 天 🔌</div>
+                    <h1>PluginStore - 插件商店</h1>
+                    <p class="subtitle">模块化智能合约 - call/delegatecall/staticcall</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--hard);">
+                        🌳 高级
+                    </div>
+                    <span class="tag">call</span>
+                    <span class="tag">delegatecall</span>
+                    <span class="tag">staticcall</span>
+                    <span class="tag">模块化</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握三种低级调用方法的区别</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>动态调用、ABI编码、插件架构</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>90分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★★☆</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">🔌 模块化设计 - 插件架构</div>
+                <p>将功能分离到独立的插件合约中,核心合约动态调用:</p>
+                
+                <div style="background: white; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                    <pre><code>架构设计:
+┌──────────────────────────────────┐
+│    PluginStore (核心合约)         │
+│  - 管理玩家配置文件                │
+│  - 注册/管理插件地址               │
+│  - 动态调用插件功能                │
+└──────────┬───────────────────────┘
+           │
+    ┌──────┴──────┐
+    │             │
+┌───▼────┐   ┌───▼────┐
+│ 成就插件│   │武器插件│
+│Achievements  │WeaponStore
+└────────┘   └────────┘</code></pre>
+                </div>
+                
+                <p><strong>优势:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>✅ <strong>关注点分离</strong>: 核心逻辑和扩展功能分开</li>
+                    <li>✅ <strong>易于扩展</strong>: 添加新功能只需部署新插件</li>
+                    <li>✅ <strong>独立升级</strong>: 可以单独升级某个插件</li>
+                    <li>✅ <strong>降低复杂度</strong>: 每个合约职责单一</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📞 三种低级调用方法</div>
+                
+                <table style="width: 100%; margin: 15px 0; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden;">
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 12px; text-align: left;">调用类型</th>
+                        <th style="padding: 12px; text-align: left;">作用</th>
+                        <th style="padding: 12px; text-align: left;">上下文</th>
+                        <th style="padding: 12px; text-align: left;">用途</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;"><code class="inline-code">call</code></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">调用其他合约</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">被调用合约</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">修改其他合约状态</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;"><code class="inline-code">staticcall</code></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">只读调用</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">被调用合约</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">查询数据(view)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><code class="inline-code">delegatecall</code></td>
+                        <td style="padding: 10px;">执行其他代码</td>
+                        <td style="padding: 10px;">调用者合约</td>
+                        <td style="padding: 10px;">代理模式/升级</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔄 call - 跨合约调用</div>
+                <pre><code class="language-solidity">// 调用插件的setAchievement函数
+bytes memory data = abi.encodeWithSignature(
+    "setAchievement(address,string)", 
+    user, 
+    "First Victory"
+);
+
+(bool success, ) = pluginAddress.call(data);
+require(success, "Call failed");</code></pre>
+                
+                <div style="background: white; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                    <h4 style="color: var(--primary); margin-bottom: 10px;">执行上下文:</h4>
+                    <pre><code>PluginStore.runPlugin()
+    │
+    │ call →
+    │
+    ▼
+AchievementsPlugin.setAchievement()
+    │
+    └─ 修改 AchievementsPlugin 的存储
+    └─ msg.sender = PluginStore地址
+    └─ 在 AchievementsPlugin 的上下文中执行</code></pre>
+                </div>
+                
+                <p><strong>特点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>修改<strong>被调用合约</strong>的状态</li>
+                    <li><code class="inline-code">msg.sender</code>变为调用者地址</li>
+                    <li>返回布尔值+返回数据</li>
+                    <li>失败不会自动revert,需要手动检查</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔍 staticcall - 只读调用</div>
+                <pre><code class="language-solidity">// 查询插件数据(不修改状态)
+bytes memory data = abi.encodeWithSignature(
+    "getAchievement(address)", 
+    user
+);
+
+(bool success, bytes memory result) = pluginAddress.staticcall(data);
+require(success, "Call failed");
+
+string memory achievement = abi.decode(result, (string));</code></pre>
+                
+                <p style="margin-top: 15px;"><strong>与call的区别:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>✅ 只能调用<code class="inline-code">view</code>或<code class="inline-code">pure</code>函数</li>
+                    <li>✅ 不能修改任何状态</li>
+                    <li>✅ Gas消耗更低</li>
+                    <li>✅ 如果被调用函数试图修改状态,会自动revert</li>
+                </ul>
+                
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong style="color: #155724;">✅ 最佳实践:</strong>
+                    <span style="color: #155724;"> 查询数据时使用staticcall,修改数据时使用call</span>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">⚡ delegatecall - 在调用者上下文执行</div>
+                <p>这是最特殊的调用方式,代码在被调用合约中,但执行环境在调用者中:</p>
+                
+                <pre><code class="language-solidity">// 使用另一个合约的代码,但修改自己的存储
+bytes memory data = abi.encodeWithSignature("someFunction()");
+(bool success, ) = logicContract.delegatecall(data);</code></pre>
+                
+                <div style="background: white; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                    <h4 style="color: var(--primary); margin-bottom: 10px;">执行上下文对比:</h4>
+                    <pre><code>call:
+ContractA.call(ContractB.func())
+    └─ 执行ContractB的代码
+    └─ 修改ContractB的存储
+    └─ msg.sender = ContractA
+
+delegatecall:
+ContractA.delegatecall(ContractB.func())
+    └─ 执行ContractB的代码
+    └─ 修改ContractA的存储  ← 关键区别!
+    └─ msg.sender = 原始调用者</code></pre>
+                </div>
+                
+                <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <strong style="color: #856404;">⚠️ 重要:</strong>
+                    <p style="color: #856404; margin-top: 5px;">delegatecall非常强大但危险!使用时必须确保两个合约的存储布局完全一致,否则会覆盖错误的存储槽位!</p>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔐 ABI编码与解码</div>
+                <p>低级调用需要手动编码函数调用数据:</p>
+                
+                <pre><code class="language-solidity">// 编码: 创建调用数据
+bytes memory data = abi.encodeWithSignature(
+    "functionName(type1,type2)",  // 函数签名
+    arg1,                          // 参数1
+    arg2                           // 参数2
+);
+
+// 或者使用函数选择器
+bytes4 selector = bytes4(keccak256("functionName(type1,type2)"));
+bytes memory data = abi.encodeWithSelector(selector, arg1, arg2);
+
+// 解码: 解析返回数据
+(bool success, bytes memory returnData) = target.call(data);
+(uint256 result, string memory message) = abi.decode(returnData, (uint256, string));</code></pre>
+                
+                <p style="margin-top: 15px;"><strong>编码函数:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">abi.encode(...)</code>: 完整ABI编码</li>
+                    <li><code class="inline-code">abi.encodePacked(...)</code>: 紧凑编码(用于哈希)</li>
+                    <li><code class="inline-code">abi.encodeWithSignature(...)</code>: 带函数签名编码</li>
+                    <li><code class="inline-code">abi.encodeWithSelector(...)</code>: 带选择器编码</li>
+                    <li><code class="inline-code">abi.decode(...)</code>: 解码数据</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 核心合约: PluginStore</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract PluginStore {
+    // 玩家配置文件
+    struct PlayerProfile {
+        string name;
+        string avatar;
+    }
+    
+    // 状态变量
+    mapping(address => PlayerProfile) public profiles;
+    mapping(string => address) public plugins;
+    
+    // 设置配置文件
+    function setProfile(string memory _name, string memory _avatar) external {
+        profiles[msg.sender] = PlayerProfile({
+            name: _name,
+            avatar: _avatar
+        });
+    }
+    
+    // 获取配置文件
+    function getProfile(address user) external view returns (string memory, string memory) {
+        PlayerProfile memory profile = profiles[user];
+        return (profile.name, profile.avatar);
+    }
+    
+    // 注册插件
+    function registerPlugin(string memory key, address pluginAddress) external {
+        plugins[key] = pluginAddress;
+    }
+    
+    // 获取插件地址
+    function getPlugin(string memory key) external view returns (address) {
+        return plugins[key];
+    }
+    
+    // 运行插件(修改状态) - 使用call
+    function runPlugin(
+        string memory key,
+        string memory functionSignature,
+        address user,
+        string memory argument
+    ) external {
+        address plugin = plugins[key];
+        require(plugin != address(0), "Plugin not found");
+        
+        // 编码函数调用
+        bytes memory data = abi.encodeWithSignature(
+            functionSignature, 
+            user, 
+            argument
+        );
+        
+        // 调用插件
+        (bool success, ) = plugin.call(data);
+        require(success, "Plugin call failed");
+    }
+    
+    // 查询插件(只读) - 使用staticcall
+    function runPluginView(
+        string memory key,
+        string memory functionSignature,
+        address user
+    ) external view returns (string memory) {
+        address plugin = plugins[key];
+        require(plugin != address(0), "Plugin not found");
+        
+        // 编码函数调用
+        bytes memory data = abi.encodeWithSignature(functionSignature, user);
+        
+        // 只读调用
+        (bool success, bytes memory result) = plugin.staticcall(data);
+        require(success, "Plugin call failed");
+        
+        // 解码返回数据
+        return abi.decode(result, (string));
+    }
+}</code></pre>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">📄 插件1: 成就系统</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract AchievementsPlugin {
+    // 存储每个玩家的最新成就
+    mapping(address => string) public latestAchievement;
+    
+    // 设置成就
+    function setAchievement(address user, string memory achievement) public {
+        latestAchievement[user] = achievement;
+    }
+    
+    // 获取成就
+    function getAchievement(address user) public view returns (string memory) {
+        return latestAchievement[user];
+    }
+}</code></pre>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">📄 插件2: 武器商店</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract WeaponStorePlugin {
+    // 存储每个玩家装备的武器
+    mapping(address => string) public equippedWeapon;
+    
+    // 装备武器
+    function setWeapon(address user, string memory weapon) public {
+        equippedWeapon[user] = weapon;
+    }
+    
+    // 获取武器
+    function getWeapon(address user) public view returns (string memory) {
+        return equippedWeapon[user];
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 架构优势</strong>
+                <p style="margin-top: 10px; color: #155724;">PluginStore管理核心数据(玩家配置文件),各个插件管理各自的功能数据(成就、武器等)。添加新功能只需部署新插件并注册,无需修改核心合约!</p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">🔍 完整调用流程解析</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">场景: 玩家获得成就</h4>
+                <pre><code class="language-solidity">// 步骤1: 部署并注册插件
+AchievementsPlugin achievementsPlugin = new AchievementsPlugin();
+pluginStore.registerPlugin("achievements", address(achievementsPlugin));
+
+// 步骤2: 玩家调用PluginStore
+pluginStore.runPlugin(
+    "achievements",                           // 插件key
+    "setAchievement(address,string)",        // 函数签名
+    playerAddress,                            // 玩家地址
+    "Defeated Dragon"                         // 成就名称
+);
+
+// 内部执行流程:
+1. PluginStore查找plugins["achievements"]
+2. 获取插件地址: 0xAchievementsPlugin...
+3. 编码调用数据:
+   data = abi.encodeWithSignature(
+       "setAchievement(address,string)",
+       playerAddress,
+       "Defeated Dragon"
+   )
+4. 执行call:
+   (success, ) = 0xAchievementsPlugin.call(data)
+5. AchievementsPlugin执行setAchievement:
+   latestAchievement[playerAddress] = "Defeated Dragon"
+
+// 步骤3: 查询成就
+string memory achievement = pluginStore.runPluginView(
+    "achievements",
+    "getAchievement(address)",
+    playerAddress
+);
+// 返回: "Defeated Dragon"</code></pre>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">函数签名生成规则</h4>
+                <pre><code class="language-solidity">// 规则: "functionName(type1,type2,type3)"
+// 注意: 类型之间没有空格!
+
+// ✅ 正确
+"setAchievement(address,string)"
+"transfer(address,uint256)"
+"swap(address,address,uint256)"
+
+// ❌ 错误
+"setAchievement(address, string)"   // 有空格
+"transfer(address,uint)"            // uint不完整,应该是uint256
+"swap(address[], uint)"             // 数组类型要写完整
+
+// 特殊类型
+"func(uint256[])"      // 动态数组
+"func(uint256[5])"     // 固定大小数组
+"func(bytes32)"        // bytes32
+"func(string)"         // string
+"func(address[])"      // 地址数组</code></pre>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">⚔️ call vs delegatecall 实战对比</h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                <div style="background: white; padding: 20px; border-radius: 10px; border: 2px solid var(--primary);">
+                    <h4 style="color: var(--primary); margin-bottom: 10px;">call 示例</h4>
+                    <pre><code class="language-solidity">contract A {
+    uint public value;
+    
+    function callB(address b) external {
+        b.call(
+            abi.encodeWithSignature(
+                "setValue(uint256)", 
+                42
+            )
+        );
+    }
+}
+
+contract B {
+    uint public value;
+    
+    function setValue(uint x) public {
+        value = x;  // 修改B的value
+    }
+}
+
+// 结果:
+// A.value = 0 (未改变)
+// B.value = 42 (被修改)</code></pre>
+                </div>
+                
+                <div style="background: white; padding: 20px; border-radius: 10px; border: 2px solid var(--hard);">
+                    <h4 style="color: var(--hard); margin-bottom: 10px;">delegatecall 示例</h4>
+                    <pre><code class="language-solidity">contract A {
+    uint public value;
+    
+    function delegatecallB(address b) external {
+        b.delegatecall(
+            abi.encodeWithSignature(
+                "setValue(uint256)", 
+                42
+            )
+        );
+    }
+}
+
+contract B {
+    uint public value;
+    
+    function setValue(uint x) public {
+        value = x;  // 修改A的value!
+    }
+}
+
+// 结果:
+// A.value = 42 (被修改!)
+// B.value = 0 (未改变)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署所有合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>创建三个文件:
+                        <ul style="margin-left: 20px;">
+                            <li><code class="inline-code">PluginStore.sol</code></li>
+                            <li><code class="inline-code">AchievementsPlugin.sol</code></li>
+                            <li><code class="inline-code">WeaponStorePlugin.sol</code></li>
+                        </ul>
+                    </li>
+                    <li>编译并部署所有三个合约</li>
+                    <li>记录每个合约的地址</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 注册插件</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>在PluginStore中调用:
+                        <ul style="margin-left: 20px;">
+                            <li><code class="inline-code">registerPlugin("achievements", AchievementsPlugin地址)</code></li>
+                            <li><code class="inline-code">registerPlugin("weapons", WeaponStorePlugin地址)</code></li>
+                        </ul>
+                    </li>
+                    <li>验证:<code class="inline-code">getPlugin("achievements")</code></li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 设置玩家配置文件</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">setProfile("DragonSlayer", "avatar1.png")</code></li>
+                    <li>验证:<code class="inline-code">getProfile(你的地址)</code></li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 使用call设置成就</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">runPlugin</code>:
+                        <ul style="margin-left: 20px;">
+                            <li>key: <code class="inline-code">"achievements"</code></li>
+                            <li>functionSignature: <code class="inline-code">"setAchievement(address,string)"</code></li>
+                            <li>user: 你的地址</li>
+                            <li>argument: <code class="inline-code">"First Victory"</code></li>
+                        </ul>
+                    </li>
+                    <li>直接在AchievementsPlugin验证:<code class="inline-code">latestAchievement(你的地址)</code></li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤5: 使用staticcall查询成就</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">runPluginView</code>:
+                        <ul style="margin-left: 20px;">
+                            <li>key: <code class="inline-code">"achievements"</code></li>
+                            <li>functionSignature: <code class="inline-code">"getAchievement(address)"</code></li>
+                            <li>user: 你的地址</li>
+                        </ul>
+                    </li>
+                    <li>应该返回: <code class="inline-code">"First Victory"</code></li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤6: 测试武器插件</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>设置武器:<code class="inline-code">runPlugin("weapons", "setWeapon(address,string)", 你的地址, "Excalibur")</code></li>
+                    <li>查询武器:<code class="inline-code">runPluginView("weapons", "getWeapon(address)", 你的地址)</code></li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>创建新插件: InventoryPlugin(物品背包系统)</li>
+                    <li>添加权限控制:只有owner可以注册插件</li>
+                    <li>实现插件版本管理(可以升级插件)</li>
+                    <li>添加插件白名单(只有经过验证的插件可注册)</li>
+                    <li>实现批量调用(一次调用多个插件功能)</li>
+                    <li>添加事件记录所有插件调用</li>
+                    <li>创建SkillsPlugin(技能树系统)</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 深入理解</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">为什么delegatecall危险?</h4>
+                <pre><code class="language-solidity">// 存储布局必须一致!
+contract Proxy {
+    address public implementation;  // 槽位0
+    uint256 public value;           // 槽位1
+}
+
+contract Logic {
+    uint256 public value;           // 槽位0 ⚠️
+    address public something;       // 槽位1 ⚠️
+}
+
+// 如果Proxy.delegatecall(Logic),
+// Logic的value会写入Proxy的槽位0,
+// 覆盖implementation地址! 💥</code></pre>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">真实世界应用</h4>
+                <ul style="margin: 10px 0 0 20px; line-height: 1.8;">
+                    <li><strong>Uniswap</strong>: 使用delegatecall实现可升级合约</li>
+                    <li><strong>Aave</strong>: 模块化架构,各功能独立合约</li>
+                    <li><strong>Compound</strong>: 通过call调用价格预言机</li>
+                    <li><strong>Axie Infinity</strong>: 游戏逻辑分离到不同合约</li>
+                </ul>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">函数选择器计算</h4>
+                <pre><code class="language-solidity">// 方式1: 使用abi.encodeWithSignature
+bytes memory data = abi.encodeWithSignature(
+    "transfer(address,uint256)", 
+    recipient, 
+    amount
+);
+
+// 方式2: 手动计算选择器
+bytes4 selector = bytes4(keccak256("transfer(address,uint256)"));
+bytes memory data = abi.encodeWithSelector(selector, recipient, amount);
+
+// 方式3: 使用函数引用
+bytes4 selector = IERC20.transfer.selector;
+bytes memory data = abi.encodeWithSelector(selector, recipient, amount);
+
+// 所有方式结果相同!</code></pre>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-15.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">Gas-Efficient Voting - Gas优化投票</div>
+            </a>
+            <a href="contract-17.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">UpgradeHub - 升级中心</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

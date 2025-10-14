@@ -1,0 +1,743 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin-Only - 仅管理员合约 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第5天 - 访问控制</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 5 天 🔐</div>
+                    <h1>Admin-Only - 仅管理员合约</h1>
+                    <p class="subtitle">使用修饰符创建只有所有者才能调用的函数</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--easy);">
+                        🌱 初级
+                    </div>
+                    <span class="tag">modifier</span>
+                    <span class="tag">访问控制</span>
+                    <span class="tag">msg.sender</span>
+                    <span class="tag">constructor</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握访问控制和权限管理</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>modifier、constructor、msg.sender</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>45分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">📊 主观感受难度</div>
+                    <div>⭐⭐⭐☆☆ 中等 - 数组操作和投票逻辑理解</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">👤 msg.sender - 调用者地址</div>
+                <p><code class="inline-code">msg.sender</code>是Solidity中的全局变量,表示当前调用函数的地址:</p>
+                <pre><code class="language-solidity">address public owner;
+
+constructor() {
+    owner = msg.sender;  // 部署合约的人成为owner
+}</code></pre>
+                <p><strong>重要特点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">msg.sender</code>是<code class="inline-code">address</code>类型</li>
+                    <li>在constructor中,msg.sender是部署合约的人</li>
+                    <li>在普通函数中,msg.sender是调用函数的人或合约</li>
+                    <li>无法伪造,由EVM保证真实性</li>
+                    <li>如果合约A调用合约B,在B中msg.sender是A的地址</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🏗️ constructor - 构造函数</div>
+                <p>构造函数在合约部署时自动执行一次,且只执行一次:</p>
+                <pre><code class="language-solidity">constructor() {
+    owner = msg.sender;  // 初始化owner
+    // 可以在这里进行其他初始化操作
+}</code></pre>
+                <p><strong>构造函数特点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>使用<code class="inline-code">constructor</code>关键字定义</li>
+                    <li>只在部署时执行一次</li>
+                    <li>没有函数名(旧版本Solidity用合约名)</li>
+                    <li>可以有参数,部署时传入</li>
+                    <li>可以是<code class="inline-code">payable</code>,接收部署时发送的ETH</li>
+                    <li>通常用于初始化状态变量</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🛡️ modifier - 函数修饰符</div>
+                <p>modifier是可重用的代码片段,用于修改函数的行为:</p>
+                <pre><code class="language-solidity">modifier onlyOwner() {
+    require(msg.sender == owner, "Not the owner");
+    _;  // 这里会执行被修饰的函数
+}</code></pre>
+                <p><strong>modifier的工作原理:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">_;</code>是占位符,表示被修饰函数的代码会在这里执行</li>
+                    <li>在<code class="inline-code">_;</code>之前的代码先执行(前置检查)</li>
+                    <li>在<code class="inline-code">_;</code>之后的代码在函数执行后执行(后置操作)</li>
+                    <li>一个函数可以有多个modifier</li>
+                    <li>modifier可以有参数</li>
+                </ul>
+
+                <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong style="color: #856404;">💡 使用modifier的好处:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #856404;">
+                        <li>代码复用 - 不用在每个函数中重复写相同的检查</li>
+                        <li>提高可读性 - 函数签名一眼就能看出有什么限制</li>
+                        <li>减少错误 - 集中管理访问控制逻辑</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔍 require - 条件检查</div>
+                <p><code class="inline-code">require</code>用于验证条件,如果失败则回滚交易:</p>
+                <pre><code class="language-solidity">require(msg.sender == owner, "Not the owner");</code></pre>
+                <p><strong>require的行为:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>第一个参数是条件表达式(bool类型)</li>
+                    <li>第二个参数是错误消息(可选)</li>
+                    <li>如果条件为false,交易回滚,所有状态改变撤销</li>
+                    <li>未使用的gas会退还给调用者</li>
+                    <li>通常用于验证输入、权限、状态</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🗺️ mapping - 映射</div>
+                <p>映射是键值对存储,类似于其他语言中的哈希表或字典:</p>
+                <pre><code class="language-solidity">mapping(address => uint256) public withdrawalAllowance;
+mapping(address => bool) public hasWithdrawn;</code></pre>
+                <p><strong>映射特点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>语法:<code class="inline-code">mapping(KeyType => ValueType)</code></li>
+                    <li>所有可能的键都存在,未设置的值为默认值(0、false等)</li>
+                    <li>不能遍历(无法获取所有键)</li>
+                    <li>只能用于状态变量(storage)</li>
+                    <li>键类型可以是除mapping、动态数组、合约、枚举、结构体外的任何类型</li>
+                    <li>值类型可以是任何类型,包括mapping</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 完整合约代码</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract AdminOnly {
+    address public owner;  // 合约所有者
+    uint256 public treasureAmount;  // 宝藏总量
+    
+    // 映射:记录每个地址的提取额度
+    mapping(address => uint256) public withdrawalAllowance;
+    // 映射:记录地址是否已提取
+    mapping(address => bool) public hasWithdrawn;
+    
+    // 构造函数:部署时设置owner
+    constructor() {
+        owner = msg.sender;
+    }
+    
+    // 修饰符:只允许owner调用
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not the owner");
+        _;
+    }
+    
+    // 只有owner能添加宝藏
+    function addTreasure(uint256 amount) public onlyOwner {
+        treasureAmount += amount;
+    }
+    
+    // 只有owner能批准提取额度
+    function approveWithdrawal(address recipient, uint256 amount) public onlyOwner {
+        withdrawalAllowance[recipient] = amount;
+    }
+    
+    // 任何人都可以提取(如果有额度)
+    function withdrawTreasure(uint256 amount) public {
+        require(amount <= withdrawalAllowance[msg.sender], "Insufficient allowance");
+        require(!hasWithdrawn[msg.sender], "Already withdrawn");
+        
+        hasWithdrawn[msg.sender] = true;
+        withdrawalAllowance[msg.sender] -= amount;
+    }
+    
+    // 只有owner能重置提取状态
+    function resetWithdrawalStatus(address user) public onlyOwner {
+        hasWithdrawn[user] = false;
+    }
+    
+    // 只有owner能转移所有权
+    function transferOwnership(address newOwner) public onlyOwner {
+        owner = newOwner;
+    }
+    
+    // 只有owner能查看宝藏详情
+    function getTreasureDetails() public view onlyOwner returns (uint256) {
+        return treasureAmount;
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 这个合约做什么?</strong>
+                <p style="margin-top: 10px; color: #155724;">这是一个宝库管理系统。owner(合约部署者)可以添加宝藏、批准他人提取额度、重置状态和转移所有权。被批准的用户可以提取自己的额度,但每个地址只能提取一次。</p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">🔍 执行流程分析</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">场景1: Alice部署合约</h4>
+                <pre><code class="language-solidity">// Alice的地址: 0xAlice
+// 部署时constructor执行:
+owner = msg.sender;  // owner = 0xAlice</code></pre>
+                <p style="margin-top: 10px;">✅ Alice成为owner,可以调用所有onlyOwner函数</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">场景2: Alice添加宝藏</h4>
+                <pre><code class="language-solidity">// Alice调用:
+addTreasure(1000);
+
+// 函数执行流程:
+1. onlyOwner modifier检查: msg.sender == owner? 
+   (0xAlice == 0xAlice) ✅ 通过
+2. 执行函数体: treasureAmount += 1000
+3. treasureAmount = 1000</code></pre>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">场景3: Bob尝试添加宝藏(失败)</h4>
+                <pre><code class="language-solidity">// Bob的地址: 0xBob
+// Bob调用:
+addTreasure(500);
+
+// 函数执行流程:
+1. onlyOwner modifier检查: msg.sender == owner?
+   (0xBob == 0xAlice) ❌ 失败
+2. require失败,抛出错误: "Not the owner"
+3. 交易回滚,treasureAmount保持不变</code></pre>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">场景4: Alice批准Bob提取,Bob提取宝藏</h4>
+                <pre><code class="language-solidity">// Alice调用:
+approveWithdrawal(0xBob, 200);
+// withdrawalAllowance[0xBob] = 200
+
+// Bob调用:
+withdrawTreasure(200);
+
+// 检查流程:
+1. require(200 <= 200, "Insufficient allowance") ✅
+2. require(!false, "Already withdrawn") ✅
+3. hasWithdrawn[0xBob] = true
+4. withdrawalAllowance[0xBob] -= 200  // 变成0
+
+// Bob再次尝试提取:
+withdrawTreasure(100);
+// require(!true, "Already withdrawn") ❌ 失败!</code></pre>
+            </div>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #856404;">⚠️ 安全注意</strong>
+                <p style="margin-top: 10px; color: #856404;">
+                    这个合约只是演示访问控制,实际应用中还需要考虑:<br>
+                    - owner丢失私钥怎么办?(多签、时间锁)<br>
+                    - owner权力过大怎么办?(去中心化治理)<br>
+                    - 如何防止owner作恶?(代码审计、透明度)
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署并确认owner</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>在Remix中部署合约</li>
+                    <li>记下你的部署地址(在Account下拉框中显示)</li>
+                    <li>点击<code class="inline-code">owner</code>按钮,确认显示的是你的地址</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 测试owner权限</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">addTreasure(1000)</code> - 应该成功</li>
+                    <li>点击<code class="inline-code">treasureAmount</code> - 应该显示1000</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 测试非owner访问(重要!)</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>在Remix顶部切换Account到另一个地址</li>
+                    <li>尝试调用<code class="inline-code">addTreasure(500)</code></li>
+                    <li>应该失败,显示"Not the owner"错误 ❌</li>
+                    <li>切换回原来的Account</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 测试提取流程</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>复制另一个账户地址(切换到它,复制地址,再切换回owner)</li>
+                    <li>调用<code class="inline-code">approveWithdrawal("0x另一个地址", 300)</code></li>
+                    <li>切换到那个账户</li>
+                    <li>调用<code class="inline-code">withdrawTreasure(200)</code> - 成功</li>
+                    <li>再次调用<code class="inline-code">withdrawTreasure(50)</code> - 失败("Already withdrawn")</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>添加一个<code class="inline-code">onlyRegisteredUser</code>修饰符,只允许注册用户调用某些函数</li>
+                    <li>创建一个<code class="inline-code">registerUser(address user)</code>函数,只有owner能注册用户</li>
+                    <li>添加一个<code class="inline-code">pause</code>和<code class="inline-code">unpause</code>功能,owner可以暂停合约</li>
+                    <li>实现多管理员功能:使用<code class="inline-code">mapping(address => bool) public isAdmin</code></li>
+                    <li>添加事件(event)来记录重要操作</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">OpenZeppelin的Ownable</h4>
+                <p style="line-height: 1.8;">
+                    实际开发中,不需要自己写owner逻辑,可以继承OpenZeppelin的<code class="inline-code">Ownable</code>合约:
+                </p>
+                <pre style="margin-top: 10px;"><code class="language-solidity">import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract MyContract is Ownable {
+    function myRestrictedFunction() public onlyOwner {
+        // 只有owner能调用
+    }
+}</code></pre>
+                <p style="margin-top: 10px;">OpenZeppelin已经帮你实现了owner管理、转移所有权等功能,而且经过了安全审计!</p>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">三种错误处理方式</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="background: var(--light);">
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">方法</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">退还Gas</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">使用场景</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><code class="inline-code">require</code></td>
+                        <td style="padding: 10px;">✅ 是</td>
+                        <td style="padding: 10px;">输入验证、权限检查</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;"><code class="inline-code">assert</code></td>
+                        <td style="padding: 10px;">❌ 否</td>
+                        <td style="padding: 10px;">内部错误、不变量检查</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><code class="inline-code">revert</code></td>
+                        <td style="padding: 10px;">✅ 是</td>
+                        <td style="padding: 10px;">复杂条件、自定义错误</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-4.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">AuctionHouse - 拍卖行</div>
+            </a>
+            <a href="contract-6.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">Ether Piggy Bank - 以太坊存钱罐</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

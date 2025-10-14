@@ -1,0 +1,821 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignThis - 签名验证 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第19天 - 数字签名</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 19 天 ✍️</div>
+                    <h1>SignThis - 签名验证</h1>
+                    <p class="subtitle">使用数字签名实现Gas高效的访问控制</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--hard);">
+                        🌳 高级
+                    </div>
+                    <span class="tag">签名</span>
+                    <span class="tag">ecrecover</span>
+                    <span class="tag">认证</span>
+                    <span class="tag">Gas优化</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握数字签名验证和链下认证</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>ecrecover、消息哈希、签名生成</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>60分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★★☆</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">🔐 数字签名原理</div>
+                <p>数字签名基于椭圆曲线密码学，提供身份验证和消息完整性：</p>
+                <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #856404;">🔹 签名过程</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px; color: #856404;">
+                        <li>用户使用私钥对消息哈希进行签名</li>
+                        <li>生成签名 (r, s, v) 三个参数</li>
+                        <li>将签名和消息一起发送</li>
+                    </ol>
+                </div>
+                <div style="background: #e6f7ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #0066cc;">🔹 验证过程</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px; color: #0066cc;">
+                        <li>合约接收消息和签名</li>
+                        <li>使用ecrecover恢复签名者地址</li>
+                        <li>验证地址是否有权限</li>
+                    </ol>
+                </div>
+                <p><strong>优势：</strong>无需在链上存储白名单，节省Gas费用</p>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔍 ecrecover 函数</div>
+                <p><code class="inline-code">ecrecover</code>是Solidity内置函数，用于从签名恢复签名者地址：</p>
+                <pre><code class="language-solidity">function ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) 
+    returns (address signer)</code></pre>
+                <p><strong>参数说明：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">hash</code>: 消息的keccak256哈希</li>
+                    <li><code class="inline-code">v</code>: 恢复ID (通常是27或28)</li>
+                    <li><code class="inline-code">r, s</code>: 签名的两个组成部分</li>
+                </ul>
+                <pre><code class="language-solidity">// 使用示例
+bytes32 messageHash = keccak256(abi.encodePacked(user, eventId));
+bytes32 ethSignedMessageHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash));
+address signer = ecrecover(ethSignedMessageHash, v, r, s);</code></pre>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📝 以太坊签名消息格式</div>
+                <p>以太坊钱包签名时会自动添加前缀，防止签名重放攻击：</p>
+                <pre><code class="language-solidity">// 原始消息哈希
+bytes32 messageHash = keccak256(abi.encodePacked(data));
+
+// 以太坊签名消息哈希
+bytes32 ethSignedMessageHash = keccak256(abi.encodePacked(
+    "\x19Ethereum Signed Message:\n32", 
+    messageHash
+));</code></pre>
+                <p><strong>前缀作用：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>防止用户误签交易数据</li>
+                    <li>区分不同类型的签名</li>
+                    <li>提高安全性</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">⚡ Gas优化策略</div>
+                <p>基于签名的访问控制相比传统白名单有显著的Gas优势：</p>
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #155724;">✅ 签名方式</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #155724;">
+                        <li>无需存储用户列表</li>
+                        <li>验证成本固定 (~3000 gas)</li>
+                        <li>支持无限用户</li>
+                        <li>动态权限管理</li>
+                    </ul>
+                </div>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #721c24;">❌ 传统白名单</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #721c24;">
+                        <li>每个用户需要存储 (~20000 gas)</li>
+                        <li>查询成本随用户增加</li>
+                        <li>修改白名单需要交易</li>
+                        <li>存储成本高</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 签名验证活动合约</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SignThis {
+    string public eventName;
+    address public organizer;
+    uint256 public eventDate;
+    uint256 public maxAttendees;
+    uint256 public attendeeCount;
+    bool public isEventActive;
+    
+    mapping(address => bool) public hasAttended;
+    
+    event EventCreated(string name, uint256 date, uint256 maxAttendees);
+    event AttendeeCheckedIn(address attendee, uint256 timestamp);
+    event EventStatusChanged(bool isActive);
+    
+    constructor(string memory _eventName, uint256 _eventDate, uint256 _maxAttendees) {
+        eventName = _eventName;
+        organizer = msg.sender;
+        eventDate = _eventDate;
+        maxAttendees = _maxAttendees;
+        isEventActive = true;
+        
+        emit EventCreated(_eventName, _eventDate, _maxAttendees);
+    }
+    
+    modifier onlyOrganizer() {
+        require(msg.sender == organizer, "Only organizer");
+        _;
+    }
+    
+    modifier eventActive() {
+        require(isEventActive, "Event not active");
+        _;
+    }
+    
+    // 使用签名验证参与者身份
+    function checkInWithSignature(
+        address attendee,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external eventActive {
+        require(attendeeCount < maxAttendees, "Event full");
+        require(!hasAttended[attendee], "Already checked in");
+        
+        // 构造消息哈希
+        bytes32 messageHash = keccak256(abi.encodePacked(
+            attendee,
+            address(this),  // 合约地址
+            eventName
+        ));
+        
+        // 以太坊签名消息哈希
+        bytes32 ethSignedMessageHash = keccak256(abi.encodePacked(
+            "\x19Ethereum Signed Message:\n32",
+            messageHash
+        ));
+        
+        // 恢复签名者地址
+        address signer = ecrecover(ethSignedMessageHash, v, r, s);
+        
+        // 验证签名者是组织者
+        require(signer == organizer, "Invalid signature");
+        
+        // 记录参与
+        hasAttended[attendee] = true;
+        attendeeCount++;
+        
+        emit AttendeeCheckedIn(attendee, block.timestamp);
+    }
+    
+    // 批量签到 (Gas优化)
+    function batchCheckIn(
+        address[] calldata attendees,
+        uint8[] calldata v,
+        bytes32[] calldata r,
+        bytes32[] calldata s
+    ) external eventActive {
+        require(attendees.length == v.length, "Array length mismatch");
+        require(attendees.length == r.length, "Array length mismatch");
+        require(attendees.length == s.length, "Array length mismatch");
+        require(attendeeCount + attendees.length <= maxAttendees, "Would exceed capacity");
+        
+        for (uint256 i = 0; i < attendees.length; i++) {
+            address attendee = attendees[i];
+            
+            if (hasAttended[attendee]) continue;  // 跳过已签到的
+            
+            bytes32 messageHash = keccak256(abi.encodePacked(
+                attendee,
+                address(this),
+                eventName
+            ));
+            
+            bytes32 ethSignedMessageHash = keccak256(abi.encodePacked(
+                "\x19Ethereum Signed Message:\n32",
+                messageHash
+            ));
+            
+            address signer = ecrecover(ethSignedMessageHash, v[i], r[i], s[i]);
+            
+            if (signer == organizer) {
+                hasAttended[attendee] = true;
+                attendeeCount++;
+                emit AttendeeCheckedIn(attendee, block.timestamp);
+            }
+        }
+    }
+    
+    // 验证签名有效性 (不执行签到)
+    function verifySignature(
+        address attendee,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external view returns (bool) {
+        bytes32 messageHash = keccak256(abi.encodePacked(
+            attendee,
+            address(this),
+            eventName
+        ));
+        
+        bytes32 ethSignedMessageHash = keccak256(abi.encodePacked(
+            "\x19Ethereum Signed Message:\n32",
+            messageHash
+        ));
+        
+        address signer = ecrecover(ethSignedMessageHash, v, r, s);
+        return signer == organizer;
+    }
+    
+    // 获取消息哈希 (用于前端签名)
+    function getMessageHash(address attendee) external view returns (bytes32) {
+        return keccak256(abi.encodePacked(
+            attendee,
+            address(this),
+            eventName
+        ));
+    }
+    
+    // 管理员功能
+    function toggleEventStatus() external onlyOrganizer {
+        isEventActive = !isEventActive;
+        emit EventStatusChanged(isEventActive);
+    }
+    
+    function getEventInfo() external view returns (
+        string memory name,
+        uint256 date,
+        uint256 maxCapacity,
+        uint256 currentCount,
+        bool active
+    ) {
+        return (eventName, eventDate, maxAttendees, attendeeCount, isEventActive);
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 签名验证流程</strong>
+                <p style="margin-top: 10px; color: #155724;">
+                    1. 组织者链下生成参与者签名 → 2. 参与者提交签名到合约 → 3. 合约使用ecrecover验证签名 → 4. 验证通过则允许签到。整个过程无需预先存储白名单！
+                </p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">🔍 前端签名生成示例</h3>
+            <pre><code class="language-javascript">// JavaScript 前端代码
+async function generateSignature(attendeeAddress, contractAddress, eventName) {
+    // 1. 构造消息
+    const messageHash = ethers.utils.solidityKeccak256(
+        ['address', 'address', 'string'],
+        [attendeeAddress, contractAddress, eventName]
+    );
+    
+    // 2. 组织者签名
+    const signature = await organizerWallet.signMessage(
+        ethers.utils.arrayify(messageHash)
+    );
+    
+    // 3. 分离签名组件
+    const { v, r, s } = ethers.utils.splitSignature(signature);
+    
+    return { v, r, s };
+}
+
+// 使用示例
+const signature = await generateSignature(
+    "0x742d35Cc6634C0532925a3b8D0C9964E5Bd4f071",  // 参与者地址
+    contractAddress,
+    "Web3 Conference 2024"
+);
+
+// 调用合约签到
+await contract.checkInWithSignature(
+    attendeeAddress,
+    signature.v,
+    signature.r,
+    signature.s
+);</code></pre>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #856404;">⚠️ 安全注意事项</strong>
+                <p style="margin-top: 10px; color: #856404;">
+                    - 签名可能被重放，需要添加nonce或时间戳<br>
+                    - 确保消息哈希包含足够的上下文信息<br>
+                    - 验证签名者身份的权威性<br>
+                    - 考虑签名的有效期限制<br>
+                    - 防止签名被用于其他合约
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>部署SignThis合约，设置活动信息</li>
+                    <li>记录合约地址和组织者地址</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 生成签名 (使用MetaMask)</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">getMessageHash(参与者地址)</code>获取消息哈希</li>
+                    <li>在浏览器控制台使用MetaMask签名：</li>
+                </ol>
+                <pre style="margin: 10px 0;"><code class="language-javascript">// 在浏览器控制台执行
+const messageHash = "0x...";  // 从合约获取的哈希
+const signature = await ethereum.request({
+    method: "personal_sign",
+    params: [messageHash, ethereum.selectedAddress]
+});</code></pre>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 分离签名并验证</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>使用在线工具或脚本分离签名的v, r, s</li>
+                    <li>调用<code class="inline-code">verifySignature</code>验证签名有效性</li>
+                    <li>调用<code class="inline-code">checkInWithSignature</code>完成签到</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 测试批量签到</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>为多个地址生成签名</li>
+                    <li>调用<code class="inline-code">batchCheckIn</code>批量处理</li>
+                    <li>观察Gas消耗对比</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>添加nonce防止签名重放攻击</li>
+                    <li>实现签名有效期机制</li>
+                    <li>创建多级权限系统 (组织者、志愿者、参与者)</li>
+                    <li>实现签名撤销功能</li>
+                    <li>添加签名使用次数限制</li>
+                    <li>创建基于签名的投票系统</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">EIP-712 结构化签名</h4>
+                <pre><code class="language-solidity">// EIP-712 提供更安全的结构化签名
+struct Permit {
+    address owner;
+    address spender;
+    uint256 value;
+    uint256 nonce;
+    uint256 deadline;
+}
+
+bytes32 constant PERMIT_TYPEHASH = keccak256(
+    "Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)"
+);</code></pre>
+                <p style="margin-top: 10px;">EIP-712提供了更安全、用户友好的签名方式，被广泛用于DeFi协议。</p>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">签名应用场景对比</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="background: var(--light);">
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">应用</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">优势</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">适用场景</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">白名单验证</td>
+                        <td style="padding: 10px;">Gas高效</td>
+                        <td style="padding: 10px;">NFT铸造、活动签到</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;">元交易</td>
+                        <td style="padding: 10px;">用户无需ETH</td>
+                        <td style="padding: 10px;">DApp用户体验</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">Permit授权</td>
+                        <td style="padding: 10px;">一步完成授权</td>
+                        <td style="padding: 10px;">DeFi协议集成</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-18.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">Oracle - 预言机合约</div>
+            </a>
+            <a href="contract-20.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">FortKnox - 金库堡垒</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

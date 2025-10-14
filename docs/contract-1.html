@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClickCounter - 点击计数器 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第1天 - Solidity入门</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 1 天 🎯</div>
+                    <h1>ClickCounter - 点击计数器</h1>
+                    <p class="subtitle">你的第一个Solidity智能合约</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--easy);">
+                        🌱 初级
+                    </div>
+                    <span class="tag">基础语法</span>
+                    <span class="tag">状态变量</span>
+                    <span class="tag">函数</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>理解智能合约的基本结构和组成部分</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>掌握状态变量和函数的基本用法</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>30分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">📊 主观感受难度</div>
+                    <div>⭐⭐☆☆☆ 中等 - 初次接触智能合约概念需要适应</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">📝 SPDX许可证标识符</div>
+                <p>每个Solidity文件都应该以许可证注释开始,这是一个最佳实践:</p>
+                <pre><code class="language-solidity">// SPDX-License-Identifier: MIT</code></pre>
+                <p><strong>为什么重要?</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>告诉他人你的代码可以如何使用和分发</li>
+                    <li>MIT是最宽松的开源许可证之一,允许商业使用</li>
+                    <li>避免编译器警告</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔧 编译器版本指令</div>
+                <pre><code class="language-solidity">pragma solidity ^0.8.0;</code></pre>
+                <p><strong>详细解释:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">pragma</code>: 编译器指令关键字</li>
+                    <li><code class="inline-code">^0.8.0</code>: 表示使用0.8.0或更高版本,但低于0.9.0</li>
+                    <li>不同版本的编译器可能有不同的特性和行为</li>
+                    <li>0.8.0版本开始,自动检查整数溢出,更安全!</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📦 合约定义</div>
+                <pre><code class="language-solidity">contract ClickCounter {
+    // 合约内容在这里
+}</code></pre>
+                <p><strong>关键点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">contract</code>关键字类似于其他语言中的<code class="inline-code">class</code></li>
+                    <li>合约是Solidity代码的基本单位</li>
+                    <li>合约名称应该使用大驼峰命名法(PascalCase)</li>
+                    <li>一个文件可以有多个合约,但通常一个文件一个主合约</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">💾 状态变量</div>
+                <pre><code class="language-solidity">uint256 public counter;</code></pre>
+                <p><strong>深入理解:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">uint256</code>: 无符号整数类型,256位(可以存储非常大的数字!)</li>
+                    <li><code class="inline-code">public</code>: 自动创建getter函数,任何人都可以读取</li>
+                    <li><code class="inline-code">counter</code>: 变量名,存储在区块链上</li>
+                    <li>状态变量默认初始化为0</li>
+                    <li>存储在区块链上是永久的,修改需要花费gas</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">⚙️ 函数</div>
+                <pre><code class="language-solidity">function click() public {
+    counter++;
+}</code></pre>
+                <p><strong>函数解析:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">function</code>: 函数关键字</li>
+                    <li><code class="inline-code">click</code>: 函数名称(建议使用小驼峰命名)</li>
+                    <li><code class="inline-code">public</code>: 任何人(包括其他合约)都可以调用这个函数</li>
+                    <li><code class="inline-code">counter++</code>: 将计数器的值加1</li>
+                    <li>调用这个函数会改变状态,需要发送交易并花费gas</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 完整合约代码</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract ClickCounter {
+    // 状态变量 - 存储点击次数
+    uint256 public counter;
+    
+    // 函数 - 增加计数器
+    function click() public {
+        counter++;
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 这个合约做什么?</strong>
+                <p style="margin-top: 10px; color: #155724;">这是一个超级简单的计数器!每次有人调用<code class="inline-code">click()</code>函数,计数器就会增加1。所有的点击都永久记录在区块链上,任何人都可以通过<code class="inline-code">counter</code>变量查看当前的点击次数。</p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">🔍 逐行详细讲解</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">第1行: 许可证声明</h4>
+                <pre><code class="language-solidity">// SPDX-License-Identifier: MIT</code></pre>
+                <p>告诉编译器和用户,这个代码使用MIT开源许可证。这是注释,不会被编译。</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">第2行: 编译器版本</h4>
+                <pre><code class="language-solidity">pragma solidity ^0.8.0;</code></pre>
+                <p>指定使用0.8.x版本的Solidity编译器。<code class="inline-code">^</code>符号表示兼容0.8.0到0.8.99之间的任何版本,但不包括0.9.0。</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">第4行: 合约声明</h4>
+                <pre><code class="language-solidity">contract ClickCounter {</code></pre>
+                <p>定义一个名为<code class="inline-code">ClickCounter</code>的智能合约。大括号<code class="inline-code">{</code>标志着合约代码的开始。</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">第6行: 状态变量声明</h4>
+                <pre><code class="language-solidity">    uint256 public counter;</code></pre>
+                <p>声明一个公开的无符号256位整数变量<code class="inline-code">counter</code>。初始值自动为0。因为是<code class="inline-code">public</code>,编译器会自动生成一个getter函数,让外部可以读取这个值。</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">第9-11行: click函数</h4>
+                <pre><code class="language-solidity">    function click() public {
+        counter++;
+    }</code></pre>
+                <p>定义一个公共函数<code class="inline-code">click()</code>。每次调用时,将<code class="inline-code">counter</code>的值加1。<code class="inline-code">++</code>是递增运算符,等同于<code class="inline-code">counter = counter + 1</code>。</p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 在Remix中部署和测试</h3>
+            
+            <div style="background: linear-gradient(135deg, #fff3cd, #ffe69c); border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #856404;">💡 提示</strong>
+                <p style="margin-top: 10px; color: #856404;">Remix是一个免费的在线Solidity IDE,非常适合初学者。无需安装,打开浏览器就能使用!</p>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 打开Remix</h4>
+                <p>访问 <a href="https://remix.ethereum.org" target="_blank" style="color: var(--primary); font-weight: bold;">https://remix.ethereum.org</a></p>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 创建新文件</h4>
+                <p>在左侧文件浏览器中,点击"contracts"文件夹,然后点击新建文件图标,命名为<code class="inline-code">ClickCounter.sol</code></p>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 粘贴代码</h4>
+                <p>将上面的完整合约代码复制粘贴到编辑器中</p>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 编译合约</h4>
+                <p>点击左侧的"Solidity Compiler"图标(第二个),然后点击蓝色的"Compile ClickCounter.sol"按钮。如果一切正常,你会看到绿色的勾号✓</p>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤5: 部署合约</h4>
+                <p>点击左侧的"Deploy & Run Transactions"图标(第三个),确保环境选择"Remix VM (Shanghai)",然后点击橙色的"Deploy"按钮</p>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤6: 测试合约</h4>
+                <p>在"Deployed Contracts"部分,你会看到你的合约实例。展开它,你会看到两个按钮:</p>
+                <ul style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li><code class="inline-code">counter</code> (蓝色按钮) - 点击查看当前计数,初始应该是0</li>
+                    <li><code class="inline-code">click</code> (橙色按钮) - 点击增加计数器</li>
+                </ul>
+                <p style="margin-top: 15px;">试试点击<code class="inline-code">click</code>按钮几次,然后点击<code class="inline-code">counter</code>按钮查看数字是否增加了!</p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>添加一个<code class="inline-code">reset()</code>函数,将计数器重置为0</li>
+                    <li>添加一个<code class="inline-code">decrease()</code>函数,使计数器减1(提示:注意不要让它变成负数!)</li>
+                    <li>添加一个<code class="inline-code">getCounter()</code>函数,明确返回当前计数(提示:使用<code class="inline-code">view</code>修饰符)</li>
+                    <li>添加一个<code class="inline-code">clickMultiple(uint256 times)</code>函数,一次增加多次</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识点</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px;">
+                    <strong style="color: var(--primary); font-size: 1.1rem;">数据类型</strong>
+                    <p style="margin-top: 10px; line-height: 1.8;">除了<code class="inline-code">uint256</code>,还有<code class="inline-code">int</code>、<code class="inline-code">bool</code>、<code class="inline-code">address</code>、<code class="inline-code">string</code>等类型</p>
+                </div>
+                <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px;">
+                    <strong style="color: var(--primary); font-size: 1.1rem;">可见性修饰符</strong>
+                    <p style="margin-top: 10px; line-height: 1.8;"><code class="inline-code">public</code>、<code class="inline-code">private</code>、<code class="inline-code">internal</code>、<code class="inline-code">external</code>控制访问权限</p>
+                </div>
+                <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px;">
+                    <strong style="color: var(--primary); font-size: 1.1rem;">函数修饰符</strong>
+                    <p style="margin-top: 10px; line-height: 1.8;"><code class="inline-code">view</code>(只读)、<code class="inline-code">pure</code>(不读不写)、<code class="inline-code">payable</code>(接收ETH)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <div style="flex: 1; min-width: 200px; background: #e9ecef; border-radius: 15px; padding: 20px; text-align: center; color: #999;">
+                <div style="font-size: 2.5rem;">🎬</div>
+                <div style="margin-top: 10px; font-family: 'Gochi Hand', cursive; font-size: 1.2rem;">这是第一天!</div>
+            </div>
+            <a href="contract-2.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">SaveMyName - 保存我的名字</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

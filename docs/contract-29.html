@@ -1,0 +1,811 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StableCoin - 稳定币 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第29天 - 稳定币</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 29 天 💰</div>
+                    <h1>StableCoin - 稳定币</h1>
+                    <p class="subtitle">构建抵押型稳定币系统</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--expert);">
+                        🏆 专家
+                    </div>
+                    <span class="tag">稳定币</span>
+                    <span class="tag">抵押</span>
+                    <span class="tag">预言机</span>
+                    <span class="tag">清算</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握稳定币机制和抵押系统</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>抵押率计算、价格预言机、铸造赎回</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>80分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★★★</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">💰 稳定币类型</div>
+                <p>稳定币通过不同机制维持与法币的稳定汇率：</p>
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #155724;">✅ 法币抵押型</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #155724;">
+                        <li>USDC、USDT：由美元储备支持</li>
+                        <li>1:1储备比例</li>
+                        <li>中心化托管</li>
+                        <li>监管合规</li>
+                    </ul>
+                </div>
+                <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #0c5460;">✅ 加密抵押型</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #0c5460;">
+                        <li>DAI：由ETH等加密资产抵押</li>
+                        <li>超额抵押（如150%）</li>
+                        <li>去中心化</li>
+                        <li>价格波动风险</li>
+                    </ul>
+                </div>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #856404;">⚠️ 算法稳定币</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #856404;">
+                        <li>通过算法调节供应量</li>
+                        <li>无抵押或部分抵押</li>
+                        <li>高风险，容易脱锚</li>
+                        <li>如UST的崩盘案例</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🏦 超额抵押机制</div>
+                <p>加密抵押型稳定币需要超额抵押来应对价格波动：</p>
+                <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin: 15px 0; text-align: center;">
+                    <h3 style="color: #856404; font-size: 1.5rem; margin-bottom: 10px;">抵押率 = 抵押品价值 ÷ 稳定币价值</h3>
+                    <p style="color: #856404;">
+                        例如：存入价值$150的ETH，铸造$100的稳定币<br>
+                        抵押率 = 150% = 1.5
+                    </p>
+                </div>
+                <pre><code class="language-solidity">function getRequiredCollateralForMint(uint256 stablecoinAmount) 
+    public view returns (uint256) {
+    
+    uint256 collateralPrice = getCurrentPrice();
+    
+    // 计算基础抵押品需求
+    uint256 baseCollateral = (stablecoinAmount * 10 ** collateralDecimals) / collateralPrice;
+    
+    // 应用抵押率 (150% = 15000 basis points)
+    uint256 requiredCollateral = (baseCollateral * collateralizationRatio) / 10000;
+    
+    return requiredCollateral;
+}</code></pre>
+                <p><strong>抵押率作用：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><strong>缓冲价格波动：</strong>抵押品价格下跌时仍有余量</li>
+                    <li><strong>维持稳定性：</strong>确保稳定币有足够支撑</li>
+                    <li><strong>激励机制：</strong>过度抵押提供安全边际</li>
+                    <li><strong>清算保护：</strong>避免系统性风险</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📊 价格预言机集成</div>
+                <p>稳定币系统依赖可靠的价格数据进行抵押品估值：</p>
+                <pre><code class="language-solidity">function getCurrentPrice() public view returns (uint256) {
+    (, int256 price, , , ) = priceFeed.latestRoundData();
+    require(price > 0, "Invalid price");
+    
+    uint8 priceFeedDecimals = priceFeed.decimals();
+    
+    // 归一化为18位小数
+    if (priceFeedDecimals < 18) {
+        return uint256(price) * (10 ** (18 - priceFeedDecimals));
+    } else if (priceFeedDecimals > 18) {
+        return uint256(price) / (10 ** (priceFeedDecimals - 18));
+    }
+    return uint256(price);
+}</code></pre>
+                <p><strong>预言机风险：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><strong>价格操纵：</strong>恶意操纵预言机数据</li>
+                    <li><strong>网络延迟：</strong>价格更新不及时</li>
+                    <li><strong>单点故障：</strong>预言机服务中断</li>
+                    <li><strong>解决方案：</strong>多预言机聚合、时间加权平均</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔄 铸造与赎回机制</div>
+                <p>用户可以通过抵押品铸造稳定币，也可以销毁稳定币赎回抵押品：</p>
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #155724;">🔹 铸造流程</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px; color: #155724;">
+                        <li>用户存入抵押品（如ETH）</li>
+                        <li>系统获取当前价格</li>
+                        <li>计算可铸造的稳定币数量</li>
+                        <li>铸造稳定币给用户</li>
+                    </ol>
+                </div>
+                <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #0c5460;">🔹 赎回流程</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px; color: #0c5460;">
+                        <li>用户销毁稳定币</li>
+                        <li>系统计算应返还的抵押品</li>
+                        <li>按1:1价值返还抵押品</li>
+                        <li>更新用户余额</li>
+                    </ol>
+                </div>
+                <pre><code class="language-solidity">function mint(uint256 stablecoinAmount) external nonReentrant {
+    require(stablecoinAmount > 0, "Amount must be > 0");
+    
+    uint256 requiredCollateral = getRequiredCollateralForMint(stablecoinAmount);
+    
+    collateralToken.safeTransferFrom(msg.sender, address(this), requiredCollateral);
+    _mint(msg.sender, stablecoinAmount);
+    
+    emit Minted(msg.sender, stablecoinAmount, requiredCollateral);
+}
+
+function redeem(uint256 stablecoinAmount) external nonReentrant {
+    require(balanceOf(msg.sender) >= stablecoinAmount, "Insufficient balance");
+    
+    uint256 collateralToReturn = getCollateralForRedeem(stablecoinAmount);
+    
+    _burn(msg.sender, stablecoinAmount);
+    collateralToken.safeTransfer(msg.sender, collateralToReturn);
+    
+    emit Redeemed(msg.sender, stablecoinAmount, collateralToReturn);
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 稳定币合约完整实现</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+contract SimpleStablecoin is ERC20, Ownable, ReentrancyGuard, AccessControl {
+    using SafeERC20 for IERC20;
+    
+    bytes32 public constant PRICE_FEED_MANAGER_ROLE = keccak256("PRICE_FEED_MANAGER_ROLE");
+    
+    IERC20 public collateralToken;
+    uint8 public collateralDecimals;
+    AggregatorV3Interface public priceFeed;
+    uint256 public collateralizationRatio;  // 基点表示 (150% = 15000)
+    
+    event Minted(address indexed user, uint256 stablecoinAmount, uint256 collateralAmount);
+    event Redeemed(address indexed user, uint256 stablecoinAmount, uint256 collateralAmount);
+    event PriceFeedUpdated(address indexed newPriceFeed);
+    event CollateralizationRatioUpdated(uint256 newRatio);
+    
+    error InvalidCollateralTokenAddress();
+    error InvalidPriceFeedAddress();
+    error MintAmountIsZero();
+    error InsufficientStablecoinBalance();
+    error CollateralizationRatioTooLow();
+    
+    constructor(
+        address _collateralToken,
+        address _priceFeed,
+        uint256 _collateralizationRatio
+    ) ERC20("Simple USD", "sUSD") Ownable(msg.sender) {
+        if (_collateralToken == address(0)) revert InvalidCollateralTokenAddress();
+        if (_priceFeed == address(0)) revert InvalidPriceFeedAddress();
+        if (_collateralizationRatio < 10000) revert CollateralizationRatioTooLow();
+        
+        collateralToken = IERC20(_collateralToken);
+        collateralDecimals = IERC20Metadata(_collateralToken).decimals();
+        priceFeed = AggregatorV3Interface(_priceFeed);
+        collateralizationRatio = _collateralizationRatio;
+        
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(PRICE_FEED_MANAGER_ROLE, msg.sender);
+    }
+    
+    // 获取当前价格
+    function getCurrentPrice() public view returns (uint256) {
+        (, int256 price, , , ) = priceFeed.latestRoundData();
+        require(price > 0, "Invalid price");
+        
+        uint8 priceFeedDecimals = priceFeed.decimals();
+        
+        // 归一化为18位小数
+        if (priceFeedDecimals < 18) {
+            return uint256(price) * (10 ** (18 - priceFeedDecimals));
+        } else if (priceFeedDecimals > 18) {
+            return uint256(price) / (10 ** (priceFeedDecimals - 18));
+        }
+        return uint256(price);
+    }
+    
+    // 铸造稳定币
+    function mint(uint256 stablecoinAmount) external nonReentrant {
+        if (stablecoinAmount == 0) revert MintAmountIsZero();
+        
+        uint256 requiredCollateral = getRequiredCollateralForMint(stablecoinAmount);
+        
+        collateralToken.safeTransferFrom(msg.sender, address(this), requiredCollateral);
+        
+        _mint(msg.sender, stablecoinAmount);
+        
+        emit Minted(msg.sender, stablecoinAmount, requiredCollateral);
+    }
+    
+    // 赎回稳定币
+    function redeem(uint256 stablecoinAmount) external nonReentrant {
+        if (balanceOf(msg.sender) < stablecoinAmount) {
+            revert InsufficientStablecoinBalance();
+        }
+        
+        uint256 collateralToReturn = getCollateralForRedeem(stablecoinAmount);
+        
+        _burn(msg.sender, stablecoinAmount);
+        
+        collateralToken.safeTransfer(msg.sender, collateralToReturn);
+        
+        emit Redeemed(msg.sender, stablecoinAmount, collateralToReturn);
+    }
+    
+    // 计算铸造所需抵押品
+    function getRequiredCollateralForMint(uint256 stablecoinAmount)
+        public
+        view
+        returns (uint256)
+    {
+        uint256 collateralPrice = getCurrentPrice();
+        
+        // 计算价值1 sUSD所需的抵押品
+        uint256 baseCollateral = (stablecoinAmount * 10 ** collateralDecimals) / collateralPrice;
+        
+        // 应用抵押率
+        uint256 requiredCollateral = (baseCollateral * collateralizationRatio) / 10000;
+        
+        return requiredCollateral;
+    }
+    
+    // 计算赎回抵押品
+    function getCollateralForRedeem(uint256 stablecoinAmount)
+        public
+        view
+        returns (uint256)
+    {
+        uint256 collateralPrice = getCurrentPrice();
+        
+        // 1:1赎回(不考虑超额抵押)
+        uint256 collateralAmount = (stablecoinAmount * 10 ** collateralDecimals) / collateralPrice;
+        
+        return collateralAmount;
+    }
+    
+    // 设置抵押率
+    function setCollateralizationRatio(uint256 _newRatio) external onlyOwner {
+        if (_newRatio < 10000) revert CollateralizationRatioTooLow();
+        collateralizationRatio = _newRatio;
+        emit CollateralizationRatioUpdated(_newRatio);
+    }
+    
+    // 设置价格馈送
+    function setPriceFeedContract(address _newPriceFeed)
+        external
+        onlyRole(PRICE_FEED_MANAGER_ROLE)
+    {
+        if (_newPriceFeed == address(0)) revert InvalidPriceFeedAddress();
+        priceFeed = AggregatorV3Interface(_newPriceFeed);
+        emit PriceFeedUpdated(_newPriceFeed);
+    }
+    
+    // 获取系统信息
+    function getSystemInfo() external view returns (
+        address _collateralToken,
+        uint256 _collateralizationRatio,
+        uint256 _currentPrice,
+        uint256 _totalSupply,
+        uint256 _collateralBalance
+    ) {
+        return (
+            address(collateralToken),
+            collateralizationRatio,
+            getCurrentPrice(),
+            totalSupply(),
+            collateralToken.balanceOf(address(this))
+        );
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 稳定币机制</strong>
+                <p style="margin-top: 10px; color: #155724;">
+                    用户存入ETH等抵押品 → 系统获取实时价格 → 按抵押率计算可铸造数量 → 铸造稳定币 → 用户可随时赎回抵押品。整个过程透明、去中心化。
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 准备抵押代币</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>部署ERC-20抵押代币（模拟WETH）</li>
+                    <li>给自己铸造足够的代币</li>
+                    <li>部署模拟价格预言机</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 部署稳定币合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>使用抵押代币和预言机地址部署</li>
+                    <li>设置150%抵押率（15000基点）</li>
+                    <li>验证合约初始化成功</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 铸造稳定币</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>批准稳定币合约使用抵押代币</li>
+                    <li>调用<code class="inline-code">getRequiredCollateralForMint(100)</code>查看需要的抵押品</li>
+                    <li>调用<code class="inline-code">mint(100)</code>铸造100个稳定币</li>
+                    <li>检查稳定币余额和抵押品扣除</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 价格变动测试</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>更新预言机价格（模拟价格波动）</li>
+                    <li>观察铸造成本变化</li>
+                    <li>测试不同抵押率下的铸造</li>
+                    <li>验证系统稳定性</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤5: 赎回测试</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">getCollateralForRedeem(50)</code>查看可赎回抵押品</li>
+                    <li>调用<code class="inline-code">redeem(50)</code>赎回50个稳定币</li>
+                    <li>检查抵押品返还和稳定币销毁</li>
+                    <li>验证1:1赎回机制</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>实现清算机制（抵押率不足时清算）</li>
+                    <li>添加多种抵押品支持</li>
+                    <li>实现稳定费机制</li>
+                    <li>添加紧急暂停功能</li>
+                    <li>实现治理代币分配</li>
+                    <li>创建稳定币储蓄池</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">清算机制实现</h4>
+                <pre><code class="language-solidity">function liquidate(address user) external {
+    uint256 userCollateral = collateralBalances[user];
+    uint256 userDebt = debtBalances[user];
+    
+    uint256 collateralValue = userCollateral * getCurrentPrice() / (10 ** collateralDecimals);
+    uint256 currentRatio = collateralValue * 10000 / userDebt;
+    
+    require(currentRatio < liquidationRatio, "Position is safe");
+    
+    // 清算逻辑：拍卖抵押品，偿还债务
+    _liquidatePosition(user, userCollateral, userDebt);
+}</code></pre>
+                <p style="margin-top: 10px;">清算机制确保系统始终有足够抵押品支撑稳定币。</p>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-28.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">DAO - 去中心化治理</div>
+            </a>
+            <a href="contract-30.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">Mini DEX - 迷你交易所</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

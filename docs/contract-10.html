@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ActivityTracker - 活动追踪器 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第10天 - 结构体与事件</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 10 天 🏃</div>
+                    <h1>ActivityTracker - 活动追踪器</h1>
+                    <p class="subtitle">健身追踪DApp - 结构体、数组映射和事件驱动</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--medium);">
+                        🌿 中级
+                    </div>
+                    <span class="tag">结构体</span>
+                    <span class="tag">数组映射</span>
+                    <span class="tag">事件</span>
+                    <span class="tag">里程碑</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握结构体和复杂数据管理</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>struct、数组映射、事件监听</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>60分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">📊 主观感受难度</div>
+                    <div>⭐⭐⭐⭐☆ 困难 - ERC-20标准实现的复杂性</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">📦 结构体 (Struct)</div>
+                <p>结构体允许你定义自定义的复合数据类型:</p>
+                <pre><code class="language-solidity">struct UserProfile {
+    string name;
+    uint256 weight;
+    bool isRegistered;
+}
+
+struct WorkoutActivity {
+    string activityType;  // "跑步"、"游泳"、"骑行"
+    uint256 duration;     // 持续时间(分钟)
+    uint256 distance;     // 距离(米)
+    uint256 timestamp;    // 时间戳
+}</code></pre>
+                <p><strong>为什么使用结构体?</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>✅ 组织相关数据,逻辑清晰</li>
+                    <li>✅ 减少函数参数数量</li>
+                    <li>✅ 代码可读性更好</li>
+                    <li>✅ 易于维护和扩展</li>
+                </ul>
+                
+                <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong style="color: #856404;">💡 对比:</strong>
+                    <div style="color: #856404; margin-top: 5px;">
+                        没有结构体:<code class="inline-code">logWorkout(string type, uint duration, uint distance, uint timestamp)</code><br>
+                        使用结构体:<code class="inline-code">logWorkout(WorkoutActivity memory activity)</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🗺️ 数组映射 - mapping(address => Type[])</div>
+                <p>将数组作为映射的值,存储每个用户的多条记录:</p>
+                <pre><code class="language-solidity">mapping(address => WorkoutActivity[]) private workoutHistory;
+
+// 每个地址对应一个WorkoutActivity数组
+// workoutHistory[Alice] = [workout1, workout2, workout3, ...]</code></pre>
+                <p><strong>使用场景:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>用户的交易历史</li>
+                    <li>NFT的所有权历史</li>
+                    <li>用户的投票记录</li>
+                    <li>任何需要"一对多"关系的场景</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📢 事件驱动架构</div>
+                <p>事件是智能合约与前端通信的桥梁:</p>
+                <pre><code class="language-solidity">event WorkoutLogged(
+    address indexed userAddress, 
+    string activityType, 
+    uint256 duration, 
+    uint256 distance, 
+    uint256 timestamp
+);
+
+// 触发事件
+emit WorkoutLogged(msg.sender, "跑步", 30, 5000, block.timestamp);</code></pre>
+                <p><strong>前端监听示例:</strong></p>
+                <pre><code class="language-javascript">// 使用ethers.js
+contract.on("WorkoutLogged", (user, type, duration, distance, timestamp) => {
+    console.log(`${user} 完成了 ${type}, 时长 ${duration} 分钟`);
+    // 更新UI显示
+    updateDashboard(user, type, duration, distance);
+});</code></pre>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">💾 storage vs memory</div>
+                <table style="width: 100%; margin-top: 15px; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden;">
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 12px; text-align: left;">关键字</th>
+                        <th style="padding: 12px; text-align: left;">位置</th>
+                        <th style="padding: 12px; text-align: left;">用途</th>
+                        <th style="padding: 12px; text-align: left;">持久性</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;"><code class="inline-code">storage</code></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">区块链</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">状态变量</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">永久</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;"><code class="inline-code">memory</code></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">内存</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">函数参数/局部变量</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e9ecef;">临时</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><code class="inline-code">calldata</code></td>
+                        <td style="padding: 10px;">调用数据</td>
+                        <td style="padding: 10px;">外部函数参数</td>
+                        <td style="padding: 10px;">临时(只读)</td>
+                    </tr>
+                </table>
+                
+                <pre style="margin-top: 15px;"><code class="language-solidity">function updateWeight(uint256 _newWeight) public {
+    // storage: 引用状态变量,修改会保存
+    UserProfile storage profile = userProfiles[msg.sender];
+    profile.weight = _newWeight;  // 永久修改
+}
+
+function processWorkout(WorkoutActivity memory activity) internal {
+    // memory: 临时变量,函数结束后销毁
+    activity.distance += 100;  // 只在内存中修改,不影响原数据
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 ActivityTracker 完整合约</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract ActivityTracker {
+    // 结构体定义
+    struct UserProfile {
+        string name;
+        uint256 weight;
+        bool isRegistered;
+    }
+    
+    struct WorkoutActivity {
+        string activityType;
+        uint256 duration;
+        uint256 distance;
+        uint256 timestamp;
+    }
+    
+    // 状态变量
+    mapping(address => UserProfile) public userProfiles;
+    mapping(address => WorkoutActivity[]) private workoutHistory;
+    mapping(address => uint256) public totalWorkouts;
+    mapping(address => uint256) public totalDistance;
+    
+    // 事件
+    event UserRegistered(address indexed userAddress, string name, uint256 timestamp);
+    event ProfileUpdated(address indexed userAddress, uint256 newWeight, uint256 timestamp);
+    event WorkoutLogged(
+        address indexed userAddress, 
+        string activityType, 
+        uint256 duration, 
+        uint256 distance, 
+        uint256 timestamp
+    );
+    event MilestoneAchieved(address indexed userAddress, string milestone, uint256 timestamp);
+    
+    // 修饰符
+    modifier onlyRegistered() {
+        require(userProfiles[msg.sender].isRegistered, "User not registered");
+        _;
+    }
+    
+    // 注册用户
+    function registerUser(string memory _name, uint256 _weight) public {
+        require(!userProfiles[msg.sender].isRegistered, "Already registered");
+        
+        userProfiles[msg.sender] = UserProfile({
+            name: _name,
+            weight: _weight,
+            isRegistered: true
+        });
+        
+        emit UserRegistered(msg.sender, _name, block.timestamp);
+    }
+    
+    // 更新体重
+    function updateWeight(uint256 _newWeight) public onlyRegistered {
+        UserProfile storage profile = userProfiles[msg.sender];
+        profile.weight = _newWeight;
+        emit ProfileUpdated(msg.sender, _newWeight, block.timestamp);
+    }
+    
+    // 记录锻炼
+    function logWorkout(
+        string memory _activityType, 
+        uint256 _duration, 
+        uint256 _distance
+    ) public onlyRegistered {
+        WorkoutActivity memory newWorkout = WorkoutActivity({
+            activityType: _activityType,
+            duration: _duration,
+            distance: _distance,
+            timestamp: block.timestamp
+        });
+        
+        workoutHistory[msg.sender].push(newWorkout);
+        totalWorkouts[msg.sender]++;
+        totalDistance[msg.sender] += _distance;
+        
+        emit WorkoutLogged(msg.sender, _activityType, _duration, _distance, block.timestamp);
+        
+        // 检查里程碑
+        checkMilestones();
+    }
+    
+    // 检查里程碑
+    function checkMilestones() private {
+        if (totalWorkouts[msg.sender] == 10) {
+            emit MilestoneAchieved(msg.sender, "10 workouts completed!", block.timestamp);
+        }
+        
+        if (totalDistance[msg.sender] >= 100000) {  // 100km = 100000m
+            emit MilestoneAchieved(msg.sender, "100km distance achieved!", block.timestamp);
+        }
+        
+        if (totalWorkouts[msg.sender] == 50) {
+            emit MilestoneAchieved(msg.sender, "50 workouts completed!", block.timestamp);
+        }
+    }
+    
+    // 查询函数
+    function getUserWorkoutCount() public view onlyRegistered returns (uint256) {
+        return totalWorkouts[msg.sender];
+    }
+    
+    function getWorkoutHistory() public view onlyRegistered returns (WorkoutActivity[] memory) {
+        return workoutHistory[msg.sender];
+    }
+    
+    function getLatestWorkout() public view onlyRegistered returns (WorkoutActivity memory) {
+        require(workoutHistory[msg.sender].length > 0, "No workouts yet");
+        uint256 lastIndex = workoutHistory[msg.sender].length - 1;
+        return workoutHistory[msg.sender][lastIndex];
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 合约功能</strong>
+                <p style="margin-top: 10px; color: #155724;">这是一个去中心化的健身追踪应用。用户可以注册个人资料、记录锻炼数据、查看历史记录。当达成里程碑时,会自动触发事件通知前端。</p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">🔍 关键代码解析</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">1. 结构体初始化</h4>
+                <pre><code class="language-solidity">// 方式1: 命名参数(推荐)
+UserProfile memory profile = UserProfile({
+    name: "Alice",
+    weight: 60,
+    isRegistered: true
+});
+
+// 方式2: 位置参数(不推荐,容易出错)
+UserProfile memory profile = UserProfile("Alice", 60, true);</code></pre>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">2. storage引用 - 修改状态</h4>
+                <pre><code class="language-solidity">function updateWeight(uint256 _newWeight) public {
+    // storage: 指向状态变量的引用
+    UserProfile storage profile = userProfiles[msg.sender];
+    profile.weight = _newWeight;  // 修改会保存到区块链
+    
+    // 如果用memory:
+    // UserProfile memory profile = userProfiles[msg.sender];
+    // profile.weight = _newWeight;  // 只修改内存副本,不会保存!
+}</code></pre>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">3. 数组操作</h4>
+                <pre><code class="language-solidity">// 添加元素
+workoutHistory[msg.sender].push(newWorkout);
+
+// 获取长度
+uint256 count = workoutHistory[msg.sender].length;
+
+// 访问元素
+WorkoutActivity memory latest = workoutHistory[msg.sender][count - 1];
+
+// 返回整个数组
+return workoutHistory[msg.sender];</code></pre>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">📊 数据流程图</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">用户记录锻炼的完整流程</h4>
+                <pre><code class="language-solidity">// 1. 用户调用
+logWorkout("跑步", 30, 5000);
+
+// 2. 检查权限
+require(userProfiles[msg.sender].isRegistered);  ✅
+
+// 3. 创建锻炼记录(内存)
+WorkoutActivity memory newWorkout = WorkoutActivity({
+    activityType: "跑步",
+    duration: 30,
+    distance: 5000,
+    timestamp: block.timestamp
+});
+
+// 4. 保存到历史记录
+workoutHistory[msg.sender].push(newWorkout);
+
+// 5. 更新统计数据
+totalWorkouts[msg.sender]++;       // 1 -> 2
+totalDistance[msg.sender] += 5000; // 0 -> 5000
+
+// 6. 触发事件
+emit WorkoutLogged(msg.sender, "跑步", 30, 5000, block.timestamp);
+
+// 7. 检查里程碑
+if (totalWorkouts[msg.sender] == 10) {
+    emit MilestoneAchieved(msg.sender, "10 workouts completed!", ...);
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 注册用户</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>部署ActivityTracker合约</li>
+                    <li>调用<code class="inline-code">registerUser("Alice", 60)</code></li>
+                    <li>查看事件日志,找到<code class="inline-code">UserRegistered</code>事件</li>
+                    <li>调用<code class="inline-code">userProfiles(你的地址)</code>验证注册</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 记录锻炼</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">logWorkout("跑步", 30, 5000)</code> (30分钟,5公里)</li>
+                    <li>查看<code class="inline-code">WorkoutLogged</code>事件</li>
+                    <li>调用<code class="inline-code">getUserWorkoutCount()</code> - 应该返回1</li>
+                    <li>调用<code class="inline-code">totalDistance(你的地址)</code> - 应该返回5000</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 达成里程碑</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>连续记录10次锻炼(可以简化为相同数据)</li>
+                    <li>在第10次调用时,查看事件日志</li>
+                    <li>应该看到<code class="inline-code">MilestoneAchieved</code>事件: "10 workouts completed!"</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 查看历史记录</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">getWorkoutHistory()</code></li>
+                    <li>返回一个数组,包含所有锻炼记录</li>
+                    <li>调用<code class="inline-code">getLatestWorkout()</code>查看最新的锻炼</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>添加<code class="inline-code">deleteWorkout(uint256 index)</code>删除指定的锻炼记录</li>
+                    <li>实现每周/每月统计功能</li>
+                    <li>添加卡路里计算(基于活动类型和时长)</li>
+                    <li>实现好友系统和排行榜</li>
+                    <li>添加目标设定功能(每周跑步目标等)</li>
+                    <li>实现成就徽章系统(NFT)</li>
+                    <li>添加数据导出功能(返回JSON格式)</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 深入理解</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">为什么workoutHistory是private?</h4>
+                <p style="line-height: 1.8;">
+                    虽然是private,但通过<code class="inline-code">getWorkoutHistory()</code>仍然可以访问。这样做的好处是:
+                </p>
+                <ul style="margin: 10px 0 0 20px; line-height: 1.8;">
+                    <li>控制访问权限(只有注册用户能查看自己的数据)</li>
+                    <li>可以添加额外的逻辑检查</li>
+                    <li>避免直接暴露内部数据结构</li>
+                </ul>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">数组的gas成本</h4>
+                <p style="line-height: 1.8;">
+                    存储数组到区块链成本很高!每次<code class="inline-code">push()</code>都要支付gas。对于大量数据:
+                </p>
+                <ul style="margin: 10px 0 0 20px; line-height: 1.8;">
+                    <li>考虑使用链下存储(IPFS、Arweave)</li>
+                    <li>只在链上存储哈希和关键数据</li>
+                    <li>使用事件记录历史(gas更便宜)</li>
+                </ul>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">结构体的限制</h4>
+                <pre><code class="language-solidity">// ❌ 结构体不能包含自己类型的成员
+struct Node {
+    uint256 value;
+    Node next;  // 编译错误!
+}
+
+// ✅ 但可以包含mapping
+struct User {
+    string name;
+    mapping(address => bool) friends;  // OK
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-9.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">Smart Calculator - 智能计算器</div>
+            </a>
+            <a href="contract-11.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">Masterkey - 主密钥合约</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

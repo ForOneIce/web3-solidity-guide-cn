@@ -1,0 +1,836 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DecentralisedLottery - 去中心化彩票 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第22天 - 去中心化彩票</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 22 天 🎰</div>
+                    <h1>DecentralisedLottery - 去中心化彩票</h1>
+                    <p class="subtitle">使用Chainlink VRF构建可证明公平的彩票系统</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--hard);">
+                        🌳 高级
+                    </div>
+                    <span class="tag">Chainlink VRF</span>
+                    <span class="tag">随机数</span>
+                    <span class="tag">彩票系统</span>
+                    <span class="tag">状态机</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握Chainlink VRF和随机数生成</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>VRF集成、状态管理、随机选择算法</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>65分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">📊 主观感受难度</div>
+                    <div>⭐⭐⭐⭐⭐ 极难 - Chainlink VRF集成和随机数安全性</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">🎲 区块链随机数问题</div>
+                <p>区块链是确定性系统，生成真正的随机数是一个重大挑战：</p>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #721c24;">❌ 不安全的随机数方法</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #721c24;">
+                        <li><code class="inline-code">block.timestamp</code> - 矿工可操纵</li>
+                        <li><code class="inline-code">block.difficulty</code> - 可预测</li>
+                        <li><code class="inline-code">blockhash</code> - 有限历史</li>
+                        <li><code class="inline-code">keccak256</code> - 输入可控</li>
+                    </ul>
+                </div>
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #155724;">✅ Chainlink VRF优势</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #155724;">
+                        <li>密码学可证明的随机性</li>
+                        <li>无法被矿工或预言机操纵</li>
+                        <li>链上验证随机数正确性</li>
+                        <li>去中心化预言机网络</li>
+                    </ul>
+                </div>
+                <p><strong>VRF工作原理：</strong>使用私钥生成随机数和证明，任何人都可以用公钥验证随机数的正确性。</p>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔄 彩票状态机</div>
+                <p>彩票系统使用状态机确保操作的有序性和安全性：</p>
+                <pre><code class="language-solidity">enum LOTTERY_STATE { 
+    OPEN,           // 开放参与
+    CLOSED,         // 关闭参与
+    CALCULATING     // 计算获胜者
+}
+
+LOTTERY_STATE public lotteryState;</code></pre>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong>状态转换流程：</strong>
+                    <pre style="background: none; color: var(--dark); font-size: 0.9rem;">CLOSED → OPEN → CALCULATING → CLOSED
+                      ↑                           ↓
+                      ←←←←←←←←←←←←←←←←←←←←←←←←←←←</pre>
+                </div>
+                <p><strong>状态控制的重要性：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><strong>OPEN状态：</strong>只有此时用户才能参与彩票</li>
+                    <li><strong>CALCULATING状态：</strong>防止在随机数生成期间的操纵</li>
+                    <li><strong>CLOSED状态：</strong>管理员可以开始新一轮或维护</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔗 Chainlink VRF集成</div>
+                <p>VRF（Verifiable Random Function）提供可验证的随机数服务：</p>
+                <pre><code class="language-solidity">import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2Plus.sol";
+import "@chainlink/contracts/src/v0.8/vrf/interfaces/VRFCoordinatorV2Interface.sol";
+
+contract DecentralisedLottery is VRFConsumerBaseV2Plus {
+    // VRF配置参数
+    uint256 public subscriptionId;      // 订阅ID
+    bytes32 public keyHash;             // Gas Lane
+    uint32 public callbackGasLimit = 100000;  // 回调Gas限制
+    uint16 public requestConfirmations = 3;   // 确认数
+    uint32 public numWords = 1;         // 随机数个数
+}</code></pre>
+                <p><strong>VRF参数说明：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><strong>subscriptionId：</strong>Chainlink订阅账户ID</li>
+                    <li><strong>keyHash：</strong>指定Gas价格档位的标识符</li>
+                    <li><strong>callbackGasLimit：</strong>回调函数的Gas限制</li>
+                    <li><strong>requestConfirmations：</strong>等待的区块确认数</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🎯 随机选择算法</div>
+                <p>使用模运算从参与者中随机选择获胜者：</p>
+                <pre><code class="language-solidity">function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) 
+    internal override {
+    
+    require(lotteryState == LOTTERY_STATE.CALCULATING, "Not calculating");
+    require(randomWords.length > 0, "No random words");
+    
+    // 使用随机数选择获胜者
+    uint256 indexOfWinner = randomWords[0] % players.length;
+    recentWinner = players[indexOfWinner];
+    
+    // 转账奖金给获胜者
+    uint256 prize = address(this).balance;
+    (bool success, ) = recentWinner.call{value: prize}("");
+    require(success, "Transfer failed");
+    
+    // 重置彩票状态
+    players = new address payable[](0);
+    lotteryState = LOTTERY_STATE.CLOSED;
+    
+    emit WinnerPicked(recentWinner, prize);
+}</code></pre>
+                <p><strong>算法特点：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><strong>均匀分布：</strong>每个参与者获胜概率相等</li>
+                    <li><strong>不可预测：</strong>基于VRF的真随机数</li>
+                    <li><strong>可验证：</strong>任何人都可以验证选择过程</li>
+                    <li><strong>自动执行：</strong>无需人工干预</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 去中心化彩票合约</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2Plus.sol";
+import "@chainlink/contracts/src/v0.8/vrf/interfaces/VRFCoordinatorV2Interface.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract DecentralisedLottery is VRFConsumerBaseV2Plus, Ownable {
+    // 彩票状态
+    enum LOTTERY_STATE { OPEN, CLOSED, CALCULATING }
+    
+    LOTTERY_STATE public lotteryState;
+    address payable[] public players;
+    address public recentWinner;
+    uint256 public entryFee;
+    
+    // Chainlink VRF配置
+    VRFCoordinatorV2Interface private vrfCoordinator;
+    uint256 public subscriptionId;
+    bytes32 public keyHash;
+    uint32 public callbackGasLimit = 100000;
+    uint16 public requestConfirmations = 3;
+    uint32 public numWords = 1;
+    uint256 public latestRequestId;
+    
+    // 事件
+    event LotteryEntered(address indexed player, uint256 entryFee);
+    event LotteryStarted();
+    event LotteryEnded();
+    event RandomnessRequested(uint256 indexed requestId);
+    event WinnerPicked(address indexed winner, uint256 prize);
+    
+    constructor(
+        address vrfCoordinatorAddress,
+        uint256 _subscriptionId,
+        bytes32 _keyHash,
+        uint256 _entryFee
+    ) VRFConsumerBaseV2Plus(vrfCoordinatorAddress) Ownable(msg.sender) {
+        vrfCoordinator = VRFCoordinatorV2Interface(vrfCoordinatorAddress);
+        subscriptionId = _subscriptionId;
+        keyHash = _keyHash;
+        entryFee = _entryFee;
+        lotteryState = LOTTERY_STATE.CLOSED;
+    }
+    
+    // 参与彩票
+    function enter() public payable {
+        require(lotteryState == LOTTERY_STATE.OPEN, "Lottery not open");
+        require(msg.value >= entryFee, "Not enough ETH to enter");
+        
+        players.push(payable(msg.sender));
+        emit LotteryEntered(msg.sender, msg.value);
+    }
+    
+    // 开始彩票
+    function startLottery() public onlyOwner {
+        require(lotteryState == LOTTERY_STATE.CLOSED, "Lottery already started");
+        
+        lotteryState = LOTTERY_STATE.OPEN;
+        emit LotteryStarted();
+    }
+    
+    // 结束彩票并请求随机数
+    function endLottery() public onlyOwner {
+        require(lotteryState == LOTTERY_STATE.OPEN, "Lottery not open");
+        require(players.length > 0, "No players in lottery");
+        
+        lotteryState = LOTTERY_STATE.CALCULATING;
+        
+        // 请求随机数
+        latestRequestId = vrfCoordinator.requestRandomWords(
+            keyHash,
+            subscriptionId,
+            requestConfirmations,
+            callbackGasLimit,
+            numWords
+        );
+        
+        emit RandomnessRequested(latestRequestId);
+        emit LotteryEnded();
+    }
+    
+    // VRF回调函数 - 选择获胜者
+    function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) 
+        internal override {
+        
+        require(lotteryState == LOTTERY_STATE.CALCULATING, "Not calculating winner");
+        require(randomWords.length > 0, "No random words received");
+        
+        // 选择获胜者
+        uint256 indexOfWinner = randomWords[0] % players.length;
+        recentWinner = players[indexOfWinner];
+        
+        // 发送奖金
+        uint256 prize = address(this).balance;
+        (bool success, ) = recentWinner.call{value: prize}("");
+        require(success, "Prize transfer failed");
+        
+        // 重置彩票
+        players = new address payable[](0);
+        lotteryState = LOTTERY_STATE.CLOSED;
+        
+        emit WinnerPicked(recentWinner, prize);
+    }
+    
+    // 获取参与者数量
+    function getNumberOfPlayers() public view returns (uint256) {
+        return players.length;
+    }
+    
+    // 获取参与者列表
+    function getPlayers() public view returns (address payable[] memory) {
+        return players;
+    }
+    
+    // 获取奖池金额
+    function getPrizePool() public view returns (uint256) {
+        return address(this).balance;
+    }
+    
+    // 检查是否为参与者
+    function isPlayer(address _player) public view returns (bool) {
+        for (uint256 i = 0; i < players.length; i++) {
+            if (players[i] == _player) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    // 更新入场费
+    function setEntryFee(uint256 _newEntryFee) public onlyOwner {
+        require(lotteryState == LOTTERY_STATE.CLOSED, "Cannot change fee during lottery");
+        entryFee = _newEntryFee;
+    }
+    
+    // 更新VRF参数
+    function setVRFConfig(
+        bytes32 _keyHash,
+        uint32 _callbackGasLimit,
+        uint16 _requestConfirmations
+    ) public onlyOwner {
+        require(lotteryState == LOTTERY_STATE.CLOSED, "Cannot change config during lottery");
+        keyHash = _keyHash;
+        callbackGasLimit = _callbackGasLimit;
+        requestConfirmations = _requestConfirmations;
+    }
+    
+    // 紧急提取（仅在关闭状态）
+    function emergencyWithdraw() public onlyOwner {
+        require(lotteryState == LOTTERY_STATE.CLOSED, "Lottery must be closed");
+        require(players.length == 0, "Players still in lottery");
+        
+        (bool success, ) = owner().call{value: address(this).balance}("");
+        require(success, "Withdrawal failed");
+    }
+    
+    // 获取彩票状态字符串
+    function getLotteryState() public view returns (string memory) {
+        if (lotteryState == LOTTERY_STATE.OPEN) return "OPEN";
+        if (lotteryState == LOTTERY_STATE.CLOSED) return "CLOSED";
+        if (lotteryState == LOTTERY_STATE.CALCULATING) return "CALCULATING";
+        return "UNKNOWN";
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 彩票系统流程</strong>
+                <p style="margin-top: 10px; color: #155724;">
+                    管理员开启彩票 → 用户支付入场费参与 → 管理员结束彩票并请求随机数 → Chainlink VRF返回随机数 → 自动选择获胜者并发送奖金 → 重置彩票状态。
+                </p>
+            </div>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #856404;">⚠️ 安全注意事项</strong>
+                <p style="margin-top: 10px; color: #856404;">
+                    - 确保VRF订阅有足够的LINK代币<br>
+                    - 合理设置callbackGasLimit避免执行失败<br>
+                    - 状态检查防止重入攻击<br>
+                    - 考虑添加最小参与者数量限制<br>
+                    - 实现超时机制处理VRF失败情况
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 准备VRF环境</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>访问<a href="https://vrf.chain.link/" target="_blank" style="color: var(--primary);">Chainlink VRF</a>创建订阅</li>
+                    <li>获取VRF Coordinator地址和Key Hash</li>
+                    <li>为订阅充值LINK代币</li>
+                    <li>记录订阅ID和相关参数</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 部署彩票合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>使用VRF参数部署DecentralisedLottery合约</li>
+                    <li>设置合理的入场费（如0.01 ETH）</li>
+                    <li>将合约地址添加到VRF订阅的消费者列表</li>
+                    <li>验证合约部署成功</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 开启彩票</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>使用管理员账户调用<code class="inline-code">startLottery()</code></li>
+                    <li>检查彩票状态变为OPEN</li>
+                    <li>验证<code class="inline-code">getLotteryState()</code>返回"OPEN"</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 参与彩票</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>使用不同账户调用<code class="inline-code">enter()</code>并发送入场费</li>
+                    <li>检查<code class="inline-code">getNumberOfPlayers()</code>增加</li>
+                    <li>验证<code class="inline-code">getPrizePool()</code>累积奖金</li>
+                    <li>测试<code class="inline-code">isPlayer()</code>功能</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤5: 结束彩票</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>管理员调用<code class="inline-code">endLottery()</code></li>
+                    <li>观察状态变为CALCULATING</li>
+                    <li>等待VRF回调（可能需要几分钟）</li>
+                    <li>检查获胜者和奖金分配</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>添加多个奖项（一等奖、二等奖、三等奖）</li>
+                    <li>实现定时自动开奖功能</li>
+                    <li>添加最小参与者数量限制</li>
+                    <li>实现VRF失败的超时处理</li>
+                    <li>添加历史获奖记录查询</li>
+                    <li>实现推荐奖励机制</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">多奖项彩票实现</h4>
+                <pre><code class="language-solidity">struct Prize {
+    uint256 percentage;  // 奖金池百分比
+    uint256 amount;      // 固定奖金数额
+    bool isPercentage;   // 是否按百分比
+}
+
+mapping(uint256 => Prize) public prizes;  // 奖项配置
+mapping(uint256 => address[]) public winners;  // 各奖项获奖者
+
+function selectMultipleWinners(uint256[] memory randomWords) internal {
+    uint256 totalPrize = address(this).balance;
+    
+    for (uint256 i = 0; i < 3; i++) {  // 三个奖项
+        uint256 winnerIndex = randomWords[i] % players.length;
+        winners[i].push(players[winnerIndex]);
+        
+        uint256 prizeAmount = prizes[i].isPercentage 
+            ? (totalPrize * prizes[i].percentage) / 100
+            : prizes[i].amount;
+            
+        payable(players[winnerIndex]).transfer(prizeAmount);
+    }
+}</code></pre>
+                <p style="margin-top: 10px;">多奖项系统可以增加参与者的获奖机会，提高彩票的吸引力。</p>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">VRF成本优化</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="background: var(--light);">
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">参数</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">建议值</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">说明</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">callbackGasLimit</td>
+                        <td style="padding: 10px;">100,000</td>
+                        <td style="padding: 10px;">基础回调足够</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;">requestConfirmations</td>
+                        <td style="padding: 10px;">3</td>
+                        <td style="padding: 10px;">平衡安全性和速度</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">numWords</td>
+                        <td style="padding: 10px;">1</td>
+                        <td style="padding: 10px;">单个获奖者</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-21.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">SimpleNFT - NFT合约</div>
+            </a>
+            <a href="contract-23.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">LendingPool - 借贷池</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreorderTokens - 预购代币 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--hard);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--hard), #c72828);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #ffe6e6, #ffd6d6);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--hard);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--hard);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #fff0f0, #ffe6e6);
+            border-left: 5px solid var(--hard);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--hard);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+            padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> 返回首页
+        </a>
+            <span class="nav-title">第13天 - 代币销售与锁定</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 13 天 🎫</div>
+            <h1>PreorderTokens - 预购代币</h1>
+                    <p class="subtitle">代币销售合约 - virtual/override与时间锁</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--hard);">
+                        🌳 高级
+                    </div>
+                    <span class="tag">virtual</span>
+                    <span class="tag">override</span>
+                    <span class="tag">时间锁</span>
+                <span class="tag">ICO</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握函数重写和代币销售机制</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>virtual/override、super、时间控制</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>90分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★★☆</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">🔄 virtual 和 override</div>
+                <p>允许子合约重写父合约的函数:</p>
+                <pre><code class="language-solidity">// 父合约
+contract SimpleERC20 {
+    function transfer(address _to, uint256 _value) 
+        public 
+        virtual  // 标记为可被重写
+        returns (bool) 
+    {
+        _transfer(msg.sender, _to, _value);
+        return true;
+    }
+}
+
+// 子合约
+contract TokenSale is SimpleERC20 {
+    function transfer(address _to, uint256 _value) 
+        public 
+        override  // 重写父合约函数
+        returns (bool) 
+    {
+        // 添加额外逻辑
+        require(finalized, "Tokens are locked");
+        
+        // 调用父合约的原始函数
+        return super.transfer(_to, _value);
+    }
+}</code></pre>
+                <p><strong>关键点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">virtual</code>: 父合约标记函数可被重写</li>
+                    <li><code class="inline-code">override</code>: 子合约标记正在重写父函数</li>
+                    <li><code class="inline-code">super</code>: 调用父合约的函数</li>
+                    <li>函数签名必须完全匹配</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔒 代币锁定机制</div>
+                <p>在代币销售期间防止转账,保护投资者:</p>
+                <pre><code class="language-solidity">bool public finalized = false;
+
+function transfer(address _to, uint256 _value) public override returns (bool) {
+    // 如果销售未完成,禁止转账
+    if (!finalized && msg.sender != address(this)) {
+        require(false, "Tokens are locked until sale is finalized");
+    }
+    return super.transfer(_to, _value);
+}</code></pre>
+                <p><strong>为什么需要锁定?</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>防止早期投资者在销售期间抛售</li>
+                    <li>确保公平的代币分配</li>
+                    <li>避免价格操纵</li>
+                    <li>保护项目方筹集资金</li>
+                </ul>
+                
+                <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong style="color: #856404;">💡 例外:</strong>
+                    <span style="color: #856404;"> 合约自己(<code class="inline-code">address(this)</code>)仍然可以转账,这样才能在购买时将代币转给买家!</span>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">⏰ 时间控制 - 销售周期</div>
+                <pre><code class="language-solidity">uint256 public saleStartTime;
+uint256 public saleEndTime;
+
+constructor(uint256 _startTime, uint256 _duration) {
+    saleStartTime = _startTime;
+    saleEndTime = _startTime + _duration;
+}
+
+function isSaleActive() public view returns (bool) {
+    return block.timestamp >= saleStartTime && 
+           block.timestamp <= saleEndTime && 
+           !finalized;
+}</code></pre>
+                <p><strong>时间线示例:</strong></p>
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <pre><code>部署时间: 2024-01-01 00:00:00
+销售开始: 2024-01-10 00:00:00 (saleStartTime)
+销售持续: 30天
+销售结束: 2024-02-09 00:00:00 (saleEndTime)
+
+时间轴:
+|---- 准备期 ----|---- 销售期 (30天) ----|---- 销售后 ----|
+部署            开始                     结束            完成</code></pre>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">💰 代币价格计算</div>
+                <pre><code class="language-solidity">uint256 public tokenPrice = 0.001 ether;  // 每个代币0.001 ETH
+
+function buyTokens() public payable {
+    // 用户发送1 ETH,能买多少代币?
+    uint256 tokenAmount = (msg.value * 10**decimals) / tokenPrice;
+    
+    // 计算过程:
+    // msg.value = 1 ETH = 10^18 wei
+    // decimals = 18
+    // tokenAmount = (10^18 * 10^18) / (0.001 * 10^18)
+    //             = 10^36 / 10^15
+    //             = 10^21 最小单位
+    //             = 1000 tokens (10^21 / 10^18)
+}</code></pre>
+                
+                <p style="margin-top: 15px;"><strong>公式推导:</strong></p>
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <code>代币数量 = (支付的ETH × 10^decimals) ÷ 单个代币价格</code><br><br>
+                    <code>例: 1 ETH ÷ 0.001 ETH/token = 1000 tokens</code>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📊 receive() - 自动购买</div>
+                <pre><code class="language-solidity">receive() external payable {
+    buyTokens();
+}
+
+// 用户直接向合约发送ETH,自动触发购买
+// 不需要调用函数!</code></pre>
+                <p><strong>工作原理:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">receive()</code>在合约收到纯ETH时自动调用</li>
+                    <li>必须标记为<code class="inline-code">external payable</code></li>
+                    <li>不能有参数,不能返回值</li>
+                    <li>提供更好的用户体验</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 步骤1: 修改SimpleERC20为virtual</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SimpleERC20 {
+    string public name = "SimpleToken";
+    string public symbol = "SIM";
+    uint8 public decimals = 18;
+    uint256 public totalSupply;
+    
+    mapping(address => uint256) public balanceOf;
+    mapping(address => mapping(address => uint256)) public allowance;
+    
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+    
+    constructor(uint256 _initialSupply) {
+        totalSupply = _initialSupply * (10 ** uint256(decimals));
+        balanceOf[msg.sender] = totalSupply;
+        emit Transfer(address(0), msg.sender, totalSupply);
+    }
+    
+    function _transfer(address _from, address _to, uint256 _value) internal {
+        require(balanceOf[_from] >= _value, "Insufficient balance");
+        balanceOf[_from] -= _value;
+        balanceOf[_to] += _value;
+        emit Transfer(_from, _to, _value);
+    }
+    
+    // ✅ 添加virtual关键字
+    function transfer(address _to, uint256 _value) public virtual returns (bool) {
+        require(_to != address(0), "Invalid address");
+        _transfer(msg.sender, _to, _value);
+        return true;
+    }
+    
+    function approve(address _spender, uint256 _value) public returns (bool) {
+        require(_spender != address(0), "Invalid address");
+        allowance[msg.sender][_spender] = _value;
+        emit Approval(msg.sender, _spender, _value);
+        return true;
+    }
+    
+    // ✅ 添加virtual关键字
+    function transferFrom(address _from, address _to, uint256 _value) public virtual returns (bool) {
+        require(_to != address(0), "Invalid address");
+        require(_value <= allowance[_from][msg.sender], "Allowance exceeded");
+        allowance[_from][msg.sender] -= _value;
+        _transfer(_from, _to, _value);
+        return true;
+    }
+}</code></pre>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">📄 步骤2: TokenSale合约(继承并重写)</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "./SimpleERC20.sol";
+
+contract SimplifiedTokenSale is SimpleERC20 {
+    uint256 public tokenPrice;
+    uint256 public saleStartTime;
+    uint256 public saleEndTime;
+    uint256 public minPurchase;
+    uint256 public maxPurchase;
+    uint256 public totalRaised;
+    address public projectOwner;
+    bool public finalized = false;
+    bool private initialTransferDone = false;
+    
+    event TokensPurchased(address indexed buyer, uint256 etherAmount, uint256 tokenAmount);
+    event SaleFinalized(uint256 totalRaised, uint256 totalTokensSold);
+    
+    constructor(
+        uint256 _initialSupply,
+        uint256 _tokenPrice,
+        uint256 _saleStartTime,
+        uint256 _saleDuration,
+        uint256 _minPurchase,
+        uint256 _maxPurchase
+    ) SimpleERC20(_initialSupply) {
+        tokenPrice = _tokenPrice;
+        saleStartTime = _saleStartTime;
+        saleEndTime = _saleStartTime + _saleDuration;
+        minPurchase = _minPurchase;
+        maxPurchase = _maxPurchase;
+        projectOwner = msg.sender;
+        
+        // 将所有代币转到合约
+        _transfer(msg.sender, address(this), totalSupply);
+        initialTransferDone = true;
+    }
+    
+    // 检查销售是否激活
+    function isSaleActive() public view returns (bool) {
+        return block.timestamp >= saleStartTime && 
+               block.timestamp <= saleEndTime && 
+               !finalized;
+    }
+    
+    // 购买代币
+    function buyTokens() public payable {
+        require(isSaleActive(), "Sale not active");
+        require(msg.value >= minPurchase && msg.value <= maxPurchase, "Invalid purchase amount");
+        
+        uint256 tokenAmount = (msg.value * 10**uint256(decimals)) / tokenPrice;
+        require(balanceOf[address(this)] >= tokenAmount, "Insufficient tokens");
+        
+        _transfer(address(this), msg.sender, tokenAmount);
+        totalRaised += msg.value;
+        
+        emit TokensPurchased(msg.sender, msg.value, tokenAmount);
+    }
+    
+    // ✅ 重写transfer - 添加锁定逻辑
+    function transfer(address _to, uint256 _value) public override returns (bool) {
+        if (!finalized && msg.sender != address(this) && initialTransferDone) {
+            require(false, "Tokens are locked until sale is finalized");
+        }
+        return super.transfer(_to, _value);
+    }
+    
+    // ✅ 重写transferFrom - 添加锁定逻辑
+    function transferFrom(address _from, address _to, uint256 _value) public override returns (bool) {
+        if (!finalized && _from != address(this) && initialTransferDone) {
+            require(false, "Tokens are locked until sale is finalized");
+        }
+        return super.transferFrom(_from, _to, _value);
+    }
+    
+    // 完成销售
+    function finalizeSale() public payable {
+        require(msg.sender == projectOwner, "Only owner");
+        require(block.timestamp > saleEndTime, "Sale not ended");
+        require(!finalized, "Already finalized");
+        
+        finalized = true;
+        
+        // 将筹集的ETH转给项目方
+        (bool success, ) = projectOwner.call{value: address(this).balance}("");
+        require(success, "Transfer failed");
+        
+        emit SaleFinalized(totalRaised, totalSupply - balanceOf[address(this)]);
+    }
+    
+    // 工具函数
+    function timeRemaining() public view returns (uint256) {
+        if (block.timestamp >= saleEndTime) return 0;
+        return saleEndTime - block.timestamp;
+    }
+    
+    function tokensAvailable() public view returns (uint256) {
+        return balanceOf[address(this)];
+    }
+    
+    // 接收直接发送的ETH
+    receive() external payable {
+        buyTokens();
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 合约功能</strong>
+                <p style="margin-top: 10px; color: #155724;">这是一个完整的代币销售(ICO)合约。项目方可以设置代币价格、销售时间、购买限额。投资者在销售期间购买代币,但代币被锁定。销售结束后,项目方完成销售,代币解锁,投资者可以自由转账。</p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">🔍 关键代码解析</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">1. 构造函数执行流程</h4>
+                <pre><code class="language-solidity">constructor(...) SimpleERC20(_initialSupply) {
+    // 1. 先执行父合约构造函数
+    //    - 铸造所有代币给msg.sender
+    //    - balanceOf[deployer] = totalSupply
+    
+    // 2. 设置销售参数
+    tokenPrice = _tokenPrice;
+    saleStartTime = _saleStartTime;
+    saleEndTime = _saleStartTime + _saleDuration;
+    // ...
+    
+    // 3. 将所有代币从deployer转到合约
+    _transfer(msg.sender, address(this), totalSupply);
+    // balanceOf[deployer] = 0
+    // balanceOf[this contract] = totalSupply
+    
+    // 4. 标记初始转账完成
+    initialTransferDone = true;
+}</code></pre>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">2. 购买流程详解</h4>
+                <pre><code class="language-solidity">// 场景: Alice用1 ETH购买代币
+// tokenPrice = 0.001 ETH
+
+buyTokens{value: 1 ether}();
+
+// 步骤1: 检查销售激活
+require(isSaleActive());  ✅
+
+// 步骤2: 检查购买金额
+require(1 ether >= minPurchase && 1 ether <= maxPurchase);  ✅
+
+// 步骤3: 计算代币数量
+tokenAmount = (1 ether * 10^18) / 0.001 ether
+            = (10^18 * 10^18) / (10^15)
+            = 10^21 最小单位
+            = 1000 tokens
+
+// 步骤4: 检查合约余额
+require(balanceOf[contract] >= 1000 tokens);  ✅
+
+// 步骤5: 转账(合约可以转,因为msg.sender == address(this))
+_transfer(address(this), Alice, 1000 tokens);
+
+// 步骤6: 记录
+totalRaised += 1 ether;
+
+// 步骤7: 触发事件
+emit TokensPurchased(Alice, 1 ether, 1000 tokens);</code></pre>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">3. 锁定机制详解</h4>
+                <pre><code class="language-solidity">// 场景1: Alice试图在销售期间转账
+Alice调用: token.transfer(Bob, 100);
+
+执行:
+  finalized = false  ✅
+  msg.sender = Alice (不是address(this))  ✅
+  initialTransferDone = true  ✅
+  
+  require(false, "Tokens are locked");  ❌ 失败!
+
+// 场景2: 合约在购买时转账给Alice
+Contract调用: _transfer(address(this), Alice, 100);
+
+执行:
+  内部通过super.transfer()调用
+  但msg.sender在_transfer内部的上下文不同
+  实际上直接修改balanceOf,不触发锁定检查  ✅
+
+// 场景3: 销售完成后Alice转账
+finalizeSale();  // finalized = true
+
+Alice调用: token.transfer(Bob, 100);
+
+执行:
+  finalized = true  ✅
+  if条件不满足,直接执行super.transfer()  ✅</code></pre>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署代币销售</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>创建两个文件:<code class="inline-code">SimpleERC20.sol</code>和<code class="inline-code">TokenSale.sol</code></li>
+                    <li>编译TokenSale合约</li>
+                    <li>部署参数示例:
+                        <ul style="margin-left: 20px;">
+                            <li>_initialSupply: <code class="inline-code">1000000</code> (100万代币)</li>
+                            <li>_tokenPrice: <code class="inline-code">1000000000000000</code> (0.001 ETH)</li>
+                            <li>_saleStartTime: <code class="inline-code">(当前时间戳)</code></li>
+                            <li>_saleDuration: <code class="inline-code">2592000</code> (30天)</li>
+                            <li>_minPurchase: <code class="inline-code">10000000000000000</code> (0.01 ETH)</li>
+                            <li>_maxPurchase: <code class="inline-code">10000000000000000000</code> (10 ETH)</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 检查初始状态</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">balanceOf(合约地址)</code> - 应该等于totalSupply</li>
+                    <li>调用<code class="inline-code">tokensAvailable()</code> - 查看可售代币</li>
+                    <li>调用<code class="inline-code">isSaleActive()</code> - 应该返回true</li>
+                    <li>调用<code class="inline-code">timeRemaining()</code> - 查看剩余时间</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 购买代币</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>切换到另一个账户(投资者)</li>
+                    <li>在VALUE输入框输入0.1,选择Ether</li>
+                    <li>调用<code class="inline-code">buyTokens</code></li>
+                    <li>查看事件<code class="inline-code">TokensPurchased</code></li>
+                    <li>调用<code class="inline-code">balanceOf(投资者地址)</code> - 应该有100个代币</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 测试锁定</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>投资者尝试转账:<code class="inline-code">transfer(另一个地址, 10)</code></li>
+                    <li>应该失败,错误信息:"Tokens are locked until sale is finalized"</li>
+                    <li>验证代币确实被锁定</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤5: 完成销售(模拟)</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>在Remix中修改<code class="inline-code">saleEndTime</code>为过去的时间(测试用)</li>
+                    <li>或者等待实际销售期结束</li>
+                    <li>切换回项目方账户</li>
+                    <li>调用<code class="inline-code">finalizeSale()</code></li>
+                    <li>查看事件<code class="inline-code">SaleFinalized</code></li>
+                    <li>验证<code class="inline-code">finalized() == true</code></li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤6: 验证解锁</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>切换回投资者账户</li>
+                    <li>再次调用<code class="inline-code">transfer(另一个地址, 10)</code></li>
+                    <li>这次应该成功!</li>
+                    <li>验证代币已解锁,可以自由转账</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>添加白名单功能(只有白名单地址可以购买)</li>
+                    <li>实现分阶段销售(早鸟价、正常价、最后冲刺价)</li>
+                    <li>添加软上限和硬上限</li>
+                    <li>实现退款功能(如果没达到软上限)</li>
+                    <li>添加推荐奖励(推荐人获得额外代币)</li>
+                    <li>实现渐进式解锁(25%立即解锁,剩余分3个月)</li>
+                    <li>添加紧急暂停功能</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 深入理解</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">virtual、override和super</h4>
+                <pre><code class="language-solidity">contract A {
+    function foo() public virtual returns (string memory) {
+        return "A";
+    }
+}
+
+contract B is A {
+    function foo() public override returns (string memory) {
+        return "B";
+    }
+}
+
+contract C is B {
+    function foo() public override returns (string memory) {
+        string memory parent = super.foo();  // 调用B的foo
+        return string.concat(parent, "+C");  // "B+C"
+    }
+}</code></pre>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">真实世界的代币销售</h4>
+                <p>现代ICO/IDO通常包括:</p>
+                <ul style="margin: 10px 0 0 20px; line-height: 1.8;">
+                    <li><strong>KYC/AML</strong>: 身份验证</li>
+                    <li><strong>Vesting</strong>: 锁仓期和释放计划</li>
+                    <li><strong>Cliff</strong>: 悬崖期(一段时间后才开始释放)</li>
+                    <li><strong>Cap</strong>: 个人上限和总上限</li>
+                    <li><strong>Whitelist</strong>: 白名单/优先购买</li>
+                    <li><strong>Refund</strong>: 未达目标退款</li>
+</ul>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">receive() vs fallback()</h4>
+                <pre><code class="language-solidity">// receive: 接收纯ETH(无data)
+receive() external payable {
+    buyTokens();
+}
+
+// fallback: 接收ETH+data 或 调用不存在的函数
+fallback() external payable {
+    // 处理其他情况
+}
+
+// 调用优先级:
+// 1. 如果msg.data为空 -> receive()
+// 2. 如果receive()不存在或msg.data不为空 -> fallback()</code></pre>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-12.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">MyFirstToken首代币</div>
+            </a>
+            <a href="contract-14.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">SafeDeposit 安全保管箱</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

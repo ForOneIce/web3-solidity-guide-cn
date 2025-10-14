@@ -1,0 +1,681 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PollStation - 投票站 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第3天 - 数组与映射</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 3 天 🗳️</div>
+                    <h1>PollStation - 投票站</h1>
+                    <p class="subtitle">通过构建投票系统探索数组和映射</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--easy);">
+                        🌱 初级
+                    </div>
+                    <span class="tag">数组</span>
+                    <span class="tag">映射</span>
+                    <span class="tag">投票系统</span>
+                    <span class="tag">push()</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>深入理解数组和映射的配合使用</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>动态数组、映射、字符串操作</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>40分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★☆☆☆</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">📋 动态数组 (Dynamic Array)</div>
+                <p>动态数组可以在运行时改变大小:</p>
+                <pre><code class="language-solidity">string[] public candidateNames;  // 动态字符串数组</code></pre>
+                <p><strong>数组操作方法:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">push(element)</code>: 在数组末尾添加元素</li>
+                    <li><code class="inline-code">pop()</code>: 移除并返回最后一个元素</li>
+                    <li><code class="inline-code">length</code>: 获取数组长度</li>
+                    <li><code class="inline-code">array[index]</code>: 访问指定索引的元素</li>
+                    <li>可以返回完整数组:<code class="inline-code">returns (string[] memory)</code></li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🗺️ 映射用于计数</div>
+                <p>映射非常适合用来跟踪计数:</p>
+                <pre><code class="language-solidity">mapping(string => uint256) voteCount;</code></pre>
+                <p><strong>映射特点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>所有可能的键都"存在",默认值为0</li>
+                    <li>无法遍历所有键(这就是为什么需要数组)</li>
+                    <li>查找速度O(1),非常高效</li>
+                    <li>键类型可以是string(在这个例子中)</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔄 数组 + 映射组合模式</div>
+                <p>这是Solidity中非常常见的设计模式:</p>
+                <pre><code class="language-solidity">string[] public candidateNames;     // 存储所有候选人(可遍历)
+mapping(string => uint256) voteCount;  // 存储票数(快速查询)</code></pre>
+                <p><strong>为什么这样设计?</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>数组:可以遍历,获取完整列表</li>
+                    <li>映射:可以快速查询特定候选人的票数</li>
+                    <li>结合两者优势:既能列表显示,又能快速查询</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">➕ 自增运算符 (++)</div>
+                <pre><code class="language-solidity">voteCount[_candidateNames]++;  // 等同于 voteCount[_candidateNames] += 1</code></pre>
+                <p><strong>关于 ++ 运算符:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">x++</code>: 后置自增,先使用再加1</li>
+                    <li><code class="inline-code">++x</code>: 前置自增,先加1再使用</li>
+                    <li>在这个场景中两者效果相同</li>
+                    <li>自增比 <code class="inline-code">x = x + 1</code> 更简洁</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 完整合约代码</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract PollStation {
+    // 候选人列表(数组 - 可遍历)
+    string[] public candidateNames;
+    
+    // 票数统计(映射 - 快速查询)
+    mapping(string => uint256) voteCount;
+    
+    // 添加候选人
+    function addCandidateNames(string memory _candidateNames) public {
+        candidateNames.push(_candidateNames);
+    }
+    
+    // 获取所有候选人
+    function getcandidateNames() public view returns (string[] memory) {
+        return candidateNames;
+    }
+    
+    // 投票
+    function vote(string memory _candidateNames) public {
+        voteCount[_candidateNames]++;
+    }
+    
+    // 查看某个候选人的票数
+    function getVote(string memory _candidateNames) public view returns (uint256) {
+        return voteCount[_candidateNames];
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 工作原理</strong>
+                <p style="margin-top: 10px; color: #155724;">候选人名字存储在数组中,方便获取完整列表。每个候选人的票数存储在映射中,实现快速查询和更新。数组提供了"列表功能",映射提供了"查询功能"。</p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">🔍 逐函数分析</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">addCandidateNames() - 添加候选人</h4>
+                <pre><code class="language-solidity">function addCandidateNames(string memory _candidateNames) public {
+    candidateNames.push(_candidateNames);
+}</code></pre>
+                <p style="margin-top: 10px;">使用<code class="inline-code">push()</code>将候选人名字添加到数组末尾。注意:没有检查重复,可能添加同名候选人!</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">getcandidateNames() - 获取列表</h4>
+                <pre><code class="language-solidity">function getcandidateNames() public view returns (string[] memory) {
+    return candidateNames;
+}</code></pre>
+                <p style="margin-top: 10px;">返回完整的候选人数组。前端可以用这个函数显示所有候选人。返回类型是<code class="inline-code">string[] memory</code>,表示返回一个内存中的字符串数组。</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">vote() - 投票</h4>
+                <pre><code class="inline-code">function vote(string memory _candidateNames) public {
+    voteCount[_candidateNames]++;
+}</code></pre>
+                <p style="margin-top: 10px;">将指定候选人的票数加1。即使候选人不在数组中,也可以投票(映射的默认值是0)。这是一个漏洞!</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">getVote() - 查询票数</h4>
+                <pre><code class="language-solidity">function getVote(string memory _candidateNames) public view returns (uint256) {
+    return voteCount[_candidateNames];
+}</code></pre>
+                <p style="margin-top: 10px;">返回指定候选人的票数。如果候选人不存在,返回0(映射的默认值)。</p>
+            </div>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #856404;">⚠️ 这个简化版本的问题</strong>
+                <p style="margin-top: 10px; color: #856404;">这个投票系统有几个明显的问题:</p>
+                <ul style="margin-left: 20px; margin-top: 10px; color: #856404; line-height: 1.8;">
+                    <li>❌ 没有防止重复投票(同一地址可以投票多次)</li>
+                    <li>❌ 没有检查候选人是否存在</li>
+                    <li>❌ 可能添加重复的候选人</li>
+                    <li>❌ 没有投票时间限制</li>
+                    <li>❌ 任何人都可以添加候选人</li>
+                </ul>
+                <p style="margin-top: 10px; color: #856404;">实际应用需要添加这些安全检查!</p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署合约</h4>
+                <p>在Remix中创建文件、编译并部署PollStation合约。</p>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 添加候选人</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">addCandidateNames("Alice")</code></li>
+                    <li>调用<code class="inline-code">addCandidateNames("Bob")</code></li>
+                    <li>调用<code class="inline-code">addCandidateNames("Charlie")</code></li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 查看候选人列表</h4>
+                <p>点击<code class="inline-code">getcandidateNames</code>按钮,应该看到:</p>
+                <pre><code>0: string: Alice
+1: string: Bob
+2: string: Charlie</code></pre>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 投票测试</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">vote("Alice")</code>几次</li>
+                    <li>调用<code class="inline-code">vote("Bob")</code>几次</li>
+                    <li>调用<code class="inline-code">getVote("Alice")</code>查看票数</li>
+                    <li>调用<code class="inline-code">getVote("Bob")</code>查看票数</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤5: 测试边界情况</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>尝试投票给不存在的候选人:<code class="inline-code">vote("David")</code></li>
+                    <li>查询不存在候选人的票数:<code class="inline-code">getVote("David")</code> - 会返回0</li>
+                    <li>切换账户,再次投票 - 会成功(没有防重复投票)</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>添加<code class="inline-code">mapping(address => bool) public hasVoted</code>,防止重复投票</li>
+                    <li>修改vote函数,检查候选人是否存在</li>
+                    <li>添加<code class="inline-code">removeCandiate(string memory name)</code>函数</li>
+                    <li>添加一个函数返回获胜者(票数最多的候选人)</li>
+                    <li>添加owner控制,只有owner能添加候选人</li>
+                    <li>使用struct存储候选人信息(名字、票数、描述等)</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">改进版本示例</h4>
+                <pre><code class="language-solidity">// 防止重复投票
+mapping(address => bool) public hasVoted;
+
+function vote(string memory _candidateNames) public {
+    require(!hasVoted[msg.sender], "Already voted");
+    require(isValidCandidate(_candidateNames), "Invalid candidate");
+    
+    hasVoted[msg.sender] = true;
+    voteCount[_candidateNames]++;
+}
+
+function isValidCandidate(string memory _name) private view returns (bool) {
+    for (uint i = 0; i < candidateNames.length; i++) {
+        if (keccak256(bytes(candidateNames[i])) == keccak256(bytes(_name))) {
+            return true;
+        }
+    }
+    return false;
+}</code></pre>
+                <p style="margin-top: 10px;"><strong>注意:</strong> 字符串比较需要使用<code class="inline-code">keccak256</code>哈希!</p>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">数组 vs 映射对比</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="background: var(--light);">
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">特性</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">数组</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">映射</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">遍历</td>
+                        <td style="padding: 10px;">✅ 可以</td>
+                        <td style="padding: 10px;">❌ 不可以</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;">长度</td>
+                        <td style="padding: 10px;">✅ 有length属性</td>
+                        <td style="padding: 10px;">❌ 没有</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">查询速度</td>
+                        <td style="padding: 10px;">O(n) 遍历查找</td>
+                        <td style="padding: 10px;">O(1) 常数时间</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;">默认值</td>
+                        <td style="padding: 10px;">空数组[]</td>
+                        <td style="padding: 10px;">0/false</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">使用场景</td>
+                        <td style="padding: 10px;">需要列表显示</td>
+                        <td style="padding: 10px;">需要快速查询</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-2.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">SaveMyName - 保存我的名字</div>
+            </a>
+            <a href="contract-4.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">AuctionHouse - 拍卖行</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

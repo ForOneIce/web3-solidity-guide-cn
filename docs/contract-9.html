@@ -1,0 +1,730 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Calculator - 智能计算器 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+            padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> 返回首页
+        </a>
+            <span class="nav-title">第9天 - 合约通信</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 9 天 🔗</div>
+                    <h1>Smart Calculator - 智能计算器</h1>
+                    <p class="subtitle">学习合约间通信和函数调用</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--medium);">
+                        🌿 中级
+                    </div>
+                    <span class="tag">合约调用</span>
+                    <span class="tag">interface</span>
+                    <span class="tag">abi.encode</span>
+                    <span class="tag">import</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握合约间通信的两种方式</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>高级调用、低级调用、ABI编码</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>60分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔥 难度系数</div>
+                    <div>★★★☆☆</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">🔗 合约间通信</div>
+                <p>合约可以调用其他合约的函数,这是DeFi协议组合性的基础:</p>
+                <pre><code class="language-solidity">// 方式1: 高级调用 (类型安全,推荐)
+ScientificCalculator calc = ScientificCalculator(calculatorAddress);
+uint256 result = calc.power(2, 10);
+
+// 方式2: 低级调用 (灵活,但需要手动编码)
+(bool success, bytes memory data) = calculatorAddress.call(
+    abi.encodeWithSignature("power(uint256,uint256)", 2, 10)
+);
+uint256 result = abi.decode(data, (uint256));</code></pre>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📝 import - 导入其他文件</div>
+                <p>使用<code class="inline-code">import</code>导入其他Solidity文件:</p>
+                <pre><code class="language-solidity">import "./ScientificCalculator.sol";
+
+// 或者从node_modules导入
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";</code></pre>
+                <p><strong>导入方式:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>相对路径:<code class="inline-code">./File.sol</code></li>
+                    <li>绝对路径:<code class="inline-code">@openzeppelin/...</code></li>
+                    <li>导入后可以使用文件中的合约</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🎯 高级调用 (High-Level Call)</div>
+                <pre><code class="language-solidity">// 实例化合约
+ScientificCalculator scientificCalc = ScientificCalculator(scientificCalculatorAddress);
+
+// 直接调用函数
+uint256 result = scientificCalc.power(base, exponent);</code></pre>
+                <p><strong>优点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>✅ 类型安全,编译器会检查</li>
+                    <li>✅ 代码清晰易读</li>
+                    <li>✅ 自动处理返回值</li>
+                    <li>✅ 如果函数不存在,编译时就会报错</li>
+                </ul>
+                <p><strong>缺点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>❌ 需要知道完整的合约接口</li>
+                    <li>❌ 必须import合约或接口定义</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">⚡ 低级调用 (Low-Level Call)</div>
+                <pre><code class="language-solidity">// 编码函数调用
+bytes memory data = abi.encodeWithSignature(
+    "squareRoot(uint256)", 
+    number
+);
+
+// 发送调用
+(bool success, bytes memory returnData) = calculatorAddress.call(data);
+require(success, "Call failed");
+
+// 解码返回值
+uint256 result = abi.decode(returnData, (uint256));</code></pre>
+                <p><strong>优点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>✅ 不需要import合约定义</li>
+                    <li>✅ 可以动态调用任何函数</li>
+                    <li>✅ 更灵活</li>
+                </ul>
+                <p><strong>缺点:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>❌ 容易出错(拼写错误、类型错误)</li>
+                    <li>❌ 需要手动处理返回值</li>
+                    <li>❌ 没有编译时检查</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔐 pure 函数</div>
+                <pre><code class="language-solidity">function power(uint256 base, uint256 exponent) public pure returns (uint256) {
+    uint256 result = 1;
+    for (uint256 i = 0; i < exponent; i++) {
+        result *= base;
+    }
+    return result;
+}</code></pre>
+                <p><strong>pure vs view vs normal:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">pure</code>: 不读不写状态,纯计算</li>
+                    <li><code class="inline-code">view</code>: 只读状态,不修改</li>
+                    <li><code class="inline-code">normal</code>: 可以读写状态</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 ScientificCalculator合约</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract ScientificCalculator {
+    // 幂运算: base^exponent
+    function power(uint256 base, uint256 exponent) public pure returns (uint256) {
+        uint256 result = 1;
+        for (uint256 i = 0; i < exponent; i++) {
+            result *= base;
+        }
+        return result;
+    }
+    
+    // 平方根(整数)
+    function squareRoot(uint256 number) public pure returns (uint256) {
+        if (number == 0) return 0;
+        
+        uint256 z = (number + 1) / 2;
+        uint256 y = number;
+        
+        while (z < y) {
+            y = z;
+            z = (number / z + z) / 2;
+        }
+        return y;
+    }
+}</code></pre>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">📄 Calculator合约</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "./ScientificCalculator.sol";
+
+contract Calculator {
+    address public owner;
+    address public scientificCalculatorAddress;
+    
+    constructor() {
+        owner = msg.sender;
+    }
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not the owner");
+        _;
+    }
+    
+    // 设置科学计算器地址
+    function setScientificCalculator(address _address) public onlyOwner {
+        scientificCalculatorAddress = _address;
+    }
+    
+    // 方式1: 高级调用 - power
+    function power(uint256 base, uint256 exponent) public view returns (uint256) {
+        require(scientificCalculatorAddress != address(0), "Calculator not set");
+        
+        ScientificCalculator scientificCalc = ScientificCalculator(scientificCalculatorAddress);
+        return scientificCalc.power(base, exponent);
+    }
+    
+    // 方式2: 低级调用 - squareRoot
+    function squareRoot(uint256 number) public view returns (uint256) {
+        require(scientificCalculatorAddress != address(0), "Calculator not set");
+        
+        bytes memory data = abi.encodeWithSignature("squareRoot(uint256)", number);
+        (bool success, bytes memory returnData) = scientificCalculatorAddress.staticcall(data);
+        require(success, "Call failed");
+        
+        return abi.decode(returnData, (uint256));
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 工作原理</strong>
+                <p style="margin-top: 10px; color: #155724;">Calculator合约将复杂的数学运算委托给ScientificCalculator合约。这展示了合约的模块化设计,每个合约专注于特定功能。</p>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">🔍 两种调用方式对比</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">高级调用示例</h4>
+                <pre><code class="language-solidity">// 1. 实例化合约
+ScientificCalculator scientificCalc = ScientificCalculator(scientificCalculatorAddress);
+
+// 2. 直接调用
+return scientificCalc.power(base, exponent);
+
+// 编译器会:
+// - 检查power函数是否存在
+// - 检查参数类型是否正确
+// - 检查返回值类型是否匹配</code></pre>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">低级调用示例</h4>
+                <pre><code class="language-solidity">// 1. 编码函数签名和参数
+bytes memory data = abi.encodeWithSignature("squareRoot(uint256)", number);
+// 生成: 0x677342ce0000000000000000000000000000000000000000000000000000000000000010
+// 前4字节是函数选择器,后面是参数
+
+// 2. 调用
+(bool success, bytes memory returnData) = address.staticcall(data);
+
+// 3. 检查成功
+require(success, "Call failed");
+
+// 4. 解码返回值
+return abi.decode(returnData, (uint256));</code></pre>
+            </div>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #856404;">📌 call vs staticcall vs delegatecall</strong>
+                <ul style="margin: 10px 0 0 20px; color: #856404; line-height: 1.8;">
+                    <li><code class="inline-code">call</code>: 可以修改被调用合约的状态</li>
+                    <li><code class="inline-code">staticcall</code>: 只读,不能修改状态(相当于view)</li>
+                    <li><code class="inline-code">delegatecall</code>: 在调用者的上下文中执行(用于代理模式)</li>
+</ul>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署两个合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>创建两个文件:<code class="inline-code">ScientificCalculator.sol</code>和<code class="inline-code">Calculator.sol</code></li>
+                    <li>先编译并部署<code class="inline-code">ScientificCalculator</code></li>
+                    <li>复制ScientificCalculator的地址</li>
+                    <li>再部署<code class="inline-code">Calculator</code></li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 设置科学计算器地址</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>在Calculator合约中,调用<code class="inline-code">setScientificCalculator("科学计算器地址")</code></li>
+                    <li>点击<code class="inline-code">scientificCalculatorAddress</code>确认设置成功</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 测试高级调用</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>在Calculator合约中调用<code class="inline-code">power(2, 10)</code></li>
+                    <li>应该返回1024 (2的10次方)</li>
+                    <li>尝试<code class="inline-code">power(5, 3)</code> - 应该返回125</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 测试低级调用</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>调用<code class="inline-code">squareRoot(16)</code> - 应该返回4</li>
+                    <li>调用<code class="inline-code">squareRoot(100)</code> - 应该返回10</li>
+                    <li>调用<code class="inline-code">squareRoot(17)</code> - 应该返回4(整数结果)</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>在ScientificCalculator中添加<code class="inline-code">factorial(uint256 n)</code>阶乘函数</li>
+                    <li>在Calculator中使用高级调用来调用factorial</li>
+                    <li>添加一个<code class="inline-code">divide(uint256 a, uint256 b)</code>函数,处理除零错误</li>
+                    <li>使用interface而不是import完整合约</li>
+                    <li>添加事件记录每次计算</li>
+                    <li>实现批量计算功能(一次调用多个计算)</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 深入理解</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">使用interface(推荐)</h4>
+                <p>定义接口比import完整合约更轻量:</p>
+                <pre><code class="language-solidity">// IScientificCalculator.sol
+interface IScientificCalculator {
+    function power(uint256 base, uint256 exponent) external pure returns (uint256);
+    function squareRoot(uint256 number) external pure returns (uint256);
+}
+
+// 在Calculator中使用
+IScientificCalculator calc = IScientificCalculator(calculatorAddress);
+calc.power(2, 10);</code></pre>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">函数选择器</h4>
+                <p>每个函数都有唯一的4字节选择器:</p>
+                <pre><code class="language-solidity">bytes4 selector = bytes4(keccak256("power(uint256,uint256)"));
+// 结果: 0x617ec7e4
+
+// 或者使用
+bytes4 selector = ScientificCalculator.power.selector;</code></pre>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">ABI编码函数</h4>
+                <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+                    <li><code class="inline-code">abi.encode(...)</code>: 完整编码</li>
+                    <li><code class="inline-code">abi.encodePacked(...)</code>: 紧凑编码</li>
+                    <li><code class="inline-code">abi.encodeWithSignature()</code>: 带函数签名</li>
+                    <li><code class="inline-code">abi.encodeWithSelector()</code>: 带函数选择器</li>
+                    <li><code class="inline-code">abi.decode()</code>: 解码数据</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-8.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">TipJar - 小费罐</div>
+            </a>
+            <a href="contract-10.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">ActivityTracker - 活动追踪器</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeDeposit 安全保管箱 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #fff5f5, #ffe6e6);
+            border-left: 5px solid var(--hard);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-card.important {
+            background: linear-gradient(135deg, #fff9e6, #ffedd5);
+            border-left-color: var(--medium);
+        }
+        
+        .concept-card.tip {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left-color: var(--primary);
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .warning-box strong {
+            color: #ff6b35;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .steps-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .steps-list li {
+            counter-increment: step-counter;
+            margin-bottom: 20px;
+            padding-left: 60px;
+            position: relative;
+        }
+        
+        .steps-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--accent);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第14天</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 练习</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 14 天</div>
+                    <h1>🔐 SafeDeposit 安全保管箱</h1>
+                    <p class="subtitle">掌握接口、抽象合约与继承 - 构建模块化智能合约系统</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--hard);">
+                        ⭐⭐⭐⭐ 困难
+                    </div>
+                    <span class="tag">接口 Interface</span>
+                    <span class="tag">抽象合约 Abstract</span>
+                    <span class="tag">继承 Inheritance</span>
+                    <span class="tag">工厂模式</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">🎯 学习目标</div>
+                    <div>掌握接口、抽象合约与继承，构建模块化智能合约系统</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🛠️ 核心技能</div>
+                    <div>Interface设计、Abstract合约、继承机制、工厂模式</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏰ 预计时间</div>
+                    <div>3-4小时 (理解+编码+测试)</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">📊 主观感受难度</div>
+                    <div>⭐⭐⭐⭐⭐ 极难 - 抽象编程思维和多层继承关系理解</div>
+                </div>
+            </div>
+            
+            <div class="key-points" style="margin-top: 20px;">
+                <div class="key-point">
+                    <div class="key-point-title">🎯 接口定义标准</div>
+                    <div>定义IDepositBox接口,规范所有保管箱必须实现的功能</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🏗️ 抽象合约复用</div>
+                    <div>BaseDepositBox提供公共逻辑,子类继承并实现特定功能</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🔄 继承与重写</div>
+                    <div>使用virtual/override关键字实现多态性</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🏭 工厂模式应用</div>
+                    <div>VaultManager动态创建不同类型的保管箱合约</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念
+            </h2>
+            
+            <div class="concept-card important">
+                <div class="concept-title">📋 接口 (Interface) vs 抽象合约 (Abstract Contract)</div>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>特性</th>
+                            <th>接口 Interface</th>
+                            <th>抽象合约 Abstract</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>函数实现</strong></td>
+                            <td>❌ 不能有任何实现</td>
+                            <td>✅ 可以有部分实现</td>
+                        </tr>
+                        <tr>
+                            <td><strong>状态变量</strong></td>
+                            <td>❌ 不能有状态变量</td>
+                            <td>✅ 可以有状态变量</td>
+                        </tr>
+                        <tr>
+                            <td><strong>构造函数</strong></td>
+                            <td>❌ 不能有构造函数</td>
+                            <td>✅ 可以有构造函数</td>
+                        </tr>
+                        <tr>
+                            <td><strong>修饰符</strong></td>
+                            <td>❌ 不能有修饰符</td>
+                            <td>✅ 可以有修饰符</td>
+                        </tr>
+                        <tr>
+                            <td><strong>继承</strong></td>
+                            <td>只能继承接口</td>
+                            <td>可继承合约和接口</td>
+                        </tr>
+                        <tr>
+                            <td><strong>用途</strong></td>
+                            <td>定义标准/规范</td>
+                            <td>代码复用/模板</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="concept-card tip">
+                <div class="concept-title">🔑 Virtual 和 Override 关键字</div>
+                <p><strong>virtual:</strong> 标记函数可以被子合约重写</p>
+                <p><strong>override:</strong> 标记函数重写了父合约的函数</p>
+                <pre><code class="language-solidity">// 父合约
+abstract contract BaseBox {
+    function getBoxType() external pure virtual returns (string memory);
+}
+
+// 子合约
+contract BasicBox is BaseBox {
+    function getBoxType() external pure override returns (string memory) {
+        return "Basic";
+    }
+}</code></pre>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🏭 工厂模式 (Factory Pattern)</div>
+                <p>工厂合约可以动态创建其他合约的实例:</p>
+                <pre><code class="language-solidity">function createBasicBox(string memory _metadata) external returns (address) {
+    // 使用 new 关键字创建新合约
+    BasicDepositBox newBox = new BasicDepositBox(_metadata);
+    
+    // 转移所有权给调用者
+    newBox.transferOwnership(msg.sender);
+    
+    return address(newBox);
+}</code></pre>
+                <div class="success-box">
+                    <strong>✅ 优势:</strong> 统一管理、批量创建、跟踪所有实例
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 代码详解
+            </h2>
+
+            <h3 style="color: var(--primary); margin: 20px 0;">1️⃣ 接口定义</h3>
+            <pre><code class="language-solidity">interface IDepositBox {
+    function getOwner() external view returns (address);
+    function transferOwnership(address newOwner) external;
+    function storeSecret(string memory secret) external;
+    function getSecret() external view returns (string memory);
+    function getBoxType() external pure returns (string memory);
+    function getDepositTime() external view returns (uint256);
+}</code></pre>
+            <div class="warning-box">
+                <strong>⚠️ 接口规则:</strong> 所有函数必须是external,不能有函数体
+            </div>
+
+            <h3 style="color: var(--primary); margin: 20px 0;">2️⃣ 抽象合约基类</h3>
+            <pre><code class="language-solidity">abstract contract BaseDepositBox is IDepositBox {
+    address public owner;
+    string public metadata;
+    string private secret;
+    uint256 public depositTime;
+    
+    constructor(string memory _metadata) {
+        owner = msg.sender;
+        metadata = _metadata;
+        depositTime = block.timestamp;
+    }
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
+        _;
+    }
+    
+    // 实现的函数
+    function getOwner() external view override returns (address) {
+        return owner;
+    }
+    
+    function storeSecret(string memory _secret) external override onlyOwner {
+        secret = _secret;
+    }
+    
+    // 抽象函数 - 子类必须实现
+    function getBoxType() external pure virtual override returns (string memory);
+}</code></pre>
+
+            <h3 style="color: var(--primary); margin: 20px 0;">3️⃣ 具体实现 - 基础保管箱</h3>
+            <pre><code class="language-solidity">contract BasicDepositBox is BaseDepositBox {
+    constructor(string memory _metadata) BaseDepositBox(_metadata) {}
+    
+    function getBoxType() external pure override returns (string memory) {
+        return "Basic";
+    }
+}</code></pre>
+
+            <h3 style="color: var(--primary); margin: 20px 0;">4️⃣ 时间锁定保管箱</h3>
+            <pre><code class="language-solidity">contract TimeLockedDepositBox is BaseDepositBox {
+    uint256 public unlockTime;
+    
+    constructor(string memory _metadata, uint256 _lockDuration) 
+        BaseDepositBox(_metadata) 
+    {
+        unlockTime = block.timestamp + _lockDuration;
+    }
+    
+    modifier timeUnlocked() {
+        require(block.timestamp >= unlockTime, "Still locked");
+        _;
+    }
+    
+    // 重写父合约函数,添加时间锁
+    function getSecret() external view override onlyOwner timeUnlocked 
+        returns (string memory) 
+    {
+        return super.getSecret();
+    }
+    
+    function getBoxType() external pure override returns (string memory) {
+        return "Time-Locked";
+    }
+}</code></pre>
+            <div class="concept-card tip">
+                <div class="concept-title">💡 修饰符叠加</div>
+                <p>可以同时使用多个修饰符:</p>
+                <code class="inline-code">onlyOwner timeUnlocked</code>
+                <p style="margin-top: 10px;">执行顺序: 从左到右依次检查</p>
+            </div>
+
+            <h3 style="color: var(--primary); margin: 20px 0;">5️⃣ 工厂管理器</h3>
+            <pre><code class="language-solidity">contract VaultManager {
+    struct BoxInfo {
+        address boxAddress;
+        string boxType;
+        string metadata;
+    }
+    
+    mapping(address => BoxInfo[]) public userBoxes;
+    
+    function createTimeLockedBox(string memory _metadata, uint256 _lockDuration) 
+        external returns (address) 
+    {
+        // 创建新合约
+        TimeLockedDepositBox newBox = new TimeLockedDepositBox(_metadata, _lockDuration);
+        
+        // 转移所有权
+        newBox.transferOwnership(msg.sender);
+        
+        // 记录信息
+        userBoxes[msg.sender].push(BoxInfo({
+            boxAddress: address(newBox),
+            boxType: "Time-Locked",
+            metadata: _metadata
+        }));
+        
+        return address(newBox);
+    }
+    
+    // 通过接口与保管箱交互
+    function storeSecret(address boxAddress, string memory secret) external {
+        IDepositBox(boxAddress).storeSecret(secret);
+    }
+}</code></pre>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践要点
+            </h2>
+
+            <div class="concept-card important">
+                <div class="concept-title">🎯 关键难点</div>
+                <ul class="steps-list">
+                    <li>
+                        <strong>接口类型转换</strong><br>
+                        <code class="inline-code">IDepositBox(boxAddress).storeSecret(secret)</code><br>
+                        将地址转换为接口类型,可以调用接口定义的函数
+                    </li>
+                    <li>
+                        <strong>super关键字</strong><br>
+                        <code class="inline-code">return super.getSecret()</code><br>
+                        调用父合约的函数实现
+                    </li>
+                    <li>
+                        <strong>构造函数继承</strong><br>
+                        <code class="inline-code">BaseDepositBox(_metadata)</code><br>
+                        子合约构造函数必须调用父合约构造函数
+                    </li>
+                </ul>
+            </div>
+
+            <div class="concept-card tip">
+                <div class="concept-title">💪 练习任务</div>
+                <ol style="margin-left: 20px; line-height: 2;">
+                    <li>创建一个MultiSigDepositBox,需要多个签名才能提取秘密</li>
+                    <li>实现一个保管箱升级功能,从Basic升级到Premium</li>
+                    <li>添加事件记录所有保管箱操作</li>
+                    <li>实现保管箱转让功能</li>
+                </ol>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ 设计优势:</strong>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>代码复用 - 公共逻辑在BaseDepositBox中</li>
+                    <li>易于扩展 - 添加新类型只需继承基类</li>
+                    <li>统一接口 - 所有保管箱符合IDepositBox标准</li>
+                    <li>关注点分离 - VaultManager专注管理,DepositBox专注功能</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-13.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">PreorderTokens - 预购代币</div>
+            </a>
+            <a href="contract-15.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">Gas优化投票e</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

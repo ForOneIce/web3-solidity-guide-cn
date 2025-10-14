@@ -1,0 +1,770 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpgradeHub - 升级中心 - Solidity学习</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --easy: #43AA8B;
+            --medium: #F8961E;
+            --hard: #E71D36;
+            --expert: #7209B7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .nav-bar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        .nav-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .nav-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hero-title {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .difficulty-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .key-point-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .concept-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        pre {
+            background: #282c34;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+            color: var(--hard);
+            font-size: 0.9em;
+        }
+        
+        .navigation-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-footer-btn {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border: 3px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .nav-footer-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-footer-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-footer-title {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 25px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+            <span class="nav-title">第17天 - 可升级合约</span>
+        </div>
+        <div class="nav-right">
+            <a href="#concepts" class="nav-btn">📚 核心概念</a>
+            <a href="#code" class="nav-btn">💻 代码讲解</a>
+            <a href="#practice" class="nav-btn">🎯 实践</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-header">
+                <div class="hero-title">
+                    <div class="day-badge">第 17 天 🔄</div>
+                    <h1>UpgradeHub - 升级中心</h1>
+                    <p class="subtitle">使用代理模式实现可升级智能合约</p>
+                </div>
+                <div class="meta-tags">
+                    <div class="difficulty-badge" style="background: var(--hard);">
+                        🌳 高级
+                    </div>
+                    <span class="tag">代理</span>
+                    <span class="tag">升级</span>
+                    <span class="tag">delegatecall</span>
+                    <span class="tag">内联汇编</span>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-point-title">📌 学习目标</div>
+                    <div>掌握代理模式和可升级合约设计</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">🎯 核心技能</div>
+                    <div>代理合约、delegatecall、存储布局</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">⏱️ 预计时间</div>
+                    <div>70分钟</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-title">📊 主观感受难度</div>
+                    <div>⭐⭐⭐⭐⭐ 极难 - 代理模式和内联汇编的复杂性</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="concepts">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i> 核心概念详解
+            </h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">🏗️ 代理模式架构</div>
+                <p>代理模式将数据存储和业务逻辑分离，实现合约的可升级性：</p>
+                <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #856404;">🔹 代理合约 (Proxy)</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #856404;">
+                        <li>存储所有数据</li>
+                        <li>接收所有函数调用</li>
+                        <li>将调用委托给逻辑合约</li>
+                        <li>地址永不改变</li>
+                    </ul>
+                </div>
+                <div style="background: #e6f7ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #0066cc;">🔹 逻辑合约 (Implementation)</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #0066cc;">
+                        <li>包含业务逻辑</li>
+                        <li>不存储数据</li>
+                        <li>可以被替换升级</li>
+                        <li>通过delegatecall执行</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">🔗 delegatecall 详解</div>
+                <p><code class="inline-code">delegatecall</code>是代理模式的核心机制：</p>
+                <pre><code class="language-solidity">// 普通call: 在目标合约的上下文中执行
+target.call(data);  // 使用target的storage, msg.sender是当前合约
+
+// delegatecall: 在当前合约的上下文中执行目标代码
+target.delegatecall(data);  // 使用当前合约的storage, msg.sender保持不变</code></pre>
+                <p><strong>关键特点：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><strong>存储上下文：</strong>使用调用者的存储空间</li>
+                    <li><strong>身份保持：</strong>msg.sender和msg.value不变</li>
+                    <li><strong>代码借用：</strong>借用目标合约的代码逻辑</li>
+                    <li><strong>返回值：</strong>可以获取执行结果</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">📦 存储布局兼容性</div>
+                <p>代理和逻辑合约必须有相同的存储布局：</p>
+                <pre><code class="language-solidity">contract SubscriptionStorageLayout {
+    address public logicContract;    // slot 0
+    address public owner;           // slot 1
+    
+    struct Subscription {
+        uint8 planId;      // 1 byte
+        uint256 expiry;    // 32 bytes  
+        bool paused;       // 1 byte
+    }
+    
+    mapping(address => Subscription) public subscriptions;  // slot 2
+    mapping(uint8 => uint256) public planPrices;           // slot 3
+    mapping(uint8 => uint256) public planDuration;         // slot 4
+}</code></pre>
+                <p><strong>兼容性规则：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>❌ 不能改变现有变量的类型</li>
+                    <li>❌ 不能改变现有变量的顺序</li>
+                    <li>❌ 不能删除现有变量</li>
+                    <li>✅ 可以在末尾添加新变量</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">⚙️ 内联汇编 (Inline Assembly)</div>
+                <p>在fallback函数中使用内联汇编实现高效的代理：</p>
+                <pre><code class="language-solidity">fallback() external payable {
+    address impl = logicContract;
+    assembly {
+        // 复制调用数据到内存
+        calldatacopy(0, 0, calldatasize())
+        
+        // 执行delegatecall
+        let result := delegatecall(gas(), impl, 0, calldatasize(), 0, 0)
+        
+        // 复制返回数据
+        returndatacopy(0, 0, returndatasize())
+        
+        // 根据结果返回或回滚
+        switch result
+        case 0 { revert(0, returndatasize()) }
+        default { return(0, returndatasize()) }
+    }
+}</code></pre>
+                <p><strong>汇编指令说明：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li><code class="inline-code">calldatacopy(t, f, s)</code>: 复制调用数据</li>
+                    <li><code class="inline-code">delegatecall(g, a, in, insize, out, outsize)</code>: 委托调用</li>
+                    <li><code class="inline-code">returndatacopy(t, f, s)</code>: 复制返回数据</li>
+                    <li><code class="inline-code">return(offset, size)</code>: 返回数据</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="code">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i> 完整代码详解
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin: 20px 0;">📄 存储布局合约</h3>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SubscriptionStorageLayout {
+    address public logicContract;
+    address public owner;
+    
+    struct Subscription {
+        uint8 planId;
+        uint256 expiry;
+        bool paused;
+    }
+    
+    mapping(address => Subscription) public subscriptions;
+    mapping(uint8 => uint256) public planPrices;
+    mapping(uint8 => uint256) public planDuration;
+}</code></pre>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">📄 代理合约</h3>
+            <pre><code class="language-solidity">contract SubscriptionStorage is SubscriptionStorageLayout {
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
+        _;
+    }
+    
+    constructor(address _logicContract) {
+        owner = msg.sender;
+        logicContract = _logicContract;
+    }
+    
+    // 升级逻辑合约
+    function upgradeTo(address _newLogic) external onlyOwner {
+        logicContract = _newLogic;
+    }
+    
+    // 代理所有函数调用
+    fallback() external payable {
+        address impl = logicContract;
+        assembly {
+            calldatacopy(0, 0, calldatasize())
+            let result := delegatecall(gas(), impl, 0, calldatasize(), 0, 0)
+            returndatacopy(0, 0, returndatasize())
+            
+            switch result
+            case 0 { revert(0, returndatasize()) }
+            default { return(0, returndatasize()) }
+        }
+    }
+    
+    receive() external payable {}
+}</code></pre>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">📄 逻辑合约 V1</h3>
+            <pre><code class="language-solidity">contract SubscriptionLogicV1 is SubscriptionStorageLayout {
+    function addPlan(uint8 planId, uint256 price, uint256 duration) external {
+        planPrices[planId] = price;
+        planDuration[planId] = duration;
+    }
+    
+    function subscribe(uint8 planId) external payable {
+        require(planPrices[planId] > 0, "Invalid plan");
+        require(msg.value >= planPrices[planId], "Insufficient payment");
+        
+        Subscription storage s = subscriptions[msg.sender];
+        
+        if (block.timestamp < s.expiry) {
+            s.expiry += planDuration[planId];  // 延长现有订阅
+        } else {
+            s.expiry = block.timestamp + planDuration[planId];  // 新订阅
+        }
+        
+        s.planId = planId;
+        s.paused = false;
+    }
+    
+    function isActive(address user) external view returns (bool) {
+        Subscription storage s = subscriptions[user];
+        return (block.timestamp < s.expiry && !s.paused);
+    }
+}</code></pre>
+
+            <h3 style="color: var(--secondary); margin: 30px 0 20px 0;">📄 逻辑合约 V2 (新增功能)</h3>
+            <pre><code class="language-solidity">contract SubscriptionLogicV2 is SubscriptionStorageLayout {
+    // 继承V1的所有功能
+    function addPlan(uint8 planId, uint256 price, uint256 duration) external {
+        planPrices[planId] = price;
+        planDuration[planId] = duration;
+    }
+    
+    function subscribe(uint8 planId) external payable {
+        require(planPrices[planId] > 0, "Invalid plan");
+        require(msg.value >= planPrices[planId], "Insufficient payment");
+        
+        Subscription storage s = subscriptions[msg.sender];
+        
+        if (block.timestamp < s.expiry) {
+            s.expiry += planDuration[planId];
+        } else {
+            s.expiry = block.timestamp + planDuration[planId];
+        }
+        
+        s.planId = planId;
+        s.paused = false;
+    }
+    
+    function isActive(address user) external view returns (bool) {
+        Subscription storage s = subscriptions[user];
+        return (block.timestamp < s.expiry && !s.paused);
+    }
+    
+    // V2 新增功能
+    function pauseAccount(address user) external {
+        subscriptions[user].paused = true;
+    }
+    
+    function resumeAccount(address user) external {
+        subscriptions[user].paused = false;
+    }
+    
+    // 获取订阅详情
+    function getSubscriptionDetails(address user) external view returns (uint8, uint256, bool) {
+        Subscription storage s = subscriptions[user];
+        return (s.planId, s.expiry, s.paused);
+    }
+}</code></pre>
+
+            <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 5px solid #28a745; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #155724;">✅ 升级流程</strong>
+                <p style="margin-top: 10px; color: #155724;">
+                    1. 部署V1逻辑合约 → 2. 部署代理合约(指向V1) → 3. 用户通过代理使用功能 → 4. 部署V2逻辑合约 → 5. 调用upgradeTo(V2地址) → 6. 现在所有调用使用V2逻辑，数据完全保留！
+                </p>
+            </div>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong style="color: #856404;">⚠️ 升级注意事项</strong>
+                <p style="margin-top: 10px; color: #856404;">
+                    - 升级前充分测试新逻辑合约<br>
+                    - 确保存储布局兼容性<br>
+                    - 考虑添加时间锁延迟升级<br>
+                    - 重要升级应该通过治理投票<br>
+                    - 保留紧急暂停功能
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="practice">
+            <h2 class="section-title">
+                <i class="fas fa-dumbbell"></i> 实践与练习
+            </h2>
+            
+            <h3 style="color: var(--secondary); margin-bottom: 20px;">📝 Remix实战步骤</h3>
+            
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤1: 部署逻辑合约V1</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>创建并编译SubscriptionLogicV1合约</li>
+                    <li>部署V1合约，记录合约地址</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 部署代理合约</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>部署SubscriptionStorage，传入V1地址</li>
+                    <li>记录代理合约地址（这是用户交互的地址）</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 通过代理测试V1功能</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>在"At Address"中输入代理地址，选择V1 ABI</li>
+                    <li>调用<code class="inline-code">addPlan(1, 1000000000000000000, 2592000)</code> (1 ETH, 30天)</li>
+                    <li>调用<code class="inline-code">subscribe(1)</code>并发送1 ETH</li>
+                    <li>调用<code class="inline-code">isActive(你的地址)</code>验证订阅</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 升级到V2</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>部署SubscriptionLogicV2合约</li>
+                    <li>在代理合约中调用<code class="inline-code">upgradeTo(V2地址)</code></li>
+                    <li>现在通过代理可以使用V2的新功能了！</li>
+                </ol>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤5: 测试V2新功能</h4>
+                <ol style="margin: 10px 0 10px 25px; line-height: 2;">
+                    <li>使用V2 ABI连接代理地址</li>
+                    <li>调用<code class="inline-code">getSubscriptionDetails(你的地址)</code></li>
+                    <li>调用<code class="inline-code">pauseAccount(你的地址)</code></li>
+                    <li>再次检查<code class="inline-code">isActive(你的地址)</code> - 应该返回false</li>
+                    <li>调用<code class="inline-code">resumeAccount(你的地址)</code>恢复</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">🎯 挑战练习</h3>
+            <div style="background: linear-gradient(135deg, #fff9e6, #ffedd5); border-left: 5px solid var(--medium); padding: 25px; border-radius: 10px;">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">尝试以下改进:</p>
+                <ol style="margin-left: 25px; line-height: 2.2;">
+                    <li>添加时间锁：升级需要等待24小时</li>
+                    <li>实现多签升级：需要多个管理员确认</li>
+                    <li>添加版本管理：跟踪逻辑合约版本历史</li>
+                    <li>实现回滚功能：可以回退到之前版本</li>
+                    <li>添加升级事件：记录所有升级操作</li>
+                    <li>使用OpenZeppelin的代理实现</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0;">📚 扩展知识</h3>
+            
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">OpenZeppelin代理</h4>
+                <pre><code class="language-solidity">import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
+
+contract MyLogic is Initializable {
+    function initialize() public initializer {
+        // 替代constructor的初始化函数
+    }
+}</code></pre>
+                <p style="margin-top: 10px;">OpenZeppelin提供了更安全、更标准的代理实现，包括透明代理和UUPS代理。</p>
+            </div>
+
+            <div style="background: white; border: 2px solid var(--accent); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">代理模式对比</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="background: var(--light);">
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">类型</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">优点</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--accent);">缺点</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">透明代理</td>
+                        <td style="padding: 10px;">简单安全</td>
+                        <td style="padding: 10px;">Gas成本高</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 10px;">UUPS代理</td>
+                        <td style="padding: 10px;">Gas效率高</td>
+                        <td style="padding: 10px;">复杂度高</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">钻石代理</td>
+                        <td style="padding: 10px;">极其灵活</td>
+                        <td style="padding: 10px;">非常复杂</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="navigation-footer">
+            <a href="contract-16.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">← 上一个</div>
+                <div class="nav-footer-title">PluginStore - 插件商店</div>
+            </a>
+            <a href="contract-18.html" class="nav-footer-btn" style="border-color: var(--accent);">
+                <div class="nav-footer-label">下一个 →</div>
+                <div class="nav-footer-title">Oracle - 预言机合约</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
