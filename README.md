@@ -62,57 +62,20 @@
 - **代码**: 语法高亮显示
 - **部署**: GitHub Pages 友好
 
-## 🚀 快速开始
 
-1. **克隆项目**
-   ```bash
-   git clone https://github.com/your-username/web3compass-cn.git
-   cd web3compass-cn
-   ```
-
-2. **本地预览**
-   ```bash
-   # 使用 Python 简单服务器
-   python -m http.server 8000
-   
-   # 或使用 Node.js
-   npx serve docs
-   ```
-
-3. **访问学习站**
-   ```
-   http://localhost:8000/docs
-   ```
 
 ## 📱 在线访问
 
-🌐 **GitHub Pages**: [https://your-username.github.io/web3compass-cn](https://your-username.github.io/web3compass-cn)
+🌐 **GitHub Pages**: [https://ForOneIce.github.io/web3compass-cn](https://ForOneIce.github.io/web3compass-cn)
 
 ## 📜 开源协议
 
 本项目采用 [Creative Commons BY-NC-SA 4.0](LICENSE) 协议开源。
 
-### ✅ 允许的使用方式
-- 个人学习和研究
-- 教育机构教学使用
-- 非营利组织使用
-- 开源项目参考
-
-### ❌ 禁止的使用方式  
-- 商业销售或盈利
-- 付费培训课程
-- 商业产品集成
-- 未经授权的商业推广
-
-### 📞 商业合作
-如需商业使用，请联系作者获得授权。
 
 ## 📚 内容来源声明
 
-- **教程内容**: 基于 [Web3 Compass](https://www.web3compass.xyz/challenge-calendar) 的优质教程
-- **中文翻译**: 本项目原创翻译和本地化
-- **界面设计**: 本项目原创设计
-- **学习体验**: 增强的交互式学习功能
+- **教程内容**: 基于 [Web3 Compass](https://www.web3compass.xyz/challenge-calendar) 教程
 
 ## 🤝 贡献指南
 
@@ -135,15 +98,7 @@
 ## 🙏 致谢
 
 - 感谢 [Web3 Compass](https://www.web3compass.xyz) 提供的优质教程内容
-- 感谢所有为开源教育做出贡献的开发者
-- 感谢中文Web3社区的持续支持
-
-## 📞 联系方式
-
-- **项目主页**: [GitHub Repository](https://github.com/your-username/web3compass-cn)
-- **问题反馈**: [Issues](https://github.com/your-username/web3compass-cn/issues)
-- **讨论交流**: [Discussions](https://github.com/your-username/web3compass-cn/discussions)
-
+- 感谢 [Herstory Web3社区](https://github.com/0xherstory)组织的共学活动
 ---
 
 <div align="center">
