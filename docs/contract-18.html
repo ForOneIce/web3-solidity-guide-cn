@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <!-- Markdown渲染库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
     <style>
         :root {
             --primary: #4361ee;
@@ -18,6 +20,10 @@
             --medium: #F8961E;
             --hard: #E71D36;
             --expert: #7209B7;
+            --warm-brown: #8B7355;
+            --parchment: #F5F1E6;
+            --vintage-blue: #6B8E9F;
+            --warm-red: #C44536;
         }
         
         * {
@@ -302,6 +308,519 @@
         .nav-footer-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.3rem;
+        }        
+        /* 参考答案模块样式 - 温暖治愈风格 */
+        .answer-reference {
+            position: relative;
+            margin: 60px 0 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .envelope-container {
+            position: relative;
+            width: 340px;
+            height: 240px;
+            cursor: pointer;
+            perspective: 1200px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(139, 115, 85, 0.2));
+        }
+        
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .envelope-front, .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .envelope-front {
+            background: linear-gradient(135deg, #f9f3e9, #e8dfd1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: -70px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 70px solid #e8dfd1;
+            z-index: 1;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+        }
+        
+        .envelope-flap::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: -170px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 67px solid #f9f3e9;
+        }
+        
+        .envelope-seal {
+            position: absolute;
+            bottom: 25px;
+            right: 35px;
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #C44536, #8B2E24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            border: 2px solid #A52A2A;
+        }
+        
+        .seal-icon {
+            color: #F5F1E6;
+            font-size: 1.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .envelope-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.4rem;
+            color: var(--warm-brown);
+            z-index: 2;
+            position: relative;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+        
+        .envelope-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(139, 115, 85, 0.05) 3px, transparent 3px),
+                radial-gradient(circle at 85% 75%, rgba(139, 115, 85, 0.05) 3px, transparent 3px);
+            background-size: 40px 40px;
+            z-index: 0;
+        }
+        
+        .envelope-back {
+            background: linear-gradient(135deg, #f5f1e6, #e8dfd1);
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-container:hover .envelope {
+            transform: rotateY(10deg) translateY(-5px);
+        }
+        
+        .envelope-container.open .envelope {
+            transform: rotateY(180deg);
+        }
+        
+        .envelope-hint {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--warm-brown);
+            margin-top: 15px;
+            opacity: 0.9;
+            background: rgba(245, 241, 230, 0.7);
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* 弹窗样式 */
+        .answer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            background: rgba(107, 142, 159, 0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+        
+        .letter-container {
+            width: 90%;
+            max-width: 900px;
+            height: 80vh;
+            background: #F5F1E6;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(107, 142, 159, 0.4);
+            overflow: hidden;
+            transform: scale(0);
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .answer-modal.open .letter-container {
+            transform: scale(1);
+        }
+        
+        .letter-header {
+            background: linear-gradient(135deg, #8B7355, #6B5A45);
+            padding: 25px 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-bottom: 2px dashed #A5947A;
+        }
+        
+        .letter-title {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: #F5F1E6;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
+        }
+        
+        .letter-subtitle {
+            color: rgba(245, 241, 230, 0.9);
+            font-size: 1.3rem;
+            font-family: 'Gochi Hand', cursive;
+        }
+        
+        .close-letter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(245, 241, 230, 0.2);
+            color: #F5F1E6;
+            border: 1px solid rgba(245, 241, 230, 0.3);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .close-letter:hover {
+            background: rgba(245, 241, 230, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .letter-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #F5F1E6;
+            position: relative;
+        }
+        
+        .letter-body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent 98%, rgba(139, 115, 85, 0.1) 98%),
+                linear-gradient(rgba(139, 115, 85, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        
+        /* MD内容样式 */
+        .md-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .md-section {
+            margin-bottom: 40px;
+        }
+        
+        .md-section h1 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: var(--warm-brown);
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #A5947A;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .md-section h2 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.2rem;
+            color: var(--warm-brown);
+            margin: 30px 0 15px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .md-section h2::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--warm-red);
+            font-size: 2.5rem;
+        }
+        
+        .md-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .md-tag {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--warm-brown);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-highlight {
+            background: rgba(107, 142, 159, 0.1);
+            border-left: 5px solid var(--vintage-blue);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(107, 142, 159, 0.2);
+        }
+        
+        .md-content pre {
+            background: #2d2a2e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .md-content .inline-code {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            color: var(--warm-brown);
+            font-size: 0.9em;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content ul, .md-content ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .md-content li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+        
+        .md-content blockquote {
+            border-left: 4px solid var(--vintage-blue);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+            background: rgba(107, 142, 159, 0.05);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .md-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th, .md-content td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th {
+            background: linear-gradient(135deg, var(--warm-brown), #6B5A45);
+            color: #F5F1E6;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.1rem;
+        }
+        
+        .md-content tr:nth-child(even) {
+            background: rgba(139, 115, 85, 0.05);
+        }
+        
+        /* Markdown渲染内容的额外样式 */
+        #markdown-container {
+            line-height: 1.8;
+        }
+        
+        #markdown-container h3 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 1.8rem;
+            color: var(--warm-brown);
+            margin: 25px 0 15px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        #markdown-container h3::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--vintage-blue);
+            font-size: 1.5rem;
+        }
+        
+        #markdown-container h4 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--warm-brown);
+            margin: 20px 0 12px 0;
+        }
+        
+        #markdown-container p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        #markdown-container strong {
+            color: var(--warm-brown);
+            font-weight: bold;
+        }
+        
+        #markdown-container a {
+            color: var(--vintage-blue);
+            text-decoration: underline;
+            transition: color 0.3s;
+        }
+        
+        #markdown-container a:hover {
+            color: var(--warm-brown);
+        }
+        
+        #markdown-container hr {
+            border: none;
+            border-top: 2px dashed #A5947A;
+            margin: 30px 0;
+        }
+        
+        #markdown-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        /* Markdown代码块样式 */
+        #markdown-container pre {
+            background: #2d2d2d;
+            border: 1px solid #3a363b;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        #markdown-container pre code {
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+            background: transparent;
+            padding: 0;
+            border: none;
+            display: block;
+            white-space: pre;
+        }
+        
+        /* 内联代码样式 */
+        #markdown-container code:not(pre code) {
+            background: rgba(139, 115, 85, 0.15);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            color: var(--warm-brown);
+            font-size: 0.9em;
+            border: 1px solid rgba(139, 115, 85, 0.3);
+            font-weight: 500;
+        }
+        
+        /* 表格中的代码 */
+        #markdown-container table code {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            color: var(--warm-brown);
+            font-size: 0.85em;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 40px;
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2rem;
+            color: var(--warm-brown);
         }
         
         @media (max-width: 768px) {
@@ -319,6 +838,49 @@
             
             .key-points {
                 grid-template-columns: 1fr;
+            }
+            
+            .envelope-container {
+                width: 300px;
+                height: 210px;
+            }
+            
+            .envelope-flap {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 60px solid #e8dfd1;
+            }
+            
+            .envelope-flap::after {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 57px solid #f9f3e9;
+                left: -150px;
+            }
+            
+            .envelope-text {
+                font-size: 2rem;
+            }
+            
+            .answer-modal {
+                padding: 10px;
+            }
+            
+            .letter-container {
+                width: 95%;
+                height: 85vh;
+            }
+            
+            .letter-title {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -820,6 +1382,51 @@ contract RandomNumberConsumer is VRFConsumerBaseV2 {
                 <div class="nav-footer-title">SignThis - 签名验证</div>
             </a>
         </div>
+    
+        <!-- Sneha的一封来信模块 -->
+        <div class="answer-reference">
+            <div class="envelope-container" id="envelope-container">
+                <div class="envelope">
+                    <div class="envelope-front">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-pattern"></div>
+                        <div class="envelope-seal">
+                            <i class="fas fa-feather-alt seal-icon"></i>
+                        </div>
+                        <div class="envelope-text">Sneha的一封来信</div>
+                    </div>
+                    <div class="envelope-back">
+                        <div class="envelope-text" style="color: var(--warm-brown);">点击开启</div>
+                    </div>
+                </div>
+            </div>
+            <div class="envelope-hint">点击信封查看Sneha的来信</div>
+        </div>
+    </div>
+
+    <!-- 弹窗 - 内容待后续精细化处理 -->
+    <div class="answer-modal" id="answer-modal">
+        <div class="letter-container">
+            <div class="letter-header">
+                <div class="letter-title">Sneha的一封来信</div>
+                <div class="letter-subtitle">关于第18天的学习指导</div>
+                <button id="close-letter" class="close-letter">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="letter-body">
+                <div id="md-content" class="md-content">
+                    <div id="markdown-container" class="md-section">
+                        <div style="text-align: center; padding: 40px; color: #999;">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                            <p>正在加载Sneha的来信内容...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -834,6 +1441,91 @@ contract RandomNumberConsumer is VRFConsumerBaseV2 {
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+            
+        // Sneha的一封来信模块功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelopeContainer = document.getElementById('envelope-container');
+            const answerModal = document.getElementById('answer-modal');
+            const closeLetter = document.getElementById('close-letter');
+            const markdownContainer = document.getElementById('markdown-container');
+            
+            if (!envelopeContainer || !answerModal || !closeLetter || !markdownContainer) {
+                return; // 如果元素不存在，直接返回
+            }
+            
+            // 配置marked.js渲染选项
+            if (typeof marked !== 'undefined') {
+                marked.setOptions({
+                    highlight: function(code, lang) {
+                        if (lang && hljs.getLanguage(lang)) {
+                            try {
+                                return hljs.highlight(code, { language: lang }).value;
+                            } catch (err) {}
+                        }
+                        return hljs.highlightAuto(code).value;
+                    },
+                    breaks: true,
+                    gfm: true
+                });
+            }
+            
+            // 嵌入的Markdown内容（使用字符串替换方式处理转义字符）
+            const embeddedMarkdownJsonString = "# oracle预言机将现实世界数据加入合约\\n\\nDay: Day 18\\nID: 18\\n译者: Tian Titian\\n难度等级: 中级\\n\\n今日学习内容：\\n\\n# 🌍**什么是预言机——为什么智能合约需要它们？**\\n\\n所以想象一下：\\n\\n你已经构建了一个存在于区块链上的智能合约。它防篡改、透明，并且完全按照编码运行。太神奇了，对吧？\\n\\n但这里有一个问题：智能合约**无法自行访问外部世界**。他们住在一个密封的盒子里，他们不知道天气如何，以美元计算 ETH 值多少钱，也不知道一场足球比赛是输赢。\\n\\n这就是**预言机**的用武之地。\\n\\n> 将预言机想象成一个值得信赖的送货员，他将现实世界的数据带入区块链世界。\\n> \\n\\n它们充当桥梁——安全地将链下数据（如价格、天气或分数）输入智能合约，以便他们做出明智的决策。\\n\\n---\\n\\n# 1. 产品需求书\\n\\n### 合约流程图——模拟预言机\\n\\n```mermaid\\ngraph TD\\n  Start[模拟预言机合约流程]\\n  Start --> Init[部署 constructor]\\n  Start --> QueryLatest[查询最新数据 latestRoundData - view]\\n  Start --> QueryRound[按轮次查询 getRoundData - view]\\n  Start --> QueryMeta[查询元信息 decimals description version]\\n  Start --> ForceUpdate[强制更新随机降雨量 updateRandomRainfall]\\n  ForceUpdate --> InternalUpdate[内部更新 _updateRandomRainfall - private]\\n  QueryLatest --> Rain[_rainfall - view]\\n  QueryRound --> Rain\\n\\n```\\n\\n### 合约与函数清单——模拟预言机\\n\\n| **Contract** | **Type** | **Bases** | **中文说明** |\\n| --- | --- | --- | --- |\\n| MockWeatherOracle | Implementation | AggregatorV3Interface, Ownable | 模拟天气预言机，提供降雨量数据接口 |\\n| **Function Name** | **Visibility** | **Mutability** | **中文说明** |\\n| constructor() | Public | nonpayable | 初始化轮次与时间戳，设置所有者 |\\n| decimals() returns (uint8) | External | view | 返回小数位（此处为 0，毫米整数） |\\n| description() returns (string) | External | view | 返回数据源描述字符串 |\\n| version() returns (uint256) | External | pure | 返回接口版本号 |\\n| getRoundData(uint80 *roundId*) returns (...) | External | view | 按轮次返回数据与时间戳等字段 |\\n| latestRoundData() returns (...) | External | view | 返回当前最新一轮的数据与时间戳等字段 |\\n| _rainfall() returns (int256) | Public | view | 基于区块信息生成伪随机降雨量 |\\n| updateRandomRainfall() | External | nonpayable | 触发一次内部轮次与时间更新 |\\n| _updateRandomRainfall() | Private | nonpayable | 内部更新轮次与时间戳（外部不可调用） |\\n\\n### 合约流程图——农作物保险\\n\\n```mermaid\\ngraph TD\\n  Start[农作物保险合约流程]\\n  Start --> Buy[购买保险 purchaseInsurance - payable]\\n  Start --> QueryPrice[查询 ETH 价格 getEthPrice - view]\\n  Start --> QueryRain[查询当前降雨量 getCurrentRainfall - view]\\n  Start --> Claim[检查降雨并理赔 checkRainfallAndClaim]\\n  Claim --> Oracle[天气预言机 latestRoundData]\\n  Claim --> Price[价格喂价 latestRoundData]\\n  Claim --> Payout[满足条件则赔付 payout]\\n  Start --> Withdraw[提现合约余额 withdraw - onlyOwner]\\n  Start --> Balance[查询合约余额 getBalance - view]\\n  Start --> Receive[接收 ETH receive]\\n\\n```\\n\\n### 合约与函数清单——农作物保险\\n\\n| **Contract** | **Type** | **Bases** | **中文说明** |\\n| --- | --- | --- | --- |\\n| CropInsurance | Implementation | Ownable | 天气指数型农险：购买保单、触发理赔、提现与查询 |\\n| **Function Name** | **Visibility** | **Mutability** | **中文说明** |\\n| constructor(address _weatherOracle, address _ethUsdPriceFeed) | Public | payable | 初始化天气与价格预言机地址，可接收初始资金 |\\n| purchaseInsurance() | External | payable | 用户按当前 ETH 价支付保费并获得保单 |\\n| checkRainfallAndClaim() | External | nonpayable | 检查降雨是否低于阈值，若满足则赔付 |\\n| getEthPrice() returns (uint256) | Public | view | 读取价格预言机，返回 ETH 价格（喂价精度由预言机决定） |\\n| getCurrentRainfall() returns (uint256) | Public | view | 读取天气预言机，返回当前降雨量（毫米） |\\n| withdraw() | External | nonpayable | 仅所有者可提现合约全部余额到 owner |\\n| receive() | External | payable | 接收直接转入的 ETH |\\n| getBalance() returns (uint256) | Public | view | 返回合约当前 ETH 余额 |\\n\\n# 2. 细节解说\\n\\n## 🔗**进入 Chainlink：最受欢迎的预言机网络**\\n\\n[Chainlink](https://chain.link/) 是去中心化预言机的黄金标准。它为价格馈送、天气、随机性甚至整个数据网络提供安全、防篡改且被 DeFi 项目广泛使用的 API。\\n\\nChainlink 具有 `AggregatorV3Interface`等标准接口，使我们能够轻松地将他们的数据馈送集成到我们的智能合约中。\\n\\n在我们的例子中，我们需要**降雨数据**。现在，虽然 Chainlink 尚未为每个位置提供实时降雨源，但我们将**构建一个模拟天气预言机**，其行为*类似于* Chainlink——非常适合测试和学习。\\n\\n稍后，一旦可用的 Chainlink 天气预言机可用，您就可以将其换成它。\\n\\n---\\n\\n# 🌧️ **我们在构建什么？**\\n\\n想象一下：\\n\\n- 农民经常因干旱（雨水不足）而损失农作物。\\n- 农作物保险通常需要数周或数月才能支付，并且有中间商。\\n- 如果农民可以购买**区块链驱动的农作物保险**，并在降雨量低于阈值时自动获得报酬，会怎样？\\n\\n这就是我们正在构建的：\\n\\n1. **`MockWeatherOracle.sol`** – 模拟 Chainlink 风格的预言机，随机生成降雨值。\\n2. **`CropInsurance.sol`** – 一个智能合约 :\\n    - 让农民支付溢价（以 ETH 计），\\n    - 监测降雨量，\\n    - 如果降雨量太低，则会自动支付。\\n\\n让我们分解一下这两种合同，既简单又好。\\n\\n---\\n\\n# 🛰️ **模拟预言机**— `MockWeatherOracle.sol`\\n\\n# MockWeatherOracle.sol — **完整合约代码**\\n\\n```solidity\\n\\n// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.19;\\n\\nimport \"@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol\";\\nimport \"@openzeppelin/contracts/access/Ownable.sol\";\\n\\ncontract MockWeatherOracle is AggregatorV3Interface, Ownable {\\n    uint8 private _decimals;\\n    string private _description;\\n    uint80 private _roundId;\\n    uint256 private _timestamp;\\n    uint256 private _lastUpdateBlock;\\n\\n    constructor() Ownable(msg.sender) {\\n        _decimals = 0; // Rainfall in whole millimeters\\n        _description = \"MOCK/RAINFALL/USD\";\\n        _roundId = 1;\\n        _timestamp = block.timestamp;\\n        _lastUpdateBlock = block.number;\\n    }\\n\\n    function decimals() external view override returns (uint8) {\\n        return _decimals;\\n    }\\n\\n    function description() external view override returns (string memory) {\\n        return _description;\\n    }\\n\\n    function version() external pure override returns (uint256) {\\n        return 1;\\n    }\\n\\n    function getRoundData(uint80 _roundId_)\\n        external\\n        view\\n        override\\n        returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)\\n    {\\n        return (_roundId_, _rainfall(), _timestamp, _timestamp, _roundId_);\\n    }\\n\\n    function latestRoundData()\\n        external\\n        view\\n        override\\n        returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)\\n    {\\n        return (_roundId, _rainfall(), _timestamp, _timestamp, _roundId);\\n    }\\n\\n    // Function to get current rainfall with random variation\\n    function _rainfall() public view returns (int256) {\\n        // Use block information to generate pseudo-random variation\\n        uint256 blocksSinceLastUpdate = block.number - _lastUpdateBlock;\\n        uint256 randomFactor = uint256(keccak256(abi.encodePacked(\\n            block.timestamp,\\n            block.coinbase,\\n            blocksSinceLastUpdate\\n        ))) % 1000; // Random number between 0 and 999\\n\\n        // Return random rainfall between 0 and 999mm\\n        return int256(randomFactor);\\n    }\\n\\n    // Function to update random rainfall\\n    function _updateRandomRainfall() private {\\n        _roundId++;\\n        _timestamp = block.timestamp;\\n        _lastUpdateBlock = block.number;\\n    }\\n\\n    // Function to force update rainfall (anyone can call)\\n    function updateRandomRainfall() external {\\n        _updateRandomRainfall();\\n    }\\n}\\n\\n```\\n\\n---\\n\\n# 🔍让我们逐行分解\\n\\n---\\n\\n## ✅ **许可证和版本**\\n\\n```solidity\\n\\n// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.19;\\n\\n```\\n\\n- `SPDX-License-Identifier`: 一个必需的注释，告诉编译器此代码使用什么许可证。这里是MIT——一个宽松的开源许可证。\\n- `pragma solidity ^0.8.19;`: 此行锁定要使用 Solidity 版本 **0.8.19 或更高版本**编译的合约，但 **不是 0.9.0 或更高版本**。它确保兼容性并避免未来版本的中断性更改。\\n\\n---\\n\\n## 📦  **导入**\\n\\n```solidity\\n\\nimport \"@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol\";\\nimport \"@openzeppelin/contracts/access/Ownable.sol\";\\n\\n```\\n\\n- **AggregatorV3Interface**: 这是 Chainlink 的标准预言机接口——用于获取价格信息或在我们的例子中模拟降雨等数据。\\n- **Ownable**: OpenZeppelin 的一个助手，它为我们提供了所有权功能——包括  `owner()` 和`onlyOwner` 修饰符。\\n\\n💡 类比：将 `Ownable` 视为授予部署者管理员访问权限——当您想要限制谁可以执行某些作（例如，如果需要更新天气数据）时，这很有用。\\n\\n---\\n\\n## 🏗️ **合同声明**\\n\\n```solidity\\n\\ncontract MockWeatherOracle is AggregatorV3Interface, Ownable {\\n\\n```\\n\\n我们正在创建一个名为 `MockWeatherOracle`的合约。\\n\\n它:\\n\\n- **继承** `AggregatorV3Interface` — 这意味着它必须实现`latestRoundData()`等函数。\\n- **继承** `Ownable` — 因此我们可以免费获得所有权功能。\\n\\n---\\n\\n## 🧮 **状态变量**\\n\\n```solidity\\n\\nuint8 private _decimals;\\nstring private _description;\\nuint80 private _roundId;\\nuint256 private _timestamp;\\nuint256 private _lastUpdateBlock;\\n\\n```\\n\\n让我们逐一分解：\\n\\n- `_decimals`: 定义数据的精度。我们的是 `0` ，因为降雨量以整毫米为单位（例如，“542 毫米”）。\\n- `_description`: Feed 的文字标签（如名称）。\\n- `_roundId`: 用于模拟不同的数据更新周期（每一轮都是新的读数）。\\n- `_timestamp`: 记录上次更新发生的时间。\\n- `_lastUpdateBlock`: 跟踪上次更新发生时的块，用于添加随机性。\\n\\n---\\n\\n## 🧱 **构造函数**\\n\\n```solidity\\n\\nconstructor() Ownable(msg.sender) {\\n    _decimals = 0;\\n    _description = \"MOCK/RAINFALL/USD\";\\n    _roundId = 1;\\n    _timestamp = block.timestamp;\\n    _lastUpdateBlock = block.number;\\n}\\n\\n```\\n\\n这会在首次部署合约时设置初始值。\\n\\n- `Ownable(msg.sender)` — 将部署者设置为管理员（部署合约的人）。\\n- `_decimals = 0` — 降雨不需要小数（比如 542.67 毫米？）\\n- `_description` — 只是一个可读的标签。\\n- `_roundId` — 从第 1 轮开始。\\n- `_timestamp` 和 `_lastUpdateBlock` — 存储当前时间/区块以模拟数据的新鲜度。\\n\\n---\\n\\n## 📥 **Chainlink 接口函数**\\n\\n### 1. `decimals()`\\n\\n```solidity\\n\\nfunction decimals() external view override returns (uint8) {\\n    return _decimals;\\n}\\n\\n```\\n\\nChainlink 需要这个。它告诉应用程序预期的小数位数。我们返回`0` 。\\n\\n---\\n\\n### 2. `description()`\\n\\n```solidity\\n\\nfunction description() external view override returns (string memory) {\\n    return _description;\\n}\\n\\n```\\n\\n提供人类可读的源描述。\\n\\n---\\n\\n### 3. `version()`\\n\\n```solidity\\n\\nfunction version() external pure override returns (uint256) {\\n    return 1;\\n}\\n\\n```\\n\\n这是我们模拟的`1` 版本。这主要是信息性的。\\n\\n---\\n\\n## 🔁 **舍入数据函数**\\n\\n### 1. `getRoundData()`\\n\\n```solidity\\n\\nfunction getRoundData(uint80 _roundId_)\\n    external\\n    view\\n    override\\n    returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)\\n{\\n    return (_roundId_, _rainfall(), _timestamp, _timestamp, _roundId_);\\n}\\n\\n```\\n\\n这模拟了 Chainlink 访问历史数据的标准功能。\\n\\n它返回：\\n\\n- 您请求的轮次 ID\\n- 模拟降雨量值\\n- 两次相同的时间戳（为简单起见，此处不做区分）\\n- `answeredInRound` 的轮次 ID 相同\\n\\n在真正的预言机中，`startedAt` 和 `updatedAt`可能不同。我们在这里简化它。\\n\\n---\\n\\n### 2. `latestRoundData()`\\n\\n```solidity\\n\\nfunction latestRoundData()\\n    external\\n    view\\n    override\\n    returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)\\n{\\n    return (_roundId, _rainfall(), _timestamp, _timestamp, _roundId);\\n}\\n\\n```\\n\\n这是最重要的功能——应用程序使用它来获取**最新数据**。\\n\\n我们返回：\\n\\n- 当前轮次 ID\\n- 随机降雨量值\\n- 时间戳\\n- 轮次 ID 确认\\n\\n💡 此函数是 `CropInsurance` 合约将调用的函数，以获取当前降雨量。\\n\\n---\\n\\n## 🌧️ `_rainfall()` — **模拟降雨发生器**\\n\\n```solidity\\n\\nfunction _rainfall() public view returns (int256) {\\n    uint256 blocksSinceLastUpdate = block.number - _lastUpdateBlock;\\n    uint256 randomFactor = uint256(keccak256(abi.encodePacked(\\n        block.timestamp,\\n        block.coinbase,\\n        blocksSinceLastUpdate\\n    ))) % 1000;\\n\\n    return int256(randomFactor);\\n}\\n\\n```\\n\\n以下是随机降雨背后的魔力：\\n\\n1. 我们计算自上次更新以来经过的区块数。\\n2. 我们结合：\\n    - `block.timestamp` — 当前时间\\n    - `block.coinbase` — 矿工地址（一些熵）\\n    - `blocksSinceLastUpdate`\\n3. 所有内容均使用安全哈希函数`keccak256`进行哈希处理。\\n4. 使用 `% 1000`将结果转换为 0-999 之间的整数。\\n\\n因此，每次调用此函数时，您都会得到一个新的伪随机降雨值——介于 **0 到 999mm** 之间。\\n\\n> ⚠️ 注意：这不是安全随机性。但对于模拟预言机来说，这完全没问题。\\n> \\n\\n---\\n\\n## 📅 `_updateRandomRainfall()`\\n\\n```solidity\\n\\nfunction _updateRandomRainfall() private {\\n    _roundId++;\\n    _timestamp = block.timestamp;\\n    _lastUpdateBlock = block.number;\\n}\\n\\n```\\n\\n一个辅助函数，用于：\\n\\n- 增加轮数（模拟新数据）\\n- 记录新数据的创建时间\\n\\n这将在现实生活中由 Chainlink 节点完成。在这里，我们手动模拟它。\\n\\n---\\n\\n## 🔁 `updateRandomRainfall()`\\n\\n```solidity\\n\\nfunction updateRandomRainfall() external {\\n    _updateRandomRainfall();\\n}\\n\\n```\\n\\n这是任何人都可以调用的 **public** 函数来更新“预言机”数据。\\n\\n> 您可以通过“获取最新降雨量”等 UI 按钮调用此按钮，这对于测试或模拟新的一天很有用。\\n> \\n\\n---\\n\\n# ✅ **总结：我们学到了什么？**\\n\\n- 我们创建了一个虚假的天气数据预言机，其作用类似于 Chainlink 数据馈送。\\n- 它返回伪随机降雨值以模拟真实世界的输入。\\n- 它实现了`AggregatorV3Interface`的所有必需功能。\\n- 您可以使用它代替真正的 Chainlink 预言机来测试保险、游戏或任何对降雨做出反应的逻辑。\\n\\n---\\n\\n# 🌾 **农作物保险** — `CropInsurance.sol`\\n\\n该合约模拟了基于区块链的农作物保险计划。农民可以支付少量溢价，如果降雨量低于阈值，他们会自动获得报酬——没有中间商，没有等待。\\n\\n---\\n\\n## 📜 完整合约\\n\\n```solidity\\n\\n// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.19;\\n\\nimport \"@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol\";\\nimport \"@openzeppelin/contracts/access/Ownable.sol\";\\n\\ncontract CropInsurance is Ownable {\\n    AggregatorV3Interface private weatherOracle;\\n    AggregatorV3Interface private ethUsdPriceFeed;\\n\\n    uint256 public constant RAINFALL_THRESHOLD = 500;\\n    uint256 public constant INSURANCE_PREMIUM_USD = 10;\\n    uint256 public constant INSURANCE_PAYOUT_USD = 50;\\n\\n    mapping(address => bool) public hasInsurance;\\n    mapping(address => uint256) public lastClaimTimestamp;\\n\\n    event InsurancePurchased(address indexed farmer, uint256 amount);\\n    event ClaimSubmitted(address indexed farmer);\\n    event ClaimPaid(address indexed farmer, uint256 amount);\\n    event RainfallChecked(address indexed farmer, uint256 rainfall);\\n\\n    constructor(address _weatherOracle, address _ethUsdPriceFeed) payable Ownable(msg.sender) {\\n        weatherOracle = AggregatorV3Interface(_weatherOracle);\\n        ethUsdPriceFeed = AggregatorV3Interface(_ethUsdPriceFeed);\\n    }\\n\\n    function purchaseInsurance() external payable {\\n        uint256 ethPrice = getEthPrice();\\n        uint256 premiumInEth = (INSURANCE_PREMIUM_USD * 1e18) / ethPrice;\\n\\n        require(msg.value >= premiumInEth, \"Insufficient premium amount\");\\n        require(!hasInsurance[msg.sender], \"Already insured\");\\n\\n        hasInsurance[msg.sender] = true;\\n        emit InsurancePurchased(msg.sender, msg.value);\\n    }\\n\\n    function checkRainfallAndClaim() external {\\n        require(hasInsurance[msg.sender], \"No active insurance\");\\n        require(block.timestamp >= lastClaimTimestamp[msg.sender] + 1 days, \"Must wait 24h between claims\");\\n\\n        (\\n            uint80 roundId,\\n            int256 rainfall,\\n            ,\\n            uint256 updatedAt,\\n            uint80 answeredInRound\\n        ) = weatherOracle.latestRoundData();\\n\\n        require(updatedAt > 0, \"Round not complete\");\\n        require(answeredInRound >= roundId, \"Stale data\");\\n\\n        uint256 currentRainfall = uint256(rainfall);\\n        emit RainfallChecked(msg.sender, currentRainfall);\\n\\n        if (currentRainfall < RAINFALL_THRESHOLD) {\\n            lastClaimTimestamp[msg.sender] = block.timestamp;\\n            emit ClaimSubmitted(msg.sender);\\n\\n            uint256 ethPrice = getEthPrice();\\n            uint256 payoutInEth = (INSURANCE_PAYOUT_USD * 1e18) / ethPrice;\\n\\n            (bool success, ) = msg.sender.call{value: payoutInEth}(\"\");\\n            require(success, \"Transfer failed\");\\n\\n            emit ClaimPaid(msg.sender, payoutInEth);\\n        }\\n    }\\n\\n    function getEthPrice() public view returns (uint256) {\\n        (\\n            ,\\n            int256 price,\\n            ,\\n            ,\\n        ) = ethUsdPriceFeed.latestRoundData();\\n\\n        return uint256(price);\\n    }\\n\\n    function getCurrentRainfall() public view returns (uint256) {\\n        (\\n            ,\\n            int256 rainfall,\\n            ,\\n            ,\\n        ) = weatherOracle.latestRoundData();\\n\\n        return uint256(rainfall);\\n    }\\n\\n    function withdraw() external onlyOwner {\\n        payable(owner()).transfer(address(this).balance);\\n    }\\n\\n    receive() external payable {}\\n\\n    function getBalance() public view returns (uint256) {\\n        return address(this).balance;\\n    }\\n}\\n\\n```\\n\\n---\\n\\n## 🧱 **构造函数**\\n\\n```solidity\\n\\nconstructor(address _weatherOracle, address _ethUsdPriceFeed) payable Ownable(msg.sender) {\\n    weatherOracle = AggregatorV3Interface(_weatherOracle);\\n    ethUsdPriceFeed = AggregatorV3Interface(_ethUsdPriceFeed);\\n}\\n\\n```\\n\\n**逐行解释：**\\n\\n- `constructor(...)`: 此特殊函数在部署合约时运行**一次**。\\n- `address _weatherOracle`: 这是我们的降雨预言机的地址（就像我们之前构建的模拟一样）。\\n- `address _ethUsdPriceFeed`: 这是 Chainlink 价格馈送的地址，可为我们提供 ETH → USD 的转换。\\n- `Ownable(msg.sender)`: 将合约管理员初始化为部署它的人。\\n- 我们保存两个预言机地址以供以后的函数使用。\\n\\n---\\n\\n## 💸 `purchaseInsurance()`\\n\\n```solidity\\n\\nfunction purchaseInsurance() external payable {\\n    uint256 ethPrice = getEthPrice();\\n    uint256 premiumInEth = (INSURANCE_PREMIUM_USD * 1e18) / ethPrice;\\n\\n    require(msg.value >= premiumInEth, \"Insufficient premium amount\");\\n    require(!hasInsurance[msg.sender], \"Already insured\");\\n\\n    hasInsurance[msg.sender] = true;\\n    emit InsurancePurchased(msg.sender, msg.value);\\n}\\n\\n```\\n\\n**逐行解释：**\\n\\n- `external payable`:该函数可以直接从用户那里接收 ETH。\\n- `getEthPrice()`: 我们使用 Chainlink 获取 ETH 的当前美元价格。\\n- `premiumInEth`: 我们将 10 美元的溢价转换为 ETH（乘以  `1e18` 以获得 wei 精度）。\\n- `require(msg.value >= ...)`: 检查用户是否发送了**足够**的 ETH。\\n- `require(!hasInsurance[msg.sender])`: 防止用户两次购买保险。\\n- `hasInsurance[msg.sender] = true`: 将用户标记为已投保。\\n- `emit InsurancePurchased(...)`: 发出前端可以监听的事件。\\n\\n---\\n\\n## ⛅ `checkRainfallAndClaim()`\\n\\n```solidity\\n\\nfunction checkRainfallAndClaim() external {\\n    require(hasInsurance[msg.sender], \"No active insurance\");\\n    require(block.timestamp >= lastClaimTimestamp[msg.sender] + 1 days, \"Must wait 24h between claims\");\\n\\n```\\n\\n- 此功能**仅适用于受保用户**。\\n- 我们在声明之间强制执行**1 天的冷却**，以避免垃圾邮件。\\n\\n```solidity\\n\\n    (\\n        uint80 roundId,\\n        int256 rainfall,\\n        ,\\n        uint256 updatedAt,\\n        uint80 answeredInRound\\n    ) = weatherOracle.latestRoundData();\\n\\n```\\n\\n- 从我们的天气预言机中提取最新的降雨数据。\\n- 我们使用 **解构** 来忽略不需要的值。\\n\\n```solidity\\n\\n    require(updatedAt > 0, \"Round not complete\");\\n    require(answeredInRound >= roundId, \"Stale data\");\\n\\n```\\n\\n- 基本检查以确保预言机数据是最新且有效的。\\n\\n```solidity\\n\\n    uint256 currentRainfall = uint256(rainfall);\\n    emit RainfallChecked(msg.sender, currentRainfall);\\n\\n```\\n\\n- 将降雨量转换为无符号格式。\\n- 发出一个事件，以便用户/前端可以跟踪他们所评估的降雨量。\\n\\n---\\n\\n## 💵  **索赔和支付逻辑**\\n\\n```solidity\\n\\n    if (currentRainfall < RAINFALL_THRESHOLD) {\\n        lastClaimTimestamp[msg.sender] = block.timestamp;\\n        emit ClaimSubmitted(msg.sender);\\n\\n```\\n\\n- 如果降雨量**低于干旱阈值**，索赔流程将继续进行。\\n- 记录时间以防止背靠背索赔\\n- 发出 `ClaimSubmitted`事件。\\n\\n```solidity\\n\\n        uint256 ethPrice = getEthPrice();\\n        uint256 payoutInEth = (INSURANCE_PAYOUT_USD * 1e18) / ethPrice;\\n\\n```\\n\\n- 使用实时汇率将 50 美元的支出转换为 ETH。\\n\\n```solidity\\n\\n        (bool success, ) = msg.sender.call{value: payoutInEth}(\"\");\\n        require(success, \"Transfer failed\");\\n\\n```\\n\\n- 将 ETH 转移给农民。\\n- 我们检查传输是否成功。\\n\\n```solidity\\n\\n        emit ClaimPaid(msg.sender, payoutInEth);\\n    }\\n}\\n\\n```\\n\\n- 发出 `ClaimPaid` 事件进行跟踪。\\n\\n---\\n\\n## 📈实用函数\\n\\n### `getEthPrice()`\\n\\n```solidity\\n\\nfunction getEthPrice() public view returns (uint256) {\\n    (, int256 price, , , ) = ethUsdPriceFeed.latestRoundData();\\n    return uint256(price);\\n}\\n\\n```\\n\\n### 🧠 **它的作用**:\\n\\n- 此功能与 **Chainlink** 对话，它为我们提供了**以美元计价的最新 ETH 价格**。\\n- 它返回的 `price` 并不是直接的实际价值——它带有**8 位额外的数字**。\\n\\n---\\n\\n### 📦 **示例：**\\n\\n假设 Chainlink 需要返回：\\n\\n```solidity\\n\\nprice = 254000000000\\n\\n```\\n\\n**那是$2,540.00000000** — 基本上是 `$2,540` ，末尾有 8 位小数。\\n\\n因此，要正确阅读它，只需**将输出除以 100,000,000**（又名 `1e8` ）\\n\\n```\\n\\nActual ETH price = 254000000000 / 100000000 = $2,540\\n```\\n\\n---\\n\\n### 💵 **我们如何使用它？**\\n\\n假设有人发送了 **0.1 ETH**，您想知道这是多少美元。\\n\\n---\\n\\n### 逐步学习:\\n\\n1 ETH = $2,540\\n\\n0.1 ETH = 0.1 × 2,540 = **$254**\\n\\n在合约中：\\n\\n```solidity\\nethAmount = 0.1 ether = 100000000000000000 wei  // 18 decimals\\nethPrice  = 254000000000                       // 8 decimals\\n\\nusdValue = (ethAmount * ethPrice) / 1e18\\n         = (100000000000000000 * 254000000000) / 1e18\\n         = 25400000000\\n```\\n\\n现在将其除以 `1e8` （Solidity 外部）得到：\\n\\n```\\n\\nusdValue = 25400000000 / 1e8 = $254\\n```\\n\\n### `getCurrentRainfall()`\\n\\n```solidity\\n\\nfunction getCurrentRainfall() public view returns (uint256) {\\n    (, int256 rainfall, , , ) = weatherOracle.latestRoundData();\\n    return uint256(rainfall);\\n}\\n\\n```\\n\\n- 让任何人都可以查看当前降雨量——对仪表板或浏览器很有用。\\n\\n---\\n\\n## 🔐 **管理员 + 后备**\\n\\n```solidity\\n\\nfunction withdraw() external onlyOwner {\\n    payable(owner()).transfer(address(this).balance);\\n}\\n\\n```\\n\\n- 让合约所有者提取所有收集的 ETH（例如，未使用的溢价）\\n\\n```solidity\\n\\nreceive() external payable {}\\n\\n```\\n\\n- 该函数允许合约**无需调用函数**接收 ETH。\\n\\n```solidity\\n\\nfunction getBalance() public view returns (uint256) {\\n    return address(this).balance;\\n}\\n\\n```\\n\\n- 允许任何人查看合约当前持有多少 ETH。\\n\\n---\\n\\n# 🧪 **如何使用它（测试工作流程）**\\n\\n1. 部署 `MockWeatherOracle`\\n2. 部署`CropInsurance` :\\n    - 天气预言机地址\\n    - Chainlink ETH/USD 预言机地址（或其他模拟）\\n3. 调用 `updateRandomRainfall()` 来模拟天气\\n4. 使用 `purchaseInsurance()` 支付保费\\n5. 调用 `checkRainfallAndClaim()` 并查看是否发生付款\\n\\n---\\n\\n# 🎉 **总结**\\n\\n您现在了解了：\\n\\n- 什么是预言机以及 Chainlink 如何将智能合约连接到现实世界。\\n- 如何模拟预言机进行测试。\\n- 如何使用 Solidity 和 Chainlink 风格的提要构建功能齐全的保险 dApp。\\n- 为什么事件' `msg.sender`,映射和安全传输在 dApp 开发中至关重要。\\n\\n如果您想要前端演练、Chainlink 模拟部署脚本或使用 Hardhat 或 Foundry 进行测试覆盖率，请告诉我。";
+            // 将转义的字符串转换为实际的字符串（将 \\n 替换为 \n）
+            const embeddedMarkdown = embeddedMarkdownJsonString.replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+            
+            // 加载并渲染Markdown
+            function loadMarkdown() {
+                // 使用marked.js渲染Markdown
+                if (typeof marked !== 'undefined') {
+                    const html = marked.parse(embeddedMarkdown);
+                    markdownContainer.innerHTML = html;
+                    
+                    // 等待DOM更新后重新高亮代码块
+                    setTimeout(function() {
+                        // 查找所有代码块并高亮
+                        markdownContainer.querySelectorAll('pre code').forEach(function(block) {
+                            hljs.highlightElement(block);
+                        });
+                    }, 100);
+                } else {
+                    markdownContainer.innerHTML = '<pre>' + embeddedMarkdown + '</pre>';
+                }
+            }
+            
+            // 页面加载时立即加载Markdown
+            loadMarkdown();
+            
+            // 点击信封打开弹窗
+            envelopeContainer.addEventListener('click', function() {
+                envelopeContainer.classList.add('open');
+                
+                // 延迟显示弹窗，让信封翻转动画完成
+                setTimeout(function() {
+                    answerModal.style.display = 'flex';
+                    setTimeout(function() {
+                        answerModal.classList.add('open');
+                    }, 50);
+                }, 400);
+            });
+            
+            // 关闭弹窗
+            closeLetter.addEventListener('click', function() {
+                answerModal.classList.remove('open');
+                
+                setTimeout(function() {
+                    answerModal.style.display = 'none';
+                    envelopeContainer.classList.remove('open');
+                }, 600);
+            });
+            
+            // 点击弹窗外部关闭
+            answerModal.addEventListener('click', function(e) {
+                if (e.target === answerModal) {
+                    closeLetter.click();
                 }
             });
         });

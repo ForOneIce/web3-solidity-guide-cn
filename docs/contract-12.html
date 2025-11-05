@@ -18,6 +18,10 @@
             --medium: #F8961E;
             --hard: #E71D36;
             --expert: #7209B7;
+            --warm-brown: #8B7355;
+            --parchment: #F5F1E6;
+            --vintage-blue: #6B8E9F;
+            --warm-red: #C44536;
         }
         
         * {
@@ -302,6 +306,410 @@
         .nav-footer-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.3rem;
+        }        
+        /* 参考答案模块样式 - 温暖治愈风格 */
+        .answer-reference {
+            position: relative;
+            margin: 60px 0 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .envelope-container {
+            position: relative;
+            width: 340px;
+            height: 240px;
+            cursor: pointer;
+            perspective: 1200px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(139, 115, 85, 0.2));
+        }
+        
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .envelope-front, .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .envelope-front {
+            background: linear-gradient(135deg, #f9f3e9, #e8dfd1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: -70px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 70px solid #e8dfd1;
+            z-index: 1;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+        }
+        
+        .envelope-flap::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: -170px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 67px solid #f9f3e9;
+        }
+        
+        .envelope-seal {
+            position: absolute;
+            bottom: 25px;
+            right: 35px;
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #C44536, #8B2E24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            border: 2px solid #A52A2A;
+        }
+        
+        .seal-icon {
+            color: #F5F1E6;
+            font-size: 1.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .envelope-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.4rem;
+            color: var(--warm-brown);
+            z-index: 2;
+            position: relative;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+        
+        .envelope-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(139, 115, 85, 0.05) 3px, transparent 3px),
+                radial-gradient(circle at 85% 75%, rgba(139, 115, 85, 0.05) 3px, transparent 3px);
+            background-size: 40px 40px;
+            z-index: 0;
+        }
+        
+        .envelope-back {
+            background: linear-gradient(135deg, #f5f1e6, #e8dfd1);
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-container:hover .envelope {
+            transform: rotateY(10deg) translateY(-5px);
+        }
+        
+        .envelope-container.open .envelope {
+            transform: rotateY(180deg);
+        }
+        
+        .envelope-hint {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--warm-brown);
+            margin-top: 15px;
+            opacity: 0.9;
+            background: rgba(245, 241, 230, 0.7);
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* 弹窗样式 */
+        .answer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            background: rgba(107, 142, 159, 0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+        
+        .letter-container {
+            width: 90%;
+            max-width: 900px;
+            height: 80vh;
+            background: #F5F1E6;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(107, 142, 159, 0.4);
+            overflow: hidden;
+            transform: scale(0);
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .answer-modal.open .letter-container {
+            transform: scale(1);
+        }
+        
+        .letter-header {
+            background: linear-gradient(135deg, #8B7355, #6B5A45);
+            padding: 25px 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-bottom: 2px dashed #A5947A;
+        }
+        
+        .letter-title {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: #F5F1E6;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
+        }
+        
+        .letter-subtitle {
+            color: rgba(245, 241, 230, 0.9);
+            font-size: 1.3rem;
+            font-family: 'Gochi Hand', cursive;
+        }
+        
+        .close-letter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(245, 241, 230, 0.2);
+            color: #F5F1E6;
+            border: 1px solid rgba(245, 241, 230, 0.3);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .close-letter:hover {
+            background: rgba(245, 241, 230, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .letter-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #F5F1E6;
+            position: relative;
+        }
+        
+        .letter-body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent 98%, rgba(139, 115, 85, 0.1) 98%),
+                linear-gradient(rgba(139, 115, 85, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        
+        /* MD内容样式 */
+        .md-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .md-section {
+            margin-bottom: 40px;
+        }
+        
+        .md-section h1 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: var(--warm-brown);
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #A5947A;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .md-section h2 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.2rem;
+            color: var(--warm-brown);
+            margin: 30px 0 15px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .md-section h2::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--warm-red);
+            font-size: 2.5rem;
+        }
+        
+        .md-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .md-tag {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--warm-brown);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-highlight {
+            background: rgba(107, 142, 159, 0.1);
+            border-left: 5px solid var(--vintage-blue);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(107, 142, 159, 0.2);
+        }
+        
+        .md-content pre {
+            background: #2d2a2e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .md-content .inline-code {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            color: var(--warm-brown);
+            font-size: 0.9em;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content ul, .md-content ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .md-content li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+        
+        .md-content blockquote {
+            border-left: 4px solid var(--vintage-blue);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+            background: rgba(107, 142, 159, 0.05);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .md-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th, .md-content td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th {
+            background: linear-gradient(135deg, var(--warm-brown), #6B5A45);
+            color: #F5F1E6;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.1rem;
+        }
+        
+        .md-content tr:nth-child(even) {
+            background: rgba(139, 115, 85, 0.05);
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 40px;
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2rem;
+            color: var(--warm-brown);
         }
         
         @media (max-width: 768px) {
@@ -319,6 +727,49 @@
             
             .key-points {
                 grid-template-columns: 1fr;
+            }
+            
+            .envelope-container {
+                width: 300px;
+                height: 210px;
+            }
+            
+            .envelope-flap {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 60px solid #e8dfd1;
+            }
+            
+            .envelope-flap::after {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 57px solid #f9f3e9;
+                left: -150px;
+            }
+            
+            .envelope-text {
+                font-size: 2rem;
+            }
+            
+            .answer-modal {
+                padding: 10px;
+            }
+            
+            .letter-container {
+                width: 95%;
+                height: 85vh;
+            }
+            
+            .letter-title {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -705,6 +1156,468 @@ contract MyToken is ERC20 {
                 <div class="nav-footer-title">PreorderTokens - 预购代币</div>
             </a>
         </div>
+    
+        <!-- Sneha的一封来信模块 -->
+        <div class="answer-reference">
+            <div class="envelope-container" id="envelope-container">
+                <div class="envelope">
+                    <div class="envelope-front">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-pattern"></div>
+                        <div class="envelope-seal">
+                            <i class="fas fa-feather-alt seal-icon"></i>
+                        </div>
+                        <div class="envelope-text">Sneha的一封来信</div>
+                    </div>
+                    <div class="envelope-back">
+                        <div class="envelope-text" style="color: var(--warm-brown);">点击开启</div>
+                    </div>
+                </div>
+            </div>
+            <div class="envelope-hint">点击信封查看Sneha的来信</div>
+        </div>
+    </div>
+
+    <!-- 弹窗 - 内容待后续精细化处理 -->
+    <div class="answer-modal" id="answer-modal">
+        <div class="letter-container">
+            <div class="letter-header">
+                <div class="letter-title">Sneha的一封来信</div>
+                <div class="letter-subtitle">关于第12天的学习指导</div>
+                <button id="close-letter" class="close-letter">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="letter-body">
+                <div id="md-content" class="md-content">
+                    <div class="md-section">
+                        <h1>第一次ERC20合约</h1>
+                        <div class="md-meta">
+                            <span class="md-tag"><i class="fas fa-calendar-day"></i> Day 12</span>
+                            <span class="md-tag"><i class="fas fa-hashtag"></i> ID: 12</span>
+                            <span class="md-tag"><i class="fas fa-user-edit"></i> 译者: sun sun</span>
+                            <span class="md-tag"><i class="fas fa-signal"></i> 难度等级: 中级</span>
+                        </div>
+                        
+                        <h2>学习内容</h2>
+                        
+                        <p>到目前为止，我们已经构建了计算器、共享钱包、储钱罐，甚至一个具有所有权逻辑的 ETH 密室——在这个过程中，我们学习了继承和访问控制如何使我们的合约保持简洁和安全。但我们如果稍微改变一下方向呢？</p>
+                        
+                        <p>如果我们不只是持有或移动 ETH，而是想创建自己的代币呢？你知道——就像你经常在加密货币领域看到的那样。$MEME, $WAGMI, $COIN — 它们无处不在。自己创建一个难道不有趣吗？</p>
+                        
+                        <p>今天你就要亲手做到这一点。我们将编写一个代币合约——但不是普通的代币——一个 ERC-20 代币。</p>
+                        
+                        <div class="md-highlight">
+                            <strong>💻 完整代码地址</strong>：<a href="https://github.com/snehasharma76/30daysSolidity_Web3Compass/blob/master/ERC20.sol" target="_blank" style="color: var(--vintage-blue); text-decoration: underline;">GitHub链接</a>
+                        </div>
+                        
+                        <h2>1、产品需求书</h2>
+                        
+                        <h3>用户流程</h3>
+                        <ul>
+                            <li><strong>合约部署</strong>：初始化 → 设置代币总数 → 分配整个供应量给部署者 → 记录事件（代币已铸造）</li>
+                            <li><strong>转账</strong>：检查用户余额 > 转账额度 → 执行转账 _transfer → 检查接收地址不能为0地址 → 记账（扣除发送者金额，添加收款人金额）</li>
+                            <li><strong>授权人转账</strong>：检查用户余额 > 转账额度 → 检查授权额度 > 转账额度 → 更新授权额度 → 执行转账 _transfer</li>
+                            <li><strong>授权</strong>：发放授权额度</li>
+                        </ul>
+                        
+                        <h3>数据库</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Contract</th>
+                                    <th>Type</th>
+                                    <th>Bases</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>SimpleERC20</td>
+                                    <td>Implementation</td>
+                                    <td>-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Function Name</th>
+                                    <th>Visibility</th>
+                                    <th>Mutability</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>constructor</td>
+                                    <td>public</td>
+                                    <td>nonpayable</td>
+                                </tr>
+                                <tr>
+                                    <td>transfer</td>
+                                    <td>public</td>
+                                    <td>nonpayable</td>
+                                </tr>
+                                <tr>
+                                    <td>approve</td>
+                                    <td>public</td>
+                                    <td>nonpayable</td>
+                                </tr>
+                                <tr>
+                                    <td>transferFrom</td>
+                                    <td>public</td>
+                                    <td>nonpayable</td>
+                                </tr>
+                                <tr>
+                                    <td>_transfer</td>
+                                    <td>internal</td>
+                                    <td>nonpayable</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h2>2、细节解说</h2>
+                        
+                        <h3>为什么代币从一开始就需要标准</h3>
+                        
+                        <p>在以太坊的早期，每个人都对创建代币的想法感到兴奋。所以，他们确实创建了。很多。但有一个大问题：每个人都以不同的方式构建它们。</p>
+                        
+                        <ul>
+                            <li>一个代币的转账功能使用了 send()</li>
+                            <li>另一个代币则称之为 moveTokens()</li>
+                            <li>有些代币不允许你检查余额</li>
+                            <li>另一些代币在转账发生时没有发出任何事件</li>
+                        </ul>
+                        
+                        <p>现在想象一下，如果你是一个钱包或交易所，需要支持所有这些代币。每当有新的代币出现时，你都必须编写定制的逻辑才能让它正常工作。</p>
+                        
+                        <p>这就像试图制造一个通用的遥控器——但每个电视制造商都决定使用不同的按钮、不同的线缆，有时甚至根本没有电源开关。</p>
+                        
+                        <p>所以以太坊社区联合起来，说："好吧，到此为止。让我们就如何构建代币达成共识。"</p>
+                        
+                        <p>那时提出了 ERC-20——一套简单的规则，内容如下：</p>
+                        <ul>
+                            <li>这就是一个代币应该的样子</li>
+                            <li>每个代币都必须具备这些功能</li>
+                            <li>如果你遵循这些规则，你的代币将能直接与钱包、DApp 和交易所兼容</li>
+                        </ul>
+                        
+                        <p>那个时刻——即 ERC-20 的诞生——正是让以太坊的代币生态系统爆炸性增长的原因。</p>
+                        
+                        <h3>ERC-20 是什么意思？</h3>
+                        
+                        <p>那么，到底什么是"ERC-20"？我们来分解一下。</p>
+                        
+                        <p>ERC 代表以太坊请求评论——基本上是一个公开提案，它说："嘿，以太坊开发者们，这里有一套我们认为在构建某种类型的智能合同时，每个人都应该遵循的规则和行为。"</p>
+                        
+                        <p>这是以太坊社区就标准达成共识的方式——就像区块链的建筑规范。以及 ERC-20？那是 ERC 系列的第 20 个提案——而且恰好是定义了可替代代币在以太坊上应该如何行为的那一个。</p>
+                        
+                        <h3>ERC-20 定义了哪些规则？</h3>
+                        
+                        <p>ERC-20 制定了一个统一的接口——一种共享的语言——所有代币都应该使用。它涵盖了诸如：</p>
+                        
+                        <div class="md-highlight">
+                            <p><strong>命名和显示</strong></p>
+                            <p>你的代币必须有名称、符号和小数位数，以便钱包能正确显示它们。</p>
+                            
+                            <p><strong>余额和供应量</strong></p>
+                            <p>必须有 totalSupply() 函数，以及一种方法来检查地址拥有多少代币，使用 balanceOf(address)。</p>
+                            
+                            <p><strong>转账</strong></p>
+                            <p>应该有一个 transfer() 函数，允许人们从他们的钱包向其他人发送代币。</p>
+                            
+                            <p><strong>批准和授权支出</strong></p>
+                            <p>您的代币需要一个 approve() 函数，以便用户可以让其他人（例如智能合约）代表他们花费代币。以及一个 transferFrom() 函数来实际执行这些已批准的转账。</p>
+                            
+                            <p><strong>事件发射</strong></p>
+                            <p>每当代币转移或权限被授予时，您的合约应发射 Transfer 和 Approval 事件。这些帮助钱包、DApps 和区块链浏览器追踪链上发生的事情。</p>
+                        </div>
+                        
+                        <h3>为何这很重要</h3>
+                        
+                        <p>通过遵循这些规则，您的代币变得即插即用——它可以：出现在像 MetaMask 这样的钱包中、在去中心化交易所交易、与借贷协议、DAO 或任何支持 ERC-20 的应用程序合作。</p>
+                        
+                        <p>如果你的代币不符合 ERC-20 规则，那就好比建造一个不适用于任何插头的电源插座——它或许还能运作，但没有人能使用它。</p>
+                        
+                        <p>简而言之：ERC-20 是使以太坊代币经济成为可能的设计蓝图。这也是为什么代币具有互操作性、可重复使用，并能即时与生态系统兼容。现在，你要自己构建一个。</p>
+                        
+                        <h3>今天我们要构建什么</h3>
+                        
+                        <p>我们将从头开始构建一个最小的 ERC-20 代币。它不会有铸造、销毁或高级功能——而且它跳过了生产环境中通常想要的一些安全检查。但它非常适合理解代币在底层实际是如何运作的。</p>
+                        
+                        <p>我们的代币将被称为 SimpleToken，符号为 SIM。</p>
+                        
+                        <h4>SimpleERC20.sol</h4>
+                        
+                        <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract SimpleERC20 {
+    string public name = "SimpleToken";
+    string public symbol = "SIM";
+    uint8 public decimals = 18;
+    uint256 public totalSupply;
+
+    mapping(address => uint256) public balanceOf;
+    mapping(address => mapping(address => uint256)) public allowance;
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+
+    constructor(uint256 _initialSupply) {
+        totalSupply = _initialSupply * (10 ** uint256(decimals));
+        balanceOf[msg.sender] = totalSupply;
+        emit Transfer(address(0), msg.sender, totalSupply);
+    }
+
+    function transfer(address _to, uint256 _value) public returns (bool) {
+        require(balanceOf[msg.sender] >= _value, "Not enough balance");
+        _transfer(msg.sender, _to, _value);
+        return true;
+    }
+
+    function approve(address _spender, uint256 _value) public returns (bool) {
+        allowance[msg.sender][_spender] = _value;
+        emit Approval(msg.sender, _spender, _value);
+        return true;
+    }
+
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool) {
+        require(balanceOf[_from] >= _value, "Not enough balance");
+        require(allowance[_from][msg.sender] >= _value, "Allowance too low");
+
+        allowance[_from][msg.sender] -= _value;
+        _transfer(_from, _to, _value);
+        return true;
+    }
+
+    function _transfer(address _from, address _to, uint256 _value) internal {
+        require(_to != address(0), "Invalid address");
+        balanceOf[_from] -= _value;
+        balanceOf[_to] += _value;
+        emit Transfer(_from, _to, _value);
+    }
+}</code></pre>
+                        
+                        <p>让我们一步步来讲解。</p>
+                        
+                        <h3>分解</h3>
+                        
+                        <h4>代币元数据</h4>
+                        
+                        <pre><code class="language-solidity">string public name = "SimpleToken";
+string public symbol = "SIM";
+uint8 public decimals = 18;</code></pre>
+                        
+                        <p>这三行定义了您的代币在钱包和交易所中的显示方式：name 是代币的全名。symbol 是简短的交易代码（如"ETH"或"DAI"）。decimals 定义了它的可分割程度。大多数代币使用 18 位小数——就像 ETH 一样。</p>
+                        
+                        <h4>代币供应</h4>
+                        
+                        <pre><code class="language-solidity">uint256 public totalSupply;</code></pre>
+                        
+                        <p>这个用于追踪当前存在的代币总数。我们将在合约部署时设置这个值——更多细节请参考构造函数。</p>
+                        
+                        <h4>余额和额度</h4>
+                        
+                        <pre><code class="language-solidity">mapping(address => uint256) public balanceOf;
+mapping(address => mapping(address => uint256)) public allowance;</code></pre>
+                        
+                        <p>balanceOf 告诉你每个地址持有多少代币。allowance 是一个嵌套映射，用于追踪谁被允许代表谁花费代币——以及花费多少。这是 ERC-20 的核心功能：允许其他人（如 DApp 或智能合约）移动你的代币，但前提是你必须首先批准。</p>
+                        
+                        <h4>事件</h4>
+                        
+                        <pre><code class="language-solidity">event Transfer(address indexed from, address indexed to, uint256 value);
+event Approval(address indexed owner, address indexed spender, uint256 value);</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>正如你所知，Solidity 中的事件就像合约在说，"嘿，刚发生了一件什么事！"——它们是智能合约与外界交互的关键部分。它们不会修改任何状态或执行合约内的逻辑。相反，它们会发出日志，外部工具如钱包、DApps 和区块浏览器可以监听这些日志。</p>
+                            
+                            <p>每个事件的作用如下：</p>
+                            <ul>
+                                <li><strong>Transfer</strong>：每当代币从一个地址转移到另一个地址时，这个事件就会触发。钱包和浏览器依赖这个事件来显示交易历史。</li>
+                                <li><strong>Approval</strong>：当有人授权另一个地址代表他们花费代币时，这个事件就会触发。</li>
+                            </ul>
+                            
+                            <p>你会注意到地址参数上的 <code class="inline-code">indexed</code> 关键字——这使得这些值在事件日志中可搜索。所以如果你想要查找来自特定地址的所有转账，或是对某个特定支出者的所有批准，这就是实现方式。</p>
+                        </div>
+                        
+                        <h3>构造函数——铸造初始供应</h3>
+                        
+                        <pre><code class="language-solidity">constructor(uint256 _initialSupply) {
+    totalSupply = _initialSupply * (10 ** uint256(decimals));
+    balanceOf[msg.sender] = totalSupply;
+    emit Transfer(address(0), msg.sender, totalSupply);
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这个构造函数在合约部署时只会运行一次，并且只会运行一次。</p>
+                            
+                            <p><strong>设置总供应量</strong></p>
+                            <pre><code class="language-solidity">totalSupply = _initialSupply * (10 ** uint256(decimals));</code></pre>
+                            <p>这一行设定了将存在的代币总数。<code class="inline-code">_initialSupply</code> 是部署合约时传入的数值。但请记住——ERC-20 代币使用小数位来确保精确度（就像 ETH 使用 Wei 一样）。所以如果你的代币使用 18 位小数（这是标准），并且你想创建 100 个代币，你实际上需要将其表示为：100 * 10^18 = 100000000000000000000。这就是为什么我们将初始供应量乘以 10 ** decimals。这个缩放后的数字存储在 totalSupply 中。</p>
+                            
+                            <p><strong>分配代币</strong></p>
+                            <pre><code class="language-solidity">balanceOf[msg.sender] = totalSupply;</code></pre>
+                            <p>整个供应量被分配给了部署合约的人 — <code class="inline-code">msg.sender</code>。这意味着部署者最初持有 100% 的代币。从那时起，他们可以随意转移、出售或分配代币。</p>
+                            
+                            <p><strong>发出铸造事件</strong></p>
+                            <pre><code class="language-solidity">emit Transfer(address(0), msg.sender, totalSupply);</code></pre>
+                            <p>这会发出一个 Transfer 事件来表示代币已被"铸造"。我们将 from 地址设置为 <code class="inline-code">address(0)</code>，这是一种特殊说法：这些代币并非来自其他用户——它们凭空创造了。钱包、浏览器和前端工具理解这种模式，并将其显示为铸造事件。</p>
+                        </div>
+                        
+                        <h3>transfer()</h3>
+                        
+                        <pre><code class="language-solidity">function transfer(address _to, uint256 _value) public returns (bool) {
+    require(balanceOf[msg.sender] >= _value, "Not enough balance");
+    _transfer(msg.sender, _to, _value);
+    return true;
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这个功能允许用户将他们的代币发送到另一个地址。这是最直接和最常用的转移代币的方式——无论是你向朋友发送一些 SIM 代币，还是用你的 ERC-20 代币支付某物。</p>
+                            
+                            <p>以下是步骤：首先，它确保发送者（<code class="inline-code">msg.sender</code>）有足够的代币，使用 <code class="inline-code">require(balanceOf[msg.sender] >= _value)</code>。然后，它不是在这里处理转账逻辑，而是调用一个内部辅助函数 <code class="inline-code">_transfer()</code> 来执行实际的代币转移。</p>
+                            
+                            <p><strong>那么为什么要拆分呢？</strong></p>
+                            <p>这就引出了一个非常重要的 Solidity 设计模式：逻辑分离。我们不想在 <code class="inline-code">transfer()</code> 和 <code class="inline-code">transferFrom()</code> 等多个地方重复转账逻辑。相反，我们将核心的余额变更逻辑提取到一个单独的函数 <code class="inline-code">_transfer()</code> 中，并在需要的地方重用它。可以把 <code class="inline-code">transfer()</code> 想象成前端按钮，而 <code class="inline-code">_transfer()</code> 是后端引擎。用户只看到按钮，但实际操作在后台进行。</p>
+                            
+                            <p>这种方法的另一个好处是安全性和一致性。如果我们想改变代币余额更新的方式（例如添加费用或记录额外数据），我们只需要在一个地方修改 <code class="inline-code">_transfer()</code>，而 <code class="inline-code">transfer()</code> 和 <code class="inline-code">transferFrom()</code> 都会受益于更新。</p>
+                        </div>
+                        
+                        <h3>_transfer()</h3>
+                        
+                        <pre><code class="language-solidity">function _transfer(address _from, address _to, uint256 _value) internal {
+    require(_to != address(0), "Invalid address");
+    balanceOf[_from] -= _value;
+    balanceOf[_to] += _value;
+    emit Transfer(_from, _to, _value);
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这是实际移动代币的引擎。它被标记为 <code class="inline-code">internal</code>，这意味着它只能从该合约或其派生合约内部调用——不能由外部用户或其他合约调用。这是一个有意的选择：我们不想让人们直接调用 <code class="inline-code">_transfer()</code> 并绕过重要的检查，如额度。</p>
+                            
+                            <p>它做了以下事情：它确保接收地址不是零地址——因为那样会实际销毁代币。它从发送者的余额中扣除金额。它将相同金额添加到收款人。然后它发出一个 Transfer 事件，以便钱包和前端可以反映这一变化。</p>
+                            
+                            <p>通过将这个逻辑移入它自己的内部函数，我们得到：干净、可重用的代码、减少重复逻辑的 bug、余额更新的单一真实来源。<code class="inline-code">transfer()</code> 和 <code class="inline-code">transferFrom()</code> 都依赖于 <code class="inline-code">_transfer()</code> 来保持一致性并遵循 DRY（不要重复自己）原则。</p>
+                        </div>
+                        
+                        <h3>transferFrom()</h3>
+                        
+                        <pre><code class="language-solidity">function transferFrom(address _from, address _to, uint256 _value) public returns (bool) {
+    require(balanceOf[_from] >= _value, "Not enough balance");
+    require(allowance[_from][msg.sender] >= _value, "Allowance too low");
+
+    allowance[_from][msg.sender] -= _value;
+    _transfer(_from, _to, _value);
+    return true;
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这个功能允许已获批准的人代为转移代币。以下是典型流程：</p>
+                            <ol>
+                                <li>Alice 调用 <code class="inline-code">approve(Bob, 100)</code></li>
+                                <li>Bob 调用 <code class="inline-code">transferFrom(Alice, Carol, 50)</code></li>
+                            </ol>
+                            
+                            <p>在这个例子中：Bob 是 <code class="inline-code">msg.sender</code>、Alice 是 <code class="inline-code">_from</code>、Carol 是 <code class="inline-code">_to</code>。</p>
+                            
+                            <p>该函数执行三项操作：它检查 Alice 是否确实拥有这些代币（<code class="inline-code">balanceOf[_from] >= _value</code>）。它检查 Bob 是否已被批准至少花费该金额（<code class="inline-code">allowance[_from][msg.sender] >= _value</code>）。它减少 Bob 的授权额度。然后它调用 <code class="inline-code">_transfer()</code> 来执行实际的代币转移。</p>
+                            
+                            <p>这个函数使得像 DEX 交易和 DAO 投票这样的操作成为可能——每当智能合约移动你的代币时，它很可能在底层使用 <code class="inline-code">transferFrom()</code>。</p>
+                        </div>
+                        
+                        <h3>approve()</h3>
+                        
+                        <pre><code class="language-solidity">function approve(address _spender, uint256 _value) public returns (bool) {
+    allowance[msg.sender][_spender] = _value;
+    emit Approval(msg.sender, _spender, _value);
+    return true;
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这个功能允许你授权另一个地址（通常是智能合约）代表你花费代币。这里有一个现实世界的类比：你给你的朋友一张签名的授权条，让他从你的钱包里拿 50 美元。他们不能拿超过这个数额，并且需要这张授权条才能这样做。</p>
+                            
+                            <p>这里也是一样：<code class="inline-code">_spender</code> 是您授权的地址。<code class="inline-code">_value</code> 是他们被允许花费的最大金额。授权信息存储在一个嵌套映射中：<code class="inline-code">allowance[owner][spender]</code>。就像转账一样，我们也会发出一个事件——Approval——来通知外界这一操作已经发生。</p>
+                            
+                            <p>这是所有委托代币交易的基础——比如在 DEX 上交易、订阅服务或参与收益农场。注意：此函数仅设置权限。实际转账通过 <code class="inline-code">transferFrom()</code> 完成。</p>
+                        </div>
+                        
+                        <h3>缺失的内容（以及你为什么应该关心）</h3>
+                        
+                        <p>好了，我们已经构建了一个可用的 ERC-20 代币——这很棒。但在你急于将其部署到主网并开始建立自己的加密货币帝国之前……这个最小化合约还有一些功能没有实现——而这些功能很重要。</p>
+                        
+                        <div class="md-highlight">
+                            <p><strong>没有对 approve() 进行抢先交易的保护</strong></p>
+                            <p>这是一个在 ERC-20 中众所周知的漏洞，有人可能利用竞态条件来花费超出他们应有的金额。修复方法？使用 <code class="inline-code">increaseAllowance()</code> 和 <code class="inline-code">decreaseAllowance()</code>，或者使用其他更安全的模式。</p>
+                            
+                            <p><strong>没有铸造或销毁功能</strong></p>
+                            <p>总量在部署时固定。未经添加额外功能，你无法增加它（铸造）或减少它（销毁）。</p>
+                            
+                            <p><strong>无访问控制或所有权</strong></p>
+                            <p>任何人都可以与该合约交互——没有方法可以限制谁可以铸造、暂停或升级合约。</p>
+                            
+                            <p><strong>无暂停或紧急制动器</strong></p>
+                            <p>如果出现问题（比如漏洞或错误），你无法暂停转账或暂时关闭系统。</p>
+                            
+                            <p><strong>没有可升级性或模块化</strong></p>
+                            <p>一旦部署，就固定了。除非重新部署，否则无法升级逻辑——如果代币已经流通，这可能会很混乱。</p>
+                        </div>
+                        
+                        <p>所以虽然这个合约非常适合学习，但它还不适合真正的大场面。如果你正在构建真实的东西——一个会持有真实价值的代币——你需要更强大的工具。</p>
+                        
+                        <h3>奖励：使用 OpenZeppelin 节省时间（和理智）</h3>
+                        
+                        <p>在生产环境中，大多数开发者不会从零开始编写所有内容。他们会使用经过实战检验的库——而在以太坊世界中，首选是 OpenZeppelin。</p>
+                        
+                        <h4>为什么选择 OpenZeppelin？</h4>
+                        
+                        <p>因为它：安全（被主要 DeFi 协议使用）、经过审计并受社区信任、模块化和可定制、易于与其他合约集成。</p>
+                        
+                        <p>以下是使用 OpenZeppelin 轻松创建您自己的代币的方法：</p>
+                        
+                        <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract MyToken is ERC20 {
+    constructor(uint256 initialSupply) ERC20("MyToken", "MTK") {
+        _mint(msg.sender, initialSupply * 10 ** decimals());
+    }
+}</code></pre>
+                        
+                        <p>就这样。您刚刚用几行代码创建了一个生产级的 ERC-20 代币。</p>
+                        
+                        <p>如果您想更进一步，OpenZeppelin 为您提供即插即用的扩展功能，例如：ERC20Burnable、ERC20Pausable、AccessControl 或 Ownable、ERC20Permit 用于无 gas 审批。</p>
+                        
+                        <p>你可以挑选你需要的部分，将其组合到你的合约中，然后就可以使用了——所有安全措施和最佳实践都已内置其中。所以当你学习完成后，准备真正开始构建时——不要重复造轮子。使用 OpenZeppelin。</p>
+                        
+                        <h2>总结</h2>
+                        
+                        <p>今天你学习了：</p>
+                        <ul>
+                            <li>为什么存在 ERC-20 以及它如何标准化以太坊上的代币行为</li>
+                            <li>名称、符号、小数位数和总供应量是什么</li>
+                            <li>如何跟踪余额和授权额度</li>
+                            <li>如何授权和转移代币</li>
+                            <li>OpenZeppelin 如何帮助你安全高效地完成所有这些</li>
+                        </ul>
+                        
+                        <blockquote>
+                            <p>只需几行代码，你现在就明白了以太坊上 99% 的代币实际上是如何工作的。从 transfer() 到 approve()，从 balanceOf 到 allowance——每一个概念都是构建去中心化金融世界的基础。我们继续前进。</p>
+                        </blockquote>
+                        
+                        <div class="signature">
+                            <p>真诚的，</p>
+                            <p>Sneha</p>
+                            <p style="margin-top: 10px; font-size: 1.5rem; opacity: 0.8;">译者：sun sun</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -719,6 +1632,47 @@ contract MyToken is ERC20 {
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+            
+        // Sneha的一封来信模块功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelopeContainer = document.getElementById('envelope-container');
+            const answerModal = document.getElementById('answer-modal');
+            const closeLetter = document.getElementById('close-letter');
+            
+            if (!envelopeContainer || !answerModal || !closeLetter) {
+                return; // 如果元素不存在，直接返回
+            }
+            
+            // 点击信封打开弹窗
+            envelopeContainer.addEventListener('click', function() {
+                envelopeContainer.classList.add('open');
+                
+                // 延迟显示弹窗，让信封翻转动画完成
+                setTimeout(function() {
+                    answerModal.style.display = 'flex';
+                    setTimeout(function() {
+                        answerModal.classList.add('open');
+                    }, 50);
+                }, 400);
+            });
+            
+            // 关闭弹窗
+            closeLetter.addEventListener('click', function() {
+                answerModal.classList.remove('open');
+                
+                setTimeout(function() {
+                    answerModal.style.display = 'none';
+                    envelopeContainer.classList.remove('open');
+                }, 600);
+            });
+            
+            // 点击弹窗外部关闭
+            answerModal.addEventListener('click', function(e) {
+                if (e.target === answerModal) {
+                    closeLetter.click();
                 }
             });
         });

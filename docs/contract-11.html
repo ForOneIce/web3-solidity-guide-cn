@@ -18,6 +18,10 @@
             --medium: #F8961E;
             --hard: #E71D36;
             --expert: #7209B7;
+            --warm-brown: #8B7355;
+            --parchment: #F5F1E6;
+            --vintage-blue: #6B8E9F;
+            --warm-red: #C44536;
         }
         
         * {
@@ -302,6 +306,410 @@
         .nav-footer-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.3rem;
+        }        
+        /* 参考答案模块样式 - 温暖治愈风格 */
+        .answer-reference {
+            position: relative;
+            margin: 60px 0 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .envelope-container {
+            position: relative;
+            width: 340px;
+            height: 240px;
+            cursor: pointer;
+            perspective: 1200px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(139, 115, 85, 0.2));
+        }
+        
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .envelope-front, .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .envelope-front {
+            background: linear-gradient(135deg, #f9f3e9, #e8dfd1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: -70px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 70px solid #e8dfd1;
+            z-index: 1;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+        }
+        
+        .envelope-flap::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: -170px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 67px solid #f9f3e9;
+        }
+        
+        .envelope-seal {
+            position: absolute;
+            bottom: 25px;
+            right: 35px;
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #C44536, #8B2E24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            border: 2px solid #A52A2A;
+        }
+        
+        .seal-icon {
+            color: #F5F1E6;
+            font-size: 1.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .envelope-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.4rem;
+            color: var(--warm-brown);
+            z-index: 2;
+            position: relative;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+        
+        .envelope-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(139, 115, 85, 0.05) 3px, transparent 3px),
+                radial-gradient(circle at 85% 75%, rgba(139, 115, 85, 0.05) 3px, transparent 3px);
+            background-size: 40px 40px;
+            z-index: 0;
+        }
+        
+        .envelope-back {
+            background: linear-gradient(135deg, #f5f1e6, #e8dfd1);
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-container:hover .envelope {
+            transform: rotateY(10deg) translateY(-5px);
+        }
+        
+        .envelope-container.open .envelope {
+            transform: rotateY(180deg);
+        }
+        
+        .envelope-hint {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--warm-brown);
+            margin-top: 15px;
+            opacity: 0.9;
+            background: rgba(245, 241, 230, 0.7);
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* 弹窗样式 */
+        .answer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            background: rgba(107, 142, 159, 0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+        
+        .letter-container {
+            width: 90%;
+            max-width: 900px;
+            height: 80vh;
+            background: #F5F1E6;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(107, 142, 159, 0.4);
+            overflow: hidden;
+            transform: scale(0);
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .answer-modal.open .letter-container {
+            transform: scale(1);
+        }
+        
+        .letter-header {
+            background: linear-gradient(135deg, #8B7355, #6B5A45);
+            padding: 25px 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-bottom: 2px dashed #A5947A;
+        }
+        
+        .letter-title {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: #F5F1E6;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
+        }
+        
+        .letter-subtitle {
+            color: rgba(245, 241, 230, 0.9);
+            font-size: 1.3rem;
+            font-family: 'Gochi Hand', cursive;
+        }
+        
+        .close-letter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(245, 241, 230, 0.2);
+            color: #F5F1E6;
+            border: 1px solid rgba(245, 241, 230, 0.3);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .close-letter:hover {
+            background: rgba(245, 241, 230, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .letter-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #F5F1E6;
+            position: relative;
+        }
+        
+        .letter-body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent 98%, rgba(139, 115, 85, 0.1) 98%),
+                linear-gradient(rgba(139, 115, 85, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        
+        /* MD内容样式 */
+        .md-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .md-section {
+            margin-bottom: 40px;
+        }
+        
+        .md-section h1 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: var(--warm-brown);
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #A5947A;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .md-section h2 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.2rem;
+            color: var(--warm-brown);
+            margin: 30px 0 15px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .md-section h2::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--warm-red);
+            font-size: 2.5rem;
+        }
+        
+        .md-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .md-tag {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--warm-brown);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-highlight {
+            background: rgba(107, 142, 159, 0.1);
+            border-left: 5px solid var(--vintage-blue);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(107, 142, 159, 0.2);
+        }
+        
+        .md-content pre {
+            background: #2d2a2e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .md-content .inline-code {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            color: var(--warm-brown);
+            font-size: 0.9em;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content ul, .md-content ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .md-content li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+        
+        .md-content blockquote {
+            border-left: 4px solid var(--vintage-blue);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+            background: rgba(107, 142, 159, 0.05);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .md-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th, .md-content td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th {
+            background: linear-gradient(135deg, var(--warm-brown), #6B5A45);
+            color: #F5F1E6;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.1rem;
+        }
+        
+        .md-content tr:nth-child(even) {
+            background: rgba(139, 115, 85, 0.05);
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 40px;
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2rem;
+            color: var(--warm-brown);
         }
         
         @media (max-width: 768px) {
@@ -319,6 +727,49 @@
             
             .key-points {
                 grid-template-columns: 1fr;
+            }
+            
+            .envelope-container {
+                width: 300px;
+                height: 210px;
+            }
+            
+            .envelope-flap {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 60px solid #e8dfd1;
+            }
+            
+            .envelope-flap::after {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 57px solid #f9f3e9;
+                left: -150px;
+            }
+            
+            .envelope-text {
+                font-size: 2rem;
+            }
+            
+            .answer-modal {
+                padding: 10px;
+            }
+            
+            .letter-container {
+                width: 95%;
+                height: 85vh;
+            }
+            
+            .letter-title {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -684,6 +1135,329 @@ contract C is A, B {
                 <div class="nav-footer-title">MyFirstToken - 我的第一个代币</div>
             </a>
         </div>
+    
+        <!-- Sneha的一封来信模块 -->
+        <div class="answer-reference">
+            <div class="envelope-container" id="envelope-container">
+                <div class="envelope">
+                    <div class="envelope-front">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-pattern"></div>
+                        <div class="envelope-seal">
+                            <i class="fas fa-feather-alt seal-icon"></i>
+                        </div>
+                        <div class="envelope-text">Sneha的一封来信</div>
+                    </div>
+                    <div class="envelope-back">
+                        <div class="envelope-text" style="color: var(--warm-brown);">点击开启</div>
+                    </div>
+                </div>
+            </div>
+            <div class="envelope-hint">点击信封查看Sneha的来信</div>
+        </div>
+    </div>
+
+    <!-- 弹窗 - 内容待后续精细化处理 -->
+    <div class="answer-modal" id="answer-modal">
+        <div class="letter-container">
+            <div class="letter-header">
+                <div class="letter-title">Sneha的一封来信</div>
+                <div class="letter-subtitle">关于第11天的学习指导</div>
+                <button id="close-letter" class="close-letter">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="letter-body">
+                <div id="md-content" class="md-content">
+                    <div class="md-section">
+                        <h1>钱库控制合约 - Ownable</h1>
+                        <div class="md-meta">
+                            <span class="md-tag"><i class="fas fa-calendar-day"></i> Day 11</span>
+                            <span class="md-tag"><i class="fas fa-hashtag"></i> ID: 11</span>
+                            <span class="md-tag"><i class="fas fa-user-edit"></i> 译者: Bala Chen</span>
+                            <span class="md-tag"><i class="fas fa-signal"></i> 难度等级: 中级</span>
+                        </div>
+                        
+                        <p>好的，让我们换个思路。到目前为止，你可能一直在一次编写一个智能合约——所有内容都打包在一个文件中，各自独立运行。但随着合约变得越来越复杂，你会开始注意到重复的代码。</p>
+                        
+                        <blockquote>
+                            <p>"我不是已经在其他地方写过这个所有权逻辑了吗？"<br>"为什么我又要复制同样的 <code class="inline-code">onlyOwner</code> 检查？"</p>
+                        </blockquote>
+                        
+                        <p>这就是 Solidity 为你提供强大功能的地方：<strong>继承</strong>。</p>
+                        
+                        <h2>什么是继承？</h2>
+                        
+                        <p>假设你的父母拥有一栋房子。有一天，他们把它传给了你。当你继承那栋房子时，你得到的不仅仅是四面墙——你得到了所有附带的东西：家具、规则（比如"室内不准穿鞋"）、甚至可能还有家里的狗。你自己没有设置任何这些——但你仍然可以使用所有这些。</p>
+                        
+                        <p>这就是 Solidity 中继承的工作原理。一个合约（"母合约"）定义了一堆逻辑——函数、变量、修饰符等。另一个合约（"子合约"）继承了这一切——可以按原样使用，或者修改其中的部分以满足自己的需求。</p>
+                        
+                        <h2>为什么要使用它？</h2>
+                        
+                        <p>继承帮助你：</p>
+                        <ul>
+                            <li>避免在多个地方编写相同的逻辑</li>
+                            <li>将代码拆分成更小、更专注的部分</li>
+                            <li>重用重要功能，如访问控制或实用函数</li>
+                            <li>使合约更容易更新和维护</li>
+                        </ul>
+                        
+                        <p>它是大多数大规模 Solidity 项目的支柱。</p>
+                        
+                        <h2>如果你想改变某些东西怎么办？</h2>
+                        
+                        <p>让我们回到房子的例子。你继承了父母的房子。随之而来的是所有附带的东西——家具、设计，甚至他们遵循的规则。但如果你不想完全按照原样保留呢？也许你想翻新厨房。或者改变"不准养宠物"的规则。它仍然是同一栋房子——但你在让它成为你自己的。</p>
+                        
+                        <p><strong>这正是在 Solidity 中继承合约时自定义的工作原理。</strong></p>
+                        
+                        <p>你从母合约获得所有函数——但有时，你会想要<strong>改变其中一个函数在新合约中的行为方式</strong>。Solidity 为你提供了一种安全的方法，使用两个关键字：</p>
+                        
+                        <div class="md-highlight">
+                            <ul>
+                                <li><strong><code class="inline-code">virtual</code></strong> 放在<strong>母合约</strong>中。它将函数标记为<em>可更改的</em>。就像父母说，"这是规则——但如果你需要的话，可以随意更改。"</li>
+                                <li><strong><code class="inline-code">override</code></strong> 放在<strong>子合约</strong>中。它告诉 Solidity，"我知道这个函数是继承的，但我要用自己的版本替换它。"</li>
+                            </ul>
+                            <p>你<strong>必须</strong>同时使用两者——除非<strong>母合约</strong>明确允许，否则 Solidity 不会让你意外覆盖某些东西。这使你的合约保持干净、可预测且更容易维护。你确切地知道什么是继承的，什么是被更改的——没有意外。</p>
+                        </div>
+                        
+                        <p>简而言之：继承为你提供了<strong>母合约</strong>的一切，但通过 <code class="inline-code">virtual</code> 和 <code class="inline-code">override</code>，你获得了<strong>自定义</strong>所需部分的灵活性。这样，Solidity 保持了安全和清晰——没有静默覆盖，没有意外更改。一切都是有意的。</p>
+                        
+                        <h2>我们今天要构建什么</h2>
+                        
+                        <p>你将编写两个展示继承实际应用的合约：</p>
+                        <ol>
+                            <li><strong>Ownable.sol</strong> – 一个简单的合约，定义谁是所有者，并为你提供可重用的 <code class="inline-code">onlyOwner</code> 检查来保护敏感函数。</li>
+                            <li><strong>VaultMaster.sol</strong> – 一个接受任何人 ETH 存款的金库，但只允许<strong>所有者</strong>提取。它不会重新编写所有权逻辑，而是简单地从 <code class="inline-code">Ownable</code> <strong>继承</strong>它。</li>
+                        </ol>
+                        
+                        <p>这是你迈向编写干净、模块化和生产级 Solidity 代码的第一步。</p>
+                        
+                        <div class="md-highlight">
+                            <strong>💻 完整代码地址</strong>：
+                            <p>Ownable.sol: <a href="https://github.com/snehasharma76/30daysSolidity_Web3Compass/blob/master/Ownable.sol" target="_blank" style="color: var(--vintage-blue); text-decoration: underline;">GitHub链接</a></p>
+                            <p>VaultMaster.sol: <a href="https://github.com/snehasharma76/30daysSolidity_Web3Compass/blob/master/VaultMaster.sol" target="_blank" style="color: var(--vintage-blue); text-decoration: underline;">GitHub链接</a></p>
+                        </div>
+                        
+                        <h2>1、产品需求书</h2>
+                        
+                        <h3>用户流程</h3>
+                        <ul>
+                            <li><strong>getBalance</strong>：读取 address(this).balance → 返回余额</li>
+                            <li><strong>deposit</strong>：检查 msg.value > 0 → emit DepositSuccessful → 结束</li>
+                            <li><strong>withdraw</strong>：onlyOwner 检查 → 检查 _amount <= getBalance → payable(_to).call 发送 ETH → 检查 success → emit WithdrawSuccessful</li>
+                        </ul>
+                        
+                        <h2>2、细节解说</h2>
+                        
+                        <p>我们将编写<strong>两个合约</strong>：</p>
+                        <ol>
+                            <li><strong>Ownable.sol</strong> – 这个合约跟踪谁是所有者，并使用 <code class="inline-code">onlyOwner</code> 修饰符保护敏感函数。</li>
+                            <li><strong>VaultMaster.sol</strong> – 一个让用户存入 ETH 的金库，但<strong>只有所有者</strong>可以提取资金。</li>
+                        </ol>
+                        
+                        <p>最棒的部分是：<code class="inline-code">VaultMaster</code> 将<strong>继承</strong> <code class="inline-code">Ownable</code> 的一切，无需重写任何一行逻辑。</p>
+                        
+                        <h3>合约 1：Ownable.sol — 我们的可重复使用的访问控制</h3>
+                        
+                        <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Ownable {
+    address private owner;
+
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+    constructor() {
+        owner = msg.sender;
+        emit OwnershipTransferred(address(0), msg.sender);
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can perform this action");
+        _;
+    }
+
+    function ownerAddress() public view returns (address) {
+        return owner;
+    }
+
+    function transferOwnership(address _newOwner) public onlyOwner {
+        require(_newOwner != address(0), "Invalid address");
+        address previous = owner;
+        owner = _newOwner;
+        emit OwnershipTransferred(previous, _newOwner);
+    }
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p><strong><code class="inline-code">address private owner;</code></strong></p>
+                            <p>我们存储合约所有者的地址，所有者也就是部署该合约的人。它被标记为 <code class="inline-code">private</code>，所以只能在这个合约内部访问。其他合约无法直接访问它。</p>
+                            
+                            <p><strong><code class="inline-code">event OwnershipTransferred(...)</code></strong></p>
+                            <p>Solidity 中的事件就像日志——它们存储在区块链上，你的前端可以<strong>监听/查询/收听/查看</strong>它们，但是它们不能改变合约的状态，它们只是让外部世界知道这个合约发生了什么：在这里，我们记录所有权从谁<strong>转移</strong>到谁。<code class="inline-code">indexed</code> 关键字有助于轻松过滤日志——所以你可以搜索涉及特定地址的所有事件。</p>
+                            
+                            <p><strong><code class="inline-code">constructor()</code></strong></p>
+                            <p>这在合约部署时运行一次。它将部署者（<code class="inline-code">msg.sender</code>）设置为初始所有者，并发出 <code class="inline-code">OwnershipTransferred</code> 事件来记录该更改。</p>
+                            
+                            <p><strong><code class="inline-code">modifier onlyOwner()</code></strong></p>
+                            <p>这是一个自定义修饰符。当应用于函数时，它<strong>确保只有所有者可以调用它</strong>。如果 <code class="inline-code">require</code> 失败，函数调用就会在那里停止。</p>
+                            
+                            <p><strong><code class="inline-code">ownerAddress()</code></strong></p>
+                            <p>由于 <code class="inline-code">owner</code> 是私有的，我们提供一个公共函数，这样任何人都可以检查当前所有者是谁。</p>
+                            
+                            <p><strong><code class="inline-code">transferOwnership()</code></strong></p>
+                            <p>这个函数允许当前所有者<strong>转移所有权</strong>给其他人。它使用 <code class="inline-code">onlyOwner</code> 修饰符进行保护。它检查新所有者地址是否有效（不是 <code class="inline-code">0x0</code>）。它将当前所有者地址存储在 <code class="inline-code">previous</code> 变量中，然后更新所有者并通过 <code class="inline-code">OwnershipTransferred</code> 事件记录更改。</p>
+                        </div>
+                        
+                        <p>那么，我们构建了什么？一个<strong>可重复使用的合约</strong>，它：跟踪当前所有者、限制对敏感函数的访问、允许转移所有权、发出事件，使所有权更改被公开记录。但这个合约本身自己无法完成什么事情，它是为了被其他合约<strong>继承</strong>而存在——比如我们的下一个合约。</p>
+                        
+                        <h3>合约 2：VaultMaster.sol — 带有所有权的简单 ETH 金库</h3>
+                        
+                        <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "./ownable.sol";
+
+contract VaultMaster is Ownable {
+    event DepositSuccessful(address indexed account, uint256 value);
+    event WithdrawSuccessful(address indexed recipient, uint256 value);
+
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+
+    function deposit() public payable {
+        require(msg.value > 0, "Enter a valid amount");
+        emit DepositSuccessful(msg.sender, msg.value);
+    }
+
+    function withdraw(address _to, uint256 _amount) public onlyOwner {
+        require(_amount <= getBalance(), "Insufficient balance");
+
+        (bool success, ) = payable(_to).call{value: _amount}("");
+        require(success, "Transfer Failed");
+
+        emit WithdrawSuccessful(_to, _amount);
+    }
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p><strong><code class="inline-code">import "./ownable.sol";</code></strong></p>
+                            <p>这一行从另一个文件引入我们的 <code class="inline-code">Ownable</code> 合约。现在 <code class="inline-code">Ownable</code> 中定义的所有内容，包括 <code class="inline-code">onlyOwner</code> 修饰符和 <code class="inline-code">transferOwnership()</code> 功能，在 <code class="inline-code">VaultMaster</code> 合约中都将可用。</p>
+                            
+                            <p><strong><code class="inline-code">contract VaultMaster is Ownable</code></strong></p>
+                            <p>这是关键的一行。它说："VaultMaster 继承自 Ownable。"这意味着 <code class="inline-code">VaultMaster</code> 现在<strong>自动拥有</strong> <code class="inline-code">Ownable</code> 的所有函数、变量和修饰符。</p>
+                            
+                            <p><strong>事件</strong></p>
+                            <ul>
+                                <li><code class="inline-code">DepositSuccessful</code> 当有人向合约发送 ETH 时触发。account：发送者的地址（标记为 <code class="inline-code">indexed</code>，因此可以在日志中轻松过滤）。value：存入的 ETH 数量。</li>
+                                <li><code class="inline-code">WithdrawSuccessful</code> 当所有者从合约提取 ETH 时触发。recipient：接收资金的地址（也是 <code class="inline-code">indexed</code>）。value：提取的数量。</li>
+                            </ul>
+                            <p>这些事件在 <code class="inline-code">deposit()</code> 和 <code class="inline-code">withdraw()</code> 函数内部发出，以保持每笔交易的公开记录——对前端、仪表板和链下系统很有用。</p>
+                            
+                            <p><strong><code class="inline-code">getBalance()</code></strong></p>
+                            <p>返回合约当前持有的 ETH 数量。</p>
+                            
+                            <p><strong><code class="inline-code">deposit()</code></strong></p>
+                            <p>允许任何人向合约发送 ETH。我们检查他们确实在发送一些东西，并记录下这个存储动作。这个函数让<strong>任何人</strong>都可以向合约发送 ETH——它对公众开放。然后我们使用 <code class="inline-code">require</code> 语句要求发送人必须发送>0的数值。如果检查通过，函数发出 <code class="inline-code">DepositSuccessful</code> 事件，记录 <code class="inline-code">msg.sender</code>（发送者的地址）和 <code class="inline-code">msg.value</code>（发送的 ETH 数量）。</p>
+                            
+                            <p><strong><code class="inline-code">withdraw()</code></strong></p>
+                            <p>这个函数允许从合约中提取 ETH——但只有所有者有权限。关键在于 <code class="inline-code">onlyOwner</code> 修饰符。我们没有在这个合约内部定义它——我们从 <code class="inline-code">Ownable</code> 合约继承了它。这就是继承的力量：我们可以重用像访问控制这样的逻辑，而无需重写任何东西。<code class="inline-code">onlyOwner</code> 修饰符检查调用者是否是当前合约所有者，并阻止其他任何人执行该函数。在函数内部：我们首先检查合约是否有足够的 ETH 可以提取。然后我们使用 <code class="inline-code">.call</code> 将指定数量发送到给定地址。如果转账成功，我们发出 <code class="inline-code">WithdrawSuccessful</code> 事件来记录该操作。</p>
+                        </div>
+                        
+                        <h3>彩蛋：使用 OpenZeppelin 的 Ownable 替代</h3>
+                        
+                        <p>好的，我们刚刚从头开始构建了自己的 <code class="inline-code">Ownable</code> 合约——这是学习访问控制如何工作的重要一步。但在现实世界中，大多数开发者不会从头开始编写所有内容。他们依赖<strong>可信的库</strong>。</p>
+                        
+                        <h4>什么是 OpenZeppelin？</h4>
+                        
+                        <p><strong>OpenZeppelin</strong> 是一个由顶级智能合约开发者组成的团队，他们为以太坊创建了一个安全、可重用且经过社区审计的合约库。他们的合约处理以下事务：访问控制（<code class="inline-code">Ownable</code>、<code class="inline-code">AccessControl</code>）、代币标准（<code class="inline-code">ERC20</code>、<code class="inline-code">ERC721</code>、<code class="inline-code">ERC1155</code>）、安全模式（可暂停、重入保护）、代理和可升级合约、实用程序和数学库。</p>
+                        
+                        <p>这些合约在整个以太坊生态系统中被使用——被各种协议、DAO、NFT 平台、DeFi 应用程序以及几乎任何编写生产级智能合约的人使用。<strong>为什么？</strong> 因为它们：在实际环境中经过实战测试、持续维护、经过审计且值得信赖。使用 OpenZeppelin 节省时间，减少错误，并帮助你构建更安全的合约。</p>
+                        
+                        <h4>如何在 Remix 中使用 OpenZeppelin 的 <code class="inline-code">Ownable</code></h4>
+                        
+                        <p>由于我们在 <strong>Remix</strong> 中工作，你可以立即使用 OpenZeppelin——无需安装。</p>
+                        
+                        <h4>步骤 1：替换导入</h4>
+                        
+                        <p>在你的 <code class="inline-code">VaultMaster.sol</code> 中，不要从本地文件导入你的自定义 <code class="inline-code">Ownable</code> 合约，你可以直接使用官方 OpenZeppelin 版本，如下所示：</p>
+                        
+                        <pre><code class="language-solidity">import "@openzeppelin/contracts/access/Ownable.sol";</code></pre>
+                        
+                        <p>那么，<code class="inline-code">@</code> 符号是什么意思？<code class="inline-code">@openzeppelin</code> 部分是在 Remix（以及许多 Solidity 项目中）使用的简写，用于引用来自 <strong>npm 风格包系统</strong>的信息<strong>包</strong>。即使我们没有在 Remix 中明确安装任何东西，它仍然在幕后识别并解析这个路径。可以这样理解：<code class="inline-code">@openzeppelin/...</code> = "从 OpenZeppelin 库包中获取这个"，<code class="inline-code">contracts/access/Ownable.sol</code> = 该包内的实际文件夹和文件路径。所以这一行告诉 Remix："嘿，从 OpenZeppelin 包内的 contracts/access 目录中拉取 Ownable.sol 文件。"当你以这种方式引用 OpenZeppelin 合约时，Remix 会自动获取它们，所以你不需要手动设置任何东西。它开箱即用——这在你进行原型设计或学习时非常方便。</p>
+                        
+                        <h4>步骤 2：在构造函数中传递所有者</h4>
+                        
+                        <p>OpenZeppelin 版本的 <code class="inline-code">Ownable</code> 期望你在部署合约时<strong>传递初始所有者</strong>。所以，在你的合约内部，添加这个构造函数：</p>
+                        
+                        <pre><code class="language-solidity">constructor() Ownable(msg.sender) {}</code></pre>
+                        
+                        <p>这告诉 OpenZeppelin 将部署者设置为第一个所有者——就像我们之前手动做的一样。</p>
+                        
+                        <h4>使用 OpenZeppelin 的最终 VaultMaster</h4>
+                        
+                        <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract VaultMaster is Ownable {
+    event DepositSuccessful(address indexed account, uint256 value);
+    event WithdrawSuccessful(address indexed recipient, uint256 value);
+
+    // 使用 OpenZeppelin 的构造函数将部署者设置为所有者
+    constructor() Ownable(msg.sender) {}
+
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+
+    function deposit() public payable {
+        require(msg.value > 0, "Enter a valid amount");
+        emit DepositSuccessful(msg.sender, msg.value);
+    }
+
+    function withdraw(address _to, uint256 _amount) public onlyOwner {
+        require(_amount <= getBalance(), "Insufficient balance");
+
+        (bool success, ) = payable(_to).call{value: _amount}("");
+        require(success, "Transfer failed");
+
+        emit WithdrawSuccessful(_to, _amount);
+    }
+}</code></pre>
+                        
+                        <h3>那么为什么要使用 OpenZeppelin？</h3>
+                        
+                        <p>因为从长远来看：你编写<strong>更少的代码</strong>、你得到<strong>更少的错误</strong>、你的合约遵循<strong>行业最佳实践</strong>。这就像使用可靠的构建块，而不是每次都从原材料开始。你可以专注于应用程序的独特逻辑——并将基础工作留给专家。</p>
+                        
+                        <h2>总结</h2>
+                        
+                        <p>今天，你学到了：</p>
+                        <ul>
+                            <li>如何编写控制所有权的<strong>基础合约</strong></li>
+                            <li>如何在另一个合约中<strong>继承</strong>该合约</li>
+                            <li>如何使用 <code class="inline-code">modifier</code> 和 <code class="inline-code">event</code> 添加控制和可见性</li>
+                            <li>如何更清晰地构建你的 Solidity 项目</li>
+                            <li>以及如何使用 <strong>OpenZeppelin 的 Ownable</strong> 进行实际应用</li>
+                        </ul>
+                        
+                        <blockquote>
+                            <p>继承使你的智能合约更加<strong>模块化</strong>、<strong>可重用</strong>和<strong>可维护</strong>。这就是现实世界中智能合约系统的构建方式——一次一个小的、可组合的部分。</p>
+                        </blockquote>
+                        
+                        <div class="signature">
+                            <p>真诚的，</p>
+                            <p>Sneha</p>
+                            <p style="margin-top: 10px; font-size: 1.5rem; opacity: 0.8;">译者：Bala Chen</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -698,6 +1472,47 @@ contract C is A, B {
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+            
+        // Sneha的一封来信模块功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelopeContainer = document.getElementById('envelope-container');
+            const answerModal = document.getElementById('answer-modal');
+            const closeLetter = document.getElementById('close-letter');
+            
+            if (!envelopeContainer || !answerModal || !closeLetter) {
+                return; // 如果元素不存在，直接返回
+            }
+            
+            // 点击信封打开弹窗
+            envelopeContainer.addEventListener('click', function() {
+                envelopeContainer.classList.add('open');
+                
+                // 延迟显示弹窗，让信封翻转动画完成
+                setTimeout(function() {
+                    answerModal.style.display = 'flex';
+                    setTimeout(function() {
+                        answerModal.classList.add('open');
+                    }, 50);
+                }, 400);
+            });
+            
+            // 关闭弹窗
+            closeLetter.addEventListener('click', function() {
+                answerModal.classList.remove('open');
+                
+                setTimeout(function() {
+                    answerModal.style.display = 'none';
+                    envelopeContainer.classList.remove('open');
+                }, 600);
+            });
+            
+            // 点击弹窗外部关闭
+            answerModal.addEventListener('click', function(e) {
+                if (e.target === answerModal) {
+                    closeLetter.click();
                 }
             });
         });

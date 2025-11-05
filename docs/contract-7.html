@@ -18,6 +18,10 @@
             --medium: #F8961E;
             --hard: #E71D36;
             --expert: #7209B7;
+            --warm-brown: #8B7355;
+            --parchment: #F5F1E6;
+            --vintage-blue: #6B8E9F;
+            --warm-red: #C44536;
         }
         
         * {
@@ -302,6 +306,410 @@
         .nav-footer-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.3rem;
+        }        
+        /* 参考答案模块样式 - 温暖治愈风格 */
+        .answer-reference {
+            position: relative;
+            margin: 60px 0 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .envelope-container {
+            position: relative;
+            width: 340px;
+            height: 240px;
+            cursor: pointer;
+            perspective: 1200px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(139, 115, 85, 0.2));
+        }
+        
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .envelope-front, .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .envelope-front {
+            background: linear-gradient(135deg, #f9f3e9, #e8dfd1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: -70px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 70px solid #e8dfd1;
+            z-index: 1;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+        }
+        
+        .envelope-flap::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: -170px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 67px solid #f9f3e9;
+        }
+        
+        .envelope-seal {
+            position: absolute;
+            bottom: 25px;
+            right: 35px;
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #C44536, #8B2E24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            border: 2px solid #A52A2A;
+        }
+        
+        .seal-icon {
+            color: #F5F1E6;
+            font-size: 1.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .envelope-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.4rem;
+            color: var(--warm-brown);
+            z-index: 2;
+            position: relative;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+        
+        .envelope-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(139, 115, 85, 0.05) 3px, transparent 3px),
+                radial-gradient(circle at 85% 75%, rgba(139, 115, 85, 0.05) 3px, transparent 3px);
+            background-size: 40px 40px;
+            z-index: 0;
+        }
+        
+        .envelope-back {
+            background: linear-gradient(135deg, #f5f1e6, #e8dfd1);
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-container:hover .envelope {
+            transform: rotateY(10deg) translateY(-5px);
+        }
+        
+        .envelope-container.open .envelope {
+            transform: rotateY(180deg);
+        }
+        
+        .envelope-hint {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--warm-brown);
+            margin-top: 15px;
+            opacity: 0.9;
+            background: rgba(245, 241, 230, 0.7);
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* 弹窗样式 */
+        .answer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            background: rgba(107, 142, 159, 0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+        
+        .letter-container {
+            width: 90%;
+            max-width: 900px;
+            height: 80vh;
+            background: #F5F1E6;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(107, 142, 159, 0.4);
+            overflow: hidden;
+            transform: scale(0);
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .answer-modal.open .letter-container {
+            transform: scale(1);
+        }
+        
+        .letter-header {
+            background: linear-gradient(135deg, #8B7355, #6B5A45);
+            padding: 25px 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-bottom: 2px dashed #A5947A;
+        }
+        
+        .letter-title {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: #F5F1E6;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
+        }
+        
+        .letter-subtitle {
+            color: rgba(245, 241, 230, 0.9);
+            font-size: 1.3rem;
+            font-family: 'Gochi Hand', cursive;
+        }
+        
+        .close-letter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(245, 241, 230, 0.2);
+            color: #F5F1E6;
+            border: 1px solid rgba(245, 241, 230, 0.3);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .close-letter:hover {
+            background: rgba(245, 241, 230, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .letter-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #F5F1E6;
+            position: relative;
+        }
+        
+        .letter-body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent 98%, rgba(139, 115, 85, 0.1) 98%),
+                linear-gradient(rgba(139, 115, 85, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        
+        /* MD内容样式 */
+        .md-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .md-section {
+            margin-bottom: 40px;
+        }
+        
+        .md-section h1 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: var(--warm-brown);
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #A5947A;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .md-section h2 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.2rem;
+            color: var(--warm-brown);
+            margin: 30px 0 15px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .md-section h2::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--warm-red);
+            font-size: 2.5rem;
+        }
+        
+        .md-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .md-tag {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--warm-brown);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-highlight {
+            background: rgba(107, 142, 159, 0.1);
+            border-left: 5px solid var(--vintage-blue);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(107, 142, 159, 0.2);
+        }
+        
+        .md-content pre {
+            background: #2d2a2e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .md-content .inline-code {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            color: var(--warm-brown);
+            font-size: 0.9em;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content ul, .md-content ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .md-content li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+        
+        .md-content blockquote {
+            border-left: 4px solid var(--vintage-blue);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+            background: rgba(107, 142, 159, 0.05);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .md-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th, .md-content td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th {
+            background: linear-gradient(135deg, var(--warm-brown), #6B5A45);
+            color: #F5F1E6;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.1rem;
+        }
+        
+        .md-content tr:nth-child(even) {
+            background: rgba(139, 115, 85, 0.05);
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 40px;
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2rem;
+            color: var(--warm-brown);
         }
         
         @media (max-width: 768px) {
@@ -319,6 +727,49 @@
             
             .key-points {
                 grid-template-columns: 1fr;
+            }
+            
+            .envelope-container {
+                width: 300px;
+                height: 210px;
+            }
+            
+            .envelope-flap {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 60px solid #e8dfd1;
+            }
+            
+            .envelope-flap::after {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 57px solid #f9f3e9;
+                left: -150px;
+            }
+            
+            .envelope-text {
+                font-size: 2rem;
+            }
+            
+            .answer-modal {
+                padding: 10px;
+            }
+            
+            .letter-container {
+                width: 95%;
+                height: 85vh;
+            }
+            
+            .letter-title {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -706,6 +1157,421 @@ require(success, "Send failed");</code></pre>
                 <div class="nav-footer-title">TipJar - 小费罐</div>
             </a>
         </div>
+    
+        <!-- Sneha的一封来信模块 -->
+        <div class="answer-reference">
+            <div class="envelope-container" id="envelope-container">
+                <div class="envelope">
+                    <div class="envelope-front">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-pattern"></div>
+                        <div class="envelope-seal">
+                            <i class="fas fa-feather-alt seal-icon"></i>
+                        </div>
+                        <div class="envelope-text">Sneha的一封来信</div>
+                    </div>
+                    <div class="envelope-back">
+                        <div class="envelope-text" style="color: var(--warm-brown);">点击开启</div>
+                    </div>
+                </div>
+            </div>
+            <div class="envelope-hint">点击信封查看Sneha的来信</div>
+        </div>
+    </div>
+
+    <!-- 弹窗 - 内容待后续精细化处理 -->
+    <div class="answer-modal" id="answer-modal">
+        <div class="letter-container">
+            <div class="letter-header">
+                <div class="letter-title">Sneha的一封来信</div>
+                <div class="letter-subtitle">关于第7天的学习指导</div>
+                <button id="close-letter" class="close-letter">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="letter-body">
+                <div id="md-content" class="md-content">
+                    <div class="md-section">
+                        <h1>IOU合约</h1>
+                        <div class="md-meta">
+                            <span class="md-tag"><i class="fas fa-calendar-day"></i> Day 7</span>
+                            <span class="md-tag"><i class="fas fa-hashtag"></i> ID: 7</span>
+                            <span class="md-tag"><i class="fas fa-user-edit"></i> 译者: Tian Titian</span>
+                            <span class="md-tag"><i class="fas fa-signal"></i> 难度等级: 初级</span>
+                        </div>
+                        
+                        <h2>今日学习内容</h2>
+                        
+                        <p>假设您和您的朋友经常外出——分摊账单、支付旅行费用、购买团体礼物。大多数时候，一个人预付钱，其他人说"我稍后会还给你"。</p>
+                        
+                        <p>但您可能遇到过这种情况：</p>
+                        
+                        <blockquote>
+                            <p>"等等......我又欠你多少钱？"</p>
+                            <p>"我已经还给你了吗？"</p>
+                            <p>"您为该团体承保的总金额是多少？"</p>
+                        </blockquote>
+                        
+                        <p>它很快就会变得混乱。</p>
+                        
+                        <p>这就是这个智能合约的用武之地。<code class="inline-code">SimpleIOU</code> 是您的<strong>链上群账</strong>。它可以帮助朋友：</p>
+                        <ul>
+                            <li>跟踪债务，</li>
+                            <li>将 ETH 存储在他们自己的应用内余额中，</li>
+                            <li>并且可以轻松安顿下来，无需做数学或电子表格。</li>
+                        </ul>
+                        
+                        <div class="md-highlight">
+                            <strong>💻 完整代码地址</strong>：<a href="https://github.com/snehasharma76/30daysSolidity_Web3Compass/blob/master/SimpleIOUApp.sol" target="_blank" style="color: var(--vintage-blue); text-decoration: underline;">GitHub链接</a>
+                        </div>
+                        
+                        <h2>1、产品需求书</h2>
+                        
+                        <h3>合约流程</h3>
+                        <ul>
+                            <li><strong>注册好友</strong>：addFriend（仅所有者）</li>
+                            <li><strong>充值到钱包</strong>：depositIntoWallet（payable）</li>
+                            <li><strong>记录欠款</strong>：recordDebt</li>
+                            <li><strong>用钱包还款</strong>：payFromWallet → 更新余额与债务</li>
+                            <li><strong>直接转账</strong>：transferEther 或 transferEtherViaCall → 外部转出与内部变更</li>
+                            <li><strong>提现</strong>：withdraw</li>
+                            <li><strong>查询余额</strong>：checkBalance（view）</li>
+                        </ul>
+                        
+                        <h3>合约与函数清单</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Function Name</th>
+                                    <th>Visibility</th>
+                                    <th>Mutability</th>
+                                    <th>中文说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>addFriend(address _friend)</td>
+                                    <td>Public</td>
+                                    <td>nonpayable</td>
+                                    <td>仅所有者可注册好友到白名单</td>
+                                </tr>
+                                <tr>
+                                    <td>depositIntoWallet()</td>
+                                    <td>Public</td>
+                                    <td>payable</td>
+                                    <td>注册用户向内部钱包充值 ETH</td>
+                                </tr>
+                                <tr>
+                                    <td>recordDebt(address, uint256)</td>
+                                    <td>Public</td>
+                                    <td>nonpayable</td>
+                                    <td>记录某债务人对调用者的欠款金额</td>
+                                </tr>
+                                <tr>
+                                    <td>payFromWallet(address, uint256)</td>
+                                    <td>Public</td>
+                                    <td>nonpayable</td>
+                                    <td>用内部余额向指定债权人偿还欠款并冲减债务</td>
+                                </tr>
+                                <tr>
+                                    <td>transferEther(address, uint256)</td>
+                                    <td>Public</td>
+                                    <td>nonpayable</td>
+                                    <td>使用 transfer 向注册好友直接转出 ETH</td>
+                                </tr>
+                                <tr>
+                                    <td>transferEtherViaCall(address, uint256)</td>
+                                    <td>Public</td>
+                                    <td>nonpayable</td>
+                                    <td>使用 call 方式转出 ETH</td>
+                                </tr>
+                                <tr>
+                                    <td>withdraw(uint256)</td>
+                                    <td>Public</td>
+                                    <td>nonpayable</td>
+                                    <td>从内部余额提现 ETH 至调用者地址</td>
+                                </tr>
+                                <tr>
+                                    <td>checkBalance()</td>
+                                    <td>Public</td>
+                                    <td>view</td>
+                                    <td>查询调用者在合约的内部余额</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h2>2、细节解说</h2>
+                        
+                        <h3>状态变量：我们在跟踪什么？</h3>
+                        
+                        <p>在任何逻辑运行之前，合约需要<strong>记住一些事情</strong>。</p>
+                        
+                        <div class="md-highlight">
+                            <h4>owner</h4>
+                            <pre><code class="language-solidity">address public owner;</code></pre>
+                            <p>我们首先定义该组的<strong>管理员</strong>是谁。</p>
+                            <p><code class="inline-code">owner</code> 是部署合约的人。此人将拥有特殊权限，例如向群组添加新朋友。这就像创建 Splitwise 组的第一个人 - 他们管理访问权限。</p>
+                        </div>
+                        
+                        <div class="md-highlight">
+                            <h4>registeredFriends 和 friendList</h4>
+                            <pre><code class="language-solidity">mapping(address => bool) public registeredFriends;
+address[] public friendList;</code></pre>
+                            <p>我们希望这份合同<strong>对您的团队来说是私有的</strong>。不仅仅是互联网上的任何人都应该能够加入并开始记录欠条。</p>
+                            <p>我们的管理方法如下：</p>
+                            <ul>
+                                <li><code class="inline-code">registeredFriends</code> 让我们<strong>快速检查</strong>是否允许某人使用合约。</li>
+                                <li><code class="inline-code">friendList</code> 为我们提供了所有注册地址的<strong>完整列表</strong>，如果您想在前端显示所有群组成员，这非常有用。</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="md-highlight">
+                            <h4>balances</h4>
+                            <pre><code class="language-solidity">mapping(address => uint256) public balances;</code></pre>
+                            <p>现在我们来处理这笔钱。</p>
+                            <p>每个人都可以在<strong>合同内</strong>将 ETH 存入其个人余额中。该 ETH 稍后可用于：</p>
+                            <ul>
+                                <li>还清债务，</li>
+                                <li>将 ETH 转移给另一个会员，</li>
+                                <li>或者完全撤回。</li>
+                            </ul>
+                            <p>实际的 ETH 存储在合约"内部"，这个映射只是跟踪<strong>谁拥有多少</strong>。</p>
+                        </div>
+                        
+                        <div class="md-highlight">
+                            <h4>debts</h4>
+                            <pre><code class="language-solidity">mapping(address => mapping(address => uint256)) public debts;</code></pre>
+                            <p>这就是真正的 IOU 魔法发生的地方。这是一个<strong>嵌套映射</strong>，意思是：</p>
+                            <pre><code class="language-solidity">debts[debtor][creditor] = amount;</code></pre>
+                            <p><strong>例如：</strong></p>
+                            <pre><code class="language-solidity">debts[0xAsha][0xRavi] = 1.5 ether;</code></pre>
+                            <p>意味着 Asha 欠 Ravi 1.5 ETH。它就在那里，透明地存储在链上。没有沟通不畅，没有遗忘。</p>
+                        </div>
+                        
+                        <h3>构造函数</h3>
+                        <pre><code class="language-solidity">constructor() {
+    owner = msg.sender;
+    registeredFriends[msg.sender] = true;
+    friendList.push(msg.sender);
+}</code></pre>
+                        
+                        <p>部署合约时：</p>
+                        <ul>
+                            <li><code class="inline-code">msg.sender</code>（无论部署它的人）成为所有者。</li>
+                            <li>他们会自动注册为朋友 - 因为他们显然想使用该系统。</li>
+                            <li>他们的地址被添加到 <code class="inline-code">friendList</code> 中。</li>
+                        </ul>
+                        
+                        <p>因此，从创建此合同的那一刻起，我们就已经有了一个活跃成员：管理员。</p>
+                        
+                        <h3>修饰符：控制访问</h3>
+                        
+                        <p>我们不希望任何人都与此合约进行交互。这些<strong>修饰符</strong>有助于保护功能免遭未经授权的访问。</p>
+                        
+                        <h4>onlyOwner</h4>
+                        <pre><code class="language-solidity">modifier onlyOwner() {
+    require(msg.sender == owner, "Only owner can perform this action");
+    _;
+}</code></pre>
+                        <p>这个很简单：它确保只有部署合约的人（所有者）才能执行某些操作 - 例如添加朋友。</p>
+                        
+                        <h4>onlyRegistered</h4>
+                        <pre><code class="language-solidity">modifier onlyRegistered() {
+    require(registeredFriends[msg.sender], "You are not registered");
+    _;
+}</code></pre>
+                        <p>只有注册的好友（所有者添加的人）才能：存入 ETH、记录债务、偿还债务、发送 ETH 或者撤回它。</p>
+                        <p>如果有人尝试在没有先添加的情况下使用合约，该函数将立即拒绝他们的请求。</p>
+                        
+                        <h2>功能：好友（用户）可以做什么？</h2>
+                        
+                        <h3>addFriend</h3>
+                        <pre><code class="language-solidity">function addFriend(address _friend) public onlyOwner {
+    require(_friend != address(0), "Invalid address");
+    require(!registeredFriends[_friend], "Friend already registered");
+
+    registeredFriends[_friend] = true;
+    friendList.push(_friend);
+}</code></pre>
+                        
+                        <p>只有部署合约的人（所有者）才能调用此函数。它：</p>
+                        <ul>
+                            <li>检查新地址是否不是 <code class="inline-code">0x0</code></li>
+                            <li>确保该人尚未被添加</li>
+                            <li>然后将它们添加到 <code class="inline-code">registeredFriends</code> 和 <code class="inline-code">friendList</code> 中。</li>
+                        </ul>
+                        <p>这使您的 IOU 组保持小、私密和安全。</p>
+                        
+                        <h3>depositIntoWallet</h3>
+                        <pre><code class="language-solidity">function depositIntoWallet() public payable onlyRegistered {
+    require(msg.value > 0, "Must send ETH");
+    balances[msg.sender] += msg.value;
+}</code></pre>
+                        
+                        <p>以下是用户如何将 ETH 添加到其应用内余额中：</p>
+                        <ul>
+                            <li>该函数是 <code class="inline-code">payable</code>，这意味着它可以接收 ETH。</li>
+                            <li><code class="inline-code">msg.value</code> 保存发送的 ETH 数量。</li>
+                            <li>该金额将添加到他们的内部余额中。</li>
+                        </ul>
+                        <p>现在他们可以用这笔 ETH 来偿还债务、汇款或稍后提取。</p>
+                        
+                        <h3>recordDebt</h3>
+                        <pre><code class="language-solidity">function recordDebt(address _debtor, uint256 _amount) public onlyRegistered {
+    require(_debtor != address(0), "Invalid address");
+    require(registeredFriends[_debtor], "Address not registered");
+    require(_amount > 0, "Amount must be greater than 0");
+
+    debts[_debtor][msg.sender] += _amount;
+}</code></pre>
+                        
+                        <p>如果你的朋友欠你钱，你调用这个记录下来。</p>
+                        <p>假设 Ravi 支付了每个人的午餐费用，而 Asha 欠他 0.05 ETH。Ravi 会调用：</p>
+                        <pre><code class="language-solidity">recordDebt(ashaAddress, 0.05 ether);</code></pre>
+                        <p>合同存储了 Asha 现在欠 Ravi 的这笔钱。这里没有 ETH 被移动——我们只是在<strong>记录协议</strong>。</p>
+                        
+                        <h3>payFromWallet</h3>
+                        <pre><code class="language-solidity">function payFromWallet(address _creditor, uint256 _amount) public onlyRegistered {
+    require(_creditor != address(0), "Invalid address");
+    require(registeredFriends[_creditor], "Creditor not registered");
+    require(_amount > 0, "Amount must be greater than 0");
+    require(debts[msg.sender][_creditor] >= _amount, "Debt amount incorrect");
+    require(balances[msg.sender] >= _amount, "Insufficient balance");
+
+    balances[msg.sender] -= _amount;
+    balances[_creditor] += _amount;
+    debts[msg.sender][_creditor] -= _amount;
+}</code></pre>
+                        
+                        <p>这是您使用合约中存储的 ETH 余额<strong>偿还某人</strong>的地方。它的作用如下：</p>
+                        <ul>
+                            <li>检查你欠那个人的钱</li>
+                            <li>确保您有足够的 ETH</li>
+                            <li>从您的余额中减去金额</li>
+                            <li>将其添加到债权人的余额中</li>
+                            <li>减少您记录的债务</li>
+                        </ul>
+                        <p>尽管如此，实际上并没有 ETH 离开合约。它只是在用户的余额之间内部移动。</p>
+                        
+                        <h3>transferEther — 使用 transfer() 发送 ETH</h3>
+                        <pre><code class="language-solidity">function transferEther(address payable _to, uint256 _amount) public onlyRegistered {
+    require(_to != address(0), "Invalid address");
+    require(registeredFriends[_to], "Recipient not registered");
+    require(balances[msg.sender] >= _amount, "Insufficient balance");
+
+    balances[msg.sender] -= _amount;
+    _to.transfer(_amount);
+    balances[_to] += _amount;
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <h4>这究竟是怎么回事呢？</h4>
+                            <p>假设您的余额中存了 1 ETH，并且您想将 0.25 ETH 发送给您的朋友 Rohit（他也在您的朋友群中）。此功能允许您将 ETH 直接从合约发送到他们的钱包。</p>
+                            
+                            <h4>所以......什么是 transfer()?</h4>
+                            <p><code class="inline-code">transfer()</code> 是一种内置的 Solidity 方法，用于将 ETH 从合约发送到外部地址。</p>
+                            <pre><code class="language-solidity">recipientAddress.transfer(amount);</code></pre>
+                            
+                            <p>这就是为什么 <code class="inline-code">transfer()</code> 传统上被认为是安全的：</p>
+                            <ul>
+                                <li>如果发送失败，它<strong>自动恢复</strong></li>
+                                <li>它<strong>仅向接收者转发 2300 gas</strong>——刚好足以接收 ETH，但不足以执行任何其他代码（防止重入攻击）</li>
+                            </ul>
+                            
+                            <h4>⚠️ 为什么这可能是个问题？</h4>
+                            <p>2300 gas 的限制也是它的弱点。如果接收者是<strong>智能合约</strong>（而不是钱包），它可能需要更多的 gas 来处理传入的 ETH——例如更新日志、发出事件或存储状态。</p>
+                            <p>如果接收合约需要超过 2300 个 gas，则转移失败。</p>
+                            <p>在现代 Solidity 中，<code class="inline-code">transfer()</code> 可以将 ETH 发送到<strong>钱包</strong>，但在处理<strong>合约</strong>时存在风险或限制。</p>
+                        </div>
+                        
+                        <h3>transferEtherViaCall — 使用 call() 发送 ETH</h3>
+                        <pre><code class="language-solidity">function transferEtherViaCall(address payable _to, uint256 _amount) public onlyRegistered {
+    require(_to != address(0), "Invalid address");
+    require(registeredFriends[_to], "Recipient not registered");
+    require(balances[msg.sender] >= _amount, "Insufficient balance");
+
+    balances[msg.sender] -= _amount;
+
+    (bool success, ) = _to.call{value: _amount}("");
+    balances[_to] += _amount;
+    require(success, "Transfer failed");
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <h4>所以......什么是 call()?</h4>
+                            <p><code class="inline-code">call()</code> 是 Solidity 中的一个<strong>低级</strong>函数，用于发送 ETH 和调用函数。它是这样写的：</p>
+                            <pre><code class="language-solidity">(bool success, ) = recipient.call{value: amount}("");</code></pre>
+                            
+                            <p>它为您提供了比 <code class="inline-code">transfer()</code> 更多的控制权：</p>
+                            <ul>
+                                <li><strong>无 gas 限制</strong> — 接收方合约可以执行任何它想要的逻辑</li>
+                                <li>您可以使用 <code class="inline-code">success</code> 变量<strong>检查是否成功</strong></li>
+                            </ul>
+                            
+                            <p>但权力越大，责任越大——如果你使用 <code class="inline-code">call()</code>，则由你来：</p>
+                            <ul>
+                                <li>检查是否成功</li>
+                                <li>妥善处理任何故障情况</li>
+                                <li>确保你的合约免受重入攻击（稍后在高级合约中会详细介绍）</li>
+                            </ul>
+                            
+                            <h4>为什么我们在这里使用 call()?</h4>
+                            <p>使用 <code class="inline-code">call()</code> 使函数<strong>与智能合约地址兼容</strong>——而不仅仅是外部拥有的账户（钱包）。因此，即使您朋友的钱包实际上是合约（如 Gnosis 保险箱或支付拆分器），ETH 仍然会通过。</p>
+                        </div>
+                        
+                        <h3>withdraw</h3>
+                        <pre><code class="language-solidity">function withdraw(uint256 _amount) public onlyRegistered {
+    require(balances[msg.sender] >= _amount, "Insufficient balance");
+
+    balances[msg.sender] -= _amount;
+
+    (bool success, ) = payable(msg.sender).call{value: _amount}("");
+    require(success, "Withdrawal failed");
+}</code></pre>
+                        
+                        <p>如果您想将 ETH 从合约中取出，此功能可以做到。它从您的内部余额中减去金额，使用 <code class="inline-code">call()</code> 将其发送到您的钱包。简单安全。</p>
+                        
+                        <h3>checkBalance</h3>
+                        <pre><code class="language-solidity">function checkBalance() public view onlyRegistered returns (uint256) {
+    return balances[msg.sender];
+}</code></pre>
+                        <p>只是查看系统中有多少 ETH 的快速方法。</p>
+                        
+                        <h2>回顾</h2>
+                        
+                        <p>您现在拥有了一个功能齐全、干净、适合初学者的债务跟踪器。</p>
+                        
+                        <p>用户可以：</p>
+                        <ul>
+                            <li>加入群组（如果所有者添加了它们）</li>
+                            <li>存入 ETH</li>
+                            <li>记录债务</li>
+                            <li>使用他们的余额结算它们</li>
+                            <li>发送和提取 ETH</li>
+                        </ul>
+                        
+                        <p>您还了解到：</p>
+                        <ul>
+                            <li>如何使用映射（单个映射和嵌套映射）</li>
+                            <li>ETH 转账如何运作（"transfer" 与 "call"）</li>
+                            <li>如何保持合同访问受控和安全</li>
+                        </ul>
+                        
+                        <blockquote>
+                            <p>从简单的债务记录到真实的 ETH 转账，从 transfer() 到 call()——这个合约展示了实际应用场景中的金融逻辑。嵌套映射、访问控制、以太币转账方式的对比，都是构建 DeFi 应用的基础。当您准备好通过债务减免、分组或事件日志记录来扩展此期限时，请告诉我。你正在路上。</p>
+                        </blockquote>
+                        
+                        <div class="signature">
+                            <p>真诚的，</p>
+                            <p>Sneha</p>
+                            <p style="margin-top: 10px; font-size: 1.5rem; opacity: 0.8;">译者：Tian Titian</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -720,6 +1586,47 @@ require(success, "Send failed");</code></pre>
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+            
+        // Sneha的一封来信模块功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelopeContainer = document.getElementById('envelope-container');
+            const answerModal = document.getElementById('answer-modal');
+            const closeLetter = document.getElementById('close-letter');
+            
+            if (!envelopeContainer || !answerModal || !closeLetter) {
+                return; // 如果元素不存在，直接返回
+            }
+            
+            // 点击信封打开弹窗
+            envelopeContainer.addEventListener('click', function() {
+                envelopeContainer.classList.add('open');
+                
+                // 延迟显示弹窗，让信封翻转动画完成
+                setTimeout(function() {
+                    answerModal.style.display = 'flex';
+                    setTimeout(function() {
+                        answerModal.classList.add('open');
+                    }, 50);
+                }, 400);
+            });
+            
+            // 关闭弹窗
+            closeLetter.addEventListener('click', function() {
+                answerModal.classList.remove('open');
+                
+                setTimeout(function() {
+                    answerModal.style.display = 'none';
+                    envelopeContainer.classList.remove('open');
+                }, 600);
+            });
+            
+            // 点击弹窗外部关闭
+            answerModal.addEventListener('click', function(e) {
+                if (e.target === answerModal) {
+                    closeLetter.click();
                 }
             });
         });

@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <!-- Markdown渲染库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
     <style>
         :root {
             --primary: #4361ee;
@@ -18,6 +20,10 @@
             --medium: #F8961E;
             --hard: #E71D36;
             --expert: #7209B7;
+            --warm-brown: #8B7355;
+            --parchment: #F5F1E6;
+            --vintage-blue: #6B8E9F;
+            --warm-red: #C44536;
         }
         
         * {
@@ -302,6 +308,522 @@
         .nav-footer-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.3rem;
+        }        
+        /* 参考答案模块样式 - 温暖治愈风格 */
+        .answer-reference {
+            position: relative;
+            margin: 60px 0 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .envelope-container {
+            position: relative;
+            width: 340px;
+            height: 240px;
+            cursor: pointer;
+            perspective: 1200px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(139, 115, 85, 0.2));
+        }
+        
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .envelope-front, .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .envelope-front {
+            background: linear-gradient(135deg, #f9f3e9, #e8dfd1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: -70px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 70px solid #e8dfd1;
+            z-index: 1;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+        }
+        
+        .envelope-flap::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: -170px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 67px solid #f9f3e9;
+        }
+        
+        .envelope-seal {
+            position: absolute;
+            bottom: 25px;
+            right: 35px;
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #C44536, #8B2E24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            border: 2px solid #A52A2A;
+        }
+        
+        .seal-icon {
+            color: #F5F1E6;
+            font-size: 1.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .envelope-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.4rem;
+            color: var(--warm-brown);
+            z-index: 2;
+            position: relative;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+        
+        .envelope-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(139, 115, 85, 0.05) 3px, transparent 3px),
+                radial-gradient(circle at 85% 75%, rgba(139, 115, 85, 0.05) 3px, transparent 3px);
+            background-size: 40px 40px;
+            z-index: 0;
+        }
+        
+        .envelope-back {
+            background: linear-gradient(135deg, #f5f1e6, #e8dfd1);
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-container:hover .envelope {
+            transform: rotateY(10deg) translateY(-5px);
+        }
+        
+        .envelope-container.open .envelope {
+            transform: rotateY(180deg);
+        }
+        
+        .envelope-hint {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--warm-brown);
+            margin-top: 15px;
+            opacity: 0.9;
+            background: rgba(245, 241, 230, 0.7);
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* 弹窗样式 */
+        .answer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            background: rgba(107, 142, 159, 0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+        
+        .letter-container {
+            width: 90%;
+            max-width: 900px;
+            height: 80vh;
+            background: #F5F1E6;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(107, 142, 159, 0.4);
+            overflow: hidden;
+            transform: scale(0);
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .answer-modal.open .letter-container {
+            transform: scale(1);
+        }
+        
+        .letter-header {
+            background: linear-gradient(135deg, #8B7355, #6B5A45);
+            padding: 25px 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-bottom: 2px dashed #A5947A;
+        }
+        
+        .letter-title {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: #F5F1E6;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
+        }
+        
+        .letter-subtitle {
+            color: rgba(245, 241, 230, 0.9);
+            font-size: 1.3rem;
+            font-family: 'Gochi Hand', cursive;
+        }
+        
+        .close-letter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(245, 241, 230, 0.2);
+            color: #F5F1E6;
+            border: 1px solid rgba(245, 241, 230, 0.3);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .close-letter:hover {
+            background: rgba(245, 241, 230, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .letter-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #F5F1E6;
+            position: relative;
+        }
+        
+        .letter-body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent 98%, rgba(139, 115, 85, 0.1) 98%),
+                linear-gradient(rgba(139, 115, 85, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        
+        /* MD内容样式 */
+        .md-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .md-section {
+            margin-bottom: 40px;
+        }
+        
+        .md-section h1 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: var(--warm-brown);
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #A5947A;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .md-section h2 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.2rem;
+            color: var(--warm-brown);
+            margin: 30px 0 15px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .md-section h2::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--warm-red);
+            font-size: 2.5rem;
+        }
+        
+        .md-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .md-tag {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--warm-brown);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-highlight {
+            background: rgba(107, 142, 159, 0.1);
+            border-left: 5px solid var(--vintage-blue);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(107, 142, 159, 0.2);
+        }
+        
+        .md-content pre {
+            background: #2d2a2e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .md-content .inline-code {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            color: var(--warm-brown);
+            font-size: 0.9em;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content ul, .md-content ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .md-content li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+        
+        .md-content blockquote {
+            border-left: 4px solid var(--vintage-blue);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+            background: rgba(107, 142, 159, 0.05);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .md-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th, .md-content td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th {
+            background: linear-gradient(135deg, var(--warm-brown), #6B5A45);
+            color: #F5F1E6;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.1rem;
+        }
+        
+        .md-content tr:nth-child(even) {
+            background: rgba(139, 115, 85, 0.05);
+        }
+        
+        /* Markdown容器样式 */
+        #markdown-container {
+            line-height: 1.8;
+        }
+        
+        #markdown-container h3 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 1.8rem;
+            color: var(--warm-brown);
+            margin: 25px 0 15px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        #markdown-container h3::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--vintage-blue);
+            font-size: 1.5rem;
+        }
+        
+        #markdown-container h4 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--warm-brown);
+            margin: 20px 0 12px 0;
+        }
+        
+        #markdown-container p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        #markdown-container strong {
+            color: var(--warm-brown);
+            font-weight: bold;
+        }
+        
+        #markdown-container a {
+            color: var(--vintage-blue);
+            text-decoration: underline;
+            transition: color 0.3s;
+        }
+        
+        #markdown-container a:hover {
+            color: var(--warm-brown);
+        }
+        
+        #markdown-container hr {
+            border: none;
+            border-top: 2px dashed #A5947A;
+            margin: 30px 0;
+        }
+        
+        #markdown-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        /* Markdown代码块样式 */
+        #markdown-container pre {
+            background: #2d2d2d;
+            border: 1px solid #3a363b;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        #markdown-container pre code {
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+            background: transparent;
+            padding: 0;
+            border: none;
+            display: block;
+            white-space: pre;
+        }
+        
+        #markdown-container code:not(pre code) {
+            background: rgba(139, 115, 85, 0.15);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            color: var(--warm-brown);
+            font-size: 0.9em;
+            border: 1px solid rgba(139, 115, 85, 0.3);
+            font-weight: 500;
+        }
+        
+        #markdown-container table code {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            color: var(--warm-brown);
+            font-size: 0.85em;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 40px;
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2rem;
+            color: var(--warm-brown);
         }
         
         @media (max-width: 768px) {
@@ -319,6 +841,49 @@
             
             .key-points {
                 grid-template-columns: 1fr;
+            }
+            
+            .envelope-container {
+                width: 300px;
+                height: 210px;
+            }
+            
+            .envelope-flap {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 60px solid #e8dfd1;
+            }
+            
+            .envelope-flap::after {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 57px solid #f9f3e9;
+                left: -150px;
+            }
+            
+            .envelope-text {
+                font-size: 2rem;
+            }
+            
+            .answer-modal {
+                padding: 10px;
+            }
+            
+            .letter-container {
+                width: 95%;
+                height: 85vh;
+            }
+            
+            .letter-title {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -799,6 +1364,49 @@ bytes32 constant PERMIT_TYPEHASH = keccak256(
                 <div class="nav-footer-title">FortKnox - 金库堡垒</div>
             </a>
         </div>
+    
+        <!-- Sneha的一封来信模块 -->
+        <div class="answer-reference">
+            <div class="envelope-container" id="envelope-container">
+                <div class="envelope">
+                    <div class="envelope-front">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-pattern"></div>
+                        <div class="envelope-seal">
+                            <i class="fas fa-feather-alt seal-icon"></i>
+                        </div>
+                        <div class="envelope-text">Sneha的一封来信</div>
+                    </div>
+                    <div class="envelope-back">
+                        <div class="envelope-text" style="color: var(--warm-brown);">点击开启</div>
+                    </div>
+                </div>
+            </div>
+            <div class="envelope-hint">点击信封查看Sneha的来信</div>
+        </div>
+    </div>
+
+    <!-- 弹窗 - 内容待后续精细化处理 -->
+    <div class="answer-modal" id="answer-modal">
+        <div class="letter-container">
+            <div class="letter-header">
+                <div class="letter-title">Sneha的一封来信</div>
+                <div class="letter-subtitle">关于第19天的学习指导</div>
+                <button id="close-letter" class="close-letter">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="letter-body">
+                <div id="markdown-container" class="md-section">
+                    <div style="text-align: center; padding: 40px;">
+                        <div class="spinner" style="border: 4px solid rgba(139, 115, 85, 0.2); border-top: 4px solid var(--warm-brown); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+                        <p style="color: #999;">正在加载内容...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -813,6 +1421,92 @@ bytes32 constant PERMIT_TYPEHASH = keccak256(
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+            
+        // Sneha的一封来信模块功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelopeContainer = document.getElementById('envelope-container');
+            const answerModal = document.getElementById('answer-modal');
+            const closeLetter = document.getElementById('close-letter');
+            const markdownContainer = document.getElementById('markdown-container');
+            
+            if (!envelopeContainer || !answerModal || !closeLetter || !markdownContainer) {
+                return; // 如果元素不存在，直接返回
+            }
+            
+            // 配置marked.js渲染选项
+            if (typeof marked !== 'undefined') {
+                marked.setOptions({
+                    highlight: function(code, lang) {
+                        if (lang && hljs.getLanguage(lang)) {
+                            try {
+                                return hljs.highlight(code, { language: lang }).value;
+                            } catch (err) {}
+                        }
+                        return hljs.highlightAuto(code).value;
+                    },
+                    breaks: true,
+                    gfm: true
+                });
+            }
+            
+            // 嵌入的Markdown内容（使用字符串替换方式处理转义字符）
+            const embeddedMarkdownJsonString = "# 绛惧悕楠岃瘉\n\nDay: Day 19\nID: 19\n璇戣€? 闆烽浄\n闅惧害绛夌骇: 涓骇\n\n# 瀛︿範鍐呭\n\n濂藉惂鈥斺€斿埌鐩墠涓烘锛屾垜浠湪 Solidity 涔嬫梾涓彇寰椾簡涓€浜涢噸澶ц繘灞曘€俓n鎴戜滑瀛︿細浜嗗浣曪細\n      \n\n- 鍒嗛厤**鎵€鏈夋潈**\n- 浣跨敤**淇グ绗?*淇濇姢鍑芥暟\n- 浣跨敤**鏄犲皠**鏉ュ瓨鍌ㄧ敤鎴锋暟鎹甛n- 杩涜鍏ㄩ潰鐨?*浠ｅ竵閿€鍞?*\n- 浣跨敤**濮旀墭璋冪敤**鏋勫缓鍩轰簬鎻掍欢鐨勬ā鍧楀寲绯荤粺\n\n浣嗙幇鍦紝鏄椂鍊欏皢**鎵€鏈夎繖浜涙妧鑳戒粯璇歌鍔?*骞惰В鍐崇幇瀹炰笘鐣岀殑闂浜嗏€斺€旇繖鏄瘡涓?Web3 鏋勫缓鑰呴兘鑳戒笌涔嬬浉鍏崇殑銆俓n\n**鍦烘櫙  锛氱浜?Web3 浜嬩欢**\n浣犳鍦ㄧ粍缁囦唬甯?*闂ㄦ帶浼氳**銆?*鍒涘浜鸿仛浼?*鎴?*閾句笂鐮旇浼?*銆傚彧鏈夐€夊畾鐨勫浜烘墠鑳借繘鍏ャ€俓n鐜板湪鎸戞垬鏉ヤ簡......\n\n**浼犵粺鏂规硶锛?*\n浣犲皢姣忎釜涓庝細鑰呯殑鍦板潃瀛樺偍鍦ㄩ摼涓娿€俓n浣犲彲浠ュ湪鍔炵悊鐧绘満鎵嬬画鏃舵墜鍔ㄦ鏌ユ瘡涓€椤广€俓n姣忔鍦板潃鏇存柊鎴栨嫾鍐欓敊璇兘浼氭秷鑰?gas銆俓n馃挗杩欏緢绗ㄦ嫏銆傚お璐典簡銆傞偅涓嶆槸 Web3銆俓n\n**鉁呮洿鏅鸿兘鐨勬柟寮忥細閾句笅绛惧悕**\n鑰屼笉鏄笂浼犱竴澶у爢鍦板潃......\n濡傛灉锛歕n\n- 娲诲姩缁勭粐鑰呬负姣忎綅鑾锋壒鐨勬潵瀹剧缃蹭竴鏉℃秷鎭痋n- 瀹汉鎼哄甫宸茬鍚嶇殑閭€璇峰嚱\n- 鍚堢害鍙槸鍦ㄧ鍒版椂楠岃瘉绛惧悕\n- 鏃犻渶鍦ㄩ摼涓婂瓨鍌ㄤ换浣曠櫧鍚嶅崟\n\n鏄殑锛岃繖涓€鍒囬兘鏄娇鐢ㄤ互澶潑鍐呯疆鐨?`ecrecover` 鍔熻兘瀹夊叏鍦板畬鎴愮殑銆俓n\n**鎴戜滑鐨勬父鎴忚鍒掟煂?*\n 浠ヤ笅鏄垜浠皢瑕佹瀯寤虹殑鍐呭锛屼互鍙婃垜浠皢濡備綍鍒嗚В瀹冿細\n        **1. 娲诲姩璁剧疆**\n        缁勭粐鑰呭畾涔夊鍚嶃€佹棩鏈熷拰鏈€澶т笌浼氳€呬汉鏁般€俓n       **2.鍔犲瘑閭€璇?*\n       鍚庣涓嶆槸瀛樺偍鍦板潃锛岃€屾槸涓烘瘡涓凡鎵瑰噯鐨勬潵瀹剧缃蹭竴鏉℃秷鎭€俓n       **3.绛惧埌娴佺▼**\n       鏉ュ鎻愪氦浠栦滑绛惧悕鐨勬秷鎭€俓n       璇ュ悎鍚屼娇鐢?`ecrecover` 鏉ラ獙璇佸畠鏄惁鐢辩粍缁囪€呯缃层€俓n      **4.瀹夊叏鎬у拰鐏垫椿鎬?*\n        閾句笂娌℃湁鍦板潃鍒楄〃銆傛病鏈夐鍔犺浇鐨勭櫧鍚嶅崟銆傛病鏈夋氮璐圭殑姘斾綋銆俓n         鍙湁鏈夋晥鐨勩€佺鍚嶇殑涓庝細鑰呮墠鑳借繘鍏モ€斺€旇€屼笖杩欎竴鍒囬兘鍙互鍦ㄩ摼涓婂畬鍏ㄩ獙璇併€俓n\n**鎮ㄥ皢瀛﹀埌浠€涔?*\n濡備綍瀵圭粨鏋勫寲鏁版嵁杩涜鍝堝笇澶勭悊  锛坄abi.encodePacked`锛塡n涓轰粈涔堜互澶潑浣跨敤绛惧悕娑堟伅鍓嶇紑\n`ecrecover锛堬級` 濡備綍璁╀綘鍦ㄩ摼涓婇獙璇侀摼涓嬫壒鍑哱n濡備綍瀹炴柦褰撲粖鐢熶骇涓疄闄呬娇鐢ㄧ殑杞婚噺绾с€佽妭鑳界殑璁块棶绯荤粺\n\n鐢辨鍙锛屽湪浼犵粺鐨勬椿鍔ㄧ鐞嗙郴缁熶腑锛岃韩浠介獙璇佸線寰€渚濊禆浜庝腑蹇冨寲鐨勬暟鎹簱鍜屽鏉傜殑鏉冮檺鎺у埗鏈哄埗銆傚弬涓庤€呴渶瑕佹敞鍐岃处鎴枫€佽浣忓瘑鐮侊紝缁勭粐鑰呴渶瑕佺淮鎶ょ敤鎴峰垪琛ㄣ€佸鐞嗗繕璁板瘑鐮佺瓑绻佺悙浜嬪姟銆傝繖绉嶆ā寮忎笉浠呯敤鎴蜂綋楠屽鏉傦紝杩樺瓨鍦ㄥ崟鐐规晠闅滃拰鏁版嵁娉勯湶鐨勯闄┿€俓n\n**鍖哄潡閾炬妧鏈负鎴戜滑鎻愪緵浜嗕竴绉嶅叏鏂扮殑鎬濊矾**锛氶€氳繃瀵嗙爜瀛﹁瘉鏄庤€岄潪涓績鍖栨巿鏉冩潵楠岃瘉韬唤銆傛湰銆岀鍚嶉獙璇佹椿鍔ㄥ悎绾︺€嶆鏄繖涓€鐞嗗康鐨勫疄璺碘€斺€斿埄鐢ㄦ暟瀛楃鍚嶆妧鏈紝鏋勫缓浜嗕竴涓幓涓績鍖栥€佸畨鍏ㄩ珮鏁堢殑娲诲姩绠＄悊绯荤粺銆俓n\n### **馃幆 璁捐鍝插**\n\n鏈悎绾︾殑鏍稿績鍒涙柊鍦ㄤ簬聽**\\"閾句笅绛惧悕锛岄摼涓婇獙璇乗\"**聽鐨勬ā寮忥細\n\n- **缁勭粐鑰?*鍦ㄩ摼涓嬩负鍚堟硶鍙備笌鑰呯敓鎴愭暟瀛楃鍚峔n- **鍙備笌鑰?*鎻愪氦绛惧悕鍒板尯鍧楅摼鍚堢害杩涜楠岃瘉\n- **鏅鸿兘鍚堢害**閫氳繃`ecrecover`鍑芥暟鎭㈠绛惧悕鑰呭湴鍧€锛岀‘璁よ韩浠芥湁鏁堟€n\n杩欑鏂规硶甯︽潵浜嗗閲嶄紭鍔匡細\n\n- **闆禛as棰勬敞鍐?*锛氬弬涓庤€呮棤闇€棰勫厛鏀粯Gas璐规敞鍐孿n- **鏃犻檺鎵╁睍鎬?*锛氱鍚嶇敓鎴愪笉鍙楀尯鍧楅摼鍚炲悙閲忛檺鍒禱n- **闅愮淇濇姢**锛氬弬涓庤€呭悕鍗曚笉浼氬叏閮ㄦ毚闇插湪閾句笂\n- **鎴愭湰浼樺寲**锛氭壒閲忕鍒板ぇ骞呴檷浣嶨as娑堣€梊n\n**瀛︿範鐩爣**锛氭帉鎻℃暟瀛楃鍚嶉獙璇佸拰閾句笅璁よ瘉\n\n**鏍稿績鎶€鑳?*锛歟crecover銆佹秷鎭搱甯屻€佺鍚嶇敓鎴怽n\n**瀹屾暣浠ｇ爜**锛氣€?\n\n# 1銆佷骇鍝侀渶姹備功\n\n### **a.鐢ㄦ埛璺緞鍥?*\n\n**缁勭粐鑰呰矾寰刼rganizer**\n\n1. **鍚堢害閮ㄧ讲**\n    - 璋冪敤鏋勯€犲嚱鏁帮紝浼犲叆娲诲姩鍙傛暟\n    - 鑷姩鎴愪负organizer锛岃幏寰楃鐞嗘潈闄怽n2. **绛惧悕鐢熸垚**\n    - 鑾峰彇鍙備笌鑰呴挶鍖呭湴鍧€\n    - 璋冪敤getMessageHash鑾峰彇娑堟伅鍝堝笇\n    - 浣跨敤绉侀挜瀵瑰搱甯岃繘琛岀鍚峔n    - 鍒嗙绛惧悕涓簐, r, s缁勪欢\n3. **鎵归噺绠＄悊**\n    - 涓哄涓弬涓庤€呯敓鎴愮鍚峔n    - 浣跨敤batchCheckIn杩涜鎵归噺绛惧埌\n    - 鐩戞帶娲诲姩鐘舵€佸拰鍙備笌浜烘暟\n    \n\n**鍙備笌鑰呰矾寰凙ttendee**\n\n1. **娲诲姩鍙戠幇**\n    - 鏌ョ湅娲诲姩鍩烘湰淇℃伅\n    - 纭娲诲姩鐘舵€?isEventActive)\n2. **绛惧埌娴佺▼**\n    - 浠庣粍缁囪€呰幏鍙栫鍚嶆暟鎹甛n    - 鎻愪氦v, r, s鍙傛暟鍒板悎绾n    - 绛夊緟绛惧悕楠岃瘉鍜岀姸鎬佹洿鏂癨n3. **鐘舵€佺‘璁?*\n    - 楠岃瘉hasAttended鐘舵€乗n    - 鏌ョ湅绛惧埌鍘嗗彶璁板綍\n\n![image.png](%E7%AD%BE%E5%90%8D%E9%AA%8C%E8%AF%81%2028c06421268880a1a3b5d1d75cf53398/image.png)\n\n### **b.鏁版嵁搴撶粨鏋?*\n\n**1.鍚堢害鍩烘湰淇℃伅锛圕ontract Basic Information锛?*\n\n| **Contract / 鍚堢害** | **Type / 绫诲瀷** | **Bases / 鍩虹鍚堢害** | **鍚箟 / Description** |\n| --- | --- | --- | --- |\n| SignThis | Implementation / 瀹炵幇鍚堢害 | None / 鏃?| 绛惧悕楠岃瘉娲诲姩鍚堢害 / Signature Verification Event Contract |\n\n**2.鐘舵€佸彉閲忚〃 (State Variables Table)**\n\n| **L** | **Field Name / 瀛楁鍚?* | **Visibility / 鍙鎬?* | **Mutability / 鍙彉鎬?* | **Data Type / 鏁版嵁绫诲瀷** | **Description / 鎻忚堪** |\n| --- | --- | --- | --- | --- | --- |\n| L | eventName | Public / 鍏紑 | view / 鍙 | string / 瀛楃涓?| 娲诲姩鍚嶇О / Event Name |\n| L | organizer | Public / 鍏紑 | view / 鍙 | address / 鍦板潃 | 缁勭粐鑰呴挶鍖呭湴鍧€ / Organizer Wallet Address |\n| L | eventDate | Public / 鍏紑 | view / 鍙 | uint256 / 鏃犵鍙锋暣鏁?| 娲诲姩鏃ユ湡鏃堕棿鎴?/ Event Date Timestamp |\n| L | maxAttendees | Public / 鍏紑 | view / 鍙 | uint256 / 鏃犵鍙锋暣鏁?| 鏈€澶у弬涓庝汉鏁?/ Maximum Attendee Capacity |\n| L | attendeeCount | Public / 鍏紑 | view / 鍙 | uint256 / 鏃犵鍙锋暣鏁?| 褰撳墠鍙備笌浜烘暟 / Current Attendee Count |\n| L | isEventActive | Public / 鍏紑 | view / 鍙 | bool / 甯冨皵鍊?| 娲诲姩鏄惁婵€娲?/ Whether Event is Active |\n| L | hasAttended | Public / 鍏紑 | view / 鍙 | mapping(address 鈬?bool) / 鏄犲皠 | 鍙備笌璁板綍鏄犲皠琛?/ Attendance Record Mapping |\n\n### **3. 鍑芥暟鎺ュ彛琛?(Function Interfaces Table)**\n\n| **L** | **Function Name / 鍑芥暟鍚?* | **Visibility / 鍙鎬?* | **Mutability / 鍙彉鎬?* | **Modifiers / 淇グ鍣?* | **Description / 鎻忚堪** |\n| --- | --- | --- | --- | --- | --- |\n| L | constructor | Internal / 鍐呴儴 | state-changing / 鐘舵€佷慨鏀?| NO / 鏃?| 鍚堢害鏋勯€犲嚱鏁?/ Contract Constructor |\n| L | checkInWithSignature | Public / 鍏紑 | state-changing / 鐘舵€佷慨鏀?| eventActive | 鍗曠敤鎴风鍚嶉獙璇佺鍒?/ Single User Signature Check-in |\n| L | batchCheckIn | Public / 鍏紑 | state-changing / 鐘舵€佷慨鏀?| eventActive | 鎵归噺绛惧悕楠岃瘉绛惧埌 / Batch Signature Check-in |\n| L | verifySignature | Public / 鍏紑 | view / 鍙 | NO / 鏃?| 楠岃瘉绛惧悕鏈夋晥鎬?/ Verify Signature Validity |\n| L | getMessageHash | Public / 鍏紑 | view / 鍙 | NO / 鏃?| 鑾峰彇娑堟伅鍝堝笇鍊?/ Get Message Hash for Signing |\n| L | toggleEventStatus | Public / 鍏紑 | state-changing / 鐘舵€佷慨鏀?| onlyOrganizer | 鍒囨崲娲诲姩鐘舵€?/ Toggle Event Status |\n| L | getEventInfo | Public / 鍏紑 | view / 鍙 | NO / 鏃?| 鑾峰彇娲诲姩瀹屾暣淇℃伅 / Get Complete Event Information |\n\n**琛ュ厖璇存槑锛?*\n\n**淇グ鍣ㄨ〃 (Modifiers Table)**\n\n| **L** | **Modifier Name / 淇グ鍣ㄥ悕** | **Description / 鎻忚堪** |\n| --- | --- | --- |\n| L | onlyOrganizer | 浠呯粍缁囪€呭彲璋冪敤 / Only Organizer Can Call |\n| L | eventActive | 浠呮椿鍔ㄦ縺娲荤姸鎬佸彲璋冪敤 / Only When Event is Active |\n\n**浜嬩欢鏃ュ織琛?(Event Logs Table)**\n\n| **L** | **Event Name / 浜嬩欢鍚?* | **Parameters / 鍙傛暟** | **Description / 鎻忚堪** |\n| --- | --- | --- | --- |\n| L | EventCreated | (string name, uint256 date, uint256 maxAttendees) | 娲诲姩鍒涘缓浜嬩欢 / Event Created |\n| L | AttendeeCheckedIn | (address attendee, uint256 timestamp) | 鍙備笌鑰呯鍒颁簨浠?/ Attendee Checked In |\n| L | EventStatusChanged | (bool isActive) | 娲诲姩鐘舵€佸彉鏇翠簨浠?/ Event Status Changed |\n\n**鍏抽敭鏈璇存槑 (Key Terminology Explanation)**\n\n| **Term / 鏈** | **Meaning / 鍚箟** | **Description / 鎻忚堪** |\n| --- | --- | --- |\n| **Visibility / 鍙鎬?* | 璁块棶鏉冮檺鎺у埗 | 瀹氫箟璋佸彲浠ヨ皟鐢ㄥ嚱鏁版垨璁块棶鍙橀噺 / Defines who can call functions or access variables |\n| **Mutability / 鍙彉鎬?* | 鐘舵€佷慨鏀硅兘鍔?| view: 鍙涓嶄慨鏀圭姸鎬? state-changing: 淇敼鐘舵€侀渶瑕丟as璐?/ view: read-only; state-changing: modifies state and requires Gas |\n| **Modifiers / 淇グ鍣?* | 鍑芥暟淇グ鏉′欢 | 鍦ㄥ嚱鏁版墽琛屽墠妫€鏌ョ殑鏉′欢 / Conditions checked before function execution |\n| **Public / 鍏紑** | 瀹屽叏鍏紑璁块棶 | 浠讳綍璐︽埛閮藉彲浠ヨ皟鐢?/ Can be called by any account |\n| **Internal / 鍐呴儴** | 鍐呴儴璁块棶 | 浠呭悎绾﹀唴閮ㄦ垨鍏朵粬缁ф壙鍚堢害鍙皟鐢?/ Only within contract or inherited contracts |\n| **State-changing / 鐘舵€佷慨鏀?* | 淇敼鍖哄潡閾剧姸鎬?| 闇€瑕佹敮浠楪as璐圭敤锛屼細浜х敓浜ゆ槗 / Requires Gas fee and creates a transaction |\n| **View / 鍙** | 浠呰鍙栫姸鎬?| 鍏嶈垂璋冪敤锛屼笉淇敼鐘舵€?/ Free to call, does not modify state |\n\n**鏁版嵁绫诲瀷璇存槑 (Data Types Explanation)**\n\n| **Data Type / 鏁版嵁绫诲瀷** | **Description / 鎻忚堪** | **Example / 绀轰緥** |\n| --- | --- | --- |\n| string / 瀛楃涓?| 鏂囨湰鏁版嵁绫诲瀷 / Text data type | \\"Web3 Conference 2024\\" |\n| address / 鍦板潃 | 浠ュお鍧婅处鎴峰湴鍧€ / Ethereum account address | 0x742d35Cc6634C0532925a3b8D0C9964E5Bd4f071 |\n| uint256 / 鏃犵鍙锋暣鏁?| 256浣嶆鏁存暟 / 256-bit positive integer | 1735660800 (鏃堕棿鎴? |\n| bool / 甯冨皵鍊?| 鐪?鍋囧€?/ True/False value | true / false |\n| mapping / 鏄犲皠 | 閿€煎瀛樺偍 / Key-value storage | address 鈫?bool (鍦板潃鍒板竷灏斿€肩殑鏄犲皠) |\n\n# 2銆佺粏鑺傝瑙n\n### **鏍稿績姒傚康**\n\n**锛?锛夋暟瀛楃鍚嶅師鐞?*锛氭暟瀛楃鍚嶅熀浜庢き鍦嗘洸绾垮瘑鐮佸锛屾彁渚涜韩浠介獙璇佸拰娑堟伅瀹屾暣鎬э細\n\n**馃敼 绛惧悕杩囩▼**\n\n1. 鐢ㄦ埛浣跨敤绉侀挜瀵规秷鎭搱甯岃繘琛岀鍚峔n2. 鐢熸垚绛惧悕 (r, s, v) 涓変釜鍙傛暟\n3. 灏嗙鍚嶅拰娑堟伅涓€璧峰彂閫乗n\n**馃敼 楠岃瘉杩囩▼**\n\n1. 鍚堢害鎺ユ敹娑堟伅鍜岀鍚峔n2. 浣跨敤ecrecover鎭㈠绛惧悕鑰呭湴鍧€\n3. 楠岃瘉鍦板潃鏄惁鏈夋潈闄怽n\n**浼樺娍锛?*鏃犻渶鍦ㄩ摼涓婂瓨鍌ㄧ櫧鍚嶅崟锛岃妭鐪丟as璐圭敤\n\n**馃攳锛?锛?ecrecover 鍑芥暟**\n\n`ecrecover`鏄疭olidity鍐呯疆鍑芥暟锛岀敤浜庝粠绛惧悕鎭㈠绛惧悕鑰呭湴鍧€锛歕n\n```solidity\nfunction ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s)\n    returns (address signer)\n```\n\n**鍙傛暟璇存槑锛?*\n\n- `hash`: 娑堟伅鐨刱eccak256鍝堝笇\n- `v`: 鎭㈠ID (閫氬父鏄?7鎴?8)\n- `r, s`: 绛惧悕鐨勪袱涓粍鎴愰儴鍒哱n\n```solidity\n// 浣跨敤绀轰緥\nbytes32 messageHash = keccak256(abi.encodePacked(user, eventId));\nbytes32 ethSignedMessageHash = keccak256(abi.encodePacked(\\"\\x19Ethereum Signed Message:\\n32\\", messageHash));\naddress signer = ecrecover(ethSignedMessageHash, v, r, s);\n```\n\n馃摑 锛?锛?*浠ュお鍧婄鍚嶆秷鎭牸寮?*\n\n浠ュお鍧婇挶鍖呯鍚嶆椂浼氳嚜鍔ㄦ坊鍔犲墠缂€锛岄槻姝㈢鍚嶉噸鏀炬敾鍑伙細\n\n```solidity\n// 鍘熷娑堟伅鍝堝笇\nbytes32 messageHash = keccak256(abi.encodePacked(data));\n\n// 浠ュお鍧婄鍚嶆秷鎭搱甯孿nbytes32 ethSignedMessageHash = keccak256(abi.encodePacked(\n    \\"\\x19Ethereum Signed Message:\\n32\\",\n    messageHash\n));\n```\n\n**鍓嶇紑浣滅敤锛?*\n\n- 闃叉鐢ㄦ埛璇浜ゆ槗鏁版嵁\n- 鍖哄垎涓嶅悓绫诲瀷鐨勭鍚峔n- 鎻愰珮瀹夊叏鎬n\n鈿?Gas浼樺寲绛栫暐\n\n鍩轰簬绛惧悕鐨勮闂帶鍒剁浉姣斾紶缁熺櫧鍚嶅崟鏈夋樉钁楃殑Gas浼樺娍锛歕n\n**鉁?绛惧悕鏂瑰紡**\n\n- 鏃犻渶瀛樺偍鐢ㄦ埛鍒楄〃\n- 楠岃瘉鎴愭湰鍥哄畾 (~3000 gas)\n- 鏀寔鏃犻檺鐢ㄦ埛\n- 鍔ㄦ€佹潈闄愮鐞哱n\n**鉂?浼犵粺鐧藉悕鍗?*\n\n- 姣忎釜鐢ㄦ埛闇€瑕佸瓨鍌?(~20000 gas)\n- 鏌ヨ鎴愭湰闅忕敤鎴峰鍔燶n- 淇敼鐧藉悕鍗曢渶瑕佷氦鏄揬n- 瀛樺偍鎴愭湰楂榎n\n### **鍒嗚В浠ｇ爜**\n\n### **鎷嗚В鐨勫悎绾︼細`EventEntry.sol`**\n\n```jsx\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.17;\n\ncontract EventEntry {\n    string public eventName;\n    address public organizer;\n    uint256 public eventDate;\n    uint256 public maxAttendees;\n    uint256 public attendeeCount;\n    bool public isEventActive;\n\n    mapping(address => bool) public hasAttended;\n\n    event EventCreated(string name, uint256 date, uint256 maxAttendees);\n    event AttendeeCheckedIn(address attendee, uint256 timestamp);\n    event EventStatusChanged(bool isActive);\n\n    constructor(string memory _eventName, uint256 _eventDate_unix, uint256 _maxAttendees) {\n        eventName = _eventName;\n        eventDate = _eventDate_unix;\n        maxAttendees = _maxAttendees;\n        organizer = msg.sender;\n        isEventActive = true;\n\n        emit EventCreated(_eventName, _eventDate_unix, _maxAttendees);\n    }\n\n    modifier onlyOrganizer() {\n        require(msg.sender == organizer, \\"Only the event organizer can call this function\\");\n        _;\n    }\n\n    function setEventStatus(bool _isActive) external onlyOrganizer {\n        isEventActive = _isActive;\n        emit EventStatusChanged(_isActive);\n    }\n\n    function getMessageHash(address _attendee) public view returns (bytes32) {\n        return keccak256(abi.encodePacked(address(this), eventName, _attendee));\n    }\n\n    function getEthSignedMessageHash(bytes32 _messageHash) public pure returns (bytes32) {\n        return keccak256(abi.encodePacked(\\"\\x19Ethereum Signed Message:\\n32\\", _messageHash));\n    }\n\n    function verifySignature(address _attendee, bytes memory _signature) public view returns (bool) {\n        bytes32 messageHash = getMessageHash(_attendee);\n        bytes32 ethSignedMessageHash = getEthSignedMessageHash(messageHash);\n        return recoverSigner(ethSignedMessageHash, _signature) == organizer;\n    }\n\n    function recoverSigner(bytes32 _ethSignedMessageHash, bytes memory _signature)\n        public\n        pure\n        returns (address)\n    {\n        require(_signature.length == 65, \\"Invalid signature length\\");\n\n        bytes32 r;\n        bytes32 s;\n        uint8 v;\n\n        assembly {\n            r := mload(add(_signature, 32))\n            s := mload(add(_signature, 64))\n            v := byte(0, mload(add(_signature, 96)))\n        }\n\n        if (v < 27) {\n            v += 27;\n        }\n\n        require(v == 27 || v == 28, \\"Invalid signature 'v' value\\");\n\n        return ecrecover(_ethSignedMessageHash, v, r, s);\n    }\n\n    function checkIn(bytes memory _signature) external {\n        require(isEventActive, \\"Event is not active\\");\n        require(block.timestamp <= eventDate + 1 days, \\"Event has ended\\");\n        require(!hasAttended[msg.sender], \\"Attendee has already checked in\\");\n        require(attendeeCount < maxAttendees, \\"Maximum attendees reached\\");\n        require(verifySignature(msg.sender, _signature), \\"Invalid signature\\");\n\n        hasAttended[msg.sender] = true;\n        attendeeCount++;\n\n        emit AttendeeCheckedIn(msg.sender, block.timestamp);\n    }\n}\n```\n\n璇ュ悎鍚屼笓涓轰細璁€佺爺璁ㄤ細鎴栫浜鸿仛浼氱瓑 Web3 娲诲姩鑰岃璁°€備絾鏄紝鎴戜滑娌℃湁鍦ㄩ摼涓婂瓨鍌ㄤ竴闀夸覆鐧藉悕鍗曞湴鍧€锛堣繖闇€瑕?Gas 涓斾笉鍙墿灞曪級锛岃€屾槸鍋氫竴浜涙洿鑱槑鐨勪簨鎯呫€俓n\n璇€绐嶅涓嬶細\n\n 娲诲姩缁勭粐鑰呬负姣忎釜鎵瑰噯鐨勪笌浼氳€呯缃查摼涓嬫秷鎭€俓n\n 鐒跺悗锛屼笌浼氳€呭皢绛惧悕娑堟伅甯﹀埌閾句笂浠?*璇佹槑**浠栦滑宸茶閭€璇枫€俓n\n鏃犻渶棰勫厛瀛樺偍浠讳綍涓滆タ銆傛櫤鑳藉悎绾︿娇鐢?`ecrecover` 楠岃瘉绛惧悕銆俓n\n杩欐槸楂樻晥銆佸畨鍏ㄧ殑锛屽苟涓斿弽鏄犱簡 IRL 闂ㄧエ鎴栦簩缁寸爜鐨勫伐浣滄柟寮忊€斺€斾絾鍦ㄩ摼涓娿€俓n\n### **锛?锛夊悎鍚屽０鏄嶤ontract Declaration**\n\n```jsx\npragma solidity ^0.8.17;\n\ncontract EventEntry {\n```\n\n鎴戜滑姝ｅ湪浣跨敤 Solidity 鐗堟湰 0.8.17 骞跺垱寤轰竴涓悕涓?EventEntry 鐨勫悎绾︺€傜畝鍗曠殑寮€濮嬨€俓n\n### **锛?锛変簨浠惰缁嗕俊鎭拰鐘舵€佸彉閲廍vent Details & State Variables**\n\n鍦ㄦ垜浠繁鍏ヤ簡瑙ｆ櫤鑳藉悎绾︾殑鏍稿績閫昏緫涔嬪墠锛岃鎴戜滑閫€鍚庝竴姝ラ棶涓€涓畝鍗曠殑闂锛歕n\nWeb3 浜嬩欢瀹為檯涓婇渶瑕佸湪閾句笂绠＄悊浠€涔堬紵\n\n鎴戜滑涓嶄粎浠呮槸鍦ㄧ紪鍐欎竴涓€氱敤鐨勫嚭甯窡韪櫒鈥斺€旀垜浠鍦ㄤ负娲诲姩鏋勫缓涓€涓?*鍩轰簬绛惧悕銆丟as 浼樺寲鐨勭浜鸿闂郴缁?* 銆傝繖鎰忓懗鐫€鎴戜滑闇€瑕佽窡韪互涓嬪唴瀹癸細\n\n- 娲诲姩鍐呭\n- 璋佽礋璐n- 褰撳畠鍙戠敓鏃禱n- 鍙弬鍔犱汉鏁癨n- 璋佸凡缁忕鍒颁簡\n- 澶ч棬鏄惁杩樺紑鐫€\n\n璁╂垜浠湅鐪嬫墍鏈夎繖浜涙槸濡備綍瀛樺偍鍦ㄥ悎绾︿腑鐨勩€俓n\n```jsx\nstring public eventName;\naddress public organizer;\nuint256 public eventDate;\nuint256 public maxAttendees;\nuint256 public attendeeCount;\nbool public isEventActive;\n```\n\n杩欏叚涓彉閲忓畾涔?*浜嗘椿鍔ㄧ殑涓€鍒?* 鈥斺€斾粠璋佽礋璐ｅ埌鏈夊灏戜汉鍙互鍙傚姞銆傝鎴戜滑閫愯閫愬彞鍦版祻瑙堜竴涓嬶細\n\n```jsx\nstring public eventName;\n```\n\n杩欐槸浣犳椿鍔ㄧ殑**浜虹被鍙鍚嶇Оhuman-readable name** 鈥斺€斾緥濡?`鈥淓thConf 2025鈥漙 鎴?`鈥淭oken-Gated Summit鈥漙銆俓n\n鐢变簬瀹冭鏍囪涓?*鍏叡public** 锛孲olidity 浼氳嚜鍔ㄥ垱寤轰竴涓?getter 鍑芥暟銆俓n\n浠讳綍浜洪兘鍙互璋冪敤 `eventName锛堬級` 鏉ヨ幏鍙栨鍊尖€斺€旈潪甯搁€傚悎鍓嶇鎴栨祻瑙堝櫒鏄剧ず浜嬩欢鐨勬爣棰樸€俓n\n```jsx\naddress public organizer;\n```\n\n杩欐槸**浜嬩欢缁勭粐鑰咃紙** 閮ㄧ讲鍚堢害鐨勪釜浜烘垨瀹炰綋锛夌殑浠ュお鍧婂湴鍧€銆俓n\n鍙湁杩欎釜鍦板潃鎵嶈兘**绛剧讲涓庝細鑰呮壒鍑?* 锛堥摼涓嬶級銆俓n\n鍙湁姝ゅ湴鍧€鍙互**鏇存敼浜嬩欢鐘舵€?*  锛坄setEventStatus锛堬級`锛夈€俓n\n杩欎娇寰楃粍缁囪€呮垚涓烘暣涓郴缁熺殑鐪嬮棬浜恒€俓n\n```jsx\nuint256 public eventDate;\n```\n\n杩欎繚瀛樹簡**浜嬩欢鐨勮鍒掓棩鏈焑vent's scheduled date** 锛屼互 **Unix 鏃堕棿鎴?*琛ㄧず銆俓n\n绀轰緥锛歚1714569600` 鈫?2024 骞?4 鏈?30 鏃?00锛?0锛?0 UTC\n\n瀹冪敤浜?`checkIn锛堬級` 鍑芥暟锛屼互纭繚浜轰滑涓嶄細绛惧埌澶櫄銆俓n\n璇ュ悎鍚屽厑璁稿湪 `eventDate + 1 澶ー涔嬪墠绛惧埌锛屼互鍏佽鏃跺尯鍜屽欢杩熺伒娲绘€с€俓n\n鍥犳锛屽湪瀹炶返涓紝浜嬩欢鍦ㄦ鏃堕棿鎴冲悗涓€澶?*鍏抽棴** 銆俓n\n```jsx\nuint256 public maxAttendees;\n```\n\n杩欏鍙互绛惧埌鐨勪汉鏁拌瀹氫簡**纭€т笂闄恏ard cap** 銆俓n\n濡傛灉璁剧疆涓?`100`锛屽垯鍙湁 100 涓敮涓€鍦板潃鍙互鎴愬姛绛惧叆銆俓n\n瀵逛簬绠＄悊绉佷汉娲诲姩涓殑鏈夐檺搴т綅銆佺墿鐞嗛檺鍒舵垨璁块棶鎺у埗闈炲父鏈夌敤銆俓n\n```jsx\nuint256 public attendeeCount;\n```\n\n杩欎細淇濈暀宸茬粡绛惧埌鐨勪汉鏁扮殑**杩愯鎬绘暟**  **running total**銆俓n\n浠?`0` 寮€濮媆n\n姣忔鏂扮敤鎴锋垚鍔熺鍏ユ椂閫掑 1\n\n鐢ㄤ簬寮哄埗瀹炴柦 `maxAttendees` 瑙勫垯\n\n```jsx\nbool public isEventActive;\n```\n\n姝ゅ彉閲忕‘瀹氫簨浠?*褰撳墠鏄惁鎺ュ彈绛惧叆** 銆俓n\n閮ㄧ讲鍚堢害鏃惰缃负 `true`\n\n鍙互鐢辩粍缁囪€呬娇鐢?`setEventStatus锛坆ool锛塦 鎵撳紑/鍏抽棴\n\n鍦ㄤ簨浠跺浜庨潪娲诲姩鐘舵€佹椂闃绘绛惧叆\n\n### **(3)鑰冨嫟璺熻釜Attendance Tracking**\n\n```jsx\nmapping(address => bool) public hasAttended;\n```\n\n鎴戜滑浣跨敤姝ゆ槧灏勬潵**璺熻釜璋佸凡缁忕鍒?* 锛屽洜姝ゆ病鏈変汉鍙互绛惧埌涓ゆ銆俓n\n### ****\n\n### **(4)浜嬩欢Events**\n\n[馃摙](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nevent EventCreated(string name, uint256 date, uint256 maxAttendees);\nevent AttendeeCheckedIn(address attendee, uint256 timestamp);\nevent EventStatusChanged(bool isActive);\n```\n\n鎴戜滑鍙戝嚭浠ヤ笅浜嬩欢鏄负浜嗘彁楂橀€忔槑搴﹀拰鍓嶇闆嗘垚锛歕n\n`EventCreated`锛氬湪閮ㄧ讲鏈熼棿鍙戝嚭涓€娆°€俓n\n`AttendeeCheckedIn`锛氭瘡娆℃湁浜烘垚鍔熺鍒版椂瑙﹀彂銆俓n\n`EventStatusChanged`锛氬厑璁哥粍缁囪€呮殏鍋?鎭㈠浜嬩欢銆俓n\n### ****\n\n### **(5)鏋勯€犲嚱鏁帮細閮ㄧ讲鏃惰缃?Constructor: Setup at Deployment**\n\n[馃彈锔廬(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nconstructor(string memory _eventName, uint256 _eventDate_unix, uint256 _maxAttendees) {\n    eventName = _eventName;\n    eventDate = _eventDate_unix;\n    maxAttendees = _maxAttendees;\n    organizer = msg.sender;\n    isEventActive = true;\n\n    emit EventCreated(_eventName, _eventDate_unix, _maxAttendees);\n}\n```\n\n`鏋勯€犲嚱鏁癭灏卞儚瀹夎鍚戝锛屽湪閮ㄧ讲鍚堢害鏃惰繍琛屼竴娆♀€斺€旇€屼笖鍙繍琛屼竴娆°€傝鎴戜滑鏉ョ湅鐪嬫瘡琛岀殑浣滅敤浠ュ強涓轰粈涔堝畠寰堥噸瑕侊細\n\n```jsx\neventName = _eventName;\n```\n\n杩欎細瀛樺偍鎮ㄧ殑娲诲姩鐨勪汉绫诲彲璇诲悕绉帮紙渚嬪锛屸€渀Web3Conf 2025`鈥濓級銆傚畠浣滀负鏋勯€犲嚱鏁板弬鏁颁紶鍏ュ苟淇濆瓨鍦ㄩ摼涓婏紝浠ヤ究浠讳綍浜洪兘鍙互绋嶅悗浣跨敤 `eventName锛堬級` 鍑芥暟鏌ヨ瀹冦€俓n\n```jsx\neventDate = _eventDate_unix;\n```\n\n杩欒缃簡瀹樻柟娲诲姩鏃ユ湡鈥斺€斾絾瀹冧笉鏄儚鈥?025 骞?4 鏈?21 鏃モ€?杩欐牱鐨勬牸寮忓寲瀛楃涓层€傚畠鏄竴涓?**Unix 鏃堕棿鎴?* 锛堝 `1745251200`锛夛紝杩欎娇寰楀湪 Solidity 涓繘琛屾椂闂存瘮杈冨彉寰楁洿鍔犲鏄撱€俓n\n绋嶅悗锛屾垜浠皢浣跨敤瀹冩潵妫€鏌ヤ簨浠舵槸鍚︿粛鍦ㄨ繘琛屾垨宸茬粡缁撴潫銆俓n\n```jsx\nmaxAttendees = _maxAttendees;\n```\n\n杩欎负鍙互鍙傚姞鐨勪汉鏁拌瀹氫簡涓婇檺銆備緥濡傦紝濡傛灉鏈€澶у€间负 150锛屽垯绗?151 浜哄皢鍦ㄥ叆浣忔椂琚嫆缁濄€俓n\n鎷ユ湁姝ゅ唴缃檺鍒舵湁鍔╀簬闃叉杩囧害鎷ユ尋銆佸瀮鍦鹃偖浠舵垨婊ョ敤銆俓n\n```jsx\norganizer = msg.sender;\n```\n\n杩欎細灏嗛儴缃插悎鍚岀殑浜哄憳璁剧疆涓?*浜嬩欢缁勭粐鑰?* 銆俓n\n`msg.sender` 鏄寚閮ㄧ讲鍚堢害鐨勫湴鍧€銆俓n\n璇ュ湴鍧€鍏锋湁鐗规畩鑳藉姏锛屼緥濡傛縺娲?鍋滅敤浜嬩欢銆俓n\n瀹冧篃鏄?*鍞竴**搴旇鍏佽绛剧讲閭€璇风鍚嶇殑鍦板潃锛屾垜浠◢鍚庝細楠岃瘉銆俓n\n```jsx\nisEventActive = true;\n```\n\n榛樿鎯呭喌涓嬶紝娲诲姩浠ユ椿鍔ㄧ姸鎬佸紑濮嬶紝杩欐剰鍛崇潃闄ら潪缁勭粐鑰呮墜鍔ㄧ鐢ㄥ畠锛屽惁鍒欏厑璁哥鍒般€俓n\n绋嶅悗鎴戜滑灏嗗垱寤轰竴涓悕涓?`setEventStatus锛堬級` 鐨勫嚱鏁帮紝璁╃粍缁囪€呭垏鎹㈡鏍囧織銆俓n\n`emit EventCreated(...)`\n\n杩欒鍚戝尯鍧楅摼骞挎挱浜嬩欢锛岃〃鏄庤浜嬩欢宸插垱寤恒€俓n\n涓轰粈涔堣鍙戝嚭浜嬩欢锛焅n\n瀹冨彲浠ュ府鍔╅摼涓嬪簲鐢ㄧ▼搴忥紙濡傚墠绔垨娴忚鍣級鐭ラ亾宸茬粡娉ㄥ唽浜嗘柊浜嬩欢銆俓n\n瀹冭褰曟湁鐢ㄧ殑鍏冩暟鎹紝渚嬪鍚嶇О銆佹棩鏈熷拰鏈€澶у閲忋€俓n\n### **锛?锛夊瓨鍙栨帶鍒禔ccess Control**\n\n```jsx\nmodifier onlyOrganizer() {\n    require(msg.sender == organizer, \\"Only the event organizer can call this function\\");\n    _;\n}\n```\n\n淇濇姢鏌愪簺鍔熻兘鐨勪究鎹?*淇グ绗?* 銆傚彧鏈夌粍缁囪€呭彲浠ュ懠鍙粬浠€俓n\n### **锛?锛?鍒囨崲浜嬩欢鐘舵€乀oggle Event Status**\n\n[馃攣](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nfunction setEventStatus(bool _isActive) external onlyOrganizer {\n    isEventActive = _isActive;\n    emit EventStatusChanged(_isActive);\n}\n```\n\n浣跨敤姝ら€夐」鍙互**鏆傚仠鎴栨仮澶?*绛惧叆銆傛偍鍙兘甯屾湜鍦ㄦ煇涓椂闂寸偣涔嬪悗鍐荤粨绛惧埌銆俓n\n### ****\n\n### **锛?锛夋秷鎭暎鍒?鈥?绛惧悕鐨勫叧閿甅essage Hashing 鈥?Key to Signatures**\n\n[馃攺](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nfunction getMessageHash(address _attendee) public view returns (bytes32) {\n    return keccak256(abi.encodePacked(address(this), eventName, _attendee));\n}\n```\n\n姝ゅ姛鑳戒娇**缁勭粐鑰?*鑳藉鎺у埗娲诲姩褰撳墠鏄惁鎺ュ彈绛惧埌銆俓n\n**瀹冭兘鍋氫粈涔堬細**\n\n[馃П](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n     **`onlyOrganizer` 淇グ绗︼細**\n\n      纭繚鍙湁閮ㄧ讲鍚堝悓鐨勪汉鍛橈紙 **缁勭粐鑰?* 锛夋墠鑳芥洿鏀规璁剧疆銆傝繖鍙互闃叉闅忔満鐢ㄦ埛鏆傚仠鎴栨仮澶嶄簨浠躲€俓n\n**`isEventActive = _isActive;`**\n\n            鏍规嵁浼犻€掔殑鍙傛暟鏇存柊浜嬩欢鐨勬椿鍔ㄧ姸鎬侊細\n\n            濡傛灉 `_isActive` 涓?`true`锛屽垯浜嬩欢涓烘墦寮€銆俓n\n            濡傛灉 `_isActive` 涓?`false`锛屽垯绛惧叆灏嗘殏鏃舵殏鍋溿€俓n\n**`emit EventStatusChanged锛坃isActive锛塦;**\n\n 姣忔鐘舵€佸彉鍖栨椂閮戒細鍙戝嚭閾句笂浜嬩欢鈥斺€斿浜庡墠绔华琛ㄦ澘鎴栧尯鍧楅摼娴忚鍣ㄧ珛鍗冲弽鏄犲彉鍖栧緢鏈夌敤銆俓n\n### **锛?锛変互澶潑绛惧悕娑堟伅鍝堝笇Ethereum Signed Message Hash**\n\n[鉁嶏笍](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nfunction getEthSignedMessageHash(bytes32 _messageHash) public pure returns (bytes32) {\n    return keccak256(abi.encodePacked(\\"\\x19Ethereum Signed Message:\\n32\\", _messageHash));\n}\n```\n\n姝ゅ姛鑳芥槸浠ュお鍧婄鍚嶉獙璇佺郴缁?*鐨勯噸瑕佺粍鎴愰儴鍒?* 鈥斺€旇繖灏辨槸瀹冨瓨鍦ㄧ殑鍘熷洜銆俓n\n ****\n\n**涓轰粈涔堝瓨鍦ㄨ繖涓嚱鏁?*\n\n[馃](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n     褰撶敤鎴峰湪閾句笅绛剧讲鏁版嵁锛堝娑堟伅鐨勫搱甯岋級鏃讹紝浠庢妧鏈笂璁诧紝浠栦滑姝ｅ湪绛剧讲**浠讳綍闅忔満鐨?32 瀛楄妭** 銆傝繖鍙兘鍖呮嫭浜ゆ槗鐨勫搱甯屽€笺€佸悎绾︾殑鍝堝笇鍊兼垨涓€浜涘畬鍏ㄤ笉鐩稿叧鐨勬暟鎹€俓n\n杩欏甫鏉ヤ簡椋庨櫓锛歕n\n     濡傛灉鏈変汉璇遍獥鐢ㄦ埛鍦ㄩ摼涓嬬缃叉煇浜涘唴瀹癸紝鐒跺悗鍦ㄩ摼涓婇噸澶嶄娇鐢ㄨ绛惧悕鏉ュ仛涓€浜涙伓鎰忕殑浜嬫儏鎬庝箞鍔烇紵\n\n涓轰簡閬垮厤杩欑鎯呭喌锛屼互澶潑寮曞叆浜嗕竴涓?*淇濇姢鎬у墠缂€** 銆俓n\n### ****\n\n### **锛?0锛夊嚱鏁扮殑浣滅敤**\n\n[馃攼](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n杩欒锛歕n\n```jsx\nkeccak256(abi.encodePacked(\\"\\x19Ethereum Signed Message:\\n32\\", _messageHash));\n```\n\n鑾峰彇鍘熷娑堟伅鍝堝笇骞?*鐢ㄥ墠缂€鍖呰瀹?* 锛屽涓嬫墍绀猴細\n\n```jsx\n\\"\\x19Ethereum Signed Message:\\n32\\" + original_hash\n```\n\n鐒跺悗瀹冧娇鐢?`keccak256` 鍐嶆瀵规暣涓簨鎯呰繘琛屽搱甯屽鐞嗐€俓n\n杩欒绉颁负**浠ュお鍧婄鍚嶆秷鎭搱甯?* 锛屽畠鏄儚 MetaMask 杩欐牱鐨勯挶鍖呭湪浣犺皟鐢?`eth_sign` 鏃朵娇鐢ㄧ殑**纭垏鏍煎紡** 銆俓n\n **涓轰粈涔堣繖寰堥噸瑕侊紵**\n\n[馃攧](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n鍥犱负褰撴垜浠◢鍚庝娇鐢?`ecrecover锛堬級` 鎭㈠**绛惧悕鑰呯殑鍦板潃**鏃讹紝鎴戜滑灏嗕粠杩欎釜**鍓嶇紑鍖呰鐨勫搱甯屼腑**鎭㈠瀹冿紝鑰屼笉鏄師濮嬪搱甯屻€俓n\n濡傛灉鎮ㄦ病鏈夋纭寘瑁呭畠锛岄獙璇佹楠ゅ皢澶辫触 - 鍗充娇鐢ㄦ埛姝ｇ‘绛惧悕锛乗n\n### \n\n### **锛?1锛?绛惧悕楠岃瘉Signature Verification**\n\n[馃暤锔忊€嶁檪锔廬(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nfunction verifySignature(address _attendee, bytes memory _signature) public view returns (bool) {\n    bytes32 messageHash = getMessageHash(_attendee);\n    bytes32 ethSignedMessageHash = getEthSignedMessageHash(messageHash);\n    return recoverSigner(ethSignedMessageHash, _signature) == organizer;\n}\n```\n\n姝ゅ姛鑳芥槸鎴戜滑**閭€璇烽獙璇佺郴缁?*鐨勬牳蹇冦€傚畠鍥炵瓟浜嗕竴涓畝鍗曚絾鏈夊姏鐨勯棶棰橈細\n\n鈥滆繖涓鍚嶇湡鐨勬槸鐢辩粍缁囪€呭垱寤虹殑鍚椻€斺€斿畠鏄负杩欎綅涓庝細鑰呭噯澶囩殑鍚楋紵鈥漒n\n璁╂垜浠€愯鍒嗚В銆俓n\n **绗?1 姝ワ細鐢熸垚鍩烘湰娑堟伅鍝堝笇**\n\n[鉁匽(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nbytes32 messageHash = getMessageHash(_attendee);\n```\n\n杩欎細閲嶆柊鍒涘缓**缁勭粐鑰?*涓虹壒瀹氫笌浼氳€呭湪閾句笅绛惧悕鐨勭‘鍒囧搱甯屽€笺€俓n\n璇ュ搱甯屽€奸€氬父绫讳技浜庯細\n\n```jsx\nkeccak256(contract address + event name + attendee address)\n```\n\n杩欑‘淇濅簡锛歕n\n绛惧悕涓?*姝ょ壒瀹氬悎绾︾浉鍏宠仈**\n\n浠呭**姝ゆ椿鍔?*鏈夋晥\n\n瀹冨睘浜?*杩欎釜纭垏鐨勭敤鎴?*\n\n濡傛灉鏈変粈涔堜笉鍚屸€斺€斾笉鍚岀殑涓庝細鑰呫€佷笉鍚岀殑娲诲姩鈥斺€斿搱甯屽€煎氨浼氬彂鐢熷彉鍖栥€俓n\n **绗?2 姝ワ細杞崲涓轰互澶潑绛惧悕鏍煎紡**\n\n[鉁匽(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nbytes32 ethSignedMessageHash = getEthSignedMessageHash(messageHash);\n```\n\n姝ｅ鎴戜滑涔嬪墠鎵€瑙ｉ噴鐨勶紝杩欑敤浠ュお鍧婄殑鏍囧噯鍓嶇紑鍖呰浜嗘秷鎭搱甯岋細\n\n```jsx\n\\"\\x19Ethereum Signed Message:\\n32\\" + messageHash\n```\n\n涓轰粈涔堬紵\n\n鍥犱负鍍?MetaMask 杩欐牱鐨勯挶鍖呭湪绛惧悕鏃朵細鑷姩娣诲姞璇ュ墠缂€鈥斺€旀墍浠ユ垜浠湪楠岃瘉鏃朵篃闇€瑕佸寘鍚畠锛屽惁鍒欐鏌ュ皢澶辫触銆俓n\n **绗?3 姝ワ細鎭㈠绛惧悕鑰?*\n\n[鉁匽(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nreturn recoverSigner(ethSignedMessageHash, _signature) == organizer;\n```\n\n鍦ㄨ繖閲岋紝鎴戜滑锛歕n\n浣跨敤 `ecrecover锛堬級`锛?閫氳繃杈呭姪鍑芥暟 `recoverSigner`锛夋彁鍙栫鍚?*娑堟伅鐨勫湴鍧€** 銆俓n\n灏嗚鍦板潃涓巂缁勭粐鑰卄 锛堥儴缃叉鍚堢害鐨勫湴鍧€锛夎繘琛屾瘮杈冦€俓n\n濡傛灉鍖归厤锛? 绛惧悕鏈夋晥\n\n濡傛灉娌℃湁锛? 鏈変汉浼€犳垨鐢卞叾浠栦汉绛惧悕\n\n[鉁匽(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n[鉂宂(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n### **锛?2锛塺ecoverSigner 鈥?瀵嗙爜渚︽帰 The Cryptographic Detective**\n\n[馃攼](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n杩欐槸鍚堢害涓殑瀹為檯鍑芥暟锛歕n\n```jsx\nfunction recoverSigner(bytes32 _ethSignedMessageHash, bytes memory _signature)\n    public\n    pure\n    returns (address)\n{\n    require(_signature.length == 65, \\"Invalid signature length\\");\n\n    bytes32 r;\n    bytes32 s;\n    uint8 v;\n\n    assembly {\n        r := mload(add(_signature, 32))\n        s := mload(add(_signature, 64))\n        v := byte(0, mload(add(_signature, 96)))\n    }\n\n    if (v < 27) {\n        v += 27;\n    }\n\n    require(v == 27 || v == 28, \\"Invalid signature 'v' value\\");\n\n    return ecrecover(_ethSignedMessageHash, v, r, s);\n}\n```\n\n姝ゅ姛鑳芥槸鎴戜滑鍩轰簬绛惧悕鐨勮緭鍏ョ郴缁熶腑鐨?*鏈€鍚庝竴涓睛鎺㈡楠?* 銆傚畠鏌ョ湅绛惧悕骞舵壘鍑?*鍝釜浠ュお鍧婂湴鍧€绛剧讲浜嗗畠** 銆俓n\n鍋囪鏈変汉缁欎簡鎴戜滑涓€涓鍚嶅苟澹扮О锛歕n\n鈥滆繖鏄敱娲诲姩缁勭粐鑰呯缃茬殑銆傝繖鎰忓懗鐫€鎴戣鍏佽鍙傚姞娲诲姩銆俓n\n浣嗘垜浠笉鑳界洸鐩浉淇′粬浠€傛垜浠渶瑕?*楠岃瘉**鏄惁锛歕n\n璇ョ鍚嶆槸鏈夋晥鐨勩€俓n\n瀹冪湡鐨勬潵鑷?*缁勭粐鑰呯殑閽卞寘** 銆俓n\n杩欎釜鍑芥暟鍙互甯姪鎴戜滑鍋氬埌杩欎竴鐐广€俓n\n **绗?1 姝ワ細妫€鏌ョ鍚嶉暱搴?*\n\n[馃搹](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nrequire(_signature.length == 65, \\"Invalid signature length\\");\n```\n\n鎵€鏈変互澶潑绛惧悕鐨?*闀垮害閮芥槸 65 瀛楄妭** 鈥斺€斾笉澶氫篃涓嶅皯銆俓n\n濡傛灉瀹冩洿鐭垨鏇撮暱锛屽垯鍙兘鏄崯鍧忕殑銆佷笉瀹屾暣鐨勬垨鍋囩殑銆俓n\n鎵€浠ュ鏋滈暱搴︿笉瀵癸紝鎴戜滑浼氱珛鍗冲仠姝€俓n\n **绗?2 姝ワ細灏嗙鍚嶅垎鎴?3 涓儴鍒?*\n\n[馃摝](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n浠ュお鍧婄鍚嶄笉浠呬粎鏄竴澶у潡鈥斺€斿畠浠敱 3 涓儴鍒嗙粍鎴愶紝绉颁负锛歕n\n`r`锛?2 瀛楄妭锛塡n\n`s`锛?2 瀛楄妭锛塡n\n`v`锛? 瀛楄妭锛塡n\n杩欎笁涓€煎崗鍚屽伐浣滐紝浠?*鏁板鏂瑰紡璇佹槑璋佺缃蹭簡閭欢** 銆俓n\n鐜板湪锛屼簨鎯呭彉寰楁湁鐐规妧鏈€т簡......\n\n **绗?3姝ワ細浣跨敤绋嬪簭闆嗘彁鍙栬繖浜涘€?*\n\n[馃](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nassembly {\n    r := mload(add(_signature, 32))\n    s := mload(add(_signature, 64))\n    v := byte(0, mload(add(_signature, 96)))\n}\n```\n\n姹囩紪鏄竴绉嶇洿鎺ヤ粠鍐呭瓨璁块棶鏁版嵁鐨勪綆绾ф柟娉曘€俓n\n鍙互鎶婂畠鎯宠薄鎴愭寲涓€涓洅瀛愶紝鍑嗙‘鍦版嬁鍑烘垜浠渶瑕佺殑涓滆タ銆俓n\n鎴戜滑璇达細\n\n鈥滃樋浠ュお鍧婏紝缁欐垜浠庝綅缃?32 寮€濮嬬殑鍓?32 涓瓧鑺傘€傞偅鏄?`r`銆俓n\n鈥滅幇鍦ㄧ粰鎴戞帴涓嬫潵鐨?32 瀛楄妭锛屼粠 64 寮€濮嬨€傞偅鏄痐s` 銆俓n\n鈥滄渶鍚庣粰鎴戜綅缃?96 鐨?1 瀛楄妭銆傞偅鏄?`v`銆俓n\n鎴戜滑鐜板湪宸茬粡鏈変簡鏍囧織鎬ф嫾鍥剧殑鎵€鏈夐儴鍒嗐€俓n\n **绗?4 姝ワ細鏍规嵁闇€瑕佷慨澶?`V` 鍊?*\n\n[馃И](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nif (v < 27) {\n    v += 27;\n}\n```\n\n鏈夋椂锛屼笉鍚岀殑閽卞寘鎴栫郴缁熶細缁欎綘涓€涓?`v` 鍊硷紝鍗?0 鎴?1銆俓n\n浣嗕互澶潑棰勮鏄?27 鎴?28銆俓n\n鎵€浠ユ垜浠彧鏄湪闇€瑕佹椂杩涜璋冩暣銆俓n\n **绗?5 姝ワ細楠岃瘉 v 鐜板湪鏄惁姝ｇ‘**\n\n[馃毃](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nrequire(v == 27 || v == 28, \\"Invalid signature 'v' value\\");\n```\n\n淇鍚庯紝鎴戜滑纭繚 v 鏄?27 鎴?28 - 鍏朵粬浠讳綍涓滆タ閮芥槸涓嶅彲鎺ュ彈鐨勩€俓n\n濡傛灉鏄叾浠栦换浣曚笢瑗匡紝鎴戜滑浼氭姏鍑洪敊璇紝鍥犱负鎴戜滑涓嶈兘淇′换绛惧悕銆俓n\n **绗?6 姝ワ細鎭㈠绛惧悕鑰呯殑鍦板潃**\n\n[馃攳](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nreturn ecrecover(_ethSignedMessageHash, v, r, s);\n```\n\n杩欐槸鏈€鍚庣殑鏃跺埢銆俓n\n鎴戜滑绉颁箣涓?`ecrecover`鈥斺€斾竴涓唴缃殑浠ュお鍧婂嚱鏁帮紝瀹冮噰鐢細\n\n绛惧悕娑堟伅鍝堝笇\n\n绛惧悕鍊?锛坄v銆乺銆乻`锛塡n\n瀹冭繑鍥?*绛惧悕鑰呯殑鍦板潃** 銆俓n\nyeah锛佹垜浠幇鍦ㄧ煡閬撴槸璋佺缃蹭簡杩欐潯娑堟伅銆俓n\n### **(13)checkIn 鈥?Web3 娲诲姩鐨勫墠闂?The Front Gate of the Web3 Event**\n\n[馃師锔廬(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n杩欐槸涓庝細鑰呭埌杈炬偍鐨勬椿鍔ㄦ椂灏嗚皟鐢ㄧ殑涓昏鍔熻兘鈥斺€?**鏃犺鏄唬甯侀棬鎺ц仛浼氥€佺爺璁ㄤ細杩樻槸绉佷汉鍙戝竷娲惧** 銆俓n\n璁╂垜浠厛閲嶆柊瀹¤涓€涓嬪嚱鏁帮細\n\n```jsx\nfunction checkIn(bytes memory _signature) external {\n    require(isEventActive, \\"Event is not active\\");\n    require(block.timestamp <= eventDate + 1 days, \\"Event has ended\\");\n    require(!hasAttended[msg.sender], \\"Attendee has already checked in\\");\n    require(attendeeCount < maxAttendees, \\"Maximum attendees reached\\");\n    require(verifySignature(msg.sender, _signature), \\"Invalid signature\\");\n\n    hasAttended[msg.sender] = true;\n    attendeeCount++;\n\n    emit AttendeeCheckedIn(msg.sender, block.timestamp);\n}\n```\n\n### **杩欎釜鍑芥暟鍦ㄥ仛浠€涔堬紵**\n\n[馃З](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n      姝ゅ姛鑳芥槸**鎮ㄧ殑鏁板瓧鐪嬮棬浜?* 銆俓n\n 姣忔鏈変汉鎯宠绛惧埌鏃讹紝浠栦滑蹇呴』璇佹槑锛歕n\n 浠栦滑琚個璇凤紙閫氳繃鎻愪緵鏈夋晥绛惧悕锛塡n\n 浠栦滑鍦ㄥ厑璁哥殑绐楀彛鍐呯鍒癨n\n 娲诲姩浠嶅湪杩涜涓璡n\n 浠栦滑灏氭湭绛惧埌銆俓n\n       杩樻湁绌轰綑锛乗n\n濡傛灉浠栦滑閫氳繃浜嗘墍鏈夎繖浜涙鏌ワ紝浠栦滑灏卞彲浠ラ€氳繃澶ч棬銆俓n\n鐜板湪璁╂垜浠€愯鍒嗚В杩欎釜鍑芥暟锛歕n\n```jsx\nrequire(isEventActive, \\"Event is not active\\");\n```\n\n鍦ㄦ垜浠鏌ュ叾浠栦换浣曚簨鎯呬箣鍓嶁€斺€旇娲诲姩鏄惁姝ｅ湪鐩存挱锛焅n\n缁勭粐鑰呭彲鑳藉凡鏆傚仠鎴栧彇娑堟椿鍔ㄣ€傚鏋滄槸杩欐牱锛?**鍒欎笉鍏佽浠讳綍浜虹鍒?* 銆俓n\n姝ゆ爣蹇?锛坄isEventActive`锛?鐢辩粍缁囪€呬娇鐢?`setEventStatus锛堬級` 鍑芥暟杩涜鎺у埗銆俓n\n```jsx\nrequire(block.timestamp <= eventDate + 1 days, \\"Event has ended\\");\n```\n\n姝ゆ鏌ヤ笂鍐欑潃锛氣€?**鎮ㄥ彧鑳藉湪娲诲姩鏃ユ湡鍚?24 灏忔椂涔嬪墠绛惧埌銆?*\n\n涓轰粈涔堬紵\n\n鍥犱负浜嬩欢涓嶄細姘歌繙鎸佺画涓嬪幓銆傛偍涓嶅笇鏈涙湁浜哄湪 5 澶╁悗灏濊瘯鍔炵悊鐧籧heck in鎵嬬画銆俓n\n閫氳繃澧炲姞涓€澶╋紝鎴戜滑缁欎簣浜嗚交寰殑瀹介檺鏈燂紝鍚屾椂浠嶇劧淇濇寔鐜板疄銆俓n\n```jsx\nrequire(!hasAttended[msg.sender], \\"Attendee has already checked in\\");\n```\n\n鎴戜滑涓嶅厑璁搁噸澶嶇鍒般€俓n\n姝よ纭繚**姣忎釜鍦板潃鍙兘绛惧埌涓€娆?* 銆傚鏋滀粬浠凡琚爣璁颁负鏈変汉鍊煎畧锛屽垯浠栦滑灏嗚闃绘鍐嶆绛惧埌銆俓n\n杩欐槸浣跨敤 `hasAttended` 鏄犲皠杩涜璺熻釜鐨勩€俓n\n```jsx\nrequire(attendeeCount < maxAttendees, \\"Maximum attendees reached\\");\n```\n\n杩欐槸浣?*娲诲姩涓婇檺** 銆俓n\n濡傛灉浣犳渶澶氫笌浼氳€呬汉鏁颁负 100 浜猴紝骞朵笖宸茬粡鏈?100 浜虹鍒帮紝閭ｄ箞鏃犺璋佽瘯鍥捐繘鍏ワ紝闂ㄩ兘浼氬叧闂€俓n\n鍗充娇浠栦滑鏈夋湁鏁堢殑绛惧悕锛屼竴鏃﹁揪鍒颁笂闄愶紝浠栦滑涔熸棤娉曡繘鍏ャ€俓n\n```jsx\nrequire(verifySignature(msg.sender, _signature), \\"Invalid signature\\");\n```\n\n杩欐槸鐪熸鐨勯瓟鍔涖€俓n\n姝よ楠岃瘉锛歕n\n涓庝細鑰?锛坄msg.sender`锛? **瀹為檯涓婅閭€璇蜂簡**\n\n浠栦滑鐨勭鍚嶇敱**娲诲姩缁勭粐鑰呯鍚?*\n\n瀹冩槸涓撻棬**涓鸿繖娆℃椿鍔ㄧ鍚?*鐨刓n\n杩欎娇鐢ㄤ簡鎴戜滑涔嬪墠璁ㄨ鐨勬墍鏈夊姞瀵嗛€昏緫锛堟秷鎭搱甯屻€佷互澶潑鍓嶇紑銆乣ecrecover`锛夆€斺€旀暣榻愬湴鍖呰鍦?`verifySignature锛堬級` 甯姪绋嬪簭涓€俓n\n濡傛灉绛惧悕鏄亣鐨勬垨鏃犳晥鐨勶紝鍒欐嫆缁濊闂€俓n\n### ****\n\n**閫氳繃鎵€鏈夋鏌ワ紵澶鍟︼紒**\n\n[鉁匽(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n濡傛灉涓庝細鑰呴€氳繃浜嗘墍鏈夎姹傦紝鎴戜滑灏嗚褰曚粬浠殑绛惧埌锛歕n\n```jsx\nhasAttended[msg.sender] = true;\n```\n\n鎴戜滑灏嗗懠鍙€呮爣璁颁负鐜板湪宸茬鍒扮殑浜恒€俓n\n杩欏彲浠ラ槻姝㈤噸澶嶇鍏ャ€俓n\n```jsx\nattendeeCount++;\n```\n\n鎴戜滑閫掑鎬讳笌浼氳€呰鏁般€俓n\n杩欐湁鍔╀簬鎴戜滑涓轰笅涓€涓皾璇曡繘鍏ョ殑浜哄己鍒舵墽琛?maxAttendees 闄愬埗銆俓n\n```jsx\nemit AttendeeCheckedIn(msg.sender, block.timestamp);\n```\n\n鎴戜滑瑙﹀彂涓€涓簨浠舵潵璁板綍姝や汉宸茬鍒颁互鍙婄鍒扮殑鏃堕棿銆俓n\n杩欏浠ヤ笅鎯呭喌寰堟湁鐢細\n\n鍓嶇 UI\n\n鍖哄潡娴忚鍣╘n\n閾句笅鏁版嵁绱㈠紩锛堝 The Graph锛塡n\n### 瀹屾暣浠ｇ爜璇﹁В\n\n### 馃搫 绛惧悕楠岃瘉娲诲姩鍚堢害\n\n```solidity\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ncontract SignThis {\n    string public eventName;\n    address public organizer;\n    uint256 public eventDate;\n    uint256 public maxAttendees;\n    uint256 public attendeeCount;\n    bool public isEventActive;\n\n    mapping(address => bool) public hasAttended;\n\n    event EventCreated(string name, uint256 date, uint256 maxAttendees);\n    event AttendeeCheckedIn(address attendee, uint256 timestamp);\n    event EventStatusChanged(bool isActive);\n\n    constructor(string memory _eventName, uint256 _eventDate, uint256 _maxAttendees) {\n        eventName = _eventName;\n        organizer = msg.sender;\n        eventDate = _eventDate;\n        maxAttendees = _maxAttendees;\n        isEventActive = true;\n\n        emit EventCreated(_eventName, _eventDate, _maxAttendees);\n    }\n\n    modifier onlyOrganizer() {\n        require(msg.sender == organizer, \\"Only organizer\\");\n        _;\n    }\n\n    modifier eventActive() {\n        require(isEventActive, \\"Event not active\\");\n        _;\n    }\n\n    // 浣跨敤绛惧悕楠岃瘉鍙備笌鑰呰韩浠絓n    function checkInWithSignature(\n        address attendee,\n        uint8 v,\n        bytes32 r,\n        bytes32 s\n    ) external eventActive {\n        require(attendeeCount < maxAttendees, \\"Event full\\");\n        require(!hasAttended[attendee], \\"Already checked in\\");\n\n        // 鏋勯€犳秷鎭搱甯孿n        bytes32 messageHash = keccak256(abi.encodePacked(\n            attendee,\n            address(this),  // 鍚堢害鍦板潃\n            eventName\n        ));\n\n        // 浠ュお鍧婄鍚嶆秷鎭搱甯孿n        bytes32 ethSignedMessageHash = keccak256(abi.encodePacked(\n            \\"\\x19Ethereum Signed Message:\\n32\\",\n            messageHash\n        ));\n\n        // 鎭㈠绛惧悕鑰呭湴鍧€\n        address signer = ecrecover(ethSignedMessageHash, v, r, s);\n\n        // 楠岃瘉绛惧悕鑰呮槸缁勭粐鑰匼n        require(signer == organizer, \\"Invalid signature\\");\n\n        // 璁板綍鍙備笌\n        hasAttended[attendee] = true;\n        attendeeCount++;\n\n        emit AttendeeCheckedIn(attendee, block.timestamp);\n    }\n\n    // 鎵归噺绛惧埌 (Gas浼樺寲)\n    function batchCheckIn(\n        address[] calldata attendees,\n        uint8[] calldata v,\n        bytes32[] calldata r,\n        bytes32[] calldata s\n    ) external eventActive {\n        require(attendees.length == v.length, \\"Array length mismatch\\");\n        require(attendees.length == r.length, \\"Array length mismatch\\");\n        require(attendees.length == s.length, \\"Array length mismatch\\");\n        require(attendeeCount + attendees.length <= maxAttendees, \\"Would exceed capacity\\");\n\n        for (uint256 i = 0; i < attendees.length; i++) {\n            address attendee = attendees[i];\n\n            if (hasAttended[attendee]) continue;  // 璺宠繃宸茬鍒扮殑\n\n            bytes32 messageHash = keccak256(abi.encodePacked(\n                attendee,\n                address(this),\n                eventName\n            ));\n\n            bytes32 ethSignedMessageHash = keccak256(abi.encodePacked(\n                \\"\\x19Ethereum Signed Message:\\n32\\",\n                messageHash\n            ));\n\n            address signer = ecrecover(ethSignedMessageHash, v[i], r[i], s[i]);\n\n            if (signer == organizer) {\n                hasAttended[attendee] = true;\n                attendeeCount++;\n                emit AttendeeCheckedIn(attendee, block.timestamp);\n            }\n        }\n    }\n\n    // 楠岃瘉绛惧悕鏈夋晥鎬?(涓嶆墽琛岀鍒?\n    function verifySignature(\n        address attendee,\n        uint8 v,\n        bytes32 r,\n        bytes32 s\n    ) external view returns (bool) {\n        bytes32 messageHash = keccak256(abi.encodePacked(\n            attendee,\n            address(this),\n            eventName\n        ));\n\n        bytes32 ethSignedMessageHash = keccak256(abi.encodePacked(\n            \\"\\x19Ethereum Signed Message:\\n32\\",\n            messageHash\n        ));\n\n        address signer = ecrecover(ethSignedMessageHash, v, r, s);\n        return signer == organizer;\n    }\n\n    // 鑾峰彇娑堟伅鍝堝笇 (鐢ㄤ簬鍓嶇绛惧悕)\n    function getMessageHash(address attendee) external view returns (bytes32) {\n        return keccak256(abi.encodePacked(\n            attendee,\n            address(this),\n            eventName\n        ));\n    }\n\n    // 绠＄悊鍛樺姛鑳絓n    function toggleEventStatus() external onlyOrganizer {\n        isEventActive = !isEventActive;\n        emit EventStatusChanged(isEventActive);\n    }\n\n    function getEventInfo() external view returns (\n        string memory name,\n        uint256 date,\n        uint256 maxCapacity,\n        uint256 currentCount,\n        bool active\n    ) {\n        return (eventName, eventDate, maxAttendees, attendeeCount, isEventActive);\n    }\n}\n```\n\n**鉁?绛惧悕楠岃瘉娴佺▼**\n\n1. 缁勭粐鑰呴摼涓嬬敓鎴愬弬涓庤€呯鍚?鈫?2. 鍙備笌鑰呮彁浜ょ鍚嶅埌鍚堢害 鈫?3. 鍚堢害浣跨敤ecrecover楠岃瘉绛惧悕 鈫?4. 楠岃瘉閫氳繃鍒欏厑璁哥鍒般€傛暣涓繃绋嬫棤闇€棰勫厛瀛樺偍鐧藉悕鍗曪紒\n\n### 馃攳 鍓嶇绛惧悕鐢熸垚绀轰緥\n\n```jsx\n// JavaScript 鍓嶇浠ｇ爜async function generateSignature(attendeeAddress, contractAddress, eventName) {\n// 1. 鏋勯€犳秷鎭痗onst messageHash = ethers.utils.solidityKeccak256(\n        ['address', 'address', 'string'],\n        [attendeeAddress, contractAddress, eventName]\n    );\n\n// 2. 缁勭粐鑰呯鍚峜onst signature = await organizerWallet.signMessage(\n        ethers.utils.arrayify(messageHash)\n    );\n\n// 3. 鍒嗙绛惧悕缁勪欢const { v, r, s } = ethers.utils.splitSignature(signature);\n\n    return { v, r, s };\n}\n\n// 浣跨敤绀轰緥const signature = await generateSignature(\n    \\"0x742d35Cc6634C0532925a3b8D0C9964E5Bd4f071\\",// 鍙備笌鑰呭湴鍧€\n    contractAddress,\n    \\"Web3 Conference 2024\\"\n);\n\n// 璋冪敤鍚堢害绛惧埌await contract.checkInWithSignature(\n    attendeeAddress,\n    signature.v,\n    signature.r,\n    signature.s\n);\n```\n\n**鈿狅笍 瀹夊叏娉ㄦ剰浜嬮」**\n\n- 绛惧悕鍙兘琚噸鏀撅紝闇€瑕佹坊鍔爊once鎴栨椂闂存埑\n- 纭繚娑堟伅鍝堝笇鍖呭惈瓒冲鐨勪笂涓嬫枃淇℃伅\n- 楠岃瘉绛惧悕鑰呰韩浠界殑鏉冨▉鎬n- 鑰冭檻绛惧悕鐨勬湁鏁堟湡闄愬埗\n- 闃叉绛惧悕琚敤浜庡叾浠栧悎绾n\n### 馃摑 Remix瀹炴垬姝ラ\n\n### 姝ラ1: 閮ㄧ讲鍚堢害\n\n1. 閮ㄧ讲SignThis鍚堢害锛岃缃椿鍔ㄤ俊鎭痋n2. 璁板綍鍚堢害鍦板潃鍜岀粍缁囪€呭湴鍧€\n\n### 姝ラ2: 鐢熸垚绛惧悕 (浣跨敤MetaMask)\n\n1. 璋冪敤`getMessageHash(鍙備笌鑰呭湴鍧€)`鑾峰彇娑堟伅鍝堝笇\n2. 鍦ㄦ祻瑙堝櫒鎺у埗鍙颁娇鐢∕etaMask绛惧悕锛歕n\n```jsx\n// 鍦ㄦ祻瑙堝櫒鎺у埗鍙版墽琛宑onst messageHash = \\"0x...\\";// 浠庡悎绾﹁幏鍙栫殑鍝堝笇const signature = await ethereum.request({\n    method: \\"personal_sign\\",\n    params: [messageHash, ethereum.selectedAddress]\n});\n```\n\n### 姝ラ3: 鍒嗙绛惧悕骞堕獙璇乗n\n1. 浣跨敤鍦ㄧ嚎宸ュ叿鎴栬剼鏈垎绂荤鍚嶇殑v, r, s\n2. 璋冪敤`verifySignature`楠岃瘉绛惧悕鏈夋晥鎬n3. 璋冪敤`checkInWithSignature`瀹屾垚绛惧埌\n\n### 姝ラ4: 娴嬭瘯鎵归噺绛惧埌\n\n1. 涓哄涓湴鍧€鐢熸垚绛惧悕\n2. 璋冪敤`batchCheckIn`鎵归噺澶勭悊\n3. 瑙傚療Gas娑堣€楀姣擻n\n### **馃榿濡備綍鍦?Remix 涓繍琛屽熀浜庣鍚嶇殑浜嬩欢杈撳叆绯荤粺**\n\n濂藉惂锛屾槸鏃跺€欒鎴戜滑鐨勬櫤鑳藉悎绾﹀彉涓虹幇瀹炰簡銆俓n\n浣犳槸缁勭粐鑰呫€俰浣犲嵆灏嗕妇鍔?**Web3 宄颁細** 銆傝鎴戜滑浠庡ご鍒板熬鏉ヤ簡瑙ｄ竴涓嬧€斺€斿寘鎷缃查個璇峰拰绛惧埌浜轰滑锛乗n\n### **绗?1 姝ワ細閮ㄧ讲鍚堢害**\n\n[馃敤](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n1.鍓嶅線 Remix銆俓n\n灏嗕綘鐨?`EventEntry 鍚堢害`绮樿创鍒颁竴涓柊鏂囦欢涓?- 灏嗗叾鍛藉悕涓?`EventEntry.sol`銆俓n\n浣跨敤 **Solidity Compiler** 閫夐」鍗¤繘琛岀紪璇戙€俓n\n杞埌 **鈥淒eploy & Run Transactions** 鈥濋€夐」鍗°€俓n\n鐜板湪鏄椂鍊欏～鍐欐瀯閫犲嚱鏁颁簡锛歕n\n`eventName`锛氣€渀Web3 宄颁細`鈥漒n\n`eventDate`锛氫娇鐢?*future Unix timestamp**\n\n鈫?鎮ㄥ彲浠ヤ娇鐢ㄧ被浼?`Math.floor锛圖ate.now锛堬級 / 1000锛?+ 86400`锛堢幇鍦?+ 1 澶╋級涔嬬被鐨勪笢瑗縗n\n鈫?鎴栬€呭彧鏄矘璐翠竴涓‖缂栫爜鐨勬湭鏉ユ椂闂存埑锛屾瘮濡?`1714000000`\n\n`鏈€澶т笌浼氳€呬汉鏁?锛?00`\n\n鐐瑰嚮**Deploy銆?*\n\n鎭枩锛佹偍鐜板湪宸茬粡鍚姩浜嗘櫤鑳芥椿鍔ㄣ€俓n\n### **绗?2 姝ワ細鐢熸垚娑堟伅鍝堝笇**\n\n[馃攽](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n瑕侀個璇峰浜猴紝鎴戜滑闇€瑕佺敓鎴愪竴涓笌浠栦滑鐨勯挶鍖呯粦瀹氱殑鍞竴**鍝堝笇鍊?* 銆俓n\n鍦ㄥ凡閮ㄧ讲鐨勫悎绾﹀疄渚嬩腑锛歕n\n鍙細\n\n```jsx\ngetMessageHash(\\"0xAttendeeAddressHere\\")\n```\n\n 灏?`鈥?xAttendeeAddressHere鈥漙 鏇挎崲涓鸿瀹㈢殑閽卞寘鍦板潃銆俓n\n[馃](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n澶嶅埗杩斿洖鐨勫搱甯屽€?鈥?鎴戜滑灏嗗湪涓嬩竴姝ヤ腑浣跨敤瀹冦€俓n\n### **绗?3 姝ワ細鍦?Remix 涓缃叉秷鎭?*\n\n[鉁嶏笍](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n鏄椂鍊欏厖褰?*娲诲姩缁勭粐鑰?*骞剁缃插浜虹殑鍝堝笇浜嗐€俓n\n**鍒涘缓涓€涓?JavaScript 鏂囦欢锛?*\n\n鍦?*鏂囦欢璧勬簮绠＄悊鍣?*涓紝鍙抽敭鍗曞嚮骞堕€夋嫨**鏂板缓鏂囦欢**\n\n鍛藉悕 `sign.js`\n\n绮樿创姝よ剼鏈細\n\n```jsx\n(async () => {\n  const messageHash = \\"<paste-your-hash-here>\\";\n  const accounts = await web3.eth.getAccounts();\n  const organizer = accounts[0]; // first account in Remix\n  const signature = await web3.eth.sign(messageHash, organizer);\n  console.log(\\"Signature:\\", signature);\n})();\n```\n\n灏?`鈥?paste-your-hash-here>鈥漙 鏇挎崲涓烘偍鍒氬垰澶嶅埗鐨勫搱甯屽€笺€俓n\n**鐜板湪杩愯瀹冿細**\n\n鍙抽敭鍗曞嚮 `sign.js` 骞堕€夋嫨**杩愯** 銆俓n\n Remix 浼氳嚜鍔ㄥ寘鍚?**web3.js**锛屽洜姝ゆ偍鏃犻渶瀹夎浠讳綍涓滆タ銆俓n\n[鉁匽(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n鎮ㄥ皢鍦?Remix 缁堢涓湅鍒版墦鍗扮殑绛惧悕銆俓n\n**杩欐槸鎬庝箞鍥炰簨锛?*\n\n[馃](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n鎴戜滑浣跨敤閮ㄧ讲鑰咃紙鍗崇粍缁囪€咃級鐨?*绉侀挜**鍦ㄩ摼涓?*瀵规秷鎭搱甯岃繘琛岀鍚?* 銆傝繖妯℃嫙浜嗘偍鐨勫悗绔湇鍔″櫒鍦ㄧ幇瀹炵敓娲讳腑浼氬仛浠€涔堛€俓n\n### **绗?4 姝ワ細浠ヤ笌浼氳€呰韩浠界鍒?*\n\n[馃](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n鐜板湪璁╂垜浠垏鎹㈣鑹?- 鎮ㄦ槸鍒拌揪娲诲姩鐨勪笌浼氳€咃紝鍥犳鍒囨崲鍒颁笌浼氳€呭湴鍧€\n\n```jsx\ncheckIn(\\"<paste-signature-here>\\")\n```\n\n 绮樿创鎮ㄤ粠涓婁竴姝ヨ幏寰楃殑纭垏绛惧悕銆俓n\n[馃搶](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n濡傛灉涓€鍒囬『鍒╋細\n\n绯荤粺灏嗘爣璁颁负宸茬鍒般€俓n\n娲诲姩鐨勪笌浼氫汉鏁板皢澧炲姞\n\n鍗忓畾灏嗗彂鍑?`AttendeeCheckedIn` 浜嬩欢 \n\n[馃帀](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n灏辫繖鏍凤紝鎴戜滑寤虹珛浜嗚嚜宸辩殑 Web3 璁垮鍚嶅崟鈥斺€旀棤闇€鍦ㄩ摼涓婂瓨鍌ㄤ换浣曞湴鍧€銆傛垜浠病鏈夊紕涔卞瓨鍌ㄧ┖闂存垨鏀粯姹芥补鏉ユ洿鏂扮櫧鍚嶅崟锛岃€屾槸浣跨敤鍔犲瘑绛惧悕璁╀笌浼氳€呰瘉鏄庝粬浠槸琚個璇风殑銆傛椿鍔ㄧ粍缁囪€呭氨鍍忎竴涓暟瀛椾繚闀栵紝鍦ㄥ箷鍚庣缃叉壒鍑嗭紝鑰屾櫤鑳藉悎绾﹀垯鍦ㄩ棬鍙ｆ鏌ヨ繖浜涚鍚嶃€傚畠骞插噣銆侀珮鏁堜笖鏇村姞鐏垫椿鈥斺€旇繖鏄湡瀹炰簨浠跺彲浠ュ疄闄呬娇鐢ㄧ殑閭ｇ绯荤粺銆傛棤璁烘偍鏄妇鍔炰唬甯侀棬鎺ф淳瀵硅繕鏄紑鍙戣€呰仛浼氾紝杩欑妯″紡閮借兘涓烘偍鎻愪緵鎵€鏈夊畨鍏ㄦ€э紝鑰屾棤闇€閾句笂鍖呰⒈銆俓n\n# 3銆佷笅涓€姝n\n**灏濊瘯浠ヤ笅鏀硅繘:**\n\n1. 娣诲姞nonce闃叉绛惧悕閲嶆斁鏀诲嚮\n2. 瀹炵幇绛惧悕鏈夋晥鏈熸満鍒禱n3. 鍒涘缓澶氱骇鏉冮檺绯荤粺 (缁勭粐鑰呫€佸織鎰胯€呫€佸弬涓庤€?\n4. 瀹炵幇绛惧悕鎾ら攢鍔熻兘\n5. 娣诲姞绛惧悕浣跨敤娆℃暟闄愬埗\n6. 鍒涘缓鍩轰簬绛惧悕鐨勬姇绁ㄧ郴缁焅n\n**鎵╁睍鐭ヨ瘑**\n\n**EIP-712 缁撴瀯鍖栫鍚?*\n\n```solidity\n// EIP-712 鎻愪緵鏇村畨鍏ㄧ殑缁撴瀯鍖栫鍚峔nstruct Permit {\n    address owner;\n    address spender;\n    uint256 value;\n    uint256 nonce;\n    uint256 deadline;\n}\n\nbytes32 constant PERMIT_TYPEHASH = keccak256(\n    \\"Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)\\"\n);\n```\n\nEIP-712鎻愪緵浜嗘洿瀹夊叏銆佺敤鎴峰弸濂界殑绛惧悕鏂瑰紡锛岃骞挎硾鐢ㄤ簬DeFi鍗忚銆俓n\n**绛惧悕搴旂敤鍦烘櫙瀵规瘮**\n\n| 搴旂敤 | 浼樺娍 | 閫傜敤鍦烘櫙 |\n| --- | --- | --- |\n| 鐧藉悕鍗曢獙璇?| Gas楂樻晥 | NFT閾搁€犮€佹椿鍔ㄧ鍒?|\n| 鍏冧氦鏄?| 鐢ㄦ埛鏃犻渶ETH | DApp鐢ㄦ埛浣撻獙 |\n| Permit鎺堟潈 | 涓€姝ュ畬鎴愭巿鏉?| DeFi鍗忚闆嗘垚 |
+";
+            // 将转义的字符串转换为实际的字符串（将 \\n 替换为 \n）
+            const embeddedMarkdown = embeddedMarkdownJsonString.replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+            
+            // 加载并渲染Markdown
+            function loadMarkdown() {
+                // 使用marked.js渲染Markdown
+                if (typeof marked !== 'undefined') {
+                    const html = marked.parse(embeddedMarkdown);
+                    markdownContainer.innerHTML = html;
+                    
+                    // 等待DOM更新后重新高亮代码块
+                    setTimeout(function() {
+                        // 查找所有代码块并高亮
+                        markdownContainer.querySelectorAll('pre code').forEach(function(block) {
+                            hljs.highlightElement(block);
+                        });
+                    }, 100);
+                } else {
+                    markdownContainer.innerHTML = '<pre>' + embeddedMarkdown + '</pre>';
+                }
+            }
+            
+            // 页面加载时立即加载Markdown
+            loadMarkdown();
+            
+            // 点击信封打开弹窗
+            envelopeContainer.addEventListener('click', function() {
+                envelopeContainer.classList.add('open');
+                
+                // 延迟显示弹窗，让信封翻转动画完成
+                setTimeout(function() {
+                    answerModal.style.display = 'flex';
+                    setTimeout(function() {
+                        answerModal.classList.add('open');
+                    }, 50);
+                }, 400);
+            });
+            
+            // 关闭弹窗
+            closeLetter.addEventListener('click', function() {
+                answerModal.classList.remove('open');
+                
+                setTimeout(function() {
+                    answerModal.style.display = 'none';
+                    envelopeContainer.classList.remove('open');
+                }, 600);
+            });
+            
+            // 点击弹窗外部关闭
+            answerModal.addEventListener('click', function(e) {
+                if (e.target === answerModal) {
+                    closeLetter.click();
                 }
             });
         });

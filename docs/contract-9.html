@@ -18,6 +18,10 @@
             --medium: #F8961E;
             --hard: #E71D36;
             --expert: #7209B7;
+            --warm-brown: #8B7355;
+            --parchment: #F5F1E6;
+            --vintage-blue: #6B8E9F;
+            --warm-red: #C44536;
         }
         
         * {
@@ -302,6 +306,410 @@
         .nav-footer-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.3rem;
+        }        
+        /* 参考答案模块样式 - 温暖治愈风格 */
+        .answer-reference {
+            position: relative;
+            margin: 60px 0 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .envelope-container {
+            position: relative;
+            width: 340px;
+            height: 240px;
+            cursor: pointer;
+            perspective: 1200px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(139, 115, 85, 0.2));
+        }
+        
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .envelope-front, .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .envelope-front {
+            background: linear-gradient(135deg, #f9f3e9, #e8dfd1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: -70px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 70px solid #e8dfd1;
+            z-index: 1;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+        }
+        
+        .envelope-flap::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: -170px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 67px solid #f9f3e9;
+        }
+        
+        .envelope-seal {
+            position: absolute;
+            bottom: 25px;
+            right: 35px;
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #C44536, #8B2E24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            border: 2px solid #A52A2A;
+        }
+        
+        .seal-icon {
+            color: #F5F1E6;
+            font-size: 1.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .envelope-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.4rem;
+            color: var(--warm-brown);
+            z-index: 2;
+            position: relative;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+        
+        .envelope-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(139, 115, 85, 0.05) 3px, transparent 3px),
+                radial-gradient(circle at 85% 75%, rgba(139, 115, 85, 0.05) 3px, transparent 3px);
+            background-size: 40px 40px;
+            z-index: 0;
+        }
+        
+        .envelope-back {
+            background: linear-gradient(135deg, #f5f1e6, #e8dfd1);
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-container:hover .envelope {
+            transform: rotateY(10deg) translateY(-5px);
+        }
+        
+        .envelope-container.open .envelope {
+            transform: rotateY(180deg);
+        }
+        
+        .envelope-hint {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--warm-brown);
+            margin-top: 15px;
+            opacity: 0.9;
+            background: rgba(245, 241, 230, 0.7);
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* 弹窗样式 */
+        .answer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            background: rgba(107, 142, 159, 0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+        
+        .letter-container {
+            width: 90%;
+            max-width: 900px;
+            height: 80vh;
+            background: #F5F1E6;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(107, 142, 159, 0.4);
+            overflow: hidden;
+            transform: scale(0);
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .answer-modal.open .letter-container {
+            transform: scale(1);
+        }
+        
+        .letter-header {
+            background: linear-gradient(135deg, #8B7355, #6B5A45);
+            padding: 25px 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-bottom: 2px dashed #A5947A;
+        }
+        
+        .letter-title {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: #F5F1E6;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
+        }
+        
+        .letter-subtitle {
+            color: rgba(245, 241, 230, 0.9);
+            font-size: 1.3rem;
+            font-family: 'Gochi Hand', cursive;
+        }
+        
+        .close-letter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(245, 241, 230, 0.2);
+            color: #F5F1E6;
+            border: 1px solid rgba(245, 241, 230, 0.3);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .close-letter:hover {
+            background: rgba(245, 241, 230, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .letter-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #F5F1E6;
+            position: relative;
+        }
+        
+        .letter-body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent 98%, rgba(139, 115, 85, 0.1) 98%),
+                linear-gradient(rgba(139, 115, 85, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        
+        /* MD内容样式 */
+        .md-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .md-section {
+            margin-bottom: 40px;
+        }
+        
+        .md-section h1 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: var(--warm-brown);
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #A5947A;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .md-section h2 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.2rem;
+            color: var(--warm-brown);
+            margin: 30px 0 15px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .md-section h2::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--warm-red);
+            font-size: 2.5rem;
+        }
+        
+        .md-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .md-tag {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--warm-brown);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-highlight {
+            background: rgba(107, 142, 159, 0.1);
+            border-left: 5px solid var(--vintage-blue);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(107, 142, 159, 0.2);
+        }
+        
+        .md-content pre {
+            background: #2d2a2e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .md-content .inline-code {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            color: var(--warm-brown);
+            font-size: 0.9em;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content ul, .md-content ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .md-content li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+        
+        .md-content blockquote {
+            border-left: 4px solid var(--vintage-blue);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+            background: rgba(107, 142, 159, 0.05);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .md-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th, .md-content td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th {
+            background: linear-gradient(135deg, var(--warm-brown), #6B5A45);
+            color: #F5F1E6;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.1rem;
+        }
+        
+        .md-content tr:nth-child(even) {
+            background: rgba(139, 115, 85, 0.05);
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 40px;
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2rem;
+            color: var(--warm-brown);
         }
         
         @media (max-width: 768px) {
@@ -319,6 +727,49 @@
             
             .key-points {
                 grid-template-columns: 1fr;
+            }
+            
+            .envelope-container {
+                width: 300px;
+                height: 210px;
+            }
+            
+            .envelope-flap {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 60px solid #e8dfd1;
+            }
+            
+            .envelope-flap::after {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 57px solid #f9f3e9;
+                left: -150px;
+            }
+            
+            .envelope-text {
+                font-size: 2rem;
+            }
+            
+            .answer-modal {
+                padding: 10px;
+            }
+            
+            .letter-container {
+                width: 95%;
+                height: 85vh;
+            }
+            
+            .letter-title {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -708,6 +1159,523 @@ bytes4 selector = ScientificCalculator.power.selector;</code></pre>
                 <div class="nav-footer-title">ActivityTracker - 活动追踪器</div>
             </a>
         </div>
+    
+        <!-- Sneha的一封来信模块 -->
+        <div class="answer-reference">
+            <div class="envelope-container" id="envelope-container">
+                <div class="envelope">
+                    <div class="envelope-front">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-pattern"></div>
+                        <div class="envelope-seal">
+                            <i class="fas fa-feather-alt seal-icon"></i>
+                        </div>
+                        <div class="envelope-text">Sneha的一封来信</div>
+                    </div>
+                    <div class="envelope-back">
+                        <div class="envelope-text" style="color: var(--warm-brown);">点击开启</div>
+                    </div>
+                </div>
+            </div>
+            <div class="envelope-hint">点击信封查看Sneha的来信</div>
+        </div>
+    </div>
+
+    <!-- 弹窗 - 内容待后续精细化处理 -->
+    <div class="answer-modal" id="answer-modal">
+        <div class="letter-container">
+            <div class="letter-header">
+                <div class="letter-title">Sneha的一封来信</div>
+                <div class="letter-subtitle">关于第9天的学习指导</div>
+                <button id="close-letter" class="close-letter">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="letter-body">
+                <div id="md-content" class="md-content">
+                    <div class="md-section">
+                        <h1>智能计算器合约</h1>
+                        <div class="md-meta">
+                            <span class="md-tag"><i class="fas fa-calendar-day"></i> Day 9</span>
+                            <span class="md-tag"><i class="fas fa-hashtag"></i> ID: 9</span>
+                            <span class="md-tag"><i class="fas fa-user-edit"></i> 译者: 禾</span>
+                            <span class="md-tag"><i class="fas fa-signal"></i> 难度等级: 初级</span>
+                        </div>
+                        
+                        <h2>今日学习内容</h2>
+                        
+                        <p>假设你正在使用 Solidity 编写一个简单的计算器。你希望它能处理基本的数学运算——加法、减法、乘法和除法。一切都很顺利，直到一个用户说：</p>
+                        
+                        <blockquote>
+                            <p>"嘿，这个也能计算平方根吗？或者能将数字提升到幂次方吗？"</p>
+                        </blockquote>
+                        
+                        <p>你可以把所有东西都扔到一个巨大的合约里…但有一个更好的方法：<strong>分解责任</strong>。</p>
+                        <ul>
+                            <li>一个合约处理基础部分。</li>
+                            <li>另一个合约处理高级功能——比如幂运算和平方根。</li>
+                            <li>然后，我们将让它们<strong>相互通信</strong>。</li>
+                        </ul>
+                        
+                        <h2>1、产品需求书</h2>
+                        
+                        <h3>合约流程</h3>
+                        <ul>
+                            <li><strong>用户提交请求</strong> → 基础运算（加/减/乘/除）→ Calculator 合约</li>
+                            <li><strong>用户提交请求</strong> → 高级运算（幂/平方根）→ Calculator 合约</li>
+                            <li><strong>所有者</strong> → 设置科学计算器地址 → setScientificCalculator(address)</li>
+                            <li><strong>Calculator</strong> → 本地执行（加法/减法/乘法/除法）</li>
+                            <li><strong>Calculator</strong> → 委托调用 → ScientificCalculator 合约</li>
+                            <li><strong>ScientificCalculator</strong> → power(base, exponent) → 幂运算</li>
+                            <li><strong>ScientificCalculator</strong> → squareRoot(number) → 平方根近似</li>
+                            <li><strong>Calculator</strong> → 返回结果 → 用户</li>
+                        </ul>
+                        
+                        <h3>合约与函数清单</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Contract</th>
+                                    <th>Function Name</th>
+                                    <th>Visibility</th>
+                                    <th>Mutability</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ScientificCalculator</td>
+                                    <td>power(uint256, uint256)</td>
+                                    <td>Public</td>
+                                    <td>pure</td>
+                                </tr>
+                                <tr>
+                                    <td>ScientificCalculator</td>
+                                    <td>squareRoot(uint256)</td>
+                                    <td>Public</td>
+                                    <td>pure</td>
+                                </tr>
+                                <tr>
+                                    <td>Calculator</td>
+                                    <td>constructor()</td>
+                                    <td>Public</td>
+                                    <td>nonpayable</td>
+                                </tr>
+                                <tr>
+                                    <td>Calculator</td>
+                                    <td>setScientificCalculator(address)</td>
+                                    <td>Public</td>
+                                    <td>nonpayable</td>
+                                </tr>
+                                <tr>
+                                    <td>Calculator</td>
+                                    <td>add(uint256, uint256)</td>
+                                    <td>Public</td>
+                                    <td>pure</td>
+                                </tr>
+                                <tr>
+                                    <td>Calculator</td>
+                                    <td>subtract(uint256, uint256)</td>
+                                    <td>Public</td>
+                                    <td>pure</td>
+                                </tr>
+                                <tr>
+                                    <td>Calculator</td>
+                                    <td>multiply(uint256, uint256)</td>
+                                    <td>Public</td>
+                                    <td>pure</td>
+                                </tr>
+                                <tr>
+                                    <td>Calculator</td>
+                                    <td>divide(uint256, uint256)</td>
+                                    <td>Public</td>
+                                    <td>pure</td>
+                                </tr>
+                                <tr>
+                                    <td>Calculator</td>
+                                    <td>calculatePower(uint256, uint256)</td>
+                                    <td>Public</td>
+                                    <td>view</td>
+                                </tr>
+                                <tr>
+                                    <td>Calculator</td>
+                                    <td>calculateSquareRoot(uint256)</td>
+                                    <td>Public</td>
+                                    <td>nonpayable</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h2>2、细节解说</h2>
+                        
+                        <p>让我们一步步来构建。</p>
+                        
+                        <h3>计划：两个合约，两个文件</h3>
+                        
+                        <p>我们将构建两个协同工作的智能合约：</p>
+                        <ol>
+                            <li><strong>Calculator.sol</strong> – 这将是我们主要的计算器。它处理加法、减法、乘法和除法等基本数学运算。当它需要更高级的数学运算帮助时，它会将任务委托出去。</li>
+                            <li><strong>ScientificCalculator.sol</strong> – 这个合约将存放高级功能——比如指数运算（幂运算）和平方根计算。</li>
+                        </ol>
+                        
+                        <p>每个合约将存在于它自己的<strong>独立文件</strong>中，但它们会相互连接。</p>
+                        
+                        <div class="md-highlight">
+                            <strong>💻 完整代码地址</strong>：
+                            <p>1️⃣ Calculator.sol: <a href="https://github.com/snehasharma76/30daysSolidity_Web3Compass/blob/master/Calculator.sol" target="_blank" style="color: var(--vintage-blue); text-decoration: underline;">GitHub链接</a></p>
+                            <p>2️⃣ ScientificCalculator.sol: <a href="https://github.com/snehasharma76/30daysSolidity_Web3Compass/blob/master/ScientificCalculator.sol" target="_blank" style="color: var(--vintage-blue); text-decoration: underline;">GitHub链接</a></p>
+                        </div>
+                        
+                        <p>为了从 <code class="inline-code">ScientificCalculator</code> 中调用函数，在 <code class="inline-code">Calculator</code> 合约内，我们将<strong>导入（import）</strong>它并存储其部署地址。</p>
+                        
+                        <blockquote>
+                            <p>⚠️重要提示：请将两个文件放在同一目录下，以确保导入时不会出现问题。</p>
+                        </blockquote>
+                        
+                        <h3>这些文件看起来是怎样的？</h3>
+                        
+                        <p>在深入编写逻辑之前，以下是每个文件的基本结构——或称为"外壳"——的样子：</p>
+                        
+                        <h4>File 1: ScientificCalculator.sol</h4>
+                        <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract ScientificCalculator {
+    // advanced functions will go here
+}</code></pre>
+                        
+                        <p>这个文件定义了处理幂和平方根的协议——所有超出基础范围的所有数学运算。</p>
+                        
+                        <h4>File 2: Calculator.sol</h4>
+                        <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "./ScientificCalculator.sol";
+
+contract Calculator {
+    // basic math functions
+}</code></pre>
+                        
+                        <p>这个文件定义了主要的 <code class="inline-code">Calculator</code> 合约。它包括基本算术功能。</p>
+                        
+                        <p>结构已就绪，现在让我们进入 <code class="inline-code">ScientificCalculator</code> 并开始逐一构建它。</p>
+                        
+                        <h3>科学计算器——从高级数学开始</h3>
+                        
+                        <p>我们将从处理高级操作的合约开始——<code class="inline-code">ScientificCalculator</code>。这是文件的第一部分：</p>
+                        
+                        <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;</code></pre>
+                        
+                        <p>这是每个 Solidity 文件顶部的标准声明。它们确保你的合约能够正确编译并合法使用。现在让我们定义我们的合约：</p>
+                        
+                        <pre><code class="language-solidity">contract ScientificCalculator {</code></pre>
+                        
+                        <p>我们正在创建一个名为 <code class="inline-code">ScientificCalculator</code> 的新合约。在这个合约中，我们将首先编写一个用于计算幂的函数。</p>
+                        
+                        <h4>power(base, exponent)</h4>
+                        
+                        <pre><code class="language-solidity">function power(uint256 base, uint256 exponent) public pure returns (uint256) {
+    if (exponent == 0) return 1;
+    else return (base ** exponent);
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>此函数返回 <code class="inline-code">base</code> 的 <code class="inline-code">exponent</code> 次幂的结果（此函数返回将底数提升到指数次幂的结果）。</p>
+                            <ul>
+                                <li>如果指数为0，它返回1——这只是标准数学。</li>
+                                <li>否则，它使用 Solidity 的 <code class="inline-code">**</code> 运算符来计算 <code class="inline-code">base</code> 的 <code class="inline-code">exponent</code> 次方。</li>
+                                <li>它被标记为 <code class="inline-code">pure</code>，因为它不读取或更改区块链上的任何内容。它只是进行数学运算。</li>
+                            </ul>
+                        </div>
+                        
+                        <p>接下来，我们将添加一个函数来估算平方根。</p>
+                        
+                        <h4>squareRoot(number)</h4>
+                        
+                        <pre><code class="language-solidity">function squareRoot(uint256 number) public pure returns (uint256) {
+    require(number >= 0, "Cannot calculate square root of negative number");
+    if (number == 0) return 0;
+
+    int256 result = number / 2;
+    for (uint256 i = 0; i < 10; i++) {
+        result = (result + number / result) / 2;
+    }
+    return result;
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这个函数使用一种经典的技术——<strong>牛顿法</strong>来估算一个数的平方根，这是一种通过重复逼近来找到平方根的聪明方法。</p>
+                            
+                            <p>让我们一步步来分解：</p>
+                            <ul>
+                                <li>首先，我们使用 <code class="inline-code">require</code> 检查输入的数字是否为负数。Solidity 不支持复数，因此负数的平方根是不被允许的。</li>
+                                <li>然后我们处理一个快速的特殊情况：如果这个数是0，那么它的平方根也是0——所以我们会立即返回这个结果。</li>
+                                <li>现在进行实际近似。我们从将数字除以二开始进行<strong>粗略估计</strong>：<code class="inline-code">uint256 result = number / 2;</code></li>
+                                <li>我们接着使用一个简单的公式将那个猜测值进行<strong>十次精炼</strong>：<code class="inline-code">(result + number / result) / 2</code></li>
+                            </ul>
+                            
+                            <p>这个公式通过结合当前的猜测值与如果猜测值完美时我们得到的结果，并将它们取平均值来工作。每次循环都使我们可以更接近实际的平方根。</p>
+                            
+                            <p>尽管我们没有使用浮点数计算，但这种方法对于整数仍然能给出相当不错的估计——足够满足 Solidity 中许多实际应用场景的需求。</p>
+                        </div>
+                        
+                        <h3>计算器——主要数学引擎（附带一些辅助功能）</h3>
+                        
+                        <p>这份合同处理基本的数学运算：加法、减法、乘法和除法。但当事情变得更复杂时——比如计算幂或平方根——它并不能完全独立完成所有操作。相反，它向 <code class="inline-code">ScientificCalculator</code> 合约寻求帮助。</p>
+                        
+                        <p>让我们从文件顶部开始：</p>
+                        
+                        <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "./ScientificCalculator.sol";</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这是发生的情况：我们使用一个 <code class="inline-code">import</code> 语句将 <code class="inline-code">ScientificCalculator.sol</code> 中的代码引入到这个文件中。这允许 <code class="inline-code">Calculator</code> 合约使用那个其他合约中的函数。</p>
+                            
+                            <p><code class="inline-code">"../"</code> 部分告诉 Solidity：</p>
+                            <blockquote>
+                                <p>"查看与这个文件相同的目录（或文件夹）中，找到 ScientificCalculator.sol。"</p>
+                            </blockquote>
+                            
+                            <p>因此，为了让这个导入正常工作，这两个文件——<code class="inline-code">Calculator.sol</code> 和 <code class="inline-code">ScientificCalculator.sol</code>——<strong>必须保存在同一个文件夹中</strong>。</p>
+                            
+                            <p>这种设置允许一个合约知道并与其他合约交互。</p>
+                        </div>
+                        
+                        <p>现在，让我们开始构建剩余的 <code class="inline-code">Calculator</code> 合约。我们将从声明合约本身和设置几个重要变量开始。</p>
+                        
+                        <pre><code class="language-solidity">contract Calculator {</code></pre>
+                        
+                        <p>在合约内部，让我们定义几个<strong>状态变量</strong>来存储有用信息。</p>
+                        
+                        <h4>状态变量</h4>
+                        
+                        <pre><code class="language-solidity">address public owner;
+address public scientificCalculatorAddress;</code></pre>
+                        
+                        <ul>
+                            <li><code class="inline-code">owner</code> 将存储部署此合约的地址。</li>
+                            <li><code class="inline-code">scientificCalculatorAddress</code> 是我们存放已部署的 <code class="inline-code">ScientificCalculator</code> 地址的地方。</li>
+                        </ul>
+                        
+                        <p>现在，让我们在部署时设置 owner。</p>
+                        
+                        <h4>constructor()</h4>
+                        
+                        <pre><code class="language-solidity">constructor() {
+    owner = msg.sender;
+}</code></pre>
+                        
+                        <p>当有人部署这个合约时，他们的地址被存储为所有者。我们稍后会用这个来限制某些功能。</p>
+                        
+                        <h4>onlyOwner 修饰符</h4>
+                        
+                        <pre><code class="language-solidity">modifier onlyOwner() {
+    require(msg.sender == owner, "Only owner can perform this action");
+    _;
+}</code></pre>
+                        
+                        <p>这是一个<strong>修饰符</strong>，就像一个可重复使用的看门人。任何使用 onlyOwner 的函数只能被合约的原始部署者调用。现在我们用它来允许所有者链接一个 ScientificCalculator。</p>
+                        
+                        <h4>setScientificCalculator(address)</h4>
+                        
+                        <pre><code class="language-solidity">function setScientificCalculator(address _address) public onlyOwner {
+    scientificCalculatorAddress = _address;
+}</code></pre>
+                        
+                        <p>一旦您的 ScientificCalculator 合约部署完成，您可以将它的地址复制并粘贴到这里。这个函数会保存该地址，以便我们之后可以调用它的函数。</p>
+                        
+                        <h3>基础数学函数</h3>
+                        
+                        <p>现在我们来定义一些基本的算术运算。这些都是 <code class="inline-code">pure</code> 函数——它们不会触及区块链状态，只是返回结果。</p>
+                        
+                        <h4>add(a, b)</h4>
+                        <pre><code class="language-solidity">function add(uint256 a, uint256 b) public pure returns (uint256) {
+    uint256 result = a + b;
+    return result;
+}</code></pre>
+                        <p>简单的加法。接受两个数字并返回它们的和。</p>
+                        
+                        <h4>subtract(a, b)</h4>
+                        <pre><code class="language-solidity">function subtract(uint256 a, uint256 b) public pure returns (uint256) {
+    uint256 result = a - b;
+    return result;
+}</code></pre>
+                        <p>从 <code class="inline-code">a</code> 中减去 <code class="inline-code">b</code> 并返回结果。</p>
+                        
+                        <h4>multiply(a, b)</h4>
+                        <pre><code class="language-solidity">function multiply(uint256 a, uint256 b) public pure returns (uint256) {
+    uint256 result = a * b;
+    return result;
+}</code></pre>
+                        <p>将两个数字相乘。</p>
+                        
+                        <h4>divide(a, b)</h4>
+                        <pre><code class="language-solidity">function divide(uint256 a, uint256 b) public pure returns (uint256) {
+    require(b != 0, "Cannot divide by zero");
+    uint256 result = a / b;
+    return result;
+}</code></pre>
+                        <p>将 <code class="inline-code">a</code> 除以 <code class="inline-code">b</code>。但在执行之前，它会检查 <code class="inline-code">b</code> 是否为零——只是为了避免错误。</p>
+                        
+                        <h3>连接到另一个合约：幂函数</h3>
+                        
+                        <p>现在事情变得真正有趣了——我们将让一个智能合约<strong>与另一个合约通信</strong>。</p>
+                        
+                        <p>让我们假设用户想要计算类似 <code class="inline-code">5 to the power of 3</code>（5 的 3 次方）这样的内容。基本的 <code class="inline-code">Calculator</code> 合约不知道如何处理——但 <code class="inline-code">ScientificCalculator</code> 可以。</p>
+                        
+                        <p>与其再次重写那段逻辑，我们将调用其他合约中的 <code class="inline-code">power()</code> 函数，并返回结果。</p>
+                        
+                        <h4>calculatePower(base, exponent)</h4>
+                        
+                        <pre><code class="language-solidity">function calculatePower(uint256 base, uint256 exponent) public view returns (uint256) {
+    ScientificCalculator scientificCalc = ScientificCalculator(scientificCalculatorAddress);
+    uint256 result = scientificCalc.power(base, exponent);
+    return result;
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>让我们一步步来解析。</p>
+                            
+                            <p><strong>第一步：地址转换</strong></p>
+                            <pre><code class="language-solidity">ScientificCalculator scientificCalc = ScientificCalculator(scientificCalculatorAddress);</code></pre>
+                            
+                            <p>这一行正在做一件非常重要的事情。它将一个普通的以太坊地址（<code class="inline-code">scientificCalculatorAddress</code>）转换成一个可用的合约对象——在这个例子中，是一个 <code class="inline-code">ScientificCalculator</code>。</p>
+                            
+                            <p>你可以这样理解：</p>
+                            <blockquote>
+                                <p>"Solidity，这里有一个区块链上的地址。我知道它指向一个 ScientificCalculator 合约。请把它当作一个合约来处理，这样我才能调用它的函数。"</p>
+                            </blockquote>
+                            
+                            <p>这个过程称为<strong>地址强制类型转换</strong>——你将一个地址转换为一个合约引用，以便直接与之交互。而且这之所以能工作<strong>仅仅因为我们已经在文件顶部导入了 <code class="inline-code">ScientificCalculator.sol</code></strong>。Solidity 现在知道了那个合约的结构，所以它允许我们安全地调用它的函数。</p>
+                            
+                            <p><strong>第二步：调用函数</strong></p>
+                            <pre><code class="language-solidity">uint256 result = scientificCalc.power(base, exponent);</code></pre>
+                            
+                            <p>现在我们有了合约引用，调用它的函数和点表示法一样简单——就像在任何面向对象编程语言中调用方法一样。这向部署的 <code class="inline-code">ScientificCalculator</code> 合约发送一个只读调用，要求它计算 <code class="inline-code">base ** exponent</code>，然后返回结果。</p>
+                            
+                            <p><strong>第三步：返回结果</strong></p>
+                            <pre><code class="language-solidity">return result;</code></pre>
+                            
+                            <p>我们直接返回该值，以便用户获得他们计算的结果。</p>
+                            
+                            <p><strong>为什么这种方法有效</strong></p>
+                            <p>这是调用另一个合约的<strong>高层、类型安全</strong>方式：</p>
+                            <ul>
+                                <li>易于阅读和书写</li>
+                                <li>需要你已经导入了外部合约的代码</li>
+                                <li>它允许编译器捕获错误——比如调用不存在的函数</li>
+                            </ul>
+                            
+                            <p>当你<strong>知道其他合约的结构</strong>并能访问其源代码时，这是推荐的方法。</p>
+                        </div>
+                        
+                        <h3>额外福利：使用低级调用</h3>
+                        
+                        <p>有时，你希望与另一个合约<strong>不导入其源代码</strong>进行交互——也许你只知道你想调用的函数的地址和名称。在这种情况下，你可以使用<strong>低级调用</strong>。它更灵活，但也更具风险，因为 Solidity 无法在编译时保护你免受错误的影响。</p>
+                        
+                        <p>让我们通过调用 <code class="inline-code">squareRoot()</code> 函数来查看实际操作，该函数来自 <code class="inline-code">ScientificCalculator</code> 合约<strong>而不使用直接导入</strong>。</p>
+                        
+                        <h4>calculateSquareRoot(number)</h4>
+                        
+                        <pre><code class="language-solidity">function calculateSquareRoot(uint256 number) public returns (uint256) {
+    require(number >= 0, "Cannot calculate square root of negative number");
+
+    bytes memory data = abi.encodeWithSignature("squareRoot(int256)", number);
+    (bool success, bytes memory returnData) = scientificCalculatorAddress.call(data);
+    require(success, "External call failed");
+
+    uint256 result = abi.decode(returnData, (uint256));
+    return result;
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>让我们逐行分析。</p>
+                            
+                            <p><strong>步骤1：输入验证</strong></p>
+                            <pre><code class="language-solidity">require(number >= 0, "Cannot calculate square root of negative number");</code></pre>
+                            <p>我们首先确保数字不是负数。Solidity 不支持虚数，所以我们从一开始就拒绝负数输入。</p>
+                            
+                            <p><strong>步骤2：编码函数调用</strong></p>
+                            <pre><code class="language-solidity">bytes memory data = abi.encodeWithSignature("squareRoot(int256)", number);</code></pre>
+                            
+                            <p>这是<strong>底层调用的核心</strong>。我们使用一种称为 <strong>ABI</strong> 的东西来准备函数调用。</p>
+                            
+                            <p><strong>什么是 ABI？</strong></p>
+                            <p>ABI 代表<strong>应用程序二进制接口</strong>。你可以把它看作是合同的"通信协议"——它定义了当一方合同调用另一方时数据必须如何结构化。</p>
+                            
+                            <p>在使用高级函数调用（如 <code class="inline-code">otherContract.someFunction()</code>）时，Solidity 会为你处理 ABI 编码。但使用低级调用时，<strong>你必须手动处理</strong>。</p>
+                            
+                            <p><strong>abi.encodeWithSignature 是做什么的？</strong></p>
+                            <p>它构建了 EVM 在调用特定函数时期望的确切二进制格式。在这种情况下：</p>
+                            <pre><code class="language-solidity">abi.encodeWithSignature("squareRoot(int256)", number)</code></pre>
+                            <ul>
+                                <li><code class="inline-code">"squareRoot(int256)"</code> 是完整的函数签名（名称+参数类型）。</li>
+                                <li><code class="inline-code">number</code> 是我们作为参数传递的值。</li>
+                                <li>结果是字节数组 (<code class="inline-code">bytes memory</code>)，其中包含在区块链上调用该函数所需的所有信息。</li>
+                            </ul>
+                            
+                            <p><strong>步骤 3：进行低级调用</strong></p>
+                            <pre><code class="language-solidity">(bool success, bytes memory returnData) = scientificCalculatorAddress.call(data);</code></pre>
+                            
+                            <p>在这里，我们告诉以太坊虚拟机（EVM）：</p>
+                            <blockquote>
+                                <p>"嘿，将我们刚刚创建的编码数据通过这个地址发送一个原始调用。"</p>
+                            </blockquote>
+                            
+                            <ul>
+                                <li><code class="inline-code">.call(data)</code> 将这些数据发送到存储在 <code class="inline-code">scientificCalculatorAddress</code> 中的地址。</li>
+                                <li>它返回两件事：
+                                    <ul>
+                                        <li><code class="inline-code">success</code>（一个布尔值，告诉我们调用是否成功）</li>
+                                        <li><code class="inline-code">returnData</code>（一个字节数组，包含函数返回的内容）</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            
+                            <blockquote>
+                                <p>这就像通过后门手动调用函数一样——你需要确保一切完全正确。</p>
+                            </blockquote>
+                            
+                            <p><strong>步骤4：检查调用是否成功</strong></p>
+                            <pre><code class="language-solidity">require(success, "External call failed");</code></pre>
+                            <p>始终检查通话是否成功。如果出现错误（签名错误、地址错误、函数未找到等），<code class="inline-code">success</code> 将为假——我们将停止执行并显示一条有用的错误消息。</p>
+                            
+                            <p><strong>步骤5：解码响应</strong></p>
+                            <pre><code class="language-solidity">uint256 result = abi.decode(returnData, (uint256));</code></pre>
+                            <p>现在我们将原始返回数据解码回可用值 — 在这个例子中，是一个 <code class="inline-code">uint256</code>。既然我们知道 <code class="inline-code">squareRoot()</code> 的返回类型是 <code class="inline-code">int256</code>（而我们这里返回的是 <code class="inline-code">uint256</code>），你可能需要根据你如何处理有符号值来调整这一点。为简化起见，我们假设传入的数字是安全的且为正数。</p>
+                            
+                            <p><strong>步骤6：返回最终结果</strong></p>
+                            <pre><code class="language-solidity">return result;</code></pre>
+                            <p>最后，我们将平方根计算的结果返回给调用这个函数的人。</p>
+                        </div>
+                        
+                        <h2>总结</h2>
+                        
+                        <p>到目前为止，你已经构建了两个合约：</p>
+                        <ul>
+                            <li>将逻辑区分为基础数学和高级数学</li>
+                            <li>使用<strong>高级调用</strong>和<strong>低级调用</strong>相互交流</li>
+                            <li>展示如何<strong>模块化逻辑</strong>并保持条理清晰</li>
+                            <li>演示如访问控制和错误检查等安全实践</li>
+                        </ul>
+                        
+                        <blockquote>
+                            <p>这些是构建干净、可维护和可扩展的真实世界去中心化应用的基本模式。通过分离关注点、利用合约间通信，你为构建复杂而强大的 dApp 打下了坚实的基础。</p>
+                        </blockquote>
+                        
+                        <div class="signature">
+                            <p>真诚的，</p>
+                            <p>Sneha</p>
+                            <p style="margin-top: 10px; font-size: 1.5rem; opacity: 0.8;">译者：禾</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -722,6 +1690,47 @@ bytes4 selector = ScientificCalculator.power.selector;</code></pre>
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+            
+        // Sneha的一封来信模块功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelopeContainer = document.getElementById('envelope-container');
+            const answerModal = document.getElementById('answer-modal');
+            const closeLetter = document.getElementById('close-letter');
+            
+            if (!envelopeContainer || !answerModal || !closeLetter) {
+                return; // 如果元素不存在，直接返回
+            }
+            
+            // 点击信封打开弹窗
+            envelopeContainer.addEventListener('click', function() {
+                envelopeContainer.classList.add('open');
+                
+                // 延迟显示弹窗，让信封翻转动画完成
+                setTimeout(function() {
+                    answerModal.style.display = 'flex';
+                    setTimeout(function() {
+                        answerModal.classList.add('open');
+                    }, 50);
+                }, 400);
+            });
+            
+            // 关闭弹窗
+            closeLetter.addEventListener('click', function() {
+                answerModal.classList.remove('open');
+                
+                setTimeout(function() {
+                    answerModal.style.display = 'none';
+                    envelopeContainer.classList.remove('open');
+                }, 600);
+            });
+            
+            // 点击弹窗外部关闭
+            answerModal.addEventListener('click', function(e) {
+                if (e.target === answerModal) {
+                    closeLetter.click();
                 }
             });
         });

@@ -18,6 +18,10 @@
             --medium: #F8961E;
             --hard: #E71D36;
             --expert: #7209B7;
+            --warm-brown: #8B7355;
+            --parchment: #F5F1E6;
+            --vintage-blue: #6B8E9F;
+            --warm-red: #C44536;
         }
         
         * {
@@ -302,6 +306,410 @@
         .nav-footer-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.3rem;
+        }        
+        /* 参考答案模块样式 - 温暖治愈风格 */
+        .answer-reference {
+            position: relative;
+            margin: 60px 0 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .envelope-container {
+            position: relative;
+            width: 340px;
+            height: 240px;
+            cursor: pointer;
+            perspective: 1200px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(139, 115, 85, 0.2));
+        }
+        
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .envelope-front, .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .envelope-front {
+            background: linear-gradient(135deg, #f9f3e9, #e8dfd1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: -70px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 70px solid #e8dfd1;
+            z-index: 1;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+        }
+        
+        .envelope-flap::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: -170px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 67px solid #f9f3e9;
+        }
+        
+        .envelope-seal {
+            position: absolute;
+            bottom: 25px;
+            right: 35px;
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #C44536, #8B2E24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            border: 2px solid #A52A2A;
+        }
+        
+        .seal-icon {
+            color: #F5F1E6;
+            font-size: 1.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .envelope-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.4rem;
+            color: var(--warm-brown);
+            z-index: 2;
+            position: relative;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+        
+        .envelope-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(139, 115, 85, 0.05) 3px, transparent 3px),
+                radial-gradient(circle at 85% 75%, rgba(139, 115, 85, 0.05) 3px, transparent 3px);
+            background-size: 40px 40px;
+            z-index: 0;
+        }
+        
+        .envelope-back {
+            background: linear-gradient(135deg, #f5f1e6, #e8dfd1);
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-container:hover .envelope {
+            transform: rotateY(10deg) translateY(-5px);
+        }
+        
+        .envelope-container.open .envelope {
+            transform: rotateY(180deg);
+        }
+        
+        .envelope-hint {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--warm-brown);
+            margin-top: 15px;
+            opacity: 0.9;
+            background: rgba(245, 241, 230, 0.7);
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* 弹窗样式 */
+        .answer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            background: rgba(107, 142, 159, 0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+        
+        .letter-container {
+            width: 90%;
+            max-width: 900px;
+            height: 80vh;
+            background: #F5F1E6;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(107, 142, 159, 0.4);
+            overflow: hidden;
+            transform: scale(0);
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .answer-modal.open .letter-container {
+            transform: scale(1);
+        }
+        
+        .letter-header {
+            background: linear-gradient(135deg, #8B7355, #6B5A45);
+            padding: 25px 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-bottom: 2px dashed #A5947A;
+        }
+        
+        .letter-title {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: #F5F1E6;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
+        }
+        
+        .letter-subtitle {
+            color: rgba(245, 241, 230, 0.9);
+            font-size: 1.3rem;
+            font-family: 'Gochi Hand', cursive;
+        }
+        
+        .close-letter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(245, 241, 230, 0.2);
+            color: #F5F1E6;
+            border: 1px solid rgba(245, 241, 230, 0.3);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .close-letter:hover {
+            background: rgba(245, 241, 230, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .letter-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #F5F1E6;
+            position: relative;
+        }
+        
+        .letter-body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent 98%, rgba(139, 115, 85, 0.1) 98%),
+                linear-gradient(rgba(139, 115, 85, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        
+        /* MD内容样式 */
+        .md-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .md-section {
+            margin-bottom: 40px;
+        }
+        
+        .md-section h1 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: var(--warm-brown);
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #A5947A;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .md-section h2 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.2rem;
+            color: var(--warm-brown);
+            margin: 30px 0 15px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .md-section h2::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--warm-red);
+            font-size: 2.5rem;
+        }
+        
+        .md-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .md-tag {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--warm-brown);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-highlight {
+            background: rgba(107, 142, 159, 0.1);
+            border-left: 5px solid var(--vintage-blue);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(107, 142, 159, 0.2);
+        }
+        
+        .md-content pre {
+            background: #2d2a2e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .md-content .inline-code {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            color: var(--warm-brown);
+            font-size: 0.9em;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content ul, .md-content ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .md-content li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+        
+        .md-content blockquote {
+            border-left: 4px solid var(--vintage-blue);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+            background: rgba(107, 142, 159, 0.05);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .md-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th, .md-content td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th {
+            background: linear-gradient(135deg, var(--warm-brown), #6B5A45);
+            color: #F5F1E6;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.1rem;
+        }
+        
+        .md-content tr:nth-child(even) {
+            background: rgba(139, 115, 85, 0.05);
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 40px;
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2rem;
+            color: var(--warm-brown);
         }
         
         @media (max-width: 768px) {
@@ -319,6 +727,49 @@
             
             .key-points {
                 grid-template-columns: 1fr;
+            }
+            
+            .envelope-container {
+                width: 300px;
+                height: 210px;
+            }
+            
+            .envelope-flap {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 60px solid #e8dfd1;
+            }
+            
+            .envelope-flap::after {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 57px solid #f9f3e9;
+                left: -150px;
+            }
+            
+            .envelope-text {
+                font-size: 2rem;
+            }
+            
+            .answer-modal {
+                padding: 10px;
+            }
+            
+            .letter-container {
+                width: 95%;
+                height: 85vh;
+            }
+            
+            .letter-title {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -721,6 +1172,340 @@ contract MyContract is Ownable {
                 <div class="nav-footer-title">Ether Piggy Bank - 以太坊存钱罐</div>
             </a>
         </div>
+    
+        <!-- Sneha的一封来信模块 -->
+        <div class="answer-reference">
+            <div class="envelope-container" id="envelope-container">
+                <div class="envelope">
+                    <div class="envelope-front">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-pattern"></div>
+                        <div class="envelope-seal">
+                            <i class="fas fa-feather-alt seal-icon"></i>
+                        </div>
+                        <div class="envelope-text">Sneha的一封来信</div>
+                    </div>
+                    <div class="envelope-back">
+                        <div class="envelope-text" style="color: var(--warm-brown);">点击开启</div>
+                    </div>
+                </div>
+            </div>
+            <div class="envelope-hint">点击信封查看Sneha的来信</div>
+        </div>
+    </div>
+
+    <!-- 弹窗 - 内容待后续精细化处理 -->
+    <div class="answer-modal" id="answer-modal">
+        <div class="letter-container">
+            <div class="letter-header">
+                <div class="letter-title">Sneha的一封来信</div>
+                <div class="letter-subtitle">关于第5天的学习指导</div>
+                <button id="close-letter" class="close-letter">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="letter-body">
+                <div id="md-content" class="md-content">
+                    <div class="md-section">
+                        <h1>管理控制</h1>
+                        <div class="md-meta">
+                            <span class="md-tag"><i class="fas fa-calendar-day"></i> Day 5</span>
+                            <span class="md-tag"><i class="fas fa-hashtag"></i> ID: 5</span>
+                            <span class="md-tag"><i class="fas fa-user-edit"></i> 译者: 月亮</span>
+                            <span class="md-tag"><i class="fas fa-signal"></i> 难度等级: 初级</span>
+                        </div>
+                        
+                        <h2>今日学习内容</h2>
+                        <p>在之前的合约中，每个人都是平等的。</p>
+                        
+                        <p>只要遵守规则（例如出更高的价），任何人都可以自由地与合约交互。</p>
+                        
+                        <p>但在现实世界中，<strong>有些操作应当只由特定的人或角色来执行</strong>。</p>
+                        
+                        <p>想象一个游戏，只有管理员能分发奖励；或一个金库，只有一个人能批准取款。</p>
+                        
+                        <p>我们需要一种机制来表达：</p>
+                        
+                        <blockquote>
+                            <p>"只有这个人可以执行这个操作。"</p>
+                        </blockquote>
+                        
+                        <p>这正是本合约要教你的内容——如何创建<strong>只能由合约拥有者</strong>调用的函数，我们将使用一种叫做 <strong>modifier（修饰符）</strong> 的机制。</p>
+                        
+                        <p>在此过程中，我们会模拟一个"宝箱系统"：由一个人控制谁能取宝、取多少、以及何时取。</p>
+                        
+                        <div class="md-highlight">
+                            <strong>💻 下面是完整合约代码</strong>：<a href="https://github.com/snehasharma76/30daysSolidity_Web3Compass/blob/master/AdminOnly.sol" target="_blank" style="color: var(--vintage-blue); text-decoration: underline;">GitHub链接</a>
+                        </div>
+                        
+                        <h2>1、产品需求说明书</h2>
+                        
+                        <h3>用户流程</h3>
+                        <ul>
+                            <li><strong>初始化</strong>：构造函数设置 owner</li>
+                            <li><strong>管理员功能</strong>（仅限 owner）：
+                                <ul>
+                                    <li>addTreasure - 添加宝藏金额</li>
+                                    <li>approveWithdrawal - 批准用户提取</li>
+                                    <li>resetWithdrawalStatus - 重置用户提取状态</li>
+                                    <li>transferOwnership - 转移合约所有权</li>
+                                    <li>getTreasureDetails - 查看宝藏详情</li>
+                                </ul>
+                            </li>
+                            <li><strong>用户功能</strong>：
+                                <ul>
+                                    <li>withdrawTreasure - 提取宝藏（需要检查身份和条件）</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        
+                        <h3>数据库</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Contract</th>
+                                    <th>Function Name</th>
+                                    <th>Visibility</th>
+                                    <th>Mutability</th>
+                                    <th>修饰符</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td rowspan="7"><strong>AdminOnly</strong></td>
+                                    <td>constructor</td>
+                                    <td>Public</td>
+                                    <td>🛑 状态修改</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>addTreasure</td>
+                                    <td>Public ❗️</td>
+                                    <td>🛑 状态修改</td>
+                                    <td>onlyOwner</td>
+                                </tr>
+                                <tr>
+                                    <td>approveWithdrawal</td>
+                                    <td>Public ❗️</td>
+                                    <td>🛑 状态修改</td>
+                                    <td>onlyOwner</td>
+                                </tr>
+                                <tr>
+                                    <td>withdrawTreasure</td>
+                                    <td>Public ❗️</td>
+                                    <td>🛑 状态修改</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>resetWithdrawalStatus</td>
+                                    <td>Public ❗️</td>
+                                    <td>🛑 状态修改</td>
+                                    <td>onlyOwner</td>
+                                </tr>
+                                <tr>
+                                    <td>transferOwnership</td>
+                                    <td>Public ❗️</td>
+                                    <td>🛑 状态修改</td>
+                                    <td>onlyOwner</td>
+                                </tr>
+                                <tr>
+                                    <td>getTreasureDetails</td>
+                                    <td>Public ❗️</td>
+                                    <td>view</td>
+                                    <td>onlyOwner</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <p><strong>说明：</strong></p>
+                        <ul>
+                            <li>❗️ 表示函数有访问控制修饰符（onlyOwner）</li>
+                            <li>🛑 表示函数会修改状态变量</li>
+                            <li>无🛑标记的函数为view/pure函数，只读取状态不修改</li>
+                        </ul>
+                        
+                        <h2>2、细节解释</h2>
+                        
+                        <p>让我们逐行浏览合约代码——解释代码里正在发生的事以及为什么它很重要。</p>
+                        
+                        <h3>设置合约拥有者</h3>
+                        <pre><code class="language-solidity">address public owner;
+
+constructor() {
+    owner = msg.sender;
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>我们首先声明一个 <code class="inline-code">owner</code> 变量，用于存储部署该合约的账户地址。</p>
+                            <p>在构造函数 constructor 中，我们写 <code class="inline-code">owner = msg.sender</code>。记住我们之前课程中的知识：</p>
+                            <p><code class="inline-code">msg.sender</code> 是一个全局变量，用来表示当前调用该函数的账户地址。</p>
+                            <p>而构造函数只在部署时运行一次，因此 <code class="inline-code">owner = msg.sender</code> 这句话的意思是：</p>
+                            <blockquote>
+                                <p>"谁部署了这个合约，谁就是合约的拥有者。"</p>
+                            </blockquote>
+                            <p>这个拥有者将在接下来的合约中拥有特殊权限。</p>
+                        </div>
+                        
+                        <h3>通过修饰符实现可复用的访问控制</h3>
+                        <pre><code class="language-solidity">modifier onlyOwner() {
+    require(msg.sender == owner, "Access denied: Only the owner can perform this action");
+    _;
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这是我们的"<strong>护栏</strong>"。</p>
+                            <p>在 Solidity 中，<strong>modifier（修饰符）</strong>让我们能够创建可以附加到函数中的可复用的小型权限检查逻辑。</p>
+                            <p>这个修饰符会检查调用者是否是拥有者。如果不是，函数将不会继续执行。</p>
+                            <p>符号 <code class="inline-code">_</code> 表示权限检查之后的函数主体将被插入的位置（它是一个占位符）。</p>
+                            <p>只有检查通过时，函数主体的代码才会被执行。</p>
+                            <p>这样一来，我们不再需要在每个函数中都写 <code class="inline-code">require(msg.sender == owner)</code>，只需添加 <code class="inline-code">onlyOwner</code> 修饰符即可——更简洁、更安全、也更好维护。</p>
+                        </div>
+                        
+                        <h3>往宝箱中添加宝物</h3>
+                        <pre><code class="language-solidity">uint256 public treasureAmount;
+
+function addTreasure(uint256 amount) public onlyOwner {
+    treasureAmount += amount;
+}</code></pre>
+                        
+                        <p>这里我们引入了"宝物"，用一个 <code class="inline-code">uint256</code> 类型的变量存储。</p>
+                        <p>只有拥有者可以调用 <code class="inline-code">addTreasure()</code> 函数。当函数被调用时，宝箱中的数量会增加指定的数额。</p>
+                        <p><code class="inline-code">onlyOwner</code> 修饰符确保没有随便其他人可以潜入并添加（或假装添加）宝物。</p>
+                        
+                        <h3>授权他人取宝</h3>
+                        <pre><code class="language-solidity">mapping(address => uint256) public withdrawalAllowance;
+
+function approveWithdrawal(address recipient, uint256 amount) public onlyOwner {
+    require(amount <= treasureAmount, "Not enough treasure available");
+    withdrawalAllowance[recipient] = amount;
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>现在假设拥有者想允许某个人可以取出一些宝物。</p>
+                            <p>我们使用一个 <code class="inline-code">mapping</code>（映射）来记录每个地址被允许提取的数量。</p>
+                            <p>在批准前，我们会先检查宝箱中是否有足够的宝物来覆盖提取数量。</p>
+                            <p>这个逻辑的流程是：</p>
+                            <ul>
+                                <li>拥有者为某个地址设置提取额度；</li>
+                                <li>那个地址之后可以尝试取宝，但前提是已经被批准。</li>
+                            </ul>
+                            <p>这就像银行经理给你一张写有额度的取款单。</p>
+                        </div>
+                        
+                        <h3>实际的取宝过程</h3>
+                        <pre><code class="language-solidity">mapping(address => bool) public hasWithdrawn;
+
+function withdrawTreasure(uint256 amount) public {</code></pre>
+                        
+                        <p>这是让人们真正从宝箱中取出宝物的函数。接下来我们分两种情况来看它的逻辑。</p>
+                        
+                        <h4>情况一：拥有者自己取宝</h4>
+                        <pre><code class="language-solidity">if (msg.sender == owner) {
+    require(amount <= treasureAmount, "Not enough treasury available for this action.");
+    treasureAmount -= amount;
+    return;
+}</code></pre>
+                        
+                        <p>如果调用者是拥有者，那么 Ta 拥有完全的自由：可以提取任意数量的宝物，只要宝箱里足够。</p>
+                        <p>这里我们不检查 Ta 的额度，也不追踪 Ta 的提取记录，因为拥有者本身就有最高权限。</p>
+                        
+                        <h4>情况二：普通用户取宝</h4>
+                        <pre><code class="language-solidity">uint256 allowance = withdrawalAllowance[msg.sender];
+require(allowance > 0, "You don't have any treasure allowance");
+require(!hasWithdrawn[msg.sender], "You have already withdrawn your treasure");
+require(allowance <= treasureAmount, "Not enough treasure in the chest");</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>如果调用者不是拥有者，我们就要进行一系列检查：</p>
+                            <ul>
+                                <li>是否被批准提取？</li>
+                                <li>是否已经提取过？</li>
+                                <li>宝箱里是否仍有足够的宝物？</li>
+                            </ul>
+                            <p>如果任意条件不满足，函数将立即终止执行。</p>
+                            <p>这样我们建立了一个系统：用户只能提取一次，且必须经过拥有者的批准。</p>
+                        </div>
+                        
+                        <h3>完成取宝操作</h3>
+                        <pre><code class="language-solidity">hasWithdrawn[msg.sender] = true;
+treasureAmount -= allowance;
+withdrawalAllowance[msg.sender] = 0;
+}</code></pre>
+                        
+                        <p>当所有检查都通过后，我们执行以下操作：</p>
+                        <ul>
+                            <li>将用户标记为"已提取"；</li>
+                            <li>从宝箱中减去被批准的提取数量；</li>
+                            <li>将该用户的提取额度重置为零，防止重复提取。</li>
+                        </ul>
+                        <p>这样一来，可以确保用户只能获得被授权的宝物，并且只有一次机会。</p>
+                        
+                        <h3>重置用户的提取状态</h3>
+                        <pre><code class="language-solidity">function resetWithdrawalStatus(address user) public onlyOwner {
+    hasWithdrawn[user] = false;
+}</code></pre>
+                        
+                        <p>如果你想让某个用户再次拥有资格提取宝物（例如完成了新的任务或通过了新的关卡），这个函数的功能能够让拥有者重置该用户的提取状态，从而使该用户能够再次进行取宝。</p>
+                        <p>同样，这个函数也受到 <code class="inline-code">onlyOwner</code> 修饰符保护。</p>
+                        
+                        <h3>转移合约拥有权</h3>
+                        <pre><code class="language-solidity">function transferOwnership(address newOwner) public onlyOwner {
+    require(newOwner != address(0), "Invalid address");
+    owner = newOwner;
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>就像现实中的系统一样，原始创建者有时会卸任并将控制权移交给他人。</p>
+                            <p>这个函数允许当前拥有者指定一个新的拥有者。</p>
+                            <p>函数中我们还加入了一个快速检查，防止新地址是空的或无效的。</p>
+                            <p>一旦执行后，新拥有者将获得完全控制权——包括添加宝物、批准用户、再次转移拥有权。</p>
+                        </div>
+                        
+                        <h3>查看宝箱信息（仅限拥有者）</h3>
+                        <pre><code class="language-solidity">function getTreasureDetails() public view onlyOwner returns (uint256) {
+    return treasureAmount;
+}</code></pre>
+                        
+                        <p>最后，这个函数让拥有者可以查看宝箱中当前的宝物数量。</p>
+                        <p>它被标记为 <code class="inline-code">view</code>（仅查看，不修改数据），并受 <code class="inline-code">onlyOwner</code> 保护，确保只有拥有者才能调用。</p>
+                        
+                        <h2>总结</h2>
+                        <p>虽然这个合约可能看起来很简单，但它教授了 <strong>Solidity 中一个极其重要的概念</strong>：如何控制谁有权执行什么操作。</p>
+                        
+                        <p>以下是我们今天学到的：</p>
+                        <ul>
+                            <li>如何使用 <code class="inline-code">msg.sender</code> 来跟踪和识别函数调用者；</li>
+                            <li>修饰符如何帮助避免重复并实现简洁的权限检查；</li>
+                            <li>如何用 <code class="inline-code">mapping</code> 与标记（flags）追踪特定用户的权限；</li>
+                            <li>如何模拟一个真实世界的"管理员面板"——只有拥有者能添加、批准、重置或转移控制权。</li>
+                        </ul>
+                        
+                        <p>这是你将在代币合约、NFT 铸造、治理系统以及几乎所有生产级智能合约中看到的常见模式。</p>
+                        
+                        <h2>进阶挑战</h2>
+                        <p>你可以尝试以下一些想法来升级此合约：</p>
+                        <ul>
+                            <li>添加<strong>冷却时间计时器</strong>：用户只能每隔 X 分钟提取一次</li>
+                            <li>在添加、提取、或转移拥有权时<strong>触发事件</strong>（<strong>emit event</strong>）</li>
+                            <li>添加一个<strong>查询函数</strong>，让用户查看自己是否被批准、是否已提取</li>
+                            <li>为<strong>每个用户设置最大提取上限</strong></li>
+                        </ul>
+                        
+                        <blockquote>
+                            <p>modifier 修饰符是 Solidity 中权限控制的核心工具。掌握它，你就掌握了智能合约安全的基础。准备好迎接下一份合约了吗？我们现在只是在热身。</p>
+                        </blockquote>
+                        
+                        <div class="signature">
+                            <p>真诚的，</p>
+                            <p>Sneha</p>
+                            <p style="margin-top: 10px; font-size: 1.5rem; opacity: 0.8;">译者：月亮</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -735,6 +1520,47 @@ contract MyContract is Ownable {
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+            
+        // Sneha的一封来信模块功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelopeContainer = document.getElementById('envelope-container');
+            const answerModal = document.getElementById('answer-modal');
+            const closeLetter = document.getElementById('close-letter');
+            
+            if (!envelopeContainer || !answerModal || !closeLetter) {
+                return; // 如果元素不存在，直接返回
+            }
+            
+            // 点击信封打开弹窗
+            envelopeContainer.addEventListener('click', function() {
+                envelopeContainer.classList.add('open');
+                
+                // 延迟显示弹窗，让信封翻转动画完成
+                setTimeout(function() {
+                    answerModal.style.display = 'flex';
+                    setTimeout(function() {
+                        answerModal.classList.add('open');
+                    }, 50);
+                }, 400);
+            });
+            
+            // 关闭弹窗
+            closeLetter.addEventListener('click', function() {
+                answerModal.classList.remove('open');
+                
+                setTimeout(function() {
+                    answerModal.style.display = 'none';
+                    envelopeContainer.classList.remove('open');
+                }, 600);
+            });
+            
+            // 点击弹窗外部关闭
+            answerModal.addEventListener('click', function(e) {
+                if (e.target === answerModal) {
+                    closeLetter.click();
                 }
             });
         });

@@ -18,6 +18,10 @@
             --medium: #F8961E;
             --hard: #E71D36;
             --expert: #7209B7;
+            --warm-brown: #8B7355;
+            --parchment: #F5F1E6;
+            --vintage-blue: #6B8E9F;
+            --warm-red: #C44536;
         }
         
         * {
@@ -302,6 +306,410 @@
         .nav-footer-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.3rem;
+        }        
+        /* 参考答案模块样式 - 温暖治愈风格 */
+        .answer-reference {
+            position: relative;
+            margin: 60px 0 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .envelope-container {
+            position: relative;
+            width: 340px;
+            height: 240px;
+            cursor: pointer;
+            perspective: 1200px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(139, 115, 85, 0.2));
+        }
+        
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .envelope-front, .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .envelope-front {
+            background: linear-gradient(135deg, #f9f3e9, #e8dfd1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: -70px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 70px solid #e8dfd1;
+            z-index: 1;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+        }
+        
+        .envelope-flap::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: -170px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 67px solid #f9f3e9;
+        }
+        
+        .envelope-seal {
+            position: absolute;
+            bottom: 25px;
+            right: 35px;
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #C44536, #8B2E24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            border: 2px solid #A52A2A;
+        }
+        
+        .seal-icon {
+            color: #F5F1E6;
+            font-size: 1.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .envelope-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.4rem;
+            color: var(--warm-brown);
+            z-index: 2;
+            position: relative;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+        
+        .envelope-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(139, 115, 85, 0.05) 3px, transparent 3px),
+                radial-gradient(circle at 85% 75%, rgba(139, 115, 85, 0.05) 3px, transparent 3px);
+            background-size: 40px 40px;
+            z-index: 0;
+        }
+        
+        .envelope-back {
+            background: linear-gradient(135deg, #f5f1e6, #e8dfd1);
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-container:hover .envelope {
+            transform: rotateY(10deg) translateY(-5px);
+        }
+        
+        .envelope-container.open .envelope {
+            transform: rotateY(180deg);
+        }
+        
+        .envelope-hint {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--warm-brown);
+            margin-top: 15px;
+            opacity: 0.9;
+            background: rgba(245, 241, 230, 0.7);
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* 弹窗样式 */
+        .answer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            background: rgba(107, 142, 159, 0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+        
+        .letter-container {
+            width: 90%;
+            max-width: 900px;
+            height: 80vh;
+            background: #F5F1E6;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(107, 142, 159, 0.4);
+            overflow: hidden;
+            transform: scale(0);
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .answer-modal.open .letter-container {
+            transform: scale(1);
+        }
+        
+        .letter-header {
+            background: linear-gradient(135deg, #8B7355, #6B5A45);
+            padding: 25px 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-bottom: 2px dashed #A5947A;
+        }
+        
+        .letter-title {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: #F5F1E6;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
+        }
+        
+        .letter-subtitle {
+            color: rgba(245, 241, 230, 0.9);
+            font-size: 1.3rem;
+            font-family: 'Gochi Hand', cursive;
+        }
+        
+        .close-letter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(245, 241, 230, 0.2);
+            color: #F5F1E6;
+            border: 1px solid rgba(245, 241, 230, 0.3);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .close-letter:hover {
+            background: rgba(245, 241, 230, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .letter-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #F5F1E6;
+            position: relative;
+        }
+        
+        .letter-body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent 98%, rgba(139, 115, 85, 0.1) 98%),
+                linear-gradient(rgba(139, 115, 85, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        
+        /* MD内容样式 */
+        .md-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .md-section {
+            margin-bottom: 40px;
+        }
+        
+        .md-section h1 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: var(--warm-brown);
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #A5947A;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .md-section h2 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.2rem;
+            color: var(--warm-brown);
+            margin: 30px 0 15px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .md-section h2::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--warm-red);
+            font-size: 2.5rem;
+        }
+        
+        .md-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .md-tag {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--warm-brown);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-highlight {
+            background: rgba(107, 142, 159, 0.1);
+            border-left: 5px solid var(--vintage-blue);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(107, 142, 159, 0.2);
+        }
+        
+        .md-content pre {
+            background: #2d2a2e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .md-content .inline-code {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            color: var(--warm-brown);
+            font-size: 0.9em;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content ul, .md-content ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .md-content li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+        
+        .md-content blockquote {
+            border-left: 4px solid var(--vintage-blue);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+            background: rgba(107, 142, 159, 0.05);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .md-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th, .md-content td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th {
+            background: linear-gradient(135deg, var(--warm-brown), #6B5A45);
+            color: #F5F1E6;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.1rem;
+        }
+        
+        .md-content tr:nth-child(even) {
+            background: rgba(139, 115, 85, 0.05);
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 40px;
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2rem;
+            color: var(--warm-brown);
         }
         
         @media (max-width: 768px) {
@@ -319,6 +727,49 @@
             
             .key-points {
                 grid-template-columns: 1fr;
+            }
+            
+            .envelope-container {
+                width: 300px;
+                height: 210px;
+            }
+            
+            .envelope-flap {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 60px solid #e8dfd1;
+            }
+            
+            .envelope-flap::after {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 57px solid #f9f3e9;
+                left: -150px;
+            }
+            
+            .envelope-text {
+                font-size: 2rem;
+            }
+            
+            .answer-modal {
+                padding: 10px;
+            }
+            
+            .letter-container {
+                width: 95%;
+                height: 85vh;
+            }
+            
+            .letter-title {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -931,6 +1382,370 @@ fallback() external payable {
                 <div class="nav-footer-title">SafeDeposit 安全保管箱</div>
             </a>
         </div>
+    
+        <!-- Sneha的一封来信模块 -->
+        <div class="answer-reference">
+            <div class="envelope-container" id="envelope-container">
+                <div class="envelope">
+                    <div class="envelope-front">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-pattern"></div>
+                        <div class="envelope-seal">
+                            <i class="fas fa-feather-alt seal-icon"></i>
+                        </div>
+                        <div class="envelope-text">Sneha的一封来信</div>
+                    </div>
+                    <div class="envelope-back">
+                        <div class="envelope-text" style="color: var(--warm-brown);">点击开启</div>
+                    </div>
+                </div>
+            </div>
+            <div class="envelope-hint">点击信封查看Sneha的来信</div>
+        </div>
+    </div>
+
+    <!-- 弹窗 - 内容待后续精细化处理 -->
+    <div class="answer-modal" id="answer-modal">
+        <div class="letter-container">
+            <div class="letter-header">
+                <div class="letter-title">Sneha的一封来信</div>
+                <div class="letter-subtitle">关于第13天的学习指导</div>
+                <button id="close-letter" class="close-letter">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="letter-body">
+                <div id="md-content" class="md-content">
+                    <div class="md-section">
+                        <h1>预售功能设置</h1>
+                        <div class="md-meta">
+                            <span class="md-tag"><i class="fas fa-calendar-day"></i> Day 13</span>
+                            <span class="md-tag"><i class="fas fa-hashtag"></i> ID: 13</span>
+                            <span class="md-tag"><i class="fas fa-user-edit"></i> 译者: He Shadow</span>
+                            <span class="md-tag"><i class="fas fa-signal"></i> 难度等级: 中级</span>
+                        </div>
+                        
+                        <h2>预购代币</h2>
+                        
+                        <p>好的——现在我们已经建立了一个有效的 ERC-20 代币合约，是时候升级了。假设你想<strong>在项目正式启动前发售你的代币</strong>。也许你想筹集一些 ETH，奖励早期信徒，或者制造热度。这正是许多现实世界加密项目所做的事情——他们进行<strong>代币发售</strong>（也称为预售或 ICO），用户以固定汇率发送 ETH 并获得代币作为回报。</p>
+                        
+                        <p>为了实现这一点，我们将构建一个<strong>简单的代币发售合约</strong>，它直接建立在我们刚刚编写的 ERC-20 代币上。但在此之前，我们需要对代币合约进行一项重要的更改，以便其能够正确扩展。</p>
+                        
+                        <h2>我们要构建什么</h2>
+                        
+                        <p>我们即将构建一个<strong>简单但功能强大的代币发售合约</strong>——您可以在预售、早期支持者轮次或发布活动中使用它。该合约将允许你：</p>
+                        <ul>
+                            <li>以固定的 ETH 价格发售你的自定义 ERC-20 代币</li>
+                            <li>设置发售的开始和结束时间</li>
+                            <li>强制执行最低和最高购买金额</li>
+                            <li>自动处理代币分发</li>
+                            <li>防止发售期间的转账（以防止短线抛售或机器人砸盘）</li>
+                            <li>完成发售并将筹集的 ETH 转移给项目所有者</li>
+                        </ul>
+                        
+                        <p>因此流程将如下所示：</p>
+                        <ol>
+                            <li>你（项目方）部署代币发售合约</li>
+                            <li>它（代币发售合约）创建并持有所有代币</li>
+                            <li>买家发送 ETH 并获取代币作为回报</li>
+                            <li>在发售期间，转账功能被<strong>锁定</strong></li>
+                            <li>发售结束后，你（项目方）完成交易并领取 ETH</li>
+                        </ol>
+                        
+                        <p>很简洁，对吧？为了使这一切正常工作，我们需要准备好代币以支持继承，并重写一些关键函数。我们先处理这个问题。</p>
+                        
+                        <h2>将代币函数标记为可重写</h2>
+                        
+                        <p>在深入讲解代币发售合约之前，我们需要先对原来的 <code class="inline-code">SimpleERC20</code> 合约做一些小调整。在 Solidity 编程语言里，如果你想在"子合约"里<strong>重写</strong>（重新实现）"父合约"里的某个函数，那父合约里的这个函数必须加上 <code class="inline-code">virtual</code> 的标记。</p>
+                        
+                        <p>所以在你的 <code class="inline-code">SimpleERC20</code> 合约里，需要像下面这样把两个函数加上 virtual 标记：</p>
+                        
+                        <pre><code class="language-solidity">function transfer(address _to, uint256 _value) public virtual returns (bool);
+function transferFrom(address _from, address _to, uint256 _value) public virtual returns (bool);</code></pre>
+                        
+                        <p>这一变化（指加 virtual）会告诉 Solidity："注意，如果有其他合约继承了这个合约，这个函数是可以被重新修改的。"我们会利用这个特性，在代币发售期间限制代币的转账。</p>
+                        
+                        <h2>合约结构解析：SimplifiedTokenSale</h2>
+                        
+                        <pre><code class="language-solidity">contract SimplifiedTokenSale is SimpleERC20 {</code></pre>
+                        
+                        <p>这个合约继承自 <code class="inline-code">SimpleERC20</code>，因此它拥有我们之前编写的所有 ERC-20 功能——还可以加上我们接下来要写的新功能。</p>
+                        
+                        <h2>状态变量 — 发售设置</h2>
+                        
+                        <pre><code class="language-solidity">uint256 public tokenPrice;
+uint256 public saleStartTime;
+uint256 public saleEndTime;
+uint256 public minPurchase;
+uint256 public maxPurchase;
+uint256 public totalRaised;
+address public projectOwner;
+bool public finalized = false;
+bool private initialTransferDone = false;</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>我们逐条解释一下：</p>
+                            <ul>
+                                <li><code class="inline-code">tokenPrice</code>：每个代币值多少 ETH（单位是 wei，1 ETH = 10¹⁸ wei）</li>
+                                <li><code class="inline-code">saleStartTime</code> 和 <code class="inline-code">saleEndTime</code>：表示发售开始和结束时间的时间戳</li>
+                                <li><code class="inline-code">minPurchase</code> 和 <code class="inline-code">maxPurchase</code>：单笔交易中允许购买的最小和最大 ETH 额度</li>
+                                <li><code class="inline-code">totalRaised</code>：目前为止接收的 ETH 总额</li>
+                                <li><code class="inline-code">projectOwner</code>：发售结束后接收 ETH 的钱包地址</li>
+                                <li><code class="inline-code">finalized</code>：发售是否已经正式关闭</li>
+                                <li><code class="inline-code">initialTransferDone</code>：用于确保合约在锁定转账前已收到所有代币</li>
+                            </ul>
+                            <p>这些变量是整个发售逻辑的基础。</p>
+                        </div>
+                        
+                        <h2>事件</h2>
+                        
+                        <pre><code class="language-solidity">event TokensPurchased(address indexed buyer, uint256 etherAmount, uint256 tokenAmount);
+event SaleFinalized(uint256 totalRaised, uint256 totalTokensSold);</code></pre>
+                        
+                        <ul>
+                            <li><code class="inline-code">TokensPurchased</code>：当有人成功购买代币时触发。它会记录购买者、支付的 ETH 数量以及收到的代币数量。</li>
+                            <li><code class="inline-code">SaleFinalized</code>：发售结束时触发。记录筹集的 ETH 总数和售出的代币数量。</li>
+                        </ul>
+                        
+                        <p>这些事件对前端页面和区块链浏览器来说很有用，可以用来展示发售的实时动态。</p>
+                        
+                        <h2>构造函数 — 设置一切</h2>
+                        
+                        <pre><code class="language-solidity">constructor(
+    uint256 _initialSupply,
+    uint256 _tokenPrice,
+    uint256 _saleDurationInSeconds,
+    uint256 _minPurchase,
+    uint256 _maxPurchase,
+    address _projectOwner
+) SimpleERC20(_initialSupply) {
+    tokenPrice = _tokenPrice;
+    saleStartTime = block.timestamp;
+    saleEndTime = block.timestamp + _saleDurationInSeconds;
+    minPurchase = _minPurchase;
+    maxPurchase = _maxPurchase;
+    projectOwner = _projectOwner;
+
+    // 将所有代币转移至此合约用于发售
+    _transfer(msg.sender, address(this), totalSupply);
+
+    // 标记我们已经从部署者那里转移了代币
+    initialTransferDone = true;
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>让我们逐行分析：</p>
+                            
+                            <p><strong>构造函数继承</strong></p>
+                            <p>这是一个<strong>构造函数</strong>，它会在合约第一次部署时自动执行。但这里有个重要的事情：这个合约继承自 <code class="inline-code">SimpleERC20</code>，所以需要把 <code class="inline-code">_initialSupply</code>（初始代币数量）传递给父合约，这样才能真的<strong>铸造代币</strong>。因此，这一行：<code class="inline-code">SimpleERC20(_initialSupply)</code> 其实是在后台帮你把全部代币分配给部署者（你）。</p>
+                            
+                            <p><strong>设置代币价格</strong></p>
+                            <p>这句是把每个代币的价格记录下来，单位是 <strong>wei</strong>（ETH 的最小单位），就像一块钱拆成一分、一厘一样。如果 <code class="inline-code">tokenPrice = 10**16</code>，就代表<strong>一个代币的成本为 0.01 ETH</strong>。</p>
+                            
+                            <p><strong>设置发售时间</strong></p>
+                            <p>我们将发售的开始时间标记为<strong>现在</strong>——即合约部署的那一秒。发售活动是限时的。因此，我们通过在开始时间上<strong>添加持续时间（以秒为单位）</strong>来设置结束时间。如果你传入 <code class="inline-code">604800</code>（一周的秒数），那就是 7 天后发售结束。</p>
+                            
+                            <p><strong>设置购买限制</strong></p>
+                            <p>这两行定义了买家可以发送的 ETH 数量的<strong>限制</strong>：<code class="inline-code">minPurchase</code> 防止有人只买一点点。<code class="inline-code">maxPurchase</code> 防止有"大户"或机器人一次买太多。这两个值也以 <strong>wei</strong> 为单位。</p>
+                            
+                            <p><strong>设置项目所有者</strong></p>
+                            <p>我们把项目所有者（即应该在发售期间接收筹集的 ETH 的人）地址存储下来。发售结束后，只有这个人可以调用 <code class="inline-code">finalizeSale()</code> 并提取资金。</p>
+                            
+                            <p><strong>自动转移代币</strong></p>
+                            <p>有趣的地方来了！此时，部署者（你）拥有所有代币——因为 ERC-20 的规则就是这样。但你不想<strong>手动</strong>一笔一笔将这些代币转给发售合约。所以在构造函数里，程序会<strong>自动地将所有代币从部署者（你）转移至合约里</strong>。这样，发售合约就变成了"代币分发员"。</p>
+                            
+                            <p><strong>标记转移完成</strong></p>
+                            <p>这句是做个标记，告诉系统"从部署者到合约的代币交接已经完成"。这个布尔值会在 <code class="inline-code">transfer()</code> 函数中使用，用来确保锁定功能只有在代币已转入合约<strong>之后</strong>才生效。</p>
+                        </div>
+                        
+                        <h2>isSaleActive()</h2>
+                        
+                        <pre><code class="language-solidity">function isSaleActive() public view returns (bool) {
+    return (!finalized && block.timestamp >= saleStartTime && block.timestamp <= saleEndTime);
+}</code></pre>
+                        
+                        <p>这个函数是用来检查发售是否正在进行：finalized 不能是 true（说明发售还没结束）、当前时间必须在发售时间窗口内。整个合约会用这个函数来判断什么时候可以买代币。</p>
+                        
+                        <h2>buyTokens() — 主要购买函数</h2>
+                        
+                        <pre><code class="language-solidity">function buyTokens() public payable {
+    require(isSaleActive(), "Sale is not active");
+    require(msg.value >= minPurchase, "Amount is below minimum purchase");
+    require(msg.value <= maxPurchase, "Amount exceeds maximum purchase");
+
+    uint256 tokenAmount = (msg.value * 10**uint256(decimals)) / tokenPrice;
+    require(balanceOf[address(this)] >= tokenAmount, "Not enough tokens left for sale");
+
+    totalRaised += msg.value;
+    _transfer(address(this), msg.sender, tokenAmount);
+    emit TokensPurchased(msg.sender, msg.value, tokenAmount);
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这个函数就是用户在发售期间买代币时要用的。他们会调用 <code class="inline-code">buyTokens()</code> 并随交易发送 ETH。具体流程如下：</p>
+                            
+                            <p><strong>1. 检查发售是否还在进行</strong></p>
+                            <p>先用辅助函数 <code class="inline-code">isSaleActive()</code> 检查发售是否正在进行中。如果发售已结束、尚未开始或已完成，则此检查失败，交易将被撤销。</p>
+                            
+                            <p><strong>2. 执行最低和最高购买限额</strong></p>
+                            <p>我们想要控制用户在一笔交易中可以发送的 ETH 的最小和最大金额。这有助于防止垃圾购买或来自机器人的巨额购买。这两行确保发送的 ETH 金额在允许范围内。</p>
+                            
+                            <p><strong>3. 计算要发多少代币</strong></p>
+                            <p>现在我们计算买家发送的 ETH 应该获得多少代币。我们将 ETH 数量（<code class="inline-code">msg.value</code>）乘以 <code class="inline-code">10 ** decimals</code>（请记住：大多数 ERC-20 代币有 18 位小数）。再除以每个代币的价格 <code class="inline-code">tokenPrice</code>。这能算出买家能收到的代币数量。</p>
+                            
+                            <p><strong>4. 确保合约里有足够的代币</strong></p>
+                            <p>即使用户发送了有效的 ETH 并申请了合理数量的代币，我们还要检查合约里是否持有足够的代币来满足请求。如果没有，购买将被阻止。</p>
+                            
+                            <p><strong>5. 更新已筹集的 ETH 总额</strong></p>
+                            <p>这句代码会记录本次发售中接收的 ETH 的累计总额。发售结束时，我们会用这个总额来结账。</p>
+                            
+                            <p><strong>6. 把代币转给买家</strong></p>
+                            <p>这里就是代币真的"动起来"的地方。合约会把自己账户里的代币转给买家。<code class="inline-code">address(this)</code> 是合约的地址（发售期间所有代币都放在这里）。<code class="inline-code">msg.sender</code> 是买家的地址。这个 <code class="inline-code">_transfer()</code> 函数是在我们之前构建的 ERC-20 代币中定义的。</p>
+                            
+                            <p><strong>7. 触发购买事件</strong></p>
+                            <p>我们触发 <code class="inline-code">TokensPurchased</code> 事件，记录：谁买代币、花了多少 ETH、收到多少代币。</p>
+                        </div>
+                        
+                        <h2>重写 transfer() — 锁定直接转账</h2>
+                        
+                        <pre><code class="language-solidity">function transfer(address _to, uint256 _value) public override returns (bool) {
+    if (!finalized && msg.sender != address(this) && initialTransferDone) {
+        require(false, "Tokens are locked until sale is finalized");
+    }
+    return super.transfer(_to, _value);
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这个函数重写了标准的 ERC-20 <code class="inline-code">transfer()</code> 函数。这里的主要目的是在发售进行期间<strong>暂时限制代币转账</strong>。</p>
+                            
+                            <p><strong>检查发售</strong></p>
+                            <p>此条件检查三件事：<code class="inline-code">!finalized</code>：发售<strong>尚未</strong>完成。<code class="inline-code">msg.sender != address(this)</code>：交易<strong>不是由合约本身</strong>发起的（例如在 <code class="inline-code">buyTokens()</code> 期间）。<code class="inline-code">initialTransferDone</code>：初始代币供应已经转移到合约中。如果这三个条件都满足，函数会回滚，交易会被撤销。</p>
+                            
+                            <p>为什么要这样？这样可以保证<strong>发售期间</strong>没人能提前交易代币，这有助于防止：过早交易或投机、机器人抢购代币并抛售、代币上线前的操纵。一旦发售完成，这个条件变为无效，大家可以自由转账。</p>
+                            
+                            <p><strong>正常转账</strong></p>
+                            <p>如果发售已完成（或者发送者是合约本身），我们只需调用父合约的原始 <code class="inline-code">transfer()</code> 函数。这会执行实际的转账逻辑。</p>
+                        </div>
+                        
+                        <h2>重写 transferFrom() — 锁定委托转账</h2>
+                        
+                        <pre><code class="language-solidity">function transferFrom(address _from, address _to, uint256 _value) public override returns (bool) {
+    if (!finalized && _from != address(this)) {
+        require(false, "Tokens are locked until sale is finalized");
+    }
+    return super.transferFrom(_from, _to, _value);
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>就像 <code class="inline-code">transfer()</code> 一样，这个函数重写了 ERC-20 的 <code class="inline-code">transferFrom()</code>——但它用于<strong>委托转账</strong>，即某人代表另一个钱包消费代币（通常在 <code class="inline-code">approve()</code> 调用之后）。</p>
+                            
+                            <p><strong>发售锁定检查</strong></p>
+                            <p>我们再次检查：发售还在继续吗？转账是否不是来自合约？如果是，交易停止。这确保了<strong>即使是已获批准的消费者，</strong>也不能在发售期间以他人的名义转移代币。为什么？因为有人可能会批准一份合约（比如 Uniswap），并且该合约甚至可以在发售进行时交易代币——这就违背了转移锁定的整个目的。</p>
+                            
+                            <p><strong>恢复默认逻辑</strong></p>
+                            <p>如果检查通过（发售完成或转移由合约发起），我们使用 <code class="inline-code">super</code> 回退到原始的 ERC-20 <code class="inline-code">transferFrom()</code>，恢复默认的转账逻辑。</p>
+                        </div>
+                        
+                        <h2>finalizeSale()</h2>
+                        
+                        <pre><code class="language-solidity">function finalizeSale() public payable {
+    require(msg.sender == projectOwner, "Only Owner can call the function");
+    require(!finalized, "Sale already finalized");
+    require(block.timestamp > saleEndTime, "Sale not finished yet");
+
+    finalized = true;
+    uint256 tokensSold = totalSupply - balanceOf[address(this)];
+
+    (bool success, ) = projectOwner.call{value: address(this).balance}("");
+    require(success, "Transfer to project owner failed");
+
+    emit SaleFinalized(totalRaised, tokensSold);
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这是<strong>结束代币发售</strong>的函数——就像在发布日结束后关店一样。让我们逐步分析：</p>
+                            
+                            <p><strong>访问控制和计时</strong></p>
+                            <p>这三个 <code class="inline-code">require()</code> 检查执行以下操作：1. <strong>只有项目所有者</strong>可以调用此函数——防止无关用户干扰发售流程。2. 检查是否已完成发售——如果已完成，则不允许再次调用。3. 确保发售期已结束（依据结束时间戳）——从而不能提前终止发售。</p>
+                            
+                            <p><strong>将发售标记为完成</strong></p>
+                            <p>我们把 <code class="inline-code">finalized</code> 状态变量设置为已完成，以便其他函数（如 <code class="inline-code">transfer()</code> 和 <code class="inline-code">transferFrom()</code>）识别发售已结束。随后系统将解除锁定，恢复自由转账。</p>
+                            
+                            <p><strong>计算已售出的代币数量</strong></p>
+                            <p>如下计算本次实际售出的代币：<code class="inline-code">totalSupply</code> 表示代币的总发行量。<code class="inline-code">balanceOf[address(this)]</code> 表示合约当前持有的代币余额（即尚未售出部分）。两者相减即为已分配给用户的代币数量。</p>
+                            
+                            <p><strong>向项目所有者发送 ETH</strong></p>
+                            <p>此处把发售期间筹集到的<strong>全部 ETH</strong> 转给 <code class="inline-code">projectOwner</code>。<code class="inline-code">address(this).balance</code> 表示该合约地址当前持有的 ETH 总额。我们使用 <code class="inline-code">.call{value: ...}</code> 来发送资金。<code class="inline-code">require(success)</code> 用于确保这次发送没有静默失败（即失败但无报错提示）。项目方可以此收取本次发售筹得的 ETH。</p>
+                            
+                            <p><strong>触发最终事件</strong></p>
+                            <p>最后，我们触发 <code class="inline-code">SaleFinalized</code> 事件，其中包含：筹集的 ETH 总额、售出的代币数量。前端页面、DApp 或区块浏览器可监听该事件，从而向用户显示发售已正式完成。</p>
+                        </div>
+                        
+                        <h2>timeRemaining() 和 tokensAvailable() — 发售状态辅助函数</h2>
+                        
+                        <p>这两个只读函数为前端、看板或其他智能合约提供便捷的实时信息查询能力。</p>
+                        
+                        <h3>timeRemaining()</h3>
+                        
+                        <pre><code class="language-solidity">function timeRemaining() public view returns (uint256) {
+    if (block.timestamp >= saleEndTime) {
+        return 0;
+    }
+    return saleEndTime - block.timestamp;
+}</code></pre>
+                        
+                        <p>该函数返回距离发售结束还剩余多少秒。它将<strong>当前区块时间戳</strong>（<code class="inline-code">block.timestamp</code>）与预定义的 <code class="inline-code">saleEndTime</code> 进行比较。如果发售已经结束，返回 <code class="inline-code">0</code>。否则，返回当前时间和结束时间之间的差值。<strong>使用场景：</strong>前端可以调用此函数来显示倒计时，例如"还剩 2 小时 15 分钟"——既能体现紧迫感，也方便用户把握最后参与时机。</p>
+                        
+                        <h3>tokensAvailable() 可购买代币数量</h3>
+                        
+                        <pre><code class="language-solidity">function tokensAvailable() public view returns (uint256) {
+    return balanceOf[address(this)];
+}</code></pre>
+                        
+                        <p>该函数返回当前<strong>可购买</strong>的代币数量。发售期内，发售合约持有全部待售代币。所以我们只需使用 <code class="inline-code">balanceOf[address(this)]</code> 返回其当前余额。<strong>使用场景：</strong>前端或 DApp 可显示"剩余 X 个代币"，让买家及时了解库存、提升决策效率。</p>
+                        
+                        <p>这些辅助函数为何有用：尽管实现简单，它们对提升发售的<strong>易用性</strong>作用显著：它们可提供实时数据展示、作为 view 函数，对外部调用不消耗 gas（链下读取）、同时让合约逻辑更清晰、易读、易集成。无论是开发精美的可视化看板，还是调试合约，这些辅助函数都会显著降低工作难度。</p>
+                        
+                        <h2>receive() — ETH回退处理器</h2>
+                        
+                        <pre><code class="language-solidity">receive() external payable {
+    buyTokens();
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>该函数显著提升购买流程的丝滑与直觉性——对非技术用户尤为友好。在 Solidity 中，<code class="inline-code">receive()</code> 函数是一个<strong>特殊的回退函数</strong>，在满足以下条件时被触发：有人<strong>直接</strong>向合约地址发送 ETH、且<strong>未指定</strong>要调用的任何函数。</p>
+                            
+                            <p>通常若合约未定义该函数，外部直接转入 ETH 的交易会失败。但在这种情况下，我们定义了 <code class="inline-code">receive()</code>，只要有人向该合约转入 ETH（即使只是从 MetaMask 或简单的钱包转账），合约都会在后台<strong>自动调用 <code class="inline-code">buyTokens()</code> 完成购买流程</strong>。</p>
+                            
+                            <p>这意味着：用户无需进入 dApp 的界面操作、无需手动调用 <code class="inline-code">buyTokens()</code> 函数、只需发送 ETH，即可参与发售。虽是小改动，却显著改善用户体验——即使用户忘记调用购买函数，也仍能获得代币。总之：<code class="inline-code">receive()</code> 既是安全兜底，又是快速通道。它的功能是允许 ETH 流入，并将 ETH 直接路由到代币销售逻辑中。</p>
+                        </div>
+                        
+                        <h2>总结</h2>
+                        
+                        <p>至此，你已从零搭建出一个完整的 <strong>ERC-20 代币发售</strong>系统。你做的不仅是写一个智能合约——而是完成了一个真实加密项目常用的<strong>预售系统</strong>。你已经掌握了：</p>
+                        <ul>
+                            <li>如何部署自定义 ERC-20 代币</li>
+                            <li>如何搭建含定价逻辑的限时发售</li>
+                            <li>如何用 ETH 完成购买并实时分发代币</li>
+                            <li>如何在发售期锁定转账以抑制投机行为</li>
+                            <li>如何结束发售并把筹得资金安全转入项目钱包</li>
+                        </ul>
+                        
+                        <blockquote>
+                            <p>更重要的是——您了解了每个部分的<strong>重要性</strong>。从保护买家、维护公平，到精确的 ETH ↔ 代币换算、到更加用户友好的 <code class="inline-code">receive()</code> 函数——您已经看到智能合约如何把这些要素整合在一起。这套架构是诸多 DeFi 发行、DAO 募资，甚至 NFT 空投（略有调整）的支柱。您已经踏入了由<strong>智能合约驱动的众筹</strong>世界。</p>
+                        </blockquote>
+                        
+                        <div class="signature">
+                            <p>真诚的，</p>
+                            <p>Sneha</p>
+                            <p style="margin-top: 10px; font-size: 1.5rem; opacity: 0.8;">译者：He Shadow</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -945,6 +1760,47 @@ fallback() external payable {
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+            
+        // Sneha的一封来信模块功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelopeContainer = document.getElementById('envelope-container');
+            const answerModal = document.getElementById('answer-modal');
+            const closeLetter = document.getElementById('close-letter');
+            
+            if (!envelopeContainer || !answerModal || !closeLetter) {
+                return; // 如果元素不存在，直接返回
+            }
+            
+            // 点击信封打开弹窗
+            envelopeContainer.addEventListener('click', function() {
+                envelopeContainer.classList.add('open');
+                
+                // 延迟显示弹窗，让信封翻转动画完成
+                setTimeout(function() {
+                    answerModal.style.display = 'flex';
+                    setTimeout(function() {
+                        answerModal.classList.add('open');
+                    }, 50);
+                }, 400);
+            });
+            
+            // 关闭弹窗
+            closeLetter.addEventListener('click', function() {
+                answerModal.classList.remove('open');
+                
+                setTimeout(function() {
+                    answerModal.style.display = 'none';
+                    envelopeContainer.classList.remove('open');
+                }, 600);
+            });
+            
+            // 点击弹窗外部关闭
+            answerModal.addEventListener('click', function(e) {
+                if (e.target === answerModal) {
+                    closeLetter.click();
                 }
             });
         });

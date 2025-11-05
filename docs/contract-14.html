@@ -18,6 +18,10 @@
             --medium: #F8961E;
             --hard: #E71D36;
             --expert: #7209B7;
+            --warm-brown: #8B7355;
+            --parchment: #F5F1E6;
+            --vintage-blue: #6B8E9F;
+            --warm-red: #C44536;
         }
         
         * {
@@ -390,6 +394,410 @@
         .nav-footer-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.3rem;
+        }        
+        /* 参考答案模块样式 - 温暖治愈风格 */
+        .answer-reference {
+            position: relative;
+            margin: 60px 0 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .envelope-container {
+            position: relative;
+            width: 340px;
+            height: 240px;
+            cursor: pointer;
+            perspective: 1200px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(139, 115, 85, 0.2));
+        }
+        
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .envelope-front, .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .envelope-front {
+            background: linear-gradient(135deg, #f9f3e9, #e8dfd1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: -70px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 70px solid #e8dfd1;
+            z-index: 1;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+        }
+        
+        .envelope-flap::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: -170px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 67px solid #f9f3e9;
+        }
+        
+        .envelope-seal {
+            position: absolute;
+            bottom: 25px;
+            right: 35px;
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #C44536, #8B2E24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            border: 2px solid #A52A2A;
+        }
+        
+        .seal-icon {
+            color: #F5F1E6;
+            font-size: 1.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .envelope-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.4rem;
+            color: var(--warm-brown);
+            z-index: 2;
+            position: relative;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+        
+        .envelope-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(139, 115, 85, 0.05) 3px, transparent 3px),
+                radial-gradient(circle at 85% 75%, rgba(139, 115, 85, 0.05) 3px, transparent 3px);
+            background-size: 40px 40px;
+            z-index: 0;
+        }
+        
+        .envelope-back {
+            background: linear-gradient(135deg, #f5f1e6, #e8dfd1);
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-container:hover .envelope {
+            transform: rotateY(10deg) translateY(-5px);
+        }
+        
+        .envelope-container.open .envelope {
+            transform: rotateY(180deg);
+        }
+        
+        .envelope-hint {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--warm-brown);
+            margin-top: 15px;
+            opacity: 0.9;
+            background: rgba(245, 241, 230, 0.7);
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* 弹窗样式 */
+        .answer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            background: rgba(107, 142, 159, 0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+        
+        .letter-container {
+            width: 90%;
+            max-width: 900px;
+            height: 80vh;
+            background: #F5F1E6;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(107, 142, 159, 0.4);
+            overflow: hidden;
+            transform: scale(0);
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .answer-modal.open .letter-container {
+            transform: scale(1);
+        }
+        
+        .letter-header {
+            background: linear-gradient(135deg, #8B7355, #6B5A45);
+            padding: 25px 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-bottom: 2px dashed #A5947A;
+        }
+        
+        .letter-title {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: #F5F1E6;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
+        }
+        
+        .letter-subtitle {
+            color: rgba(245, 241, 230, 0.9);
+            font-size: 1.3rem;
+            font-family: 'Gochi Hand', cursive;
+        }
+        
+        .close-letter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(245, 241, 230, 0.2);
+            color: #F5F1E6;
+            border: 1px solid rgba(245, 241, 230, 0.3);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .close-letter:hover {
+            background: rgba(245, 241, 230, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .letter-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #F5F1E6;
+            position: relative;
+        }
+        
+        .letter-body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent 98%, rgba(139, 115, 85, 0.1) 98%),
+                linear-gradient(rgba(139, 115, 85, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        
+        /* MD内容样式 */
+        .md-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .md-section {
+            margin-bottom: 40px;
+        }
+        
+        .md-section h1 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: var(--warm-brown);
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #A5947A;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .md-section h2 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.2rem;
+            color: var(--warm-brown);
+            margin: 30px 0 15px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .md-section h2::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--warm-red);
+            font-size: 2.5rem;
+        }
+        
+        .md-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .md-tag {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--warm-brown);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-highlight {
+            background: rgba(107, 142, 159, 0.1);
+            border-left: 5px solid var(--vintage-blue);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(107, 142, 159, 0.2);
+        }
+        
+        .md-content pre {
+            background: #2d2a2e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .md-content .inline-code {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            color: var(--warm-brown);
+            font-size: 0.9em;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content ul, .md-content ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .md-content li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+        
+        .md-content blockquote {
+            border-left: 4px solid var(--vintage-blue);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+            background: rgba(107, 142, 159, 0.05);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .md-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th, .md-content td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th {
+            background: linear-gradient(135deg, var(--warm-brown), #6B5A45);
+            color: #F5F1E6;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.1rem;
+        }
+        
+        .md-content tr:nth-child(even) {
+            background: rgba(139, 115, 85, 0.05);
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 40px;
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2rem;
+            color: var(--warm-brown);
         }
         
         @media (max-width: 768px) {
@@ -407,6 +815,49 @@
             
             .key-points {
                 grid-template-columns: 1fr;
+            }
+            
+            .envelope-container {
+                width: 300px;
+                height: 210px;
+            }
+            
+            .envelope-flap {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 60px solid #e8dfd1;
+            }
+            
+            .envelope-flap::after {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 57px solid #f9f3e9;
+                left: -150px;
+            }
+            
+            .envelope-text {
+                font-size: 2rem;
+            }
+            
+            .answer-modal {
+                padding: 10px;
+            }
+            
+            .letter-container {
+                width: 95%;
+                height: 85vh;
+            }
+            
+            .letter-title {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -753,6 +1204,524 @@ contract BasicBox is BaseBox {
                 <div class="nav-footer-title">Gas优化投票e</div>
             </a>
         </div>
+    
+        <!-- Sneha的一封来信模块 -->
+        <div class="answer-reference">
+            <div class="envelope-container" id="envelope-container">
+                <div class="envelope">
+                    <div class="envelope-front">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-pattern"></div>
+                        <div class="envelope-seal">
+                            <i class="fas fa-feather-alt seal-icon"></i>
+                        </div>
+                        <div class="envelope-text">Sneha的一封来信</div>
+                    </div>
+                    <div class="envelope-back">
+                        <div class="envelope-text" style="color: var(--warm-brown);">点击开启</div>
+                    </div>
+                </div>
+            </div>
+            <div class="envelope-hint">点击信封查看Sneha的来信</div>
+        </div>
+    </div>
+
+    <!-- 弹窗 - 内容待后续精细化处理 -->
+    <div class="answer-modal" id="answer-modal">
+        <div class="letter-container">
+            <div class="letter-header">
+                <div class="letter-title">Sneha的一封来信</div>
+                <div class="letter-subtitle">关于第14天的学习指导</div>
+                <button id="close-letter" class="close-letter">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="letter-body">
+                <div id="md-content" class="md-content">
+                    <div class="md-section">
+                        <h1>模块化金库系统 SafeDeposit 合约</h1>
+                        <div class="md-meta">
+                            <span class="md-tag"><i class="fas fa-calendar-day"></i> Day 14</span>
+                            <span class="md-tag"><i class="fas fa-hashtag"></i> ID: 14</span>
+                            <span class="md-tag"><i class="fas fa-user-edit"></i> 译者: He Shadow</span>
+                            <span class="md-tag"><i class="fas fa-signal"></i> 难度等级: 中级</span>
+                        </div>
+                        
+                        <h2>安全托管合约</h2>
+                        
+                        <p>好的——到目前为止，我们已经编写了基础版和高级版的 ERC-20 代币，完成了完整的代币发售，并探讨了<strong>继承</strong>如何帮助我们重用和组织代码。回想一下我们的 TokenSale 合约是如何扩展 ERC-20 代币以添加新逻辑，而无需重写所有内容的。</p>
+                        
+                        <p>现在我们要再次升级——这次我们将构建一个<strong>模块化金库系统</strong>，让用户可以将敏感机密存储在不同类型的存款箱中。</p>
+                        
+                        <h2>核心理念</h2>
+                        
+                        <p>想象一下：你有很多用户，每个人都想把一个秘密放进自己的金库。不过，每个金库都不一样：有些是<strong>基础型</strong>，适合日常使用。有些是<strong>高级型</strong>，能提供额外的功能，比如元数据。有些是<strong>时间锁型</strong>，用户在特定时间之前无法打开金库。</p>
+                        
+                        <p>我们不需要写三个完全不同的合约，而是要<strong>智能地构建它们</strong>——使用一些共同的规则和逻辑以及 Solidity 强大的面向对象功能。</p>
+                        
+                        <h2>Solidity 中的接口是什么？</h2>
+                        
+                        <p>如果说继承是用来<strong>重复利用通用逻辑</strong>，那么接口就是用来规定<strong>强制执行规则</strong>。</p>
+                        
+                        <p><strong>接口</strong>是一种只包含函数定义的合约——没有逻辑，没有存储，也没有状态变量。你可以把接口想象成蓝图或者承诺："任何实现此接口的合约都必须包含这些函数——并且它们的行为必须符合预期。"</p>
+                        
+                        <p>这就像定了一个标准，这样做有很多好处：它使合约交互可预测——即使类型不一样也能互通、我们可以做一些工具（比如管理器或者仪表盘），只要合约用这个接口，就能和它沟通，不用管里面具体怎么写的、这样我们的系统就能像搭积木一样灵活组合。</p>
+                        
+                        <p>我们会用一个接口来规定每个金库必须要有的功能：谁拥有这个金库？金库能否存储和检索秘密？这是什么类型的金库？金库是什么时候创建的？每种金库都会用自己的方式实现这个接口。</p>
+                        
+                        <h2>什么是抽象合约？</h2>
+                        
+                        <p>除了接口，Solidity 还给了我们另一个强大的工具：<strong>抽象合约</strong>。抽象合约是一个可以同时包含<strong>已实现的函数</strong>和<strong>未实现的（virtual）函数</strong>的合约——你可以把它想象成接口和真实逻辑的混合体。</p>
+                        
+                        <p>当您想要执行以下操作时，它很有用：提供通用逻辑（如通用变量或内部辅助函数）、有些具体的内容，可以让后面的"子合约"去补充完善。</p>
+                        
+                        <p>关键思想是：我们将抽象合约用作基础——不能直接用来部署。在我们的金库系统中，我们将构建一个抽象基础合约，处理通用逻辑，例如：追踪金库所有者、存储和检索秘密、强制访问控制。然后我们的 <code class="inline-code">Basic</code>、<code class="inline-code">Premium</code> 和 <code class="inline-code">TimeLocked</code> 金库将<strong>扩展</strong>这个基础合约并添加自己的特色——同时都符合接口规范。</p>
+                        
+                        <h2>我们将要构建的内容</h2>
+                        
+                        <p>我们将采取清晰易懂的步骤来解决这个问题：</p>
+                        <ol>
+                            <li><strong><code class="inline-code">IDepositBox.sol</code></strong> — 接口：我们将定义一个所需函数的简单规则手册。每个金库都必须遵守此规则。</li>
+                            <li><strong><code class="inline-code">BaseDepositBox.sol</code></strong> — 抽象合约：这是我们共享的基础。它会实现接口中定义的大部分逻辑，如秘密存储、所有权和存入时间。它还会使用 <code class="inline-code">修饰符</code> 来限制访问——比如，确保只有所有者才可以访问或修改金库。</li>
+                            <li><strong><code class="inline-code">BasicDepositBox.sol</code></strong> — 标准金库：这个金库只有接口规定的功能，它是默认的金库。</li>
+                            <li><strong><code class="inline-code">PremiumDepositBox.sol</code></strong> — 带附加功能的金库：这个金库建立在基础金库上，但增加了对自定义元数据的支持。可以将其视为具有更多功能的升级版。</li>
+                            <li><strong><code class="inline-code">TimeLockedDepositBox.sol</code></strong> — 暂时无法打开的金库：这个是有时效性的。在锁定期结束之前，无法查看秘密。我们将添加特殊的修饰符来强制执行此行为。</li>
+                            <li><strong><code class="inline-code">VaultManager.sol</code></strong> — 控制器：最后，我们将使用一个 <code class="inline-code">VaultManager</code> 合约将所有部分整合。本合约：允许用户创建任何类型的金库、跟踪哪些金库属于哪些用户、允许重命名金库、处理所有权转移、作为整个系统的单一交互点。</li>
+                        </ol>
+                        
+                        <p>这个系统展示了如何编写可扩展、模块化且组织良好的 Solidity 代码——就像现实世界中的大规模协议一样。它还教授了<strong>接口</strong>、<strong>抽象合约</strong>和<strong>继承</strong>如何协同工作——构成了大多数生产级智能合约的核心。</p>
+                        
+                        <h2>IDepositBox — 我们的金库接口</h2>
+                        
+                        <pre><code class="language-solidity">interface IDepositBox {
+    function getOwner() external view returns (address);
+    function transferOwnership(address newOwner) external;
+    function storeSecret(string calldata secret) external;
+    function getSecret() external view returns (string memory);
+    function getBoxType() external pure returns (string memory);
+    function getDepositTime() external view returns (uint256);
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这是我们的<strong>接口</strong>——合约蓝图。我们基本上是在说："嘿，任何想要成为我们系统一部分的金库（或存款箱）<strong>必须</strong>实现这些函数。"</p>
+                            
+                            <p>让我们看看每个函数代表什么：</p>
+                            <ul>
+                                <li><code class="inline-code">getOwner()</code> — 返回存款箱的当前所有者。</li>
+                                <li><code class="inline-code">transferOwnership()</code> — 允许将所有权转移给其他人。</li>
+                                <li><code class="inline-code">storeSecret()</code> — 一个用于将字符串（我们的"秘密"）保存在金库中的函数。</li>
+                                <li><code class="inline-code">getSecret()</code> — 检索存储的秘密。</li>
+                                <li><code class="inline-code">getBoxType()</code> — 让我们知道它是哪种类型的存款箱（基础型、高级型等）。</li>
+                                <li><code class="inline-code">getDepositTime()</code> — 返回存款箱的创建时间。</li>
+                            </ul>
+                            <p>这些就像游戏规则一样——每种类型的存款箱都会遵循这些规则，即使它们的实施方式不同。</p>
+                        </div>
+                        
+                        <h2>BaseDepositBox.sol – 基础型抽象合约</h2>
+                        
+                        <p>这个合约是我们存款箱系统的<strong>核心</strong>。所有特定类型的存款箱——如基础型、高级型和时间锁型——都建立在这个合约之上。</p>
+                        
+                        <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "./IDepositBox.sol";
+
+abstract contract BaseDepositBox is IDepositBox {
+    address private owner;
+    string private secret;
+    uint256 private depositTime;
+
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event SecretStored(address indexed owner);
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not the box owner");
+        _;
+    }
+
+    constructor() {
+        owner = msg.sender;
+        depositTime = block.timestamp;
+    }
+
+    function getOwner() public view override returns (address) {
+        return owner;
+    }
+
+    function transferOwnership(address newOwner) external virtual override onlyOwner {
+        require(newOwner != address(0), "New owner cannot be zero address");
+        emit OwnershipTransferred(owner, newOwner);
+        owner = newOwner;
+    }
+
+    function storeSecret(string calldata _secret) external virtual override onlyOwner {
+        secret = _secret;
+        emit SecretStored(msg.sender);
+    }
+
+    function getSecret() public view virtual override onlyOwner returns (string memory) {
+        return secret;
+    }
+
+    function getDepositTime() external view virtual override returns (uint256) {
+        return depositTime;
+    }
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p><strong>导入语句</strong></p>
+                            <p>我们正在导入一个名为 <code class="inline-code">IDepositBox</code> 的接口。可以将接口视为一个<strong>仅包含函数声明而没有实际实现的合约</strong>。当我们导入并继承这个接口时，就是在说："我承诺实现 IDepositBox 中声明的所有函数——即使不是所有函数都在这里实现。"这样做的好处是，每个存款箱都必须按照同样的标准来实现功能，就像大家都在用同一本说明书，这样结构就不会乱。</p>
+                            
+                            <p><strong>抽象合约</strong></p>
+                            <p>关键字 <code class="inline-code">abstract</code> 表示这个合约<strong>不能直接部署</strong>。它是充当其他合约构建的<strong>模板</strong>或<strong>地基</strong>。为什么它是抽象的？因为它没有把接口里规定的所有功能都写完整。例如，它<strong>没有定义</strong> <code class="inline-code">getBoxType()</code> 函数——每个后面的子合约会有自己的版本（如"基础型"、"高级型"等）。所以这个基础合约只处理<strong>通用逻辑</strong>，剩下的细节由每个具体的金库自己补充。</p>
+                            
+                            <p><strong>状态变量</strong></p>
+                            <ul>
+                                <li><code class="inline-code">owner</code>：存储拥有此存款箱人员的地址。只有此人被允许存储或检索秘密。</li>
+                                <li><code class="inline-code">secret</code>：用户可以安全地存储在该存款箱中的私有字符串。</li>
+                                <li><code class="inline-code">depositTime</code>：记录存款箱部署的准确时间（Unix 时间戳）。这对于基于时间的逻辑（例如，锁定）很有用。</li>
+                            </ul>
+                            <p>这些变量都是 <code class="inline-code">private</code>，表示它们只能在内部访问。如果有人想读取它们，必须通过我们提供的<strong>公共 getter 函数</strong>来查。</p>
+                            
+                            <p><strong>事件</strong></p>
+                            <ul>
+                                <li><code class="inline-code">OwnershipTransferred</code>：当有人转移存款箱的所有权时触发。</li>
+                                <li><code class="inline-code">SecretStored</code>：当存储新秘密时触发。</li>
+                            </ul>
+                            <p>关键词 <code class="inline-code">indexed</code> 在查询链上数据时，可以更轻松地按这些字段过滤日志。</p>
+                            
+                            <p><strong>修饰符：onlyOwner</strong></p>
+                            <p>此修饰符限制对某些函数的访问。如果一个函数标记为 <code class="inline-code">onlyOwner</code>，那么只有当前所有者可以运行它。否则，函数调用会回滚，并显示消息 <code class="inline-code">"Not the box owner"</code>。我们在每个重要函数中使用这个修饰符——比如存储机密或转移所有权。</p>
+                            
+                            <p><strong>构造函数</strong></p>
+                            <p>该函数只运行一次——在金库部署时。<code class="inline-code">msg.sender</code>：部署合约的人成为 <code class="inline-code">owner</code>。<code class="inline-code">block.timestamp</code>：当前时间（自 Unix 纪元以来的秒数）被记录为存入时间。所以，该金库在创建时自动设置所有权和时间跟踪。</p>
+                            
+                            <p><strong>getOwner()</strong></p>
+                            <p>返回金库的当前所有者。这是一个简单的 getter 函数——并且是 <code class="inline-code">IDepositBox</code> 接口所要求的。</p>
+                            
+                            <p><strong>transferOwnership()</strong></p>
+                            <p>允许当前所有者将所有权移交给其他人。检查新的所有者地址不是零地址（<code class="inline-code">0x000...0</code>）——否则将永远锁定金库。触发事件来表示所有权变更。<code class="inline-code">onlyOwner</code> 修饰符确保<strong>只有当前所有者</strong>可以转移所有权。</p>
+                            
+                            <p><strong>storeSecret()</strong></p>
+                            <p>这是所有者将字符串存储在金库中的方式。它只接受来自当前所有者（<code class="inline-code">onlyOwner</code>）的调用。将秘密字符串存储在私有变量 <code class="inline-code">secret</code> 中。存储后触发一个事件。我们在这里使用 <code class="inline-code">calldata</code>，因为在传递字符串参数时，它在 gas 上更便宜。</p>
+                            
+                            <p><strong>getSecret()</strong></p>
+                            <p>此函数允许所有者检索存储的秘密。这是一个 <code class="inline-code">view</code> 函数，因此如果从外部（例如从前端）调用，不会消耗 gas。标记为 <code class="inline-code">onlyOwner</code> 以确保隐私——其他任何人都无法看到秘密。</p>
+                            
+                            <p><strong>getDepositTime()</strong></p>
+                            <p>返回金库部署的时间。对于基于时间的功能很有用——例如，如果一个秘密只在若干天后才能被查看。</p>
+                        </div>
+                        
+                        <h2>BasicDepositBox.sol — 最简单的扩展</h2>
+                        
+                        <p>好的，既然我们已经用 <code class="inline-code">BaseDepositBox</code> 合约构建了坚实的基础，是时候开始创建特定类型的存款箱了。我们从最简单的开始：<code class="inline-code">BasicDepositBox</code>。</p>
+                        
+                        <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "./BaseDepositBox.sol";
+
+contract BasicDepositBox is BaseDepositBox {
+    function getBoxType() external pure override returns (string memory) {
+        return "Basic";
+    }
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>乍一看，这个合约看起来非常短——确实如此。但在后台，它非常强大，因为它继承了 <code class="inline-code">BaseDepositBox</code> 的所有内容。</p>
+                            
+                            <p><strong>继承自 BaseDepositBox</strong></p>
+                            <p>我们首先导入基础合约。这使 <code class="inline-code">BasicDepositBox</code> 能够访问基础合约中定义的<strong>所有内容</strong>：所有权管理、秘密存储和检索、存入时间跟踪、访问控制修饰符、事件。然后我们像这样定义新合约：<code class="inline-code">contract BasicDepositBox is BaseDepositBox</code>。这意味着："创建一个新合约，<strong>继承</strong> <code class="inline-code">BaseDepositBox</code> 的所有逻辑。"所以我们不需要重写所有那些逻辑——我们只需重复使用它。这就是 Solidity 中继承的力量：你将核心功能在父合约中编写一次，然后在子合约中根据需要扩展它们。</p>
+                            
+                            <p><strong>getBoxType() — 识别金库类型</strong></p>
+                            <p>此合约定义的唯一函数，它是为了履行对 <code class="inline-code">IDepositBox</code> 接口的承诺。<code class="inline-code">external</code>：此函数仅用于从合约外部调用（例如，从另一个合约或前端）。<code class="inline-code">pure</code>：它不读取或写入任何存储——它只是返回一个硬编码的字符串。<code class="inline-code">override</code>：它（当前函数）正在重写在 <code class="inline-code">IDepositBox</code> 中声明的<strong>抽象</strong> <code class="inline-code">getBoxType()</code> 函数（并且该函数在 <code class="inline-code">BaseDepositBox</code> 中未被实现）。<code class="inline-code">returns (string memory)</code>：它返回金库类型——在这种情况下是 <code class="inline-code">"Basic"</code>。</p>
+                            
+                            <p>为什么有用？假设你部署了许多金库——基础型、高级型和时间锁型——并且你想知道每个金库是什么类型。你可以简单地调用 <code class="inline-code">getBoxType()</code> 并获取一个人可读的标签。这在构建以下内容时特别有用：显示你金库的前端仪表板、<code class="inline-code">VaultManager</code> 合约中的排序逻辑、链上分析。</p>
+                            
+                            <p><strong>这个合约实际做什么</strong></p>
+                            <p>虽然只有几行代码，<code class="inline-code">BasicDepositBox</code> 也为我们提供了一个功能齐全、安全、由所有者控制的存款箱。它可以：存储一个秘密字符串（只有所有者可以设置或检索它）、将所有权转移给其他人、在存储秘密或更改所有者时触发事件、将其自身金库类型报告为 <code class="inline-code">"Basic"</code>。所有这些能力都来自<strong>基础合约</strong>——我们只是添加了一个特定的标签来识别这种类型的金库。</p>
+                        </div>
+                        
+                        <h2>PremiumDepositBox.sol — 具备额外的元数据能力</h2>
+                        
+                        <p>这次，我们再次构建在 <code class="inline-code">BaseDepositBox</code> 之上——但现在我们给存款箱<strong>一些额外的东西</strong>：一个叫做 <code class="inline-code">metadata</code> 的数据片段。可以将其视为一个个性化的标签、标记或信息字段，所有者可以设置它。它可以描述秘密的内容、应该在何时访问，或者任何你想要附加的注释。</p>
+                        
+                        <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "./BaseDepositBox.sol";
+
+contract PremiumDepositBox is BaseDepositBox {
+    string private metadata;
+
+    event MetadataUpdated(address indexed owner);
+
+    function getBoxType() external pure override returns (string memory) {
+        return "Premium";
+    }
+
+    function setMetadata(string calldata _metadata) external onlyOwner {
+        metadata = _metadata;
+        emit MetadataUpdated(msg.sender);
+    }
+
+    function getMetadata() external view onlyOwner returns (string memory) {
+        return metadata;
+    }
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p><strong>继承和导入</strong></p>
+                            <p>和之前一样，我们从 <code class="inline-code">BaseDepositBox</code> 导入基础逻辑。这使我们能够访问：所有权检查、秘密存储、事件记录、存入时间戳。我们通过声明 <code class="inline-code">PremiumDepositBox</code> 为 <code class="inline-code">BaseDepositBox</code> 的子类来<strong>扩展</strong>它。这意味着我们可以<strong>重用所有核心功能</strong>，并只关注这个版本的不同之处——即元数据。</p>
+                            
+                            <p><strong>metadata — 一个新的私有字段</strong></p>
+                            <p>我们引入了一个新的状态变量，称为 <code class="inline-code">metadata</code>。它被标记为 <code class="inline-code">private</code>，这意味着只有<strong>此合约内</strong>的函数可以读取或修改它。（我们将为所有者创建外部访问函数。）这可以用于任何东西——比如一个标签如"备份密钥"，或者一个注释如"退休后访问"，等等。</p>
+                            
+                            <p><strong>MetadataUpdated 事件</strong></p>
+                            <p>就像当有人存储秘密或转移所有权时我们会发出事件一样，当有人更新元数据时我们也会执行同样的事情。因为：它有助于链下系统（前端、浏览器）跟踪变化、它提高了透明度、它使调试更容易。我们还将 <code class="inline-code">owner</code> 标记为 <code class="inline-code">indexed</code>，以便在日志中便于过滤或搜索。</p>
+                            
+                            <p><strong>getBoxType() — 识别金库类型</strong></p>
+                            <p>和之前一样——这告诉我们这是什么类型的存款箱。它返回 <code class="inline-code">"Premium"</code>，这有助于其他合约或前端正确识别和标记它。这是 <code class="inline-code">IDepositBox</code> 接口所要求的，并帮助我们区分不同的金库类型（基础型、高级型、时间锁型）。</p>
+                            
+                            <p><strong>setMetadata() — 所有者可以读取</strong></p>
+                            <p><code class="inline-code">external</code>：只能从合约外部调用（不能从内部调用）。<code class="inline-code">onlyOwner</code>：使用我们从 <code class="inline-code">BaseDepositBox</code> 继承的修饰符来限制访问——只有金库所有者可以更新元数据。<code class="inline-code">string calldata _metadata</code>：新的元数据值作为参数传入。<code class="inline-code">metadata = _metadata</code>：我们更新存储的值。<code class="inline-code">emit MetadataUpdated(msg.sender)</code>：我们记录变更以确保透明度。这为所有者提供了一种可以将注释、类别或标签附加到他们的金库上的方法。</p>
+                            
+                            <p><strong>getMetadata() — 所有者可以读取它</strong></p>
+                            <p>此函数允许所有者<strong>检索</strong>他们之前存储的元数据。它是 <code class="inline-code">view</code>，因为它只是从存储中读取而不改变任何东西。同样，它受到 <code class="inline-code">onlyOwner</code> 的保护——其他任何人都看不到你写的内容。</p>
+                        </div>
+                        
+                        <h2>TimeLockedDepositBox.sol — 暂时无法打开的金库</h2>
+                        
+                        <p>这个合约引入了一个转折：<strong>你可以存储一个秘密，但在特定时间过去之前你无法检索它</strong>。这就像一个数字金库，在一段设定的时间内保持锁定——无论你多么想打开它，你都必须等待。我们再次从我们信任的 <code class="inline-code">BaseDepositBox</code> 继承，但这次我们添加了<strong>定时逻辑</strong>来控制秘密何时变得可访问。</p>
+                        
+                        <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "./BaseDepositBox.sol";
+
+contract TimeLockedDepositBox is BaseDepositBox {
+    uint256 private unlockTime;
+
+    constructor(uint256 lockDuration) {
+        unlockTime = block.timestamp + lockDuration;
+    }
+
+    modifier timeUnlocked() {
+        require(block.timestamp >= unlockTime, "Box is still time-locked");
+        _;
+    }
+
+    function getBoxType() external pure override returns (string memory) {
+        return "TimeLocked";
+    }
+
+    function getSecret() public view override onlyOwner timeUnlocked returns (string memory) {
+        return super.getSecret();
+    }
+
+    function getUnlockTime() external view returns (uint256) {
+        return unlockTime;
+    }
+
+    function getRemainingLockTime() external view returns (uint256) {
+        if (block.timestamp >= unlockTime) return 0;
+        return unlockTime - block.timestamp;
+    }
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p><strong>继承和导入</strong></p>
+                            <p>就像 <code class="inline-code">BasicDepositBox</code> 和 <code class="inline-code">PremiumDepositBox</code> 一样，我们从 <code class="inline-code">BaseDepositBox</code> 导入共享基础逻辑。我们继承了所有核心功能：所有者跟踪、秘密存储、存入时间、事件日志记录。我们还会在此基础上添加时间锁功能。</p>
+                            
+                            <p><strong>unlockTime — 锁定计时器</strong></p>
+                            <p>此变量存储了秘密可访问时的<strong>时间戳</strong>。它是 <code class="inline-code">private</code>，意味着没有人可以直接访问它——但我们会通过 getter 函数公开它。</p>
+                            
+                            <p><strong>构造函数 — 锁定事务</strong></p>
+                            <p>当合约部署时，构造函数会采用一个数字：<code class="inline-code">lockDuration</code>，以<strong>秒</strong>为单位。它将这个持续时间加到当前时间戳（<code class="inline-code">block.timestamp</code>）上，并将其设置为 <code class="inline-code">unlockTime</code>。所以如果你传入 <code class="inline-code">3600</code>（1 小时），秘密将从部署起锁定 1 小时。这使得合约非常灵活——你可以将秘密锁定几分钟、几小时、几天或几年。</p>
+                            
+                            <p><strong>timeUnlocked 修饰符 — 访问守门员</strong></p>
+                            <p>这是一个<strong>自定义修饰符</strong>——就像 <code class="inline-code">onlyOwner</code> 一样——但它会检查当前时间是否已超过解锁时间。如果没有，函数调用将被拒绝并报错。我们会在任何应受时间锁保护的函数上使用这个修饰符。</p>
+                            
+                            <p><strong>getBoxType()</strong></p>
+                            <p>就像其他存款箱类型一样，这有助于我们识别这是哪种存款箱。它返回字符串 <code class="inline-code">"TimeLocked"</code> 并实现 <code class="inline-code">IDepositBox</code> 接口。</p>
+                            
+                            <p><strong>getSecret() — 但仅在锁定之后</strong></p>
+                            <p>这个函数重写了 <code class="inline-code">BaseDepositBox</code> 中的常规函数 <code class="inline-code">getSecret()</code>。但现在，它增加了<strong>两个</strong>访问检查：1. <code class="inline-code">onlyOwner</code>：只有金库所有者可以查看秘密。2. <code class="inline-code">timeUnlocked</code>：只有在解锁时间过去后。然后它调用 <code class="inline-code">super.getSecret()</code> 从基础合约中检索实际秘密。这种分层保持了代码的整洁，并避免了逻辑重复。</p>
+                            
+                            <p><strong>getUnlockTime() — 何时解锁？</strong></p>
+                            <p>这是一个简单的 getter 函数，它可以告诉您盒子解锁的<strong>确切时间戳</strong>。对于前端和显示目的很有用。</p>
+                            
+                            <p><strong>getRemainingLockTime() — 倒计时助手</strong></p>
+                            <p>这是另一个对前端友好的助手。如果当前时间已经超过了解锁时间，我们返回 <code class="inline-code">0</code>。否则，我们从 <code class="inline-code">unlockTime</code> 中减去 <code class="inline-code">now</code> 的时间，并返回金库可打开所需的<strong>剩余秒数</strong>。对于在你的 UI 中创建倒计时、计时器或可视化进度条非常有用。</p>
+                        </div>
+                        
+                        <h2>VaultManager — 你的金库仪表板</h2>
+                        
+                        <p>这个合约充当<strong>控制中心</strong>，供用户创建、命名、管理和与他们的存款箱交互。可以将其视为你的<strong>金库应用后端</strong>：它允许用户创建不同类型的存款箱（基础型、高级型、时间锁型）。它跟踪哪个用户拥有哪个存款箱。它强制执行所有权规则。它提供命名和检索存款箱信息的辅助函数。</p>
+                        
+                        <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "./IDepositBox.sol";
+import "./BasicDepositBox.sol";
+import "./PremiumDepositBox.sol";
+import "./TimeLockedDepositBox.sol";
+
+contract VaultManager {
+    mapping(address => address[]) private userDepositBoxes;
+    mapping(address => string) private boxNames;
+
+    event BoxCreated(address indexed owner, address indexed boxAddress, string boxType);
+    event BoxNamed(address indexed boxAddress, string name);
+
+    function createBasicBox() external returns (address) {
+        BasicDepositBox box = new BasicDepositBox();
+        userDepositBoxes[msg.sender].push(address(box));
+        emit BoxCreated(msg.sender, address(box), "Basic");
+        return address(box);
+    }
+
+    function createPremiumBox() external returns (address) {
+        PremiumDepositBox box = new PremiumDepositBox();
+        userDepositBoxes[msg.sender].push(address(box));
+        emit BoxCreated(msg.sender, address(box), "Premium");
+        return address(box);
+    }
+
+    function createTimeLockedBox(uint256 lockDuration) external returns (address) {
+        TimeLockedDepositBox box = new TimeLockedDepositBox(lockDuration);
+        userDepositBoxes[msg.sender].push(address(box));
+        emit BoxCreated(msg.sender, address(box), "TimeLocked");
+        return address(box);
+    }
+
+    function nameBox(address boxAddress, string calldata name) external {
+        IDepositBox box = IDepositBox(boxAddress);
+        require(box.getOwner() == msg.sender, "Not the box owner");
+
+        boxNames[boxAddress] = name;
+        emit BoxNamed(boxAddress, name);
+    }
+
+    function storeSecret(address boxAddress, string calldata secret) external {
+        IDepositBox box = IDepositBox(boxAddress);
+        require(box.getOwner() == msg.sender, "Not the box owner");
+
+        box.storeSecret(secret);
+    }
+
+    function transferBoxOwnership(address boxAddress, address newOwner) external {
+        IDepositBox box = IDepositBox(boxAddress);
+        require(box.getOwner() == msg.sender, "Not the box owner");
+
+        box.transferOwnership(newOwner);
+
+        address[] storage boxes = userDepositBoxes[msg.sender];
+        for (uint i = 0; i < boxes.length; i++) {
+            if (boxes[i] == boxAddress) {
+                boxes[i] = boxes[boxes.length - 1];
+                boxes.pop();
+                break;
+            }
+        }
+
+        userDepositBoxes[newOwner].push(boxAddress);
+    }
+
+    function getUserBoxes(address user) external view returns (address[] memory) {
+        return userDepositBoxes[user];
+    }
+
+    function getBoxName(address boxAddress) external view returns (string memory) {
+        return boxNames[boxAddress];
+    }
+
+    function getBoxInfo(address boxAddress) external view returns (
+        string memory boxType,
+        address owner,
+        uint256 depositTime,
+        string memory name
+    ) {
+        IDepositBox box = IDepositBox(boxAddress);
+        return (
+            box.getBoxType(),
+            box.getOwner(),
+            box.getDepositTime(),
+            boxNames[boxAddress]
+        );
+    }
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p><strong>导入</strong></p>
+                            <p><code class="inline-code">IDepositBox</code>：我们用来以统一方式与所有类型存款箱交互的接口。其他三个是具体实现（实际可部署的合约）。<strong>为什么要使用接口？</strong>因为它让我们以相同的方式处理每个存款箱，无论其具体类型如何。所有存款箱都遵循相同的规则（<code class="inline-code">getOwner()</code>、<code class="inline-code">storeSecret()</code> 等），所以当我们调用这些共享函数时，不需要在意存款箱是什么类型。</p>
+                            
+                            <p><strong>状态变量</strong></p>
+                            <ul>
+                                <li><code class="inline-code">userDepositBoxes</code>：将用户的地址映射到其拥有的所有存款箱（作为合约地址）。</li>
+                                <li><code class="inline-code">boxNames</code>：允许用户为每个邮箱分配自定义名称。按邮箱地址存储。</li>
+                            </ul>
+                            
+                            <p><strong>事件</strong></p>
+                            <ul>
+                                <li><code class="inline-code">BoxCreated</code>：每次用户创建新存款箱时触发。</li>
+                                <li><code class="inline-code">BoxNamed</code>：当用户给他们的存款箱自定义名称时触发。</li>
+                            </ul>
+                            <p>这些有助于前端和浏览器显示发生的操作。</p>
+                            
+                            <p><strong>createBasicBox 创建基础存款箱</strong></p>
+                            <p><code class="inline-code">BasicDepositBox box = new BasicDepositBox();</code>：这行代码<strong>部署一个新的 BasicDepositBox 合约</strong>并将其地址存储在变量 <code class="inline-code">box</code> 中。<code class="inline-code">userDepositBoxes[msg.sender].push(...)</code>：将新存款箱添加到发送者拥有的存款箱列表中。触发一个事件，以便 UI 可以跟踪此创建。返回新存款箱的地址以便于访问。这就是用户为自己"铸造"一个新数字存款箱的方式。</p>
+                            
+                            <p><strong>createPremiumBox() — 适用于想要存储额外元数据的用户</strong></p>
+                            <p>允许用户创建一个新的 <strong>PremiumDepositBox</strong> —— 一种特殊类型的存款箱，通过 <code class="inline-code">setMetadata()</code> 函数支持额外数据。部署新的 PremiumDepositBox：这行代码<strong>创建了一个全新的合约</strong> <code class="inline-code">PremiumDepositBox</code>。后台是这样的：继承自 <code class="inline-code">BaseDepositBox</code>，从而获得获得所有权、秘密存储、存入时间等信息。添加一个名为 <code class="inline-code">metadata</code> 的新状态变量以便更新/检索。当这行代码运行时，合约被<strong>部署在链上</strong>，调用 <code class="inline-code">createPremiumBox()</code> 的用户成为该存款箱的所有者（感谢构造函数 <code class="inline-code">BaseDepositBox</code>）。将存款箱保存在用户的存款箱列表中：使用 <code class="inline-code">address(box)</code> 将合约转换为其地址，将该地址添加到创建它的用户的 <code class="inline-code">userDepositBoxes</code> 映射中。这确保了当用户稍后想检索他们全部存款箱时，这个存款箱会出现。为前端和跟踪触发事件：这会触发一个 <code class="inline-code">BoxCreated</code> 事件，记录：创建存款箱的用户、新合约的地址、字符串 <code class="inline-code">"Premium"</code>，便于 UI 知道它是哪种类型的存款箱。这有助于钱包、仪表盘和区块链浏览器展示相关活动，而无需手动索引链上数据。返回存款箱地址：最后，我们返回新创建的存款箱的地址，以便前端（或调用代码）可以立即与其交互。</p>
+                            
+                            <p><strong>createTimeLockedBox() — 适用于你不想立即打开的金库</strong></p>
+                            <p>这个函数允许用户创建一个<strong>时间锁存款箱</strong> —— 一个行为就基础金库一样的智能合约，<strong>但有一个关键的区别</strong>：存储在里面的秘密只有在经过一定时间后才能被访问。接受锁定持续时间：这个函数设定一个数字：<code class="inline-code">lockDuration</code> —— 代表金库应该被锁定的<strong>秒数</strong>。例如，如果 <code class="inline-code">lockDuration = 3600</code>，金库将被锁定 <strong>1 小时</strong>。在此期间，所有者可以<strong>存储秘密</strong>，但他们在锁定到期<strong>之前无法查看它</strong>。这非常适合以下情况：时间胶囊、延迟显示消息、未来的礼物或承诺。部署 TimeLockedDepositBox：这行代码创建了一个新实例 <code class="inline-code">TimeLockedDepositBox</code>，传递 <code class="inline-code">lockDuration</code>。在 <code class="inline-code">TimeLockedDepositBox</code> 构造函数内部，这个锁定持续时间被加到当前区块时间戳上，因此存款箱会根据区块链时间跟踪<strong>何时可以安全解锁</strong>。部署者（<code class="inline-code">msg.sender</code>）自动成为所有者——得益于继承自 <code class="inline-code">BaseDepositBox</code>。将存款箱保存在用户账户下：将新存款箱的地址添加到调用者在 <code class="inline-code">userDepositBoxes</code> 映射中存储的存款箱列表中。这使得每个用户都可以维护一个由多个存款箱组成的个人"金库"。合约跟踪谁拥有哪个存款箱，但不会在链上存储完整的用户数据。触发 <code class="inline-code">BoxCreated</code> 事件：事件是 dApp 在不持续查询智能合约状态的情况下跟踪链上操作的关键部分。这将记录新存款箱的创建，包括：谁创建了它、它的合约地址、存款箱类型：<code class="inline-code">"TimeLocked"</code>。前端可以使用它在 UI 中显示"新的时间锁金库已创建"或将其显示在用户活动反馈中。返回地址：最后，函数返回新部署合约的地址，以便调用者（或前端）可以立即开始与其交互。</p>
+                            
+                            <p><strong>nameBox</strong></p>
+                            <p>首先，我们<strong>将通用地址转换为接口</strong>：<code class="inline-code">IDepositBox box = IDepositBox(boxAddress);</code>这让我们可以在存款箱上调用 <code class="inline-code">getOwner()</code>，而无需知道它是什么类型。然后我们<strong>检查所有权</strong>：<code class="inline-code">require(box.getOwner() == msg.sender, "Not the box owner");</code>这确保只有合法的所有者可以重命名存款箱。最后，我们保存新名称并触发一个事件。</p>
+                            
+                            <p><strong>storeSecret</strong></p>
+                            <p>相同的所有权模式。调用接口中的 <code class="inline-code">storeSecret()</code> 函数，此函数的具体逻辑由每类存款箱自行实现。这里没有触发事件，因为存款箱本身会触发一个（<code class="inline-code">SecretStored</code>）。</p>
+                            
+                            <p><strong>transferBoxOwnership() — 移交存款箱</strong></p>
+                            <p>这个函数允许存款箱的当前所有者<strong>将所有权转移给其他人</strong>——就像把存款箱的钥匙交给某人一样。它还确保 <code class="inline-code">VaultManager</code> 更新自己的记录以反映这一变化。接口转换和所有权检查：首先，我们获取 <code class="inline-code">boxAddress</code>（这只是区块链上的一个常规地址），并将其<strong>转换</strong>为 <code class="inline-code">IDepositBox</code> 接口类型。现在，我们可以调用像 <code class="inline-code">getOwner()</code> 或 <code class="inline-code">transferOwnership()</code> 这样的函数——因为我们已经告诉 Solidity，"嘿，相信我，这个合约实现了 <code class="inline-code">IDepositBox</code> 接口。"接下来，我们验证调用此函数的人是否是该存款箱的<strong>当前所有者</strong>。如果他们不是所有者，函数将回滚。禁止未经授权的转移。调用存款箱的 <code class="inline-code">transferOwnership()</code> 方法：这行代码会告知存储箱合约，让其更新自己的内部 <code class="inline-code">owner</code> 状态。这很重要：真正的数据所有权和业务逻辑归属于存储箱合约—<strong>VaultManager 不是其所有者</strong>—因此，这一步确保了权限变更在存储箱内部自主完成。更新 VaultManager 的映射：在<strong>存储箱合约内部</strong>更改所有权之后，我们必须确保 <code class="inline-code">VaultManager</code> 的 <code class="inline-code">userDepositBoxes</code> 映射也反映这一点。如果我们不更新此列表，我们的系统将在前端或 API 中显示错误的所有者。从发送者列表中移除存储箱：我们获取发送者的存储箱列表。我们循环查找正在被转移的那个。一旦找到：我们<strong>将它与数组中的最后一项交换</strong>。然后调用 <code class="inline-code">.pop()</code> 来删除最后一项。这是一个经典的 Solidity 技巧，用于从数组中移除项目而不留空位（因为 Solidity 数组不支持 <code class="inline-code">.remove(index)</code>）。将存储箱添加到新所有者的列表：随后，我们将该存储箱存入新所有者的个人存储箱数组中——这步操作在我们的注册表内完成了所有权的转移。</p>
+                            
+                            <p><strong>getUserBoxes() — 查看用户拥有的所有存储箱</strong></p>
+                            <p>这个函数仅返回属于特定用户的<strong>存款箱地址列表</strong>。每次有人创建一个存款箱（通过 <code class="inline-code">createBasicBox()</code>、<code class="inline-code">createPremiumBox()</code> 或 <code class="inline-code">createTimeLockedBox()</code>），该新合约的地址就会存储在 <code class="inline-code">userDepositBoxes</code> 映射中。这个函数允许你检索到<strong>任何用户地址</strong>所对应的存储箱列表。<code class="inline-code">userDepositBoxes[user]</code> 存储的该特定用户的动态地址数组。由于它标记为 <code class="inline-code">view</code>，它是<strong>只读的</strong>——调用这个函数<strong>不消耗任何 gas</strong>。它返回一个完整的数组，可以在前端用来列出用户的所有金库。使用场景：非常适合创建列出用户存款箱的仪表板或个人资料页面。</p>
+                            
+                            <p><strong>getBoxName() — 读取存款箱的自定义名称</strong></p>
+                            <p>返回所有者为特定存款箱指定的<strong>自定义名称</strong>。此前，用户可以调用 <code class="inline-code">nameBox(address, string)</code> 给他们的存款箱贴上自定义标签。该标签存储在 <code class="inline-code">boxNames</code> 映射中。需要 <code class="inline-code">boxAddress</code> 作为输入。在 <code class="inline-code">boxNames</code> 映射中查找地址，并返回用户设置的任何字符串。如果没有给出名称，Solidity 只返回<strong>默认的空字符串 <code class="inline-code">""</code></strong>。使用场景：对于改进 UI 非常有用——你可以显示有意义的名称，如"主金库"或"爸爸的储物柜"，而不是显示原始地址。</p>
+                            
+                            <p><strong>getBoxInfo() — 一次调用获取完整信息</strong></p>
+                            <p>这是用于获取关于存款箱的每个重要元数据的<strong>一体化辅助函数</strong>。接口转换：我们获取原始的存款箱地址，并<strong>将其转换为 IDepositBox 接口</strong>。这让我们可以安全地调用 <code class="inline-code">getBoxType()</code>、<code class="inline-code">getOwner()</code> 和 <code class="inline-code">getDepositTime()</code> 函数，而无需确切知道它是哪种类型的存款箱（基础型、高级型、时间锁型等）。只要合约实现了该接口，这些调用就会起作用。返回所有关键细节：<code class="inline-code">box.getBoxType()</code> — 调用子合约的实现，并返回如下字符串：<code class="inline-code">"Basic"</code>、<code class="inline-code">"Premium"</code> 或 <code class="inline-code">"TimeLocked"</code>。<code class="inline-code">box.getOwner()</code> — 返回存款箱的当前所有者。<code class="inline-code">box.getDepositTime()</code> — 返回存款箱部署时的区块时间戳。<code class="inline-code">boxNames[boxAddress]</code> — 从 <code class="inline-code">VaultManager</code> 内部的 <code class="inline-code">boxNames</code> 映射中提取自定义名称（如果有）。为什么这个函数有用：你可以在<strong>一次</strong>调用中获得所有内容，而不是进行<strong>四次单独调用</strong>：存款箱类型、所有者、创建时间、自定义名称。使用场景：构建一个表格或卡片 UI，通过一次调用显示每个用户存款箱的完整摘要——对于高效的前端渲染非常有用。</p>
+                        </div>
+                        
+                        <h2>总结 — 一个构建得当的模块化金库系统</h2>
+                        
+                        <p>这就是<strong>金库系统</strong>的全部内容。我们从一个简单的想法开始——让用户在链上安全地存储秘密——最终使用 Solidity 最强大的概念构建了一个<strong>模块化</strong>、<strong>可扩展</strong>且<strong>结构良好</strong>的智能合约系统：</p>
+                        <ul>
+                            <li><strong>接口</strong> 为所有金库定义通用标准</li>
+                            <li><strong>抽象合约</strong> 提供了可复用的逻辑，并确保实现的一致性</li>
+                            <li><strong>继承</strong> 在共享的底层架构之上，构建了多种类型的金库（基础型、高级型、时间锁型）</li>
+                            <li><strong>管理器合约</strong> 来控制金库的创建、命名和所有权</li>
+                        </ul>
+                        
+                        <blockquote>
+                            <p>您刚刚构建的项目，精准反映了现实世界智能合约系统的核心架构。Compound、Aave 和 OpenZeppelin 等主流平台均采用与此同源的分层设计——通过<strong>接口实现标准化</strong>，借助<strong>抽象基础合约达成代码复用</strong>，并在其上构建<strong>清晰模块化的业务合约</strong>。所以现在，你不仅理解了<strong>继承的工作原理</strong>，还看到了如何构建随着产品增长而扩展的大型系统结构。</p>
+                        </blockquote>
+                        
+                        <div class="signature">
+                            <p>真诚的，</p>
+                            <p>Sneha</p>
+                            <p style="margin-top: 10px; font-size: 1.5rem; opacity: 0.8;">译者：He Shadow</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -767,6 +1736,47 @@ contract BasicBox is BaseBox {
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+            
+        // Sneha的一封来信模块功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelopeContainer = document.getElementById('envelope-container');
+            const answerModal = document.getElementById('answer-modal');
+            const closeLetter = document.getElementById('close-letter');
+            
+            if (!envelopeContainer || !answerModal || !closeLetter) {
+                return; // 如果元素不存在，直接返回
+            }
+            
+            // 点击信封打开弹窗
+            envelopeContainer.addEventListener('click', function() {
+                envelopeContainer.classList.add('open');
+                
+                // 延迟显示弹窗，让信封翻转动画完成
+                setTimeout(function() {
+                    answerModal.style.display = 'flex';
+                    setTimeout(function() {
+                        answerModal.classList.add('open');
+                    }, 50);
+                }, 400);
+            });
+            
+            // 关闭弹窗
+            closeLetter.addEventListener('click', function() {
+                answerModal.classList.remove('open');
+                
+                setTimeout(function() {
+                    answerModal.style.display = 'none';
+                    envelopeContainer.classList.remove('open');
+                }, 600);
+            });
+            
+            // 点击弹窗外部关闭
+            answerModal.addEventListener('click', function(e) {
+                if (e.target === answerModal) {
+                    closeLetter.click();
                 }
             });
         });

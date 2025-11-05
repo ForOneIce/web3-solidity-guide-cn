@@ -18,6 +18,10 @@
             --medium: #F8961E;
             --hard: #E71D36;
             --expert: #7209B7;
+            --warm-brown: #8B7355;
+            --parchment: #F5F1E6;
+            --vintage-blue: #6B8E9F;
+            --warm-red: #C44536;
         }
         
         * {
@@ -302,6 +306,410 @@
         .nav-footer-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.3rem;
+        }        
+        /* 参考答案模块样式 - 温暖治愈风格 */
+        .answer-reference {
+            position: relative;
+            margin: 60px 0 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .envelope-container {
+            position: relative;
+            width: 340px;
+            height: 240px;
+            cursor: pointer;
+            perspective: 1200px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(139, 115, 85, 0.2));
+        }
+        
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .envelope-front, .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .envelope-front {
+            background: linear-gradient(135deg, #f9f3e9, #e8dfd1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: -70px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 70px solid #e8dfd1;
+            z-index: 1;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+        }
+        
+        .envelope-flap::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: -170px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 67px solid #f9f3e9;
+        }
+        
+        .envelope-seal {
+            position: absolute;
+            bottom: 25px;
+            right: 35px;
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #C44536, #8B2E24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            border: 2px solid #A52A2A;
+        }
+        
+        .seal-icon {
+            color: #F5F1E6;
+            font-size: 1.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .envelope-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.4rem;
+            color: var(--warm-brown);
+            z-index: 2;
+            position: relative;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+        
+        .envelope-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(139, 115, 85, 0.05) 3px, transparent 3px),
+                radial-gradient(circle at 85% 75%, rgba(139, 115, 85, 0.05) 3px, transparent 3px);
+            background-size: 40px 40px;
+            z-index: 0;
+        }
+        
+        .envelope-back {
+            background: linear-gradient(135deg, #f5f1e6, #e8dfd1);
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-container:hover .envelope {
+            transform: rotateY(10deg) translateY(-5px);
+        }
+        
+        .envelope-container.open .envelope {
+            transform: rotateY(180deg);
+        }
+        
+        .envelope-hint {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--warm-brown);
+            margin-top: 15px;
+            opacity: 0.9;
+            background: rgba(245, 241, 230, 0.7);
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* 弹窗样式 */
+        .answer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            background: rgba(107, 142, 159, 0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+        
+        .letter-container {
+            width: 90%;
+            max-width: 900px;
+            height: 80vh;
+            background: #F5F1E6;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(107, 142, 159, 0.4);
+            overflow: hidden;
+            transform: scale(0);
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .answer-modal.open .letter-container {
+            transform: scale(1);
+        }
+        
+        .letter-header {
+            background: linear-gradient(135deg, #8B7355, #6B5A45);
+            padding: 25px 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-bottom: 2px dashed #A5947A;
+        }
+        
+        .letter-title {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: #F5F1E6;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
+        }
+        
+        .letter-subtitle {
+            color: rgba(245, 241, 230, 0.9);
+            font-size: 1.3rem;
+            font-family: 'Gochi Hand', cursive;
+        }
+        
+        .close-letter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(245, 241, 230, 0.2);
+            color: #F5F1E6;
+            border: 1px solid rgba(245, 241, 230, 0.3);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .close-letter:hover {
+            background: rgba(245, 241, 230, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .letter-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #F5F1E6;
+            position: relative;
+        }
+        
+        .letter-body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent 98%, rgba(139, 115, 85, 0.1) 98%),
+                linear-gradient(rgba(139, 115, 85, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        
+        /* MD内容样式 */
+        .md-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .md-section {
+            margin-bottom: 40px;
+        }
+        
+        .md-section h1 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: var(--warm-brown);
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #A5947A;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .md-section h2 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.2rem;
+            color: var(--warm-brown);
+            margin: 30px 0 15px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .md-section h2::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--warm-red);
+            font-size: 2.5rem;
+        }
+        
+        .md-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .md-tag {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--warm-brown);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-highlight {
+            background: rgba(107, 142, 159, 0.1);
+            border-left: 5px solid var(--vintage-blue);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(107, 142, 159, 0.2);
+        }
+        
+        .md-content pre {
+            background: #2d2a2e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .md-content .inline-code {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            color: var(--warm-brown);
+            font-size: 0.9em;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content ul, .md-content ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .md-content li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+        
+        .md-content blockquote {
+            border-left: 4px solid var(--vintage-blue);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+            background: rgba(107, 142, 159, 0.05);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .md-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th, .md-content td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th {
+            background: linear-gradient(135deg, var(--warm-brown), #6B5A45);
+            color: #F5F1E6;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.1rem;
+        }
+        
+        .md-content tr:nth-child(even) {
+            background: rgba(139, 115, 85, 0.05);
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 40px;
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2rem;
+            color: var(--warm-brown);
         }
         
         @media (max-width: 768px) {
@@ -319,6 +727,49 @@
             
             .key-points {
                 grid-template-columns: 1fr;
+            }
+            
+            .envelope-container {
+                width: 300px;
+                height: 210px;
+            }
+            
+            .envelope-flap {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 60px solid #e8dfd1;
+            }
+            
+            .envelope-flap::after {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 57px solid #f9f3e9;
+                left: -150px;
+            }
+            
+            .envelope-text {
+                font-size: 2rem;
+            }
+            
+            .answer-modal {
+                padding: 10px;
+            }
+            
+            .letter-container {
+                width: 95%;
+                height: 85vh;
+            }
+            
+            .letter-title {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -810,6 +1261,401 @@ struct User {
                 <div class="nav-footer-title">Masterkey - 主密钥合约</div>
             </a>
         </div>
+    
+        <!-- Sneha的一封来信模块 -->
+        <div class="answer-reference">
+            <div class="envelope-container" id="envelope-container">
+                <div class="envelope">
+                    <div class="envelope-front">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-pattern"></div>
+                        <div class="envelope-seal">
+                            <i class="fas fa-feather-alt seal-icon"></i>
+                        </div>
+                        <div class="envelope-text">Sneha的一封来信</div>
+                    </div>
+                    <div class="envelope-back">
+                        <div class="envelope-text" style="color: var(--warm-brown);">点击开启</div>
+                    </div>
+                </div>
+            </div>
+            <div class="envelope-hint">点击信封查看Sneha的来信</div>
+        </div>
+    </div>
+
+    <!-- 弹窗 - 内容待后续精细化处理 -->
+    <div class="answer-modal" id="answer-modal">
+        <div class="letter-container">
+            <div class="letter-header">
+                <div class="letter-title">Sneha的一封来信</div>
+                <div class="letter-subtitle">关于第10天的学习指导</div>
+                <button id="close-letter" class="close-letter">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="letter-body">
+                <div id="md-content" class="md-content">
+                    <div class="md-section">
+                        <h1>链上健身记录器</h1>
+                        <div class="md-meta">
+                            <span class="md-tag"><i class="fas fa-calendar-day"></i> Day 10</span>
+                            <span class="md-tag"><i class="fas fa-hashtag"></i> ID: 10</span>
+                            <span class="md-tag"><i class="fas fa-user-edit"></i> 译者: Shuyi</span>
+                            <span class="md-tag"><i class="fas fa-signal"></i> 难度等级: 初级</span>
+                        </div>
+                        
+                        <h2>ActivityTracker 合约</h2>
+                        
+                        <p>很好！到目前为止，我们已经构建了计算器、共享钱包、存钱罐，甚至还有一个可以接受美元并神奇地将其转换为以太币的 TipJar。</p>
+                        
+                        <p>但如果我们稍微换个方向呢？假设你和你的朋友们在进行一场健身之旅。你们记录锻炼、跟踪进度、庆祝像"完成 10 次跑步！"或"跑完 100 公里！"这样的里程碑——并且你希望这一切在链上都是透明、可证明的。</p>
+                        
+                        <p>这不仅仅是为了数据而记录数据——这些数据可以触发前端的实时更新，解锁奖励，甚至在你达到某些目标时铸造 NFT。<strong>这就是 Solidity 事件发挥作用的地方。</strong></p>
+                        
+                        <p>今天，我们将构建一个有趣的小合约，名为 <strong>SimpleFitnessTracker</strong>——但别被这个名字迷惑了。虽然这个合约很小，但它会教你 Solidity 中最强大的功能之一：<strong>事件（events）。</strong></p>
+                        
+                        <div class="md-highlight">
+                            <strong>💻 完整代码地址</strong>：<a href="https://github.com/snehasharma76/30daysSolidity_Web3Compass/blob/master/ActivityTracker.sol" target="_blank" style="color: var(--vintage-blue); text-decoration: underline;">GitHub链接</a>
+                        </div>
+                        
+                        <h2>1、产品需求书</h2>
+                        
+                        <h3>用户流程</h3>
+                        <ul>
+                            <li><strong>注册用户</strong>：registerUser → 写入 userProfiles → 事件 UserRegistered</li>
+                            <li><strong>更新体重</strong>：updateWeight → onlyRegistered 校验 → 读取当前体重 → 检查是否下降 ≥ 5% → 事件 MilestoneAchieved（如达标）→ 写入新体重 → 事件 ProfileUpdated</li>
+                            <li><strong>记录锻炼</strong>：logWorkout → onlyRegistered 校验 → 创建 WorkoutActivity → 追加到 workoutHistory → 更新 totalWorkouts/totalDistance → 事件 WorkoutLogged → 里程碑检测（第 10 或 50 次、距离跨过 100000m）→ 事件 MilestoneAchieved</li>
+                            <li><strong>查询</strong>：getUserWorkoutCount → 返回 workoutHistory 长度</li>
+                        </ul>
+                        
+                        <h3>数据库结构</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>类型</th>
+                                    <th>名称</th>
+                                    <th>可见性</th>
+                                    <th>含义</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Struct</strong></td>
+                                    <td>UserProfile</td>
+                                    <td>-</td>
+                                    <td>存储用户基本信息（name, weight, isRegistered）</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Struct</strong></td>
+                                    <td>WorkoutActivity</td>
+                                    <td>-</td>
+                                    <td>存储单次锻炼详情（activityType, duration, distance, timestamp）</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>State Var</strong></td>
+                                    <td>userProfiles</td>
+                                    <td>Public</td>
+                                    <td>(地址 => 用户资料) 映射</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>State Var</strong></td>
+                                    <td>workoutHistory</td>
+                                    <td>Private</td>
+                                    <td>(地址 => 锻炼活动数组) 映射</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>State Var</strong></td>
+                                    <td>totalWorkouts</td>
+                                    <td>Public</td>
+                                    <td>(地址 => 总锻炼次数) 映射</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>State Var</strong></td>
+                                    <td>totalDistance</td>
+                                    <td>Public</td>
+                                    <td>(地址 => 总距离) 映射</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Event</strong></td>
+                                    <td>UserRegistered</td>
+                                    <td>-</td>
+                                    <td>用户成功注册时触发</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Event</strong></td>
+                                    <td>ProfileUpdated</td>
+                                    <td>-</td>
+                                    <td>用户更新个人资料时触发</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Event</strong></td>
+                                    <td>WorkoutLogged</td>
+                                    <td>-</td>
+                                    <td>用户记录新锻炼时触发</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Event</strong></td>
+                                    <td>MilestoneAchieved</td>
+                                    <td>-</td>
+                                    <td>用户达成里程碑时触发</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Modifier</strong></td>
+                                    <td>onlyRegistered</td>
+                                    <td>-</td>
+                                    <td>限制函数只能由已注册用户调用</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Function</strong></td>
+                                    <td>registerUser</td>
+                                    <td>Public</td>
+                                    <td>注册新用户，记录姓名和体重</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Function</strong></td>
+                                    <td>updateWeight</td>
+                                    <td>Public</td>
+                                    <td>更新用户体重，检查减重里程碑</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Function</strong></td>
+                                    <td>logWorkout</td>
+                                    <td>Public</td>
+                                    <td>记录新锻炼活动，检查锻炼里程碑</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Function</strong></td>
+                                    <td>getUserWorkoutCount</td>
+                                    <td>Public (View)</td>
+                                    <td>获取指定用户的总锻炼次数</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h2>2、细节解说</h2>
+                        
+                        <h3>什么是事件？</h3>
+                        
+                        <p>Solidity 中的事件就像你的智能合约拿起一个扩音器大喊："嘿，刚刚发生了点事！"它们不会改变链上的任何东西——相反，它们会<strong>发出日志（emit logs）</strong>，这些日志可以被你的前端或任何正在监听的外部系统捕获。</p>
+                        
+                        <div class="md-highlight">
+                            <p>想象一下 Alice 刚刚完成了她的第 10 次锻炼。合约发出一个事件说："Alice 完成了 10 次锻炼！" 你的前端捕捉到这个信号，然后——砰！——它可以撒花、解锁一项成就或触发一个徽章动画。</p>
+                            <p>所以，是的，事件在你的代码中可能看起来只是一行无聊的 <code class="inline-code">emit</code>……但在幕后，它们是让你的 dApp 感觉<strong>充满活力</strong>的秘密武器。</p>
+                        </div>
+                        
+                        <p>好了，是时候设置这些魔法背后的数据了。</p>
+                        
+                        <h3>状态变量与结构体——奠定基础</h3>
+                        
+                        <p>在我们深入研究实际逻辑之前，让我们先设置好合约的数据结构。我们正在构建一个健身追踪器，所以需要存储关于用户和他们锻炼的信息。你以后总是可以扩展它，加入目标、成就或社交功能——但现在，我们保持简单和专注。</p>
+                        
+                        <p>让我们从两个关键的 <code class="inline-code">structs</code>（结构体）开始：</p>
+                        
+                        <h4>UserProfile 结构体</h4>
+                        <pre><code class="language-solidity">struct UserProfile {
+    string name;
+    uint256 weight; // in kg
+    bool isRegistered;
+}</code></pre>
+                        
+                        <p>这个结构体包含基本的用户信息：他们的名字、他们的体重（单位：公斤）、一个告诉我们他们是否已注册的标志。每个注册的地址都会在链上存储一个这样的个人资料。</p>
+                        
+                        <h4>WorkoutActivity 结构体</h4>
+                        <pre><code class="language-solidity">struct WorkoutActivity {
+    string activityType;
+    uint256 duration; // in seconds
+    uint256 distance; // in meters
+    uint256 timestamp;
+}</code></pre>
+                        
+                        <p>这个结构体记录了每次锻炼的细节：活动类型（跑步、骑行、游泳等）、持续时间（单位：秒）、用户运动的距离（单位：米）、发生时间（<code class="inline-code">block.timestamp</code>）。每当用户记录一次锻炼，我们就会创建一个这样的结构体并将其添加到他们的锻炼历史中。</p>
+                        
+                        <h4>将所有内容映射起来</h4>
+                        <p>现在我们有了数据结构，让我们用映射（mappings）将它们连接起来：</p>
+                        
+                        <pre><code class="language-solidity">mapping(address => UserProfile) public userProfiles;
+mapping(address => WorkoutActivity[]) private workoutHistory;
+mapping(address => uint256) public totalWorkouts;
+mapping(address => uint256) public totalDistance;</code></pre>
+                        
+                        <p>以下是每个映射的作用：</p>
+                        <ul>
+                            <li><code class="inline-code">userProfiles</code>：为每个用户（通过他们的地址）存储一份个人资料</li>
+                            <li><code class="inline-code">workoutHistory</code>：为每个用户保存一个锻炼日志数组</li>
+                            <li><code class="inline-code">totalWorkouts</code>：跟踪每个用户记录了多少次锻炼</li>
+                            <li><code class="inline-code">totalDistance</code>：跟踪用户覆盖的总距离</li>
+                        </ul>
+                        
+                        <p>有了这个设置，我们就可以开始构建核心功能了——用户注册、记录锻炼、跟踪进度和庆祝里程碑。对于仅仅几行设置代码来说，还不错吧？</p>
+                        
+                        <h3>声明事件——这才是最酷的部分</h3>
+                        
+                        <p>让我们声明一些事件，这样前端就能对它们作出反应：</p>
+                        
+                        <pre><code class="language-solidity">event UserRegistered(address indexed userAddress, string name, uint256 timestamp);
+event ProfileUpdated(address indexed userAddress, uint256 newWeight, uint256 timestamp);
+event WorkoutLogged(address indexed userAddress, string activityType, uint256 duration, uint256 distance, uint256 timestamp);
+event MilestoneAchieved(address indexed userAddress, string milestone, uint256 timestamp);</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p><strong>从技术上讲，什么是事件？</strong></p>
+                            <p>在 Solidity 中，一个 <code class="inline-code">event</code> 就像定义一个自定义的日志格式。当你的合约中发生重要事件时，你可以 <code class="inline-code">emit</code>（发出）一个这样的事件，它将被记录在交易日志中。</p>
+                            <p>事件不会影响你的合约状态——它们只是合约用来表达"嘿，刚刚发生了点事"并发送相关细节的一种方式。然后，这些日志可以被你的前端捕获，以显示消息、更新用户界面或实时触发操作。</p>
+                            
+                            <p><strong>为什么使用 <code class="inline-code">indexed</code>？</strong></p>
+                            <p>当你将一个参数标记为 <code class="inline-code">indexed</code> 时，你使它变得<strong>可搜索</strong>。这意味着你可以在前端根据该特定值筛选日志。</p>
+                            <p>例如，如果你只想在 Alice 的个人资料页面上显示她的事件，你的前端可以查询日志，并只拉取那些 <code class="inline-code">userAddress == Alice</code> 的事件。</p>
+                            <p>如果没有 <code class="inline-code">indexed</code>，你就必须扫描每一个事件日志并手动检查——效率低下且速度缓慢。有了 <code class="inline-code">indexed</code>，它就变得优化和可扩展——这正是一个 dApp 所需要的。</p>
+                            <p><strong>需要注意一点</strong>：在一个事件中，你最多只能索引<strong>三个</strong>参数。所以要明智地使用它们。</p>
+                        </div>
+                        
+                        <h3>修改器（Modifiers）</h3>
+                        
+                        <pre><code class="language-solidity">modifier onlyRegistered() {
+    require(userProfiles[msg.sender].isRegistered, "User not registered");
+    _;
+}</code></pre>
+                        
+                        <p>这个修改器是一个简单的检查——它确保调用者已经注册。我们将在多个函数中重用它以保持代码整洁。</p>
+                        
+                        <h3>registerUser()——让训练开始</h3>
+                        
+                        <pre><code class="language-solidity">function registerUser(string memory _name, uint256 _weight) public {
+    require(!userProfiles[msg.sender].isRegistered, "User already registered");
+
+    userProfiles[msg.sender] = UserProfile({
+        name: _name,
+        weight: _weight,
+        isRegistered: true
+    });
+
+    emit UserRegistered(msg.sender, _name, block.timestamp);
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这是某人正式加入健身小队的时刻。首先，我们使用 <code class="inline-code">require</code> 检查确保他们尚未注册。然后，我们将他们的姓名和体重保存在我们的 <code class="inline-code">userProfiles</code> 映射中，并将 <code class="inline-code">isRegistered</code> 标志设置为 true。</p>
+                            
+                            <p>现在到了最酷的部分——事件：</p>
+                            <pre><code class="language-solidity">emit UserRegistered(msg.sender, _name, block.timestamp);</code></pre>
+                            <p>这行代码告诉区块链："嘿，有人刚刚注册了——这是他是谁，以及注册的时间。"你的前端可能会使用这个事件来：显示一个欢迎弹窗、触发一个徽章或动画、将事件存储在链下数据库中、跟踪分析数据。</p>
+                            
+                            <p><strong>等等——这不消耗 Gas 吗？</strong></p>
+                            <p>好问题。是的，发出事件确实会消耗一点 Gas（因为日志被写入区块链），但<strong>它们比在链上存储数据便宜得多</strong>。事实上，发出事件是智能合约暴露数据最节省 Gas 的方式之一。这就是为什么我们经常将它们用于前端更新、分析以及任何不需要永久存储在状态中的事情。所以，大胆地发出事件吧。它便宜、快速，并使你的 dApp 充满活力。</p>
+                        </div>
+                        
+                        <h3>updateWeight()——追求进步，而非完美</h3>
+                        
+                        <pre><code class="language-solidity">function updateWeight(uint256 _newWeight) public onlyRegistered {
+    UserProfile storage profile = userProfiles[msg.sender];
+
+    if (_newWeight < profile.weight && (profile.weight - _newWeight) * 100 / profile.weight >= 5) {
+        emit MilestoneAchieved(msg.sender, "Weight Goal Reached", block.timestamp);
+    }
+
+    profile.weight = _newWeight;
+    emit ProfileUpdated(msg.sender, _newWeight, block.timestamp);
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这个函数允许注册用户更新他们的体重——但它不仅仅是一个简单的设置器。这里面包含了一些聪明的逻辑，以奖励有意义的进步。</p>
+                            
+                            <p><strong>1. 访问用户的个人资料</strong></p>
+                            <pre><code class="inline-code">UserProfile storage profile = userProfiles[msg.sender];</code></pre>
+                            <p>通过使用 <code class="inline-code">storage</code> 关键字，我们在说："嘿，Solidity，直接指向合约存储中已经存在的数据——不要创建它的副本。"这很重要，因为我们想要<strong>修改链上实际存在的个人资料</strong>。如果我们使用 <code class="inline-code">memory</code>，我们将只是在一个临时副本上工作——我们所做的任何更改都将在函数结束时被丢弃。</p>
+                            
+                            <p><strong>2. 检查体重里程碑</strong></p>
+                            <p>在更新体重之前，我们检查新体重是否比当前体重至少<strong>减少了 5%</strong>。这确保我们只为显著的进步触发里程碑——而不是微小的波动。</p>
+                            
+                            <p><strong>3. 更新用户的体重并发出事件</strong></p>
+                            <p>在里程碑检查之后，我们继续保存新的体重，并让外部世界知道用户的体重已经改变。这有助于前端刷新用户统计数据或重新计算进度条。</p>
+                        </div>
+                        
+                        <h3>logWorkout()——追踪每一次训练、跑步和骑行</h3>
+                        
+                        <pre><code class="language-solidity">function logWorkout(
+    string memory _activityType,
+    uint256 _duration,
+    uint256 _distance
+) public onlyRegistered {
+    // Create new workout activity
+    WorkoutActivity memory newWorkout = WorkoutActivity({
+        activityType: _activityType,
+        duration: _duration,
+        distance: _distance,
+        timestamp: block.timestamp
+    });
+
+    // Add to user's workout history
+    workoutHistory[msg.sender].push(newWorkout);
+
+    // Update total stats
+    totalWorkouts[msg.sender]++;
+    totalDistance[msg.sender] += _distance;
+
+    // Emit workout logged event
+    emit WorkoutLogged(
+        msg.sender,
+        _activityType,
+        _duration,
+        _distance,
+        block.timestamp
+    );
+
+    // Check for workout count milestones
+    if (totalWorkouts[msg.sender] == 10) {
+        emit MilestoneAchieved(msg.sender, "10 Workouts Completed", block.timestamp);
+    } else if (totalWorkouts[msg.sender] == 50) {
+        emit MilestoneAchieved(msg.sender, "50 Workouts Completed", block.timestamp);
+    }
+
+    // Check for distance milestones
+    if (totalDistance[msg.sender] >= 100000 && totalDistance[msg.sender] - _distance < 100000) {
+        emit MilestoneAchieved(msg.sender, "100K Total Distance", block.timestamp);
+    }
+}</code></pre>
+                        
+                        <div class="md-highlight">
+                            <p>这是健身追踪器的<strong>核心引擎</strong>——它处理用户记录新锻炼时发生的一切。</p>
+                            
+                            <p><strong>为什么是 <code class="inline-code">memory</code>？</strong></p>
+                            <p>在 Solidity 中，你有两个主要的数据位置：<code class="inline-code">storage</code> 和 <code class="inline-code">memory</code>。</p>
+                            <ul>
+                                <li><code class="inline-code">storage</code> 是持久的——它存在于区块链上，读/写都需要消耗 Gas。</li>
+                                <li><code class="inline-code">memory</code> 是临时的——它只在函数调用期间存在，而且便宜得多。</li>
+                            </ul>
+                            <p>因为我们只是<strong>临时创建这个结构体</strong>，以便将它推入一个数组（<code class="inline-code">workoutHistory[msg.sender]</code>），我们不需要将它作为一个独立的变量永久存储。使用 <code class="inline-code">memory</code> 使这个操作<strong>更高效、更节省 Gas</strong>。</p>
+                            
+                            <p><strong>里程碑检测</strong></p>
+                            <p>我们检查用户是否达到了一个关键的里程碑——比如完成他们的第 10 次或第 50 次锻炼，或者总距离是否超过了 10 万米。注意我们是如何将<strong>新的总数</strong>与<strong>之前的总数（通过减去当前距离）进行比较的——这确保了我们只在用户跨过阈值的那一刻触发一次</strong>里程碑。</p>
+                        </div>
+                        
+                        <h3>getUserWorkoutCount()</h3>
+                        
+                        <pre><code class="language-solidity">function getUserWorkoutCount() public view onlyRegistered returns (uint256) {
+    return workoutHistory[msg.sender].length;
+}</code></pre>
+                        
+                        <p>最后，一个方便的只读函数。它告诉用户他们到目前为止记录了多少次锻炼。非常适合仪表盘或统计数据显示。</p>
+                        
+                        <h2>总结</h2>
+                        
+                        <p>好了，现在你拥有了一个简单但功能强大的合约。是的，实现看起来很短。但<strong>事件</strong>在幕后承担了所有的繁重工作。每一个动作都被广播到外部世界——让这个合约感觉充满活力。</p>
+                        
+                        <blockquote>
+                            <p>而这才是真正的魔力所在。因为当智能合约和前端像这样协同工作时——你不仅仅是在存储数据……你还在讲述故事。一次次的锻炼，一步步的前进。</p>
+                        </blockquote>
+                        
+                        <div class="signature">
+                            <p>真诚的，</p>
+                            <p>Sneha</p>
+                            <p style="margin-top: 10px; font-size: 1.5rem; opacity: 0.8;">译者：Shuyi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -824,6 +1670,47 @@ struct User {
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+            
+        // Sneha的一封来信模块功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelopeContainer = document.getElementById('envelope-container');
+            const answerModal = document.getElementById('answer-modal');
+            const closeLetter = document.getElementById('close-letter');
+            
+            if (!envelopeContainer || !answerModal || !closeLetter) {
+                return; // 如果元素不存在，直接返回
+            }
+            
+            // 点击信封打开弹窗
+            envelopeContainer.addEventListener('click', function() {
+                envelopeContainer.classList.add('open');
+                
+                // 延迟显示弹窗，让信封翻转动画完成
+                setTimeout(function() {
+                    answerModal.style.display = 'flex';
+                    setTimeout(function() {
+                        answerModal.classList.add('open');
+                    }, 50);
+                }, 400);
+            });
+            
+            // 关闭弹窗
+            closeLetter.addEventListener('click', function() {
+                answerModal.classList.remove('open');
+                
+                setTimeout(function() {
+                    answerModal.style.display = 'none';
+                    envelopeContainer.classList.remove('open');
+                }, 600);
+            });
+            
+            // 点击弹窗外部关闭
+            answerModal.addEventListener('click', function(e) {
+                if (e.target === answerModal) {
+                    closeLetter.click();
                 }
             });
         });

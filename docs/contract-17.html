@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <!-- Markdown渲染库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
     <style>
         :root {
             --primary: #4361ee;
@@ -18,6 +20,10 @@
             --medium: #F8961E;
             --hard: #E71D36;
             --expert: #7209B7;
+            --warm-brown: #8B7355;
+            --parchment: #F5F1E6;
+            --vintage-blue: #6B8E9F;
+            --warm-red: #C44536;
         }
         
         * {
@@ -302,6 +308,519 @@
         .nav-footer-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.3rem;
+        }        
+        /* 参考答案模块样式 - 温暖治愈风格 */
+        .answer-reference {
+            position: relative;
+            margin: 60px 0 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .envelope-container {
+            position: relative;
+            width: 340px;
+            height: 240px;
+            cursor: pointer;
+            perspective: 1200px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(139, 115, 85, 0.2));
+        }
+        
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .envelope-front, .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .envelope-front {
+            background: linear-gradient(135deg, #f9f3e9, #e8dfd1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: -70px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 70px solid #e8dfd1;
+            z-index: 1;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+        }
+        
+        .envelope-flap::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: -170px;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-bottom: 67px solid #f9f3e9;
+        }
+        
+        .envelope-seal {
+            position: absolute;
+            bottom: 25px;
+            right: 35px;
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #C44536, #8B2E24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            border: 2px solid #A52A2A;
+        }
+        
+        .seal-icon {
+            color: #F5F1E6;
+            font-size: 1.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .envelope-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.4rem;
+            color: var(--warm-brown);
+            z-index: 2;
+            position: relative;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+        
+        .envelope-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(139, 115, 85, 0.05) 3px, transparent 3px),
+                radial-gradient(circle at 85% 75%, rgba(139, 115, 85, 0.05) 3px, transparent 3px);
+            background-size: 40px 40px;
+            z-index: 0;
+        }
+        
+        .envelope-back {
+            background: linear-gradient(135deg, #f5f1e6, #e8dfd1);
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .envelope-container:hover .envelope {
+            transform: rotateY(10deg) translateY(-5px);
+        }
+        
+        .envelope-container.open .envelope {
+            transform: rotateY(180deg);
+        }
+        
+        .envelope-hint {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.3rem;
+            color: var(--warm-brown);
+            margin-top: 15px;
+            opacity: 0.9;
+            background: rgba(245, 241, 230, 0.7);
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* 弹窗样式 */
+        .answer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            background: rgba(107, 142, 159, 0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+        
+        .letter-container {
+            width: 90%;
+            max-width: 900px;
+            height: 80vh;
+            background: #F5F1E6;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(107, 142, 159, 0.4);
+            overflow: hidden;
+            transform: scale(0);
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid #d4c9b8;
+        }
+        
+        .answer-modal.open .letter-container {
+            transform: scale(1);
+        }
+        
+        .letter-header {
+            background: linear-gradient(135deg, #8B7355, #6B5A45);
+            padding: 25px 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-bottom: 2px dashed #A5947A;
+        }
+        
+        .letter-title {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: #F5F1E6;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
+        }
+        
+        .letter-subtitle {
+            color: rgba(245, 241, 230, 0.9);
+            font-size: 1.3rem;
+            font-family: 'Gochi Hand', cursive;
+        }
+        
+        .close-letter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(245, 241, 230, 0.2);
+            color: #F5F1E6;
+            border: 1px solid rgba(245, 241, 230, 0.3);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .close-letter:hover {
+            background: rgba(245, 241, 230, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .letter-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #F5F1E6;
+            position: relative;
+        }
+        
+        .letter-body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent 98%, rgba(139, 115, 85, 0.1) 98%),
+                linear-gradient(rgba(139, 115, 85, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        
+        /* MD内容样式 */
+        .md-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .md-section {
+            margin-bottom: 40px;
+        }
+        
+        .md-section h1 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 3rem;
+            color: var(--warm-brown);
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #A5947A;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .md-section h2 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2.2rem;
+            color: var(--warm-brown);
+            margin: 30px 0 15px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .md-section h2::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--warm-red);
+            font-size: 2.5rem;
+        }
+        
+        .md-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .md-tag {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--warm-brown);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-highlight {
+            background: rgba(107, 142, 159, 0.1);
+            border-left: 5px solid var(--vintage-blue);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(107, 142, 159, 0.2);
+        }
+        
+        .md-content pre {
+            background: #2d2a2e;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+        }
+        
+        .md-content .inline-code {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            color: var(--warm-brown);
+            font-size: 0.9em;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content ul, .md-content ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .md-content li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+        
+        .md-content blockquote {
+            border-left: 4px solid var(--vintage-blue);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+            background: rgba(107, 142, 159, 0.05);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .md-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th, .md-content td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .md-content th {
+            background: linear-gradient(135deg, var(--warm-brown), #6B5A45);
+            color: #F5F1E6;
+            font-weight: bold;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.1rem;
+        }
+        
+        .md-content tr:nth-child(even) {
+            background: rgba(139, 115, 85, 0.05);
+        }
+        
+        /* Markdown渲染内容的额外样式 */
+        #markdown-container {
+            line-height: 1.8;
+        }
+        
+        #markdown-container h3 {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 1.8rem;
+            color: var(--warm-brown);
+            margin: 25px 0 15px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        #markdown-container h3::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--vintage-blue);
+            font-size: 1.5rem;
+        }
+        
+        #markdown-container h4 {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--warm-brown);
+            margin: 20px 0 12px 0;
+        }
+        
+        #markdown-container p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        #markdown-container strong {
+            color: var(--warm-brown);
+            font-weight: bold;
+        }
+        
+        #markdown-container a {
+            color: var(--vintage-blue);
+            text-decoration: underline;
+            transition: color 0.3s;
+        }
+        
+        #markdown-container a:hover {
+            color: var(--warm-brown);
+        }
+        
+        #markdown-container hr {
+            border: none;
+            border-top: 2px dashed #A5947A;
+            margin: 30px 0;
+        }
+        
+        #markdown-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        /* Markdown代码块样式 */
+        #markdown-container pre {
+            background: #2d2d2d;
+            border: 1px solid #3a363b;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        #markdown-container pre code {
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #f8f8f2;
+            background: transparent;
+            padding: 0;
+            border: none;
+            display: block;
+            white-space: pre;
+        }
+        
+        /* 内联代码样式 */
+        #markdown-container code:not(pre code) {
+            background: rgba(139, 115, 85, 0.15);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            color: var(--warm-brown);
+            font-size: 0.9em;
+            border: 1px solid rgba(139, 115, 85, 0.3);
+            font-weight: 500;
+        }
+        
+        /* 表格中的代码 */
+        #markdown-container table code {
+            background: rgba(139, 115, 85, 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            color: var(--warm-brown);
+            font-size: 0.85em;
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 40px;
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 2rem;
+            color: var(--warm-brown);
         }
         
         @media (max-width: 768px) {
@@ -319,6 +838,49 @@
             
             .key-points {
                 grid-template-columns: 1fr;
+            }
+            
+            .envelope-container {
+                width: 300px;
+                height: 210px;
+            }
+            
+            .envelope-flap {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 60px solid #e8dfd1;
+            }
+            
+            .envelope-flap::after {
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-bottom: 57px solid #f9f3e9;
+                left: -150px;
+            }
+            
+            .envelope-text {
+                font-size: 2rem;
+            }
+            
+            .answer-modal {
+                padding: 10px;
+            }
+            
+            .letter-container {
+                width: 95%;
+                height: 85vh;
+            }
+            
+            .letter-title {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .md-section h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -748,6 +1310,51 @@ contract MyLogic is Initializable {
                 <div class="nav-footer-title">Oracle - 预言机合约</div>
             </a>
         </div>
+    
+        <!-- Sneha的一封来信模块 -->
+        <div class="answer-reference">
+            <div class="envelope-container" id="envelope-container">
+                <div class="envelope">
+                    <div class="envelope-front">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-pattern"></div>
+                        <div class="envelope-seal">
+                            <i class="fas fa-feather-alt seal-icon"></i>
+                        </div>
+                        <div class="envelope-text">Sneha的一封来信</div>
+                    </div>
+                    <div class="envelope-back">
+                        <div class="envelope-text" style="color: var(--warm-brown);">点击开启</div>
+                    </div>
+                </div>
+            </div>
+            <div class="envelope-hint">点击信封查看Sneha的来信</div>
+        </div>
+    </div>
+
+    <!-- 弹窗 - 内容待后续精细化处理 -->
+    <div class="answer-modal" id="answer-modal">
+        <div class="letter-container">
+            <div class="letter-header">
+                <div class="letter-title">Sneha的一封来信</div>
+                <div class="letter-subtitle">关于第17天的学习指导</div>
+                <button id="close-letter" class="close-letter">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="letter-body">
+                <div id="md-content" class="md-content">
+                    <div id="markdown-container" class="md-section">
+                        <div style="text-align: center; padding: 40px; color: #999;">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                            <p>正在加载Sneha的来信内容...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -762,6 +1369,106 @@ contract MyLogic is Initializable {
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+            
+        // Sneha的一封来信模块功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelopeContainer = document.getElementById('envelope-container');
+            const answerModal = document.getElementById('answer-modal');
+            const closeLetter = document.getElementById('close-letter');
+            const markdownContainer = document.getElementById('markdown-container');
+            
+            if (!envelopeContainer || !answerModal || !closeLetter || !markdownContainer) {
+                return; // 如果元素不存在，直接返回
+            }
+            
+            // 配置marked.js渲染选项
+            if (typeof marked !== 'undefined') {
+                marked.setOptions({
+                    highlight: function(code, lang) {
+                        if (lang && hljs.getLanguage(lang)) {
+                            try {
+                                return hljs.highlight(code, { language: lang }).value;
+                            } catch (err) {}
+                        }
+                        return hljs.highlightAuto(code).value;
+                    },
+                    breaks: true,
+                    gfm: true
+                });
+            }
+            
+            // 嵌入的Markdown内容（使用JSON.parse解析，确保特殊字符正确转义）
+            // 由于内容很长（1049行），这里将完整内容嵌入
+            const embeddedMarkdownJsonString = "# 合约可升级性-Upgradeable Contracts\\n\\nDay: Day 17\\nID: 17\\n译者: unisy\\n难度等级: 中级\\n\\n![deepseek_mermaid_20251018_4fe96b.svg](%E5%90%88%E7%BA%A6%E5%8F%AF%E5%8D%87%E7%BA%A7%E6%80%A7-Upgradeable%20Contracts%2028c06421268880c5985cf5bbb9219048/deepseek_mermaid_20251018_4fe96b.svg)\\n\\n想象一下，你已经将一个智能合约推向市场。它运行顺畅，用户纷纷订阅，ETH不断流入……然后，突然，砰地一声💥——你发现了一个漏洞。或者你想增加新功能。又或者你意识到自己的逻辑完全可以更高效。\\n\\n但问题来了：\\n\\n> 智能合约一旦部署，就无法更改。\\n> \\n\\n至少传统意义上不行。\\n\\n在Web2中，如果你修复漏洞或添加功能，只需将更新推送到服务器即可。但在Web3呢？智能合约是不可更改的。一旦部署，就被锁定。\\n\\n除非……你将它设计成**可升级的**。\\n\\n---\\n\\n## 🔄 可升级的真正含义？\\n\\n当我们说**可升级合约**时，我们指的是将**存储**与**逻辑**分离。\\n\\n其思想是：\\n\\n-你部署一个存储**数据**的合约——我们称之为**代理（proxy）**。\\n\\n-你部署另一个包含**逻辑**的合约——这是实际的代码。\\n\\n-代理使用 `delegatecall` 来执行外部合约的逻辑——但使用的是**它自己的存储**。\\n\\n所以，如果你需要改变行为，你不必动代理——你只需将它指向一个新的逻辑合约。所有数据都保持安全。\\n\\n很酷，对吧？\\n\\n---\\n\\n## 🧰 我们将构建什么：一个可升级的订阅系统\\n\\n让我们通过构建一个**模块化订阅管理器**（你可以在 SaaS 应用或 dApp 中使用的那种）来将这个想法变为现实。\\n\\nHere's the game plan:\\n\\n### 1. **`SubscriptionStorageLayout.sol`**\\n\\n这是蓝图。它定义了：\\n\\n- 谁是所有者\\n- 逻辑合约的地址在哪里\\n- 实际的存储布局：用户订阅、套餐价格、持续时间等。\\n\\n可以把它想象成代理和逻辑合约都能理解的共享大脑。\\n\\n---\\n\\n### 2. **`SubscriptionStorage.sol`**\\n\\n这是**代理合约**：\\n\\n- 它拥有数据它拥有数据\\n- 它通过 `delegatecall` 将所有逻辑委托给外部合约执行\\n- 它可以随时升级到新的逻辑合约\\n\\n所以用户与此合约交互——但在幕后，它只是将用户的调用转发给它当前指向的任何逻辑合约。\\n\\n---\\n\\n### 3. **`SubscriptionLogicV1.sol`**\\n\\n我们逻辑的第一个版本：\\n\\n- 添加订阅套餐\\n- 让用户订阅\\n- 检查用户是否活跃\\n\\n简单、清晰——并且完美运行。\\n\\n---\\n\\n### 4. **`SubscriptionLogicV2.sol`**\\n\\n一个具有**额外功能**的升级版本：\\n\\n- V1 的所有功能 ✅\\n- 但现在你可以暂停或恢复用户账户 🔒\\n\\n当我们准备升级时，我们将把代理指向这个合约。\\n\\n---\\n\\n## 🎯 为什么这种设置很强大\\n\\n假设你有成千上万的用户订阅了。他们的订阅信息保存在代理中。然后你意识到：\\\"我想让用户可以暂停他们的订阅。\\\"\\n\\n在一个不可升级的世界里，你会被卡住。你要么：\\n\\n- 部署一个新合约并丢失所有旧数据，或者\\n- 迁移所有数据——这很麻烦且对用户不友好\\n\\n但在这里呢？\\n\\n你只需编写一个带有暂停/恢复功能的新逻辑合约…然后**调用 `upgradeTo()`**。\\n\\n无需迁移。无需停机。不影响用户。\\n\\n---\\n\\n**所以在接下来的部分，我们将逐个合约地讲解——解释它的作用、工作原理，以及为什么这种架构是可升级安全且节省 gas 的。**\\n\\n让我们从共享布局开始。\\n\\n## 📦  `SubscriptionStorageLayout.sol` – 共享内存蓝图\\n\\n```solidity\\n \\n// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\ncontract SubscriptionStorageLayout {\\n    address public logicContract;\\n    address public owner;\\n\\n    struct Subscription {\\n        uint8 planId;\\n        uint256 expiry;\\n        bool paused;\\n    }\\n\\n    mapping(address => Subscription) public subscriptions;\\n    mapping(uint8 => uint256) public planPrices;\\n    mapping(uint8 => uint256) public planDuration;\\n}\\n\\n```\\n\\n### ✅ 合约声明\\n\\n```solidity\\n \\ncontract SubscriptionStorageLayout {\\n\\n```\\n\\n这是一个独立的合约，**只保存状态变量**——它不包含任何函数（除了后面继承的逻辑）。其思想是**将存储与逻辑分离**，这是代理升级模式的关键部分。\\n\\n这个布局合约就像一个**蓝图**，定义了代理和逻辑合约的**内存结构**。\\n\\n通过导入和继承这个布局，两个合约可以**共享和操作相同的数据**，前提是它们的内存布局顺序相同——这对于 `delegatecall` 的正确工作至关重要。\\n\\n---\\n\\n### 🔑 `logicContract`\\n\\n```solidity\\n \\n    address public logicContract;\\n\\n```\\n\\n- 这存储了**当前实现合约的地址**——即包含实际功能的逻辑合约。\\n- 代理合约用它来知道**在哪里使用 `delegatecall` 转发调用**。\\n- 你以后可以通过代理中的 `upgradeTo()` 函数更新这个地址，以切换到新版本的逻辑。\\n\\n---\\n\\n### 👑 `owner`\\n\\n```solidity\\n \\n    address public owner;\\n\\n```\\n\\n- 这记录了合约的**管理员或部署者**——唯一可以升级到新逻辑版本的人。\\n- 你以后可以扩展它，使用基于角色的访问控制或多签所有权以提高安全性。\\n\\n---\\n\\n### 📦  `Subscription` 结构体\\n\\n```solidity\\n \\n    struct Subscription {\\n        uint8 planId;\\n        uint256 expiry;\\n        bool paused;\\n    }\\n\\n```\\n\\n我们来解析一下：\\n\\n- `uint8 planId`:\\n    \\n    用户套餐的标识符。一个小的数字，如 `1`, `2`, 或 `3`，代表不同的层级（例如，基础版、专业版、高级版）。\\n    \\n    → 我们使用 `uint8` 来**节省 gas**（与 `uint256` 相比）。\\n    \\n- `uint256 expiry`:\\n    \\n    一个时间戳，指示订阅何时到期。\\n    \\n    → 我们在这里使用 `uint256`，因为 Unix 时间戳是大数字。\\n    \\n- `bool paused`:\\n    \\n    一个开关，用于**在不删除的情况下**临时停用用户的订阅。\\n    \\n    → 可用于允许用户暂停或恢复他们的套餐。\\n    \\n\\n---\\n\\n### 🗂 订阅映射\\n\\n```solidity\\n \\n    mapping(address => Subscription) public subscriptions;\\n\\n```\\n\\n- 每个用户（`address`）都有自己的 `Subscription` 对象。\\n- 这允许我们**跟踪每个用户的有效套餐**、其到期时间和暂停状态。\\n\\n```solidity\\n \\n    mapping(uint8 => uint256) public planPrices;\\n\\n```\\n\\n- 这定义了每个套餐需要多少 ETH。\\n- 例如，`planPrices[1] = 0.01 ether`, `planPrices[2] = 0.05 ether`。\\n\\n```solidity\\n \\n    mapping(uint8 => uint256) public planDuration;\\n\\n```\\n\\n- 这告诉我们每个套餐**持续多久**（以秒为单位）。\\n- 例如，`planDuration[1] = 30 days`, `planDuration[2] = 365 d`\\n\\n## 🧭  `SubscriptionStorage.sol` – 代理合约\\n\\n```solidity\\n \\n// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\nimport \\\"./SubscriptionStorageLayout.sol\\\";\\n\\ncontract SubscriptionStorage is SubscriptionStorageLayout {\\n    modifier onlyOwner() {\\n        require(msg.sender == owner, \\\"Not owner\\\");\\n        _;\\n    }\\n\\n    constructor(address _logicContract) {\\n        owner = msg.sender;\\n        logicContract = _logicContract;\\n    }\\n\\n    function upgradeTo(address _newLogic) external onlyOwner {\\n        logicContract = _newLogic;\\n    }\\n\\n    fallback() external payable {\\n        address impl = logicContract;\\n        require(impl != address(0), \\\"Logic contract not set\\\");\\n\\n        assembly {\\n            calldatacopy(0, 0, calldatasize())\\n            let result := delegatecall(gas(), impl, 0, calldatasize(), 0, 0)\\n            returndatacopy(0, 0, returndatasize())\\n\\n            switch result\\n            case 0 { revert(0, returndatasize()) }\\n            default { return(0, returndatasize()) }\\n        }\\n    }\\n\\n    receive() external payable {}\\n}\\n\\n```\\n\\n### 头部\\n\\n```solidity\\n \\n// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\nimport \\\"./SubscriptionStorageLayout.sol\\\";\\n\\n```\\n\\n- 通常的许可证和版本编译指令。\\n- 我们**导入**共享的存储布局——这确保了代理与逻辑合约具有相同的变量结构。 如果你还记得，`delegatecall` 意味着**代码从逻辑合约运行但存储属于代理**，所以两者必须共享完全相同的布局。\\n\\n---\\n\\n### 🔧 合约声明\\n\\n```solidity\\n \\ncontract SubscriptionStorage is SubscriptionStorageLayout {\\n\\n```\\n\\n我们定义了一个名为 `SubscriptionStorage` 的合约。这不是你的业务逻辑所在的地方——这是**用户将与之交互的合约**，但它会**将所有实际工作委托**给逻辑合约。\\n\\n它**继承**自 `SubscriptionStorageLayout`，意味着它现在拥有：\\n\\n- `logicContract`（指向当前逻辑的指针）\\n- `owner`\\n- 所有的映射（`subscriptions`, `planPrices`, `planDuration`）\\n\\n---\\n\\n### 🔐 所有者检查修饰器\\n\\n```solidity\\n \\n    modifier onlyOwner() {\\n        require(msg.sender == owner, \\\"Not owner\\\");\\n        _;\\n    }\\n\\n```\\n\\n- 这个修饰器用于**保护敏感函数**——比如升级合约。\\n- 只有部署者（或合约的所有者）可以更改正在使用的逻辑。\\n\\n---\\n\\n### 🏗️ 构造函数\\n\\n```solidity\\n \\n    constructor(address _logicContract) {\\n        owner = msg.sender;\\n        logicContract = _logicContract;\\n    }\\n\\n```\\n\\n这是在代理首次部署时**运行一次**的函数。\\n\\n- `owner = msg.sender`: 部署者成为所有者。\\n- `logicContract = _logicContract`: 你传入初始逻辑合约的地址——通常是 `SubscriptionLogicV1`。\\n\\n所以现在你的代理知道当用户开始与之交互时使用哪个逻辑。\\n\\n---\\n\\n### 🔄 逻辑升级\\n\\n```solidity\\n \\n    function upgradeTo(address _newLogic) external onlyOwner {\\n        logicContract = _newLogic;\\n    }\\n\\n```\\n\\n这个函数使得整个可升级架构成为可能。\\n\\n- 它将 `logicContract` 更新为指向一个**新合约**（如 `SubscriptionLogicV2`）。\\n- 受 `onlyOwner` 保护，因此只有部署者可以升级。\\n- 当这种情况发生时，**存储保持不变**，但所有新的交互将使用新的逻辑。\\n\\n🧠 为什么这很强大？\\n\\n你可以在**不触及用户数据或要求人们重新部署**的情况下修复错误、添加功能或重构代码。\\n\\n---\\n\\n### ✨Fallback 函数 – 魔法发生的地方\\n\\n```solidity\\n \\n    fallback() external payable {\\n        address impl = logicContract;\\n        require(impl != address(0), \\\"Logic contract not set\\\");\\n\\n        assembly {\\n            calldatacopy(0, 0, calldatasize())\\n            let result := delegatecall(gas(), impl, 0, calldatasize(), 0, 0)\\n            returndatacopy(0, 0, returndatasize())\\n\\n            switch result\\n            case 0 { revert(0, returndatasize()) }\\n            default { return(0, returndatasize()) }\\n        }\\n    }\\n\\n```\\n\\n这是整个代理设置中**最关键的部分**。\\n\\n让我们分解一下：\\n\\n### 🧭 什么是 `fallback()`？\\n\\n- 它是一个特殊函数，当用户调用此代理合约中**不存在的函数**时会被触发。\\n- 这很完美，因为这个代理**自身没有业务逻辑**。\\n- 所以，每次用户尝试与我们其他合约中的函数(如 `subscribe()` 或 `isActive()`)交互时，都会触发这个函数。.\\n\\n### 🛠️ 内联汇编做了什么？\\n\\n让我们一步步解码它：\\n\\n```solidity\\n \\naddress impl = logicContract;\\nrequire(impl != address(0), \\\"Logic contract not set\\\");\\n\\n```\\n\\n- 确保已设置逻辑合约。\\n- 将其存储在 `impl` 中。\\n\\n---\\n\\n```solidity\\n \\ncalldatacopy(0, 0, calldatasize())\\n\\n```\\n\\n- 将**输入数据**（函数签名 + 参数）复制到内存槽 `0`。\\n\\n```solidity\\n \\nlet result := delegatecall(gas(), impl, 0, calldatasize(), 0, 0)\\n\\n```\\n\\n- 这是主要部分。\\n- 我们在说：\\\"嘿，在逻辑合约（`impl`）上运行这个输入…\\\"\\n- `delegatecall` 运行逻辑代码，但使用**此代理的存储**和**此代理的上下文**。\\n\\n---\\n\\n```solidity\\n \\nreturndatacopy(0, 0, returndatasize())\\n\\n```\\n\\n- 将逻辑合约执行返回的任何内容复制到内存中。\\n- 可能是返回值或错误消息。\\n\\n```solidity\\n \\nswitch result\\ncase 0 { revert(0, returndatasize()) }\\ndefault { return(0, returndatasize()) }\\n\\n```\\n\\n- 如果逻辑调用**失败**，我们回退（revert）并返回错误。\\n- 否则，我们将结果返回给原始调用者——就像代理自己执行了它一样。\\n\\n---\\n\\n### 💸 `receive()` 函数\\n\\n```solidity\\n \\n    receive() external payable {}\\n\\n```\\n\\n- 一个安全网，允许代理**接受原始 ETH 转账**。\\n- 在这里你可能不需要它，但当合约直接接收 ETH 时（例如，在支付期间）通常很有用。\\n\\n## 🧩  `SubscriptionLogicV1.sol` – 第一个逻辑合约\\n\\n```solidity\\n \\n// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\nimport \\\"./SubscriptionStorageLayout.sol\\\";\\n\\ncontract SubscriptionLogicV1 is SubscriptionStorageLayout {\\n    function addPlan(uint8 planId, uint256 price, uint256 duration) external {\\n        planPrices[planId] = price;\\n        planDuration[planId] = duration;\\n    }\\n\\n    function subscribe(uint8 planId) external payable {\\n        require(planPrices[planId] > 0, \\\"Invalid plan\\\");\\n        require(msg.value >= planPrices[planId], \\\"Insufficient payment\\\");\\n\\n        Subscription storage s = subscriptions[msg.sender];\\n        if (block.timestamp < s.expiry) {\\n            s.expiry += planDuration[planId];\\n        } else {\\n            s.expiry = block.timestamp + planDuration[planId];\\n        }\\n\\n        s.planId = planId;\\n        s.paused = false;\\n    }\\n\\n    function isActive(address user) external view returns (bool) {\\n        Subscription memory s = subscriptions[user];\\n        return (block.timestamp < s.expiry && !s.paused);\\n    }\\n}\\n\\n```\\n\\n## 🧩 `SubscriptionLogicV1.sol` – 第一个逻辑合约\\n\\n```solidity\\n  \\n// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\nimport \\\"./SubscriptionStorageLayout.sol\\\";\\n\\n```\\n\\n- 标准的 SPDX 许可证和 Solidity 版本。\\n- 我们**导入共享的存储布局**，以便这个逻辑合约可以访问**相同的状态变量**（如 `subscriptions`, `planPrices`, `planDuration` 等）。\\n- 这**至关重要**，因为所有存储更新都将发生在代理的内存中（通过 `delegatecall`），所以两个合约必须共享完全相同的内存布局。\\n\\n---\\n\\n```solidity\\n  \\ncontract SubscriptionLogicV1 is SubscriptionStorageLayout {\\n\\n```\\n\\n- 我们定义逻辑合约并继承 `SubscriptionStorageLayout` 以便在通过委托调用（delegatecall）时，我们可以访问代理的存储。\\n\\n这个合约处理：\\n\\n- 添加新套餐\\n- 用户订阅\\n- 检查活跃状态\\n\\n现在，让我们分解每个函数。\\n\\n---\\n\\n### 1️⃣ `addPlan()`\\n\\n```solidity\\n  \\nfunction addPlan(uint8 planId, uint256 price, uint256 duration) external {\\n    planPrices[planId] = price;\\n    planDuration[planId] = duration;\\n}\\n\\n```\\n\\n🧠 **它的作用：**\\n\\n- 允许所有者（或任何调用它的人）注册一个新的订阅套餐。\\n- 每个 `planId` 代表一个唯一的套餐（例如 `1 = 基础版`, `2 = 专业版`）。\\n- 我们将套餐的价格存储在 `planPrices[planId]` 中。\\n- 我们还使用 `planDuration[planId]` 设置套餐的持续时间。\\n\\n📌 **为什么这有用：**\\n\\n- 这使得订阅系统可定制——你可以定义具有不同定价层级和持续时间的多个套餐。\\n- 由于这个合约可以升级，套餐模型也可以随着时间的推移而发展。\\n\\n---\\n\\n### 2️⃣ `subscribe()`\\n\\n```solidity\\n  \\nfunction subscribe(uint8 planId) external payable {\\n    require(planPrices[planId] > 0, \\\"Invalid plan\\\");\\n    require(msg.value >= planPrices[planId], \\\"Insufficient payment\\\");\\n\\n    Subscription storage s = subscriptions[msg.sender];\\n    if (block.timestamp < s.expiry) {\\n        s.expiry += planDuration[planId];\\n    } else {\\n        s.expiry = block.timestamp + planDuration[planId];\\n    }\\n\\n    s.planId = planId;\\n    s.paused = false;\\n}\\n\\n```\\n\\n🧠 **它的作用：**\\n\\n- 让用户通过发送 ETH 来**订阅**特定的套餐。\\n- 首先，它检查：\\n    - 套餐是否有效 (`planPrices[planId] > 0`)\\n    - 用户是否发送了足够的 ETH (`msg.value >= price`)\\n- 然后我们从 `subscriptions` 映射中获取调用者的订阅记录。\\n\\n📦 两种情况：\\n\\n1. 如果用户还有剩余时间 (`block.timestamp < s.expiry`)：\\n    - 将新的持续时间添加到当前到期时间。这让他们可以**延长**订阅。\\n2.  如果订阅已过期：\\n    - 将到期时间重置为 `当前时间 + 持续时间`。这是一个**全新的订阅**。\\n\\n然后我们：\\n\\n- 设置 `s.planId = planId` 来记录他们选择的套餐。\\n- 通过设置 `s.paused = false` 来取消暂停订阅。\\n\\n📌**为什么这很聪明：**\\n\\n- 它简单且节省 gas。\\n- 它在一个函数中支持新用户和现有用户。\\n- 它会自动\\\"恢复\\\"已暂停的订阅（对于 V2 等功能很有用）。\\n\\n---\\n\\n### 3️⃣ `isActive()`\\n\\n```solidity\\n  \\nfunction isActive(address user) external view returns (bool) {\\n    Subscription memory s = subscriptions[user];\\n    return (block.timestamp < s.expiry && !s.paused);\\n}\\n\\n```\\n\\n🧠 **它的作用：**\\n\\n- 让任何人检查用户的订阅当前是否活跃。\\n\\n它返回 `true` **仅当**：\\n\\n- 当前时间在订阅到期之前\\n- 并且订阅未暂停\\n\\n📌 **为什么这很重要：**\\n\\n- 这是你将在以下场景中使用的只读辅助函数：\\n    - 前端（显示订阅状态）\\n    - 对高级功能进行门控访问\\n    - 显示续订提示\\n\\n## 🚀`SubscriptionLogicV2.sol` – 升级版（带有暂停/恢复功能）\\n\\n```solidity\\n \\n// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\nimport \\\"./SubscriptionStorageLayout.sol\\\";\\n\\ncontract SubscriptionLogicV2 is SubscriptionStorageLayout {\\n    function addPlan(uint8 planId, uint256 price, uint256 duration) external {\\n        planPrices[planId] = price;\\n        planDuration[planId] = duration;\\n    }\\n\\n    function subscribe(uint8 planId) external payable {\\n        require(planPrices[planId] > 0, \\\"Invalid plan\\\");\\n        require(msg.value >= planPrices[planId], \\\"Insufficient payment\\\");\\n\\n        Subscription storage s = subscriptions[msg.sender];\\n        if (block.timestamp < s.expiry) {\\n            s.expiry += planDuration[planId];\\n        } else {\\n            s.expiry = block.timestamp + planDuration[planId];\\n        }\\n\\n        s.planId = planId;\\n        s.paused = false;\\n    }\\n\\n    function isActive(address user) external view returns (bool) {\\n        Subscription memory s = subscriptions[user];\\n        return (block.timestamp < s.expiry && !s.paused);\\n    }\\n\\n    function pauseAccount(address user) external {\\n        subscriptions[user].paused = true;\\n    }\\n\\n    function resumeAccount(address user) external {\\n        subscriptions[user].paused = false;\\n    }\\n}\\n\\n```\\n\\n## 🚀 `SubscriptionLogicV2.sol`  – 升级版（带有暂停/恢复功能）\\n\\n```solidity\\n  \\n// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\nimport \\\"./SubscriptionStorageLayout.sol\\\";\\n\\n```\\n\\n这个设置和之前一样——我们导入共享的存储布局，以便在 `delegatecall` 期间可以**安全地使用代理的存储**。\\n\\n---\\n\\n```solidity\\n  \\ncontract SubscriptionLogicV2 is SubscriptionStorageLayout {\\n\\n```\\n\\n这定义了我们逻辑合约的第二个版本。通过继承布局，它可以完全访问与代理完全相同的存储结构。\\n\\n现在让我们逐行讲解每个函数。\\n\\n---\\n\\n### 1️⃣ `addPlan()`\\n\\n```solidity\\n  \\nfunction addPlan(uint8 planId, uint256 price, uint256 duration) external {\\n    planPrices[planId] = price;\\n    planDuration[planId] = duration;\\n}\\n\\n```\\n\\n✅ **它的作用：**\\n\\n- 添加或更新订阅套餐。\\n- 使用 `planId` 作为套餐的标识符。\\n- 存储它的成本和持续时间。\\n\\n🧠 **与 V1 相同**——我们这里没有改变任何东西，因为它已经工作得很好。\\n\\n---\\n\\n### 2️⃣ `subscribe()`\\n\\n```solidity\\n  \\nfunction subscribe(uint8 planId) external payable {\\n    require(planPrices[planId] > 0, \\\"Invalid plan\\\");\\n    require(msg.value >= planPrices[planId], \\\"Insufficient payment\\\");\\n\\n    Subscription storage s = subscriptions[msg.sender];\\n    if (block.timestamp < s.expiry) {\\n        s.expiry += planDuration[planId];\\n    } else {\\n        s.expiry = block.timestamp + planDuration[planId];\\n    }\\n\\n    s.planId = planId;\\n    s.paused = false;\\n}\\n\\n```\\n\\n✅ **它的作用：**\\n\\n- 用户调用此函数来订阅或续订他们的套餐。\\n- 如果套餐仍然有效，则延长到期时间。\\n- 如果已过期，则从现在开始设置一个新的到期时间。\\n- 它还确保订阅是**未暂停的**——如果用户休息后回来，这很有用。\\n\\n🧠 同样，这与 V1 相同——不需要改动已经工作的部分。\\n\\n---\\n\\n### 3️⃣ `isActive()`\\n\\n```solidity\\n  \\nfunction isActive(address user) external view returns (bool) {\\n    Subscription memory s = subscriptions[user];\\n    return (block.timestamp < s.expiry && !s.paused);\\n}\\n\\n```\\n\\n✅ **它的作用：**\\n\\n- 返回 `true` 如果：\\n    - 订阅尚未过期\\n    - 订阅未暂停\\n\\n🧠 被前端应用程序或其他智能合约用来**检查是否有权使用高级功能**。\\n\\n---\\n\\n### 🆕 4️⃣ `pauseAccount()`\\n\\n```solidity\\n  \\nfunction pauseAccount(address user) external {\\n    subscriptions[user].paused = true;\\n}\\n\\n```\\n\\n🧠 **它的作用：**\\n\\n- 手动暂停用户的账户。\\n- 可以由管理员使用，或者在未来的版本中委托给用户自己使用。\\n\\n📌 **为什么这很重要：**\\n\\n- 有些用户可能想暂时冻结他们的订阅。\\n- 或者，作为管理员，你可能由于滥用或付款失败而想要暂停一个账户。\\n\\n🧪**它不触及到期时间**——所以时钟仍在滴答走，但账户被阻止访问。\\n\\n---\\n\\n### 🆕 5️⃣ `resumeAccount()`\\n\\n```solidity\\n  \\nfunction resumeAccount(address user) external {\\n    subscriptions[user].paused = false;\\n}\\n\\n```\\n\\n✅  **它的作用：**\\n\\n- 重新启用已暂停的订阅。\\n\\n🧠 在以下情况下有用：\\n\\n- 用户想要自己取消暂停\\n- 管理员在解决问题后想要重新启用\\n\\n这简单地将 `paused` 标志翻回 `false`，恢复访问。\\n\\n# 🛠️ 运行可升级订阅管理器（在 Remix 中）\\n\\n我们将使用 `delegatecall` 部署一个基于代理的可升级逻辑订阅系统。按照以下步骤在 **Remix** 中进行测试。\\n\\n---\\n\\n## 🔧 步骤 1：创建 3 个合约\\n\\n打开 Remix，然后：\\n\\n1.  在**文件资源管理器**中，创建这 3 个新文件：\\n    - `SubscriptionStorage.sol`\\n    - `SubscriptionLogicV1.sol`\\n    - `SubscriptionLogicV2.sol`\\n2. 将前面解析中各自的代码粘贴到每个文件中。\\n\\n---\\n\\n## 🧱 步骤 2：编译所有合约\\n\\n1.  点击 **Solidity Compiler 标签**（左侧边栏 – 第二个图标）。\\n2. 确保编译器版本设置为 `0.8.x`（0.8 范围内的任何版本）。\\n3. 编译所有三个合约：\\n    - `SubscriptionStorage.sol`\\n    - `SubscriptionLogicV1.sol`\\n    - `SubscriptionLogicV2.sol`\\n\\n✅ 你应该看到每个都显示 `Compilation successful`。\\n\\n---\\n\\n## 🚀 步骤 3：部署逻辑合约 (V1)\\n\\n1. 转到 **Deploy & Run Transactions** 标签（第三个图标）。\\n2.  在 **Contract** 下拉菜单中，选择 `SubscriptionLogicV1`。\\n3. 点击 **Deploy**。\\n4. 复制部署的合约地址——下一步你会需要它。\\n\\n---\\n\\n## 📦 步骤 4：部署代理合约\\n\\n1. 在 **Contract** 下拉菜单中，选择 `SubscriptionStorage`。\\n2. 在 `Deploy` 按钮旁边的输入框中，粘贴 **V1 逻辑地址**（带引号）：\\n    \\n    ```\\n    \\n    \\\"0x1234...abcd\\\"\\n    \\n    ```\\n    \\n3. 点击 **Deploy**。\\n\\n🎉 你现在有了一个连接到你的第一个逻辑合约的代理！\\n\\n- `logicV1 = <address of SubscriptionLogicV1>`\\n- `proxy = <address of SubscriptionStorage>`\\n\\n---\\n\\n## 🧠 步骤 5：通过代理与 V1 交互\\n\\n由于代理本身不暴露任何逻辑函数，Remix 不会自动显示像 `addPlan()` 或 `subscribe()` 这样的按钮。\\n\\n以下是使用 **V1 ABI** 进行交互的方法：\\n\\n### ### ➕➕ 使用 V1 ABI 加载代理\\n\\n1.  在 Deploy 标签页中，向下滚动到 **\\\"At Address\\\"** 部分。\\n2. 确保 **Contract** 下拉菜单中选择了 `SubscriptionLogicV1`。\\n3. 在输入框中，粘贴你部署的**代理地址**。\\n4. 点击 **At Address**。\\n5. 现在v1实例已经部署完毕，现在你可以交互它了。\\n\\n✅ 你现在会看到 V1 的函数，如 `addPlan()` 和 `subscribe()`——但它们是通过 `delegatecall` **通过代理执行的**。\\n\\n---\\n\\n## 💰 步骤 6：测试订阅流程 (V1)\\n\\n过加载的代理界面尝试这些操作：\\n\\n1. 调用：\\n    \\n    ```solidity\\n    \\n    addPlan(1, 10000000000000000, 60)\\n    \\n    ```\\n    \\n    → 添加一个套餐：**0.01 ETH 持续 60 秒**\\n    \\n2. 调用：\\n    \\n    ```solidity\\n    \\n    subscribe(1)\\n    \\n    ```\\n    \\n    → 确保**发送 0.01 ETH** 随交易一起\\n    \\n3. 调用：\\n    \\n    ```solidity\\n    \\n    isActive(<your wallet address>)\\n    \\n    ```\\n    \\n    → 应该返回 `true`\\n    \\n\\n✅ 所有这些逻辑都来自 `SubscriptionLogicV1`，但是**通过代理执行的**。\\n\\n---\\n\\n## 🔄 步骤 7：升级到 V2 逻辑\\n\\n1. 在 **Contract** 下拉菜单中，选择 `SubscriptionLogicV2`。\\n2. 点击 **Deploy**。\\n3. 复制部署的 V2 地址：\\n    \\n    ```\\n    \\n    logicV2 = <address of SubscriptionLogicV2>\\n    \\n    ```\\n    \\n4. 向下滚动到你已部署的 **SubscriptionStorage** 实例。\\n5. 调用 `upgradeTo` 函数，参数是 V极速地址：\\n    \\n    ```solidity\\n    \\n    upgradeTo(logicV2)\\n    \\n    ```\\n    \\n    ✅ 这告诉代理现在使用 V2 合约来处理逻辑。\\n    \\n\\n---\\n\\n## 🧪 步骤 8：通过同一个代理使用 V2 功能\\n\\n你现在可以调用**新的暂停/恢复功能**——仍然使用同一个代理地址。\\n\\n1. 再次向下滚动到 **\\\"At Address\\\"** 部分。\\n2. 在 **Contract** 下拉菜单中，选择 `SubscriptionLogicV2`。\\n3. 再次粘贴你的**代理地址**并点击 **At Address**。\\n4. 现在，你将看到 V2 的一个新实例。\\n\\n你现在应该看到额外的函数，如：\\n\\n- `pauseAccount(address)`\\n- `resumeAccount(address)`\\n\\n### 测试它们：\\n\\n1. 调用：\\n    \\n    ```solidity\\n    \\n    pauseAccount(<your wallet address>)\\n    \\n    ```\\n    \\n2. 然后调用：\\n    \\n    ```solidity\\n    \\n    isActive(<your wallet address>)\\n    \\n    ```\\n    \\n    → 应该返回 `false`\\n    \\n3. 调用：\\n    \\n    ```solidity\\n    \\n    resumeAccount(<your wallet address>)\\n    \\n    ```\\n    \\n    → `isActive()` 现在应该再次返回 `true`\\n    \\n\\n---\\n\\n## 🎉你做到了！\\n\\n你刚刚：\\n\\n- 部署了一个逻辑合约 (V1)\\n- 通过代理路由调用\\n- 升级到了一个新的逻辑合约 (V2)\\n- 在同一存储中保留了所有数据\\n\\n欢迎来到**可升级智能合约**的世界——OpenZeppelin 的 UUPS 和代理系统等巨头使用的相同模式。";
+            const embeddedMarkdown = JSON.parse('"' + embeddedMarkdownJsonString + '"');
+            
+            // SVG 内容（嵌入的 deepseek_mermaid 图表）
+            const svgContent = '<?xml version="1.0" encoding="UTF-8"?><svg xmlns:xlink="http://www.w3.org/1999/xlink" id="mermaid-svg-61" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 100%;" viewBox="-25.313771057128907 -25.313771057128907 2183.256448364258 556.9029632568358" role="graphics-document document" aria-roledescription="flowchart-v2" height="100%"><style>#mermaid-svg-61{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-svg-61 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-svg-61 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-svg-61 .error-icon{fill:#552222;}#mermaid-svg-61 .error-text{fill:#552222;stroke:#552222;}#mermaid-svg-61 .edge-thickness-normal{stroke-width:1px;}#mermaid-svg-61 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-svg-61 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-svg-61 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-svg-61 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-svg-61 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-svg-61 .marker{fill:#333333;stroke:#333333;}#mermaid-svg-61 .marker.cross{stroke:#333333;}#mermaid-svg-61 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-svg-61 p{margin:0;}#mermaid-svg-61 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-svg-61 .cluster-label text{fill:#333;}#mermaid-svg-61 .cluster-label span{color:#333;}#mermaid-svg-61 .cluster-label span p{background-color:transparent;}#mermaid-svg-61 .label text,#mermaid-svg-61 span{fill:#333;color:#333;}#mermaid-svg-61 .node rect,#mermaid-svg-61 .node circle,#mermaid-svg-61 .node ellipse,#mermaid-svg-61 .node polygon,#mermaid-svg-61 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mermaid-svg-61 .rough-node .label text,#mermaid-svg-61 .node .label text,#mermaid-svg-61 .image-shape .label,#mermaid-svg-61 .icon-shape .label{text-anchor:middle;}#mermaid-svg-61 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-svg-61 .rough-node .label,#mermaid-svg-61 .node .label,#mermaid-svg-61 .image-shape .label,#mermaid-svg-61 .icon-shape .label{text-align:center;}#mermaid-svg-61 .node.clickable{cursor:pointer;}#mermaid-svg-61 .root .anchor path{fill:#333333!important;stroke-width:0;stroke:#333333;}#mermaid-svg-61 .arrowheadPath{fill:#333333;}#mermaid-svg-61 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mermaid-svg-61 .flowchart-link{stroke:#333333;fill:none;}#mermaid-svg-61 .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaid-svg-61 .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#mermaid-svg-61 .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#mermaid-svg-61 .labelBkg{background-color:rgba(232, 232, 232, 0.5);}#mermaid-svg-61 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mermaid-svg-61 .cluster text{fill:#333;}#mermaid-svg-61 .cluster span{color:#333;}#mermaid-svg-61 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mermaid-svg-61 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-svg-61 rect.text{fill:none;stroke-width:0;}#mermaid-svg-61 .icon-shape,#mermaid-svg-61 .image-shape{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaid-svg-61 .icon-shape p,#mermaid-svg-61 .image-shape p{background-color:rgba(232,232,232, 0.8);padding:2px;}#mermaid-svg-61 .icon-shape rect,#mermaid-svg-61 .image-shape rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#mermaid-svg-61 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-svg-61 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-svg-61 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="mermaid-svg-61_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-svg-61_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-svg-61_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mermaid-svg-61_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mermaid-svg-61_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-svg-61_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M1145.984,39.064L969.32,47.053C792.656,55.042,439.328,71.021,262.664,82.511C86,94,86,101,86,104.5L86,108" id="L_UpgradeHub系统_存储布局合约_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M86,166L86,170.167C86,174.333,86,182.667,86.073,191.667C86.146,200.667,86.293,210.334,86.366,215.167L86.439,220" id="L_存储布局合约_定义_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1145.984,48.714L1104.175,55.095C1062.365,61.476,978.746,74.238,892.257,87.574C805.768,100.911,716.409,114.822,671.73,121.777L627.05,128.733" id="L_UpgradeHub系统_代理合约_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M499.098,150.191L461.415,156.992C423.732,163.794,348.366,177.397,310.683,187.698C273,198,273,205,273,208.5L273,212" id="L_代理合约_逻辑升级_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M273,270L273,274.167C273,278.333,273,286.667,273.076,297.356C273.151,308.046,273.302,321.092,273.378,327.615L273.454,334.138" id="L_逻辑升级_升级_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M561.098,166L561.098,170.167C561.098,174.333,561.098,182.667,561.098,190.333C561.098,198,561.098,205,561.098,208.5L561.098,212" id="L_代理合约_委托调用_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M561.098,270L561.098,274.167C561.098,278.333,561.098,286.667,561.172,296.106C561.246,305.546,561.394,316.092,561.468,321.365L561.542,326.638" id="L_委托调用_执行_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M623.098,152.451L652.711,158.876C682.324,165.301,741.551,178.15,771.164,188.075C800.777,198,800.777,205,800.777,208.5L800.777,212" id="L_代理合约_数据存储_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M800.777,270L800.777,274.167C800.777,278.333,800.777,286.667,800.777,294.333C800.777,302,800.777,309,800.777,312.5L800.777,316" id="L_数据存储_存储_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1241.032,62L1241.833,66.167C1242.635,70.333,1244.237,78.667,1245.039,86.333C1245.84,94,1245.84,101,1245.84,104.5L1245.84,108" id="L_UpgradeHub系统_逻辑合约V1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1174.945,154.934L1148.201,160.945C1121.456,166.956,1067.966,178.978,1041.221,188.489C1014.477,198,1014.477,205,1014.477,208.5L1014.477,212" id="L_逻辑合约V1_功能1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1014.477,270L1014.477,274.167C1014.477,278.333,1014.477,286.667,1014.552,297.356C1014.628,308.046,1014.779,321.092,1014.855,327.615L1014.93,334.138" id="L_功能1_参数_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1245.84,166L1245.84,170.167C1245.84,174.333,1245.84,182.667,1245.84,190.333C1245.84,198,1245.84,205,1245.84,208.5L1245.84,212" id="L_逻辑合约V1_功能2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1245.84,270L1245.84,274.167C1245.84,278.333,1245.84,286.667,1245.915,297.356C1245.991,308.046,1246.142,321.092,1246.218,327.615L1246.293,334.138" id="L_功能2_支付_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1316.734,156.896L1339.252,162.58C1361.77,168.264,1406.805,179.632,1429.322,188.816C1451.84,198,1451.84,205,1451.84,208.5L1451.84,212" id="L_逻辑合约V1_功能3_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1451.84,270L1451.84,274.167C1451.84,278.333,1451.84,286.667,1451.915,297.356C1451.991,308.046,1452.142,321.092,1452.218,327.615L1452.293,334.138" id="L_功能3_查询_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1325.695,42.613L1413.018,50.01C1500.34,57.408,1674.984,72.204,1762.307,83.102C1849.629,94,1849.629,101,1849.629,104.5L1849.629,108" id="L_UpgradeHub系统_逻辑合约V2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1778.734,157.535L1757.401,163.113C1736.068,168.69,1693.401,179.845,1672.068,188.923C1650.734,198,1650.734,205,1650.734,208.5L1650.734,212" id="L_逻辑合约V2_继承V1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1849.629,166L1849.629,170.167C1849.629,174.333,1849.629,182.667,1849.629,190.333C1849.629,198,1849.629,205,1849.629,208.5L1849.629,212" id="L_逻辑合约V2_新增功能1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1849.629,270L1849.629,274.167C1849.629,278.333,1849.629,286.667,1849.705,297.356C1849.78,308.046,1849.931,321.092,1850.007,327.615L1850.083,334.138" id="L_新增功能1_暂停_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1920.523,157.433L1942.041,163.027C1963.559,168.622,2006.594,179.811,2028.111,188.905C2049.629,198,2049.629,205,2049.629,208.5L2049.629,212" id="L_逻辑合约V2_新增功能2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M2049.629,270L2049.629,274.167C2049.629,278.333,2049.629,286.667,2049.705,297.356C2049.78,308.046,2049.931,321.092,2050.007,327.615L2050.083,334.138" id="L_新增功能2_恢复_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M125.68,43.639L151.805,50.866C177.929,58.093,230.179,72.546,291.759,86.389C353.34,100.232,424.253,113.465,459.709,120.081L495.166,126.697" id="L_用户_代理合约_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M2033.023,55L2032.94,60.333C2032.857,65.667,2032.69,76.333,2032.607,85.167C2032.523,94,2032.523,101,2032.523,104.5L2032.523,108" id="L_管理员_升级功能_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1246.34,377.138L1246.257,384.161C1246.173,391.184,1246.007,405.23,1245.923,415.752C1245.84,426.275,1245.84,433.275,1245.84,436.775L1245.84,440.275" id="L_支付_代理合约余额_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path><path d="M1452.34,377.138L1452.257,384.161C1452.173,391.184,1452.007,405.23,1451.923,415.752C1451.84,426.275,1451.84,433.275,1451.84,436.775L1451.84,440.275" id="L_查询_返回状态_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="" marker-end="url(#mermaid-svg-61_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="flowchart-UpgradeHub系统-0" transform="translate(1235.83984375, 35)"><rect class="basic label-container" style="" x="-89.85546875" y="-27" width="179.7109375" height="54"></rect><g class="label" style="" transform="translate(-59.85546875, -12)"><rect></rect><foreignObject width="119.7109375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>UpgradeHub系统</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-存储布局合约-1" transform="translate(86, 139)"><rect class="basic label-container" style="fill:#fff3e0 !important" x="-78" y="-27" width="156" height="54"></rect><g class="label" style="" transform="translate(-48, -12)"><rect></rect><foreignObject width="96" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>存储布局合约</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-定义-2" transform="translate(86, 243)"><polygon points="-19.5,0 111,0 130.5,-39 0,-39" class="label-container" transform="translate(-55.5,19.5)"></polygon><g class="label" style="" transform="translate(-48, -12)"><rect></rect><foreignObject width="96" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>存储结构定义</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-代理合约-4" transform="translate(561.09765625, 139)"><rect class="basic label-container" style="fill:#e1f5fe !important" x="-62" y="-27" width="124" height="54"></rect><g class="label" style="" transform="translate(-32, -12)"><rect></rect><foreignObject width="64" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>代理合约</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-逻辑升级-5" transform="translate(273, 243)"><rect class="basic label-container" style="" x="-62" y="-27" width="124" height="54"></rect><g class="label" style="" transform="translate(-32, -12)"><rect></rect><foreignObject width="64" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>逻辑升级</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-升级-6" transform="translate(273, 357.1377143859863)"><polygon points="-19.5,0 168.8359375,0 188.3359375,-39 0,-39" class="label-container" transform="translate(-84.41796875,19.5)"></polygon><g class="label" style="" transform="translate(-76.91796875, -12)"><rect></rect><foreignObject width="153.8359375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>管理员调用upgradeTo</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-委托调用-8" transform="translate(561.09765625, 243)"><rect class="basic label-container" style="" x="-62" y="-27" width="124" height="54"></rect><g class="label" style="" transform="translate(-32, -12)"><rect></rect><foreignObject width="64" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>委托调用</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-执行-9" transform="translate(561.09765625, 357.1377143859863)"><polygon points="0,0 214.359375,0 241.359375,-54 -27,-54" class="label-container" transform="translate(-107.1796875,27)"></polygon><g class="label" style="" transform="translate(-92.1796875, -12)"><rect></rect><foreignObject width="184.359375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>通过delegatecall执行逻辑</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-数据存储-11" transform="translate(800.77734375, 243)"><rect class="basic label-container" style="" x="-62" y="-27" width="124" height="54"></rect><g class="label" style="" transform="translate(-32, -12)"><rect></rect><foreignObject width="64" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>数据存储</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-存储-12" transform="translate(800.77734375, 357.1377143859863)"><path d="M0,11.758474576271185 a55.5,11.758474576271185 0,0,0 111,0 a55.5,11.758474576271185 0,0,0 -111,0 l0,50.75847457627118 a55.5,11.758474576271185 0,0,0 111,0 l0,-50.75847457627118" class="basic label-container" style="" transform="translate(-55.5, -37.137711864406775)"></path><g class="label" style="" transform="translate(-48, -2)"><rect></rect><foreignObject width="96" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>所有用户数据</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-逻辑合约V1-14" transform="translate(1245.83984375, 139)"><rect class="basic label-container" style="fill:#f3e5f5 !important" x="-70.89453125" y="-27" width="141.7890625" height="54"></rect><g class="label" style="" transform="translate(-40.89453125, -12)"><rect></rect><foreignObject width="81.7890625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>逻辑合约V1</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-功能1-15" transform="translate(1014.4765625, 243)"><rect class="basic label-container" style="" x="-78" y="-27" width="156" height="54"></rect><g class="label" style="" transform="translate(-48, -12)"><rect></rect><foreignObject width="96" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>添加订阅计划</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-参数-16" transform="translate(1014.4765625, 357.1377143859863)"><polygon points="-19.5,0 177.3984375,0 196.8984375,-39 0,-39" class="label-container" transform="translate(-88.69921875,19.5)"></polygon><g class="label" style="" transform="translate(-81.19921875, -12)"><rect></rect><foreignObject width="162.3984375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>planId, price, duration</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-功能2-18" transform="translate(1245.83984375, 243)"><rect class="basic label-container" style="" x="-62" y="-27" width="124" height="54"></rect><g class="label" style="" transform="translate(-32, -12)"><rect></rect><foreignObject width="64" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>用户订阅</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-支付-19" transform="translate(1245.83984375, 357.1377143859863)"><polygon points="-19.5,0 107.328125,0 126.828125,-39 0,-39" class="label-container" transform="translate(-53.6640625,19.5)"></polygon><g class="label" style="" transform="translate(-46.1640625, -12)"><rect></rect><foreignObject width="92.328125" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>用户支付ETH</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-功能3-21" transform="translate(1451.83984375, 243)"><rect class="basic label-container" style="" x="-62" y="-27" width="124" height="54"></rect><g class="label" style="" transform="translate(-32, -12)"><rect></rect><foreignObject width="64" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>检查状态</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-查询-22" transform="translate(1451.83984375, 357.1377143859863)"><polygon points="-19.5,0 111,0 130.5,-39 0,-39" class="label-container" transform="translate(-55.5,19.5)"></polygon><g class="label" style="" transform="translate(-48, -12)"><rect></rect><foreignObject width="96" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>查询用户地址</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-逻辑合约V2-24" transform="translate(1849.62890625, 139)"><rect class="basic label-container" style="fill:#e8f5e8 !important" x="-70.89453125" y="-27" width="141.7890625" height="54"></rect><g class="label" style="" transform="translate(-40.89453125, -12)"><rect></rect><foreignObject width="81.7890625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>逻辑合约V2</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-继承V1-25" transform="translate(1650.734375, 243)"><rect class="basic label-container" style="" x="-86.89453125" y="-27" width="173.7890625" height="54"></rect><g class="label" style="" transform="translate(-56.89453125, -12)"><rect></rect><foreignObject width="113.7890625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>继承V1所有功能</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-新增功能1-27" transform="translate(1849.62890625, 243)"><rect class="basic label-container" style="" x="-62" y="-27" width="124" height="54"></rect><g class="label" style="" transform="translate(-32, -12)"><rect></rect><foreignObject width="64" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>暂停账户</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-暂停-28" transform="translate(1849.62890625, 357.1377143859863)"><polygon points="-19.5,0 111,0 130.5,-39 0,-39" class="label-container" transform="translate(-55.5,19.5)"></polygon><g class="label" style="" transform="translate(-48, -12)"><rect></rect><foreignObject width="96" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>指定用户地址</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-新增功能2-30" transform="translate(2049.62890625, 243)"><rect class="basic label-container" style="" x="-62" y="-27" width="124" height="54"></rect><g class="label" style="" transform="translate(-32, -12)"><rect></rect><foreignObject width="64" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>恢复账户</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-恢复-31" transform="translate(2049.62890625, 357.1377143859863)"><polygon points="-19.5,0 111,0 130.5,-39 0,-39" class="label-container" transform="translate(-55.5,19.5)"></polygon><g class="label" style="" transform="translate(-48, -12)"><rect></rect><foreignObject width="96" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>指定用户地址</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-用户-32" transform="translate(96, 35)"><polygon points="-19.5,0 47,0 66.5,-39 0,-39" class="label-container" transform="translate(-23.5,19.5)"></polygon><g class="label" style="" transform="translate(-16, -12)"><rect></rect><foreignObject width="32" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>用户</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-管理员-34" transform="translate(2032.5234375, 35)"><polygon points="-19.5,0 63,0 82.5,-39 0,-39" class="label-container" transform="translate(-31.5,19.5)"></polygon><g class="label" style="" transform="translate(-24, -12)"><rect></rect><foreignObject width="48" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>管理员</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-升级功能-35" transform="translate(2032.5234375, 139)"><rect class="basic label-container" style="" x="-62" y="-27" width="124" height="54"></rect><g class="label" style="" transform="translate(-32, -12)"><rect></rect><foreignObject width="64" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>升级功能</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-代理合约余额-37" transform="translate(1245.83984375, 471.27542877197266)"><rect class="basic label-container" style="" x="-78" y="-27" width="156" height="54"></rect><g class="label" style="" transform="translate(-48, -12)"><rect></rect><foreignObject width="96" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>代理合约余额</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-返回状态-39" transform="translate(1451.83984375, 471.27542877197266)"><rect class="basic label-container" style="" x="-78" y="-27" width="156" height="54"></rect><g class="label" style="" transform="translate(-48, -12)"><rect></rect><foreignObject width="96" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>返回激活状态</p></span></div></foreignObject></g></g></g></g></g></svg>';
+            
+            // 加载并渲染Markdown
+            function loadMarkdown() {
+                // 使用marked.js渲染Markdown
+                if (typeof marked !== 'undefined') {
+                    const html = marked.parse(embeddedMarkdown);
+                    markdownContainer.innerHTML = html;
+                    
+                    // 处理图片：将 deepseek_mermaid SVG 图片替换为嵌入的 SVG 内容
+                    setTimeout(function() {
+                        // 查找所有图片标签
+                        markdownContainer.querySelectorAll('img').forEach(function(img) {
+                            // 如果图片路径包含 deepseek_mermaid，替换为 SVG 内容
+                            if (img.src && img.src.includes('deepseek_mermaid')) {
+                                // 创建 SVG data URI
+                                const svgDataUri = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgContent);
+                                img.src = svgDataUri;
+                                img.style.maxWidth = '100%';
+                                img.style.height = 'auto';
+                            }
+                        });
+                        
+                        // 查找所有代码块并高亮
+                        markdownContainer.querySelectorAll('pre code').forEach(function(block) {
+                            hljs.highlightElement(block);
+                        });
+                    }, 100);
+                } else {
+                    markdownContainer.innerHTML = '<pre>' + embeddedMarkdown + '</pre>';
+                }
+            }
+            
+            // 页面加载时立即加载Markdown
+            loadMarkdown();
+            
+            // 点击信封打开弹窗
+            envelopeContainer.addEventListener('click', function() {
+                envelopeContainer.classList.add('open');
+                
+                // 延迟显示弹窗，让信封翻转动画完成
+                setTimeout(function() {
+                    answerModal.style.display = 'flex';
+                    setTimeout(function() {
+                        answerModal.classList.add('open');
+                    }, 50);
+                }, 400);
+            });
+            
+            // 关闭弹窗
+            closeLetter.addEventListener('click', function() {
+                answerModal.classList.remove('open');
+                
+                setTimeout(function() {
+                    answerModal.style.display = 'none';
+                    envelopeContainer.classList.remove('open');
+                }, 600);
+            });
+            
+            // 点击弹窗外部关闭
+            answerModal.addEventListener('click', function(e) {
+                if (e.target === answerModal) {
+                    closeLetter.click();
                 }
             });
         });
