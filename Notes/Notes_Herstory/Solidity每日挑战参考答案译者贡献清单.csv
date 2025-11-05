@@ -1,0 +1,31 @@
+Day,原英文教材作者,作者github,原文标题,译者,译者github,译文标题
+1,Sneha,https://github.com/snehasharma76,ClickCounter,雷雷,https://github.com/Raphael-LEI,点击计数器
+2,Sneha,https://github.com/snehasharma76,SaveMyName,sun sun,https://github.com/sunshinecyz,存储姓名和简介
+3,Sneha,https://github.com/snehasharma76,PollStation,Bala Chen,https://github.com/Agyness0410,投票站合约
+4,Sneha,https://github.com/snehasharma76,AuctionHouse,禾,https://github.com/Yu-heng-Li,拍卖行合约
+5,Sneha,https://github.com/snehasharma76,Admin-Only,月亮,https://github.com/Sofia1111111111,管理控制
+6,Sneha,https://github.com/snehasharma76,The-Ether-Piggy-Bank,He Shadow,https://github.com/heheying,发送功能
+7,Sneha,https://github.com/snehasharma76,Simple-IOU,Tian Titian,https://github.com/Titian000,IOU合约
+8,Sneha,https://github.com/snehasharma76,TipJar,Tian Titian,https://github.com/Titian000,多币种支付合约
+9,Sneha,https://github.com/snehasharma76,Smart-Calculato,禾,https://github.com/Yu-heng-Li,智能计算器合约
+10,Sneha,https://github.com/snehasharma76,ActivityTracker,Shuyi,https://github.com/Y-shuyi,链上健身记录器
+11,Sneha,https://github.com/snehasharma76,Masterkey,Bala Chen,https://github.com/Agyness0410,钱库控制合约 - Ownable
+12,Sneha,https://github.com/snehasharma76,MyFirstToken,sun sun,https://github.com/sunshinecyz,第一次ERC20合约
+13,Sneha,https://github.com/snehasharma76,PreorderTokens,He Shadow,https://github.com/heheying,预售功能设置
+14,Sneha,https://github.com/snehasharma76,SafeDeposit,He Shadow,https://github.com/heheying,模块化金库系统 SafeDeposit 合约
+15,Sneha,https://github.com/snehasharma76,Gas-Efficient-Voting,Shuyi,https://github.com/Y-shuyi,Gas节省方式
+16,Sneha,https://github.com/snehasharma76,PluginStore,禾,https://github.com/Yu-heng-Li,模块化的玩家配置文件系统 - delegatecall
+17,Sneha,https://github.com/snehasharma76,UpgradeHub,unisy,https://github.com/siyu-39,合约可升级性-Upgradeable Contracts
+18,Sneha,https://github.com/snehasharma76,Oracle,Tian Titian,https://github.com/Titian000,oracle预言机将现实世界数据加入合约
+19,Sneha,https://github.com/snehasharma76,SignThis,雷雷,https://github.com/Raphael-LEI,签名验证
+20,Sneha,https://github.com/snehasharma76,FortKnox,月亮,https://github.com/Sofia1111111111,重入攻击
+21,Sneha,https://github.com/snehasharma76,SimpleNFT,Bala Chen,https://github.com/Agyness0410,简易的NFT合约 - ERC721
+22,Sneha,https://github.com/snehasharma76,DecentralisedLottery,Shuyi,https://github.com/Y-shuyi,去中心化彩票 - Chainlink VRF
+23,Sneha,https://github.com/snehasharma76,LendingPool,sun sun,https://github.com/sunshinecyz,DeFi 借贷合约
+24,Sneha,https://github.com/snehasharma76,DecentraliseEscrow,Rebecca9715,https://github.com/Rebecca9715,去中心化托管 - Escrow
+25,Sneha,https://github.com/snehasharma76,Automated-Market-Maker,月亮,https://github.com/Sofia1111111111,自动做市商合约
+26,Sneha,https://github.com/snehasharma76,NFT-Marketplace,Bala Chen,https://github.com/Agyness0410,NFT市场合约学习内容
+27,Sneha,https://github.com/snehasharma76,YieldFarming,Rebecca9715,https://github.com/Rebecca9715,质押/定期/活期理财产品合约
+28,Sneha,https://github.com/snehasharma76,DecentralisedGovernance,雷雷,https://github.com/Raphael-LEI,去中心化管理DAO
+29,Sneha,https://github.com/snehasharma76,StableCoin,Rebecca9715,https://github.com/Rebecca9715,稳定币
+30,Sneha,https://github.com/snehasharma76,Day-30-The-Final-Build-Your-Own-Mini-DEX,Bala Chen,https://github.com/Agyness0410,Mini-交易所
