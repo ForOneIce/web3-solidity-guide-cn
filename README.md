@@ -76,6 +76,41 @@
 
 - **教程内容**: 基于 [Web3 Compass](https://www.web3compass.xyz/challenge-calendar) 教程
 
+## 📖 教程原作者
+- **Sneha**  
+  GitHub: [@snehasharma76](https://github.com/snehasharma76)
+
+## 🌟 精校翻译贡献者
+- **Bala Chen**  
+  GitHub: [@Agyness0410](https://github.com/Agyness0410)
+
+- **He Shadow**  
+  GitHub: [@heheying](https://github.com/heheying)
+
+- **Rebecca9715**  
+  GitHub: [@Rebecca9715](https://github.com/Rebecca9715)
+
+- **Shuyi**  
+  GitHub: [@Y-shuyi](https://github.com/Y-shuyi)
+
+- **sun sun**  
+  GitHub: [@sunshinecyz](https://github.com/sunshinecyz)
+
+- **Tian Titian**  
+  GitHub: [@Titian000](https://github.com/Titian000)
+
+- **月亮**  
+  GitHub: [@Sofia1111111111](https://github.com/Sofia1111111111)
+
+- **禾**  
+  GitHub: [@Yu-heng-Li](https://github.com/Yu-heng-Li)
+
+- **雷雷**  
+  GitHub: [@Raphael-LEI](https://github.com/Raphael-LEI)
+
+- **unisy**  
+  GitHub: [@siyu-39](https://github.com/siyu-39)
+
 ## 🤝 使用方式
 - ✅ **推荐 Fork** - 如需修改功能，建议直接 Fork 后在你的仓库中开发
 - ✅ **下载使用** - 下载代码本地使用
