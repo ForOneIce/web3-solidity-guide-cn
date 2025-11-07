@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LendingPool 借贷池合约 - Solidity学习</title>
-    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Reenie+Beanie&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
     <style>
         :root {
             --primary: #4361ee;
@@ -23,13 +27,13 @@
             --vintage-blue: #6B8E9F;
             --warm-red: #C44536;
         }
-        
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-        
+
         body {
             font-family: 'Comic Neue', cursive;
             background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
@@ -38,10 +42,10 @@
             background-image: radial-gradient(#d0e3ff 1px, transparent 1px);
             background-size: 30px 30px;
         }
-        
+
         .nav-bar {
             background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             padding: 15px 20px;
             position: sticky;
             top: 0;
@@ -52,13 +56,13 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-        
+
         .nav-left {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        
+
         .back-btn {
             background: var(--primary);
             color: white;
@@ -74,24 +78,24 @@
             align-items: center;
             gap: 5px;
         }
-        
+
         .back-btn:hover {
             background: var(--secondary);
             transform: translateX(-3px);
         }
-        
+
         .nav-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.3rem;
             color: var(--secondary);
         }
-        
+
         .nav-right {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
-        
+
         .nav-btn {
             background: white;
             border: 2px solid var(--primary);
@@ -103,27 +107,27 @@
             transition: all 0.3s;
             text-decoration: none;
         }
-        
+
         .nav-btn:hover {
             background: var(--primary);
             color: white;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 30px 20px;
         }
-        
+
         .hero-section {
             background: white;
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
             border-top: 5px solid var(--accent);
         }
-        
+
         .hero-header {
             display: flex;
             justify-content: space-between;
@@ -132,12 +136,12 @@
             flex-wrap: wrap;
             gap: 15px;
         }
-        
+
         .hero-title {
             flex: 1;
             min-width: 250px;
         }
-        
+
         .day-badge {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -148,27 +152,27 @@
             margin-bottom: 10px;
             display: inline-block;
         }
-        
+
         h1 {
             font-family: 'Gochi Hand', cursive;
             font-size: 2.8rem;
             color: var(--secondary);
             margin-bottom: 10px;
         }
-        
+
         .subtitle {
             font-size: 1.2rem;
             color: #666;
             margin-bottom: 20px;
         }
-        
+
         .meta-tags {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
             align-items: center;
         }
-        
+
         .difficulty-badge {
             padding: 8px 20px;
             border-radius: 20px;
@@ -176,7 +180,7 @@
             color: white;
             font-size: 1rem;
         }
-        
+
         .tag {
             background: var(--light);
             padding: 5px 15px;
@@ -184,15 +188,15 @@
             color: var(--secondary);
             font-size: 0.9rem;
         }
-        
+
         .section {
             background: white;
             border-radius: 15px;
             padding: 30px;
             margin-bottom: 25px;
-            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
         }
-        
+
         .section-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 2rem;
@@ -204,27 +208,27 @@
             align-items: center;
             gap: 10px;
         }
-        
+
         .key-points {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
-        
+
         .key-point {
             background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             padding: 15px;
             border-radius: 10px;
             border-left: 4px solid var(--accent);
         }
-        
+
         .key-point-title {
             font-weight: bold;
             color: var(--primary);
             margin-bottom: 5px;
         }
-        
+
         .concept-card {
             background: linear-gradient(135deg, #fff5f5, #ffe6e6);
             border-left: 5px solid var(--hard);
@@ -232,17 +236,17 @@
             border-radius: 10px;
             margin: 20px 0;
         }
-        
+
         .concept-card.important {
             background: linear-gradient(135deg, #fff9e6, #ffedd5);
             border-left-color: var(--medium);
         }
-        
+
         .concept-card.tip {
             background: linear-gradient(135deg, #e6f7ff, #d6f0ff);
             border-left-color: var(--primary);
         }
-        
+
         .concept-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.4rem;
@@ -252,23 +256,23 @@
             align-items: center;
             gap: 8px;
         }
-        
+
         pre {
             background: #282c34;
             border-radius: 10px;
             padding: 20px;
             overflow-x: auto;
             margin: 15px 0;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
         }
-        
+
         code {
             font-family: 'Fira Code', monospace;
             font-size: 0.9rem;
             line-height: 1.6;
             color: #f8f8f2;
         }
-        
+
         .inline-code {
             background: #f4f4f4;
             padding: 2px 6px;
@@ -277,7 +281,7 @@
             color: var(--hard);
             font-size: 0.9em;
         }
-        
+
         .warning-box {
             background: #fff3cd;
             border-left: 5px solid #ffc107;
@@ -285,11 +289,11 @@
             border-radius: 8px;
             margin: 20px 0;
         }
-        
+
         .warning-box strong {
             color: #ff6b35;
         }
-        
+
         .success-box {
             background: #d4edda;
             border-left: 5px solid #28a745;
@@ -297,7 +301,7 @@
             border-radius: 8px;
             margin: 20px 0;
         }
-        
+
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
@@ -305,9 +309,9 @@
             background: white;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         .comparison-table th {
             background: var(--primary);
             color: white;
@@ -315,29 +319,29 @@
             text-align: left;
             font-weight: bold;
         }
-        
+
         .comparison-table td {
             padding: 12px 15px;
             border-bottom: 1px solid #e9ecef;
         }
-        
+
         .comparison-table tr:hover {
             background: #f8f9fa;
         }
-        
+
         .steps-list {
             counter-reset: step-counter;
             list-style: none;
             padding-left: 0;
         }
-        
+
         .steps-list li {
             counter-increment: step-counter;
             margin-bottom: 20px;
             padding-left: 60px;
             position: relative;
         }
-        
+
         .steps-list li::before {
             content: counter(step-counter);
             position: absolute;
@@ -355,7 +359,7 @@
             font-family: 'Gochi Hand', cursive;
             font-size: 1.2rem;
         }
-        
+
         .navigation-footer {
             display: flex;
             justify-content: space-between;
@@ -363,7 +367,7 @@
             gap: 15px;
             flex-wrap: wrap;
         }
-        
+
         .nav-footer-btn {
             flex: 1;
             min-width: 200px;
@@ -378,24 +382,24 @@
             flex-direction: column;
             gap: 8px;
         }
-        
+
         .nav-footer-btn:hover {
             background: var(--primary);
             color: white;
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-        
+
         .nav-footer-label {
             font-size: 0.9rem;
             opacity: 0.8;
         }
-        
+
         .nav-footer-title {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.3rem;
         }
-        
+
         .formula-box {
             background: #f8f9fa;
             padding: 20px;
@@ -406,7 +410,8 @@
             font-family: 'Fira Code', monospace;
             font-size: 1.1em;
             font-weight: bold;
-        }        
+        }
+
         /* 参考答案模块样式 - 温暖治愈风格 */
         .answer-reference {
             position: relative;
@@ -416,7 +421,7 @@
             flex-direction: column;
             align-items: center;
         }
-        
+
         .envelope-container {
             position: relative;
             width: 340px;
@@ -426,7 +431,7 @@
             margin-bottom: 20px;
             filter: drop-shadow(0 10px 20px rgba(139, 115, 85, 0.2));
         }
-        
+
         .envelope {
             position: absolute;
             width: 100%;
@@ -434,8 +439,9 @@
             transform-style: preserve-3d;
             transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
-        
-        .envelope-front, .envelope-back {
+
+        .envelope-front,
+        .envelope-back {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -444,7 +450,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
-        
+
         .envelope-front {
             background: linear-gradient(135deg, #f9f3e9, #e8dfd1);
             display: flex;
@@ -453,7 +459,7 @@
             justify-content: center;
             border: 1px solid #d4c9b8;
         }
-        
+
         .envelope-flap {
             position: absolute;
             top: -70px;
@@ -463,9 +469,9 @@
             border-right: 170px solid transparent;
             border-bottom: 70px solid #e8dfd1;
             z-index: 1;
-            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.1));
         }
-        
+
         .envelope-flap::after {
             content: "";
             position: absolute;
@@ -477,7 +483,7 @@
             border-right: 170px solid transparent;
             border-bottom: 67px solid #f9f3e9;
         }
-        
+
         .envelope-seal {
             position: absolute;
             bottom: 25px;
@@ -493,13 +499,13 @@
             z-index: 2;
             border: 2px solid #A52A2A;
         }
-        
+
         .seal-icon {
             color: #F5F1E6;
             font-size: 1.8rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
-        
+
         .envelope-text {
             font-family: 'Reenie Beanie', cursive;
             font-size: 2.4rem;
@@ -507,23 +513,23 @@
             z-index: 2;
             position: relative;
             margin-top: 20px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
             letter-spacing: 1px;
         }
-        
+
         .envelope-pattern {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: 
+            background-image:
                 radial-gradient(circle at 15% 25%, rgba(139, 115, 85, 0.05) 3px, transparent 3px),
                 radial-gradient(circle at 85% 75%, rgba(139, 115, 85, 0.05) 3px, transparent 3px);
             background-size: 40px 40px;
             z-index: 0;
         }
-        
+
         .envelope-back {
             background: linear-gradient(135deg, #f5f1e6, #e8dfd1);
             transform: rotateY(180deg);
@@ -532,15 +538,15 @@
             justify-content: center;
             border: 1px solid #d4c9b8;
         }
-        
+
         .envelope-container:hover .envelope {
             transform: rotateY(10deg) translateY(-5px);
         }
-        
+
         .envelope-container.open .envelope {
             transform: rotateY(180deg);
         }
-        
+
         .envelope-hint {
             font-family: 'Gochi Hand', cursive;
             font-size: 1.3rem;
@@ -550,9 +556,9 @@
             background: rgba(245, 241, 230, 0.7);
             padding: 8px 20px;
             border-radius: 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
         }
-        
+
         /* 弹窗样式 */
         .answer-modal {
             display: none;
@@ -568,7 +574,7 @@
             padding: 20px;
             backdrop-filter: blur(3px);
         }
-        
+
         .letter-container {
             width: 90%;
             max-width: 900px;
@@ -584,11 +590,11 @@
             position: relative;
             border: 1px solid #d4c9b8;
         }
-        
+
         .answer-modal.open .letter-container {
             transform: scale(1);
         }
-        
+
         .letter-header {
             background: linear-gradient(135deg, #8B7355, #6B5A45);
             padding: 25px 30px;
@@ -598,21 +604,21 @@
             gap: 10px;
             border-bottom: 2px dashed #A5947A;
         }
-        
+
         .letter-title {
             font-family: 'Reenie Beanie', cursive;
             font-size: 3rem;
             color: #F5F1E6;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
             letter-spacing: 2px;
         }
-        
+
         .letter-subtitle {
             color: rgba(245, 241, 230, 0.9);
             font-size: 1.3rem;
             font-family: 'Gochi Hand', cursive;
         }
-        
+
         .close-letter {
             position: absolute;
             top: 20px;
@@ -630,12 +636,12 @@
             transition: all 0.3s;
             backdrop-filter: blur(5px);
         }
-        
+
         .close-letter:hover {
             background: rgba(245, 241, 230, 0.3);
             transform: rotate(90deg);
         }
-        
+
         .letter-body {
             flex: 1;
             overflow-y: auto;
@@ -643,7 +649,7 @@
             background: #F5F1E6;
             position: relative;
         }
-        
+
         .letter-body::before {
             content: "";
             position: absolute;
@@ -651,13 +657,13 @@
             left: 0;
             right: 0;
             height: 100%;
-            background-image: 
+            background-image:
                 linear-gradient(90deg, transparent 98%, rgba(139, 115, 85, 0.1) 98%),
                 linear-gradient(rgba(139, 115, 85, 0.1) 1px, transparent 1px);
             background-size: 20px 20px;
             pointer-events: none;
         }
-        
+
         /* MD内容样式 */
         .md-content {
             max-width: 800px;
@@ -665,11 +671,11 @@
             position: relative;
             z-index: 1;
         }
-        
+
         .md-section {
             margin-bottom: 40px;
         }
-        
+
         .md-section h1 {
             font-family: 'Reenie Beanie', cursive;
             font-size: 3rem;
@@ -679,7 +685,7 @@
             padding-bottom: 10px;
             text-align: center;
         }
-        
+
         .md-section h2 {
             font-family: 'Reenie Beanie', cursive;
             font-size: 2.2rem;
@@ -688,7 +694,7 @@
             position: relative;
             padding-left: 25px;
         }
-        
+
         .md-section h2::before {
             content: "•";
             position: absolute;
@@ -697,7 +703,7 @@
             color: var(--warm-red);
             font-size: 2.5rem;
         }
-        
+
         .md-meta {
             display: flex;
             gap: 10px;
@@ -705,7 +711,7 @@
             margin-bottom: 20px;
             justify-content: center;
         }
-        
+
         .md-tag {
             background: rgba(139, 115, 85, 0.1);
             padding: 8px 16px;
@@ -717,34 +723,34 @@
             gap: 5px;
             border: 1px solid rgba(139, 115, 85, 0.2);
         }
-        
+
         .md-highlight {
             background: rgba(107, 142, 159, 0.1);
             border-left: 5px solid var(--vintage-blue);
             padding: 20px;
             border-radius: 10px;
             margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border: 1px solid rgba(107, 142, 159, 0.2);
         }
-        
+
         .md-content pre {
             background: #2d2a2e;
             border-radius: 10px;
             padding: 20px;
             overflow-x: auto;
             margin: 20px 0;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3), 0 5px 15px rgba(0, 0, 0, 0.1);
             border: 1px solid #3a363b;
         }
-        
+
         .md-content code {
             font-family: 'Fira Code', monospace;
             font-size: 0.9rem;
             line-height: 1.6;
             color: #f8f8f2;
         }
-        
+
         .md-content .inline-code {
             background: rgba(139, 115, 85, 0.1);
             padding: 3px 8px;
@@ -754,17 +760,18 @@
             font-size: 0.9em;
             border: 1px solid rgba(139, 115, 85, 0.2);
         }
-        
-        .md-content ul, .md-content ol {
+
+        .md-content ul,
+        .md-content ol {
             margin-left: 25px;
             margin-bottom: 15px;
         }
-        
+
         .md-content li {
             margin-bottom: 8px;
             line-height: 1.7;
         }
-        
+
         .md-content blockquote {
             border-left: 4px solid var(--vintage-blue);
             padding-left: 20px;
@@ -775,23 +782,24 @@
             padding: 15px 20px;
             border-radius: 0 8px 8px 0;
         }
-        
+
         .md-content table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border-radius: 10px;
             overflow: hidden;
             border: 1px solid rgba(139, 115, 85, 0.2);
         }
-        
-        .md-content th, .md-content td {
+
+        .md-content th,
+        .md-content td {
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid rgba(139, 115, 85, 0.2);
         }
-        
+
         .md-content th {
             background: linear-gradient(135deg, var(--warm-brown), #6B5A45);
             color: #F5F1E6;
@@ -799,11 +807,11 @@
             font-family: 'Gochi Hand', cursive;
             font-size: 1.1rem;
         }
-        
+
         .md-content tr:nth-child(even) {
             background: rgba(139, 115, 85, 0.05);
         }
-        
+
         .signature {
             text-align: right;
             margin-top: 40px;
@@ -811,69 +819,212 @@
             font-size: 2rem;
             color: var(--warm-brown);
         }
-        
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
             }
-            
+
             .hero-section {
                 padding: 25px;
             }
-            
+
             .section {
                 padding: 20px;
             }
-            
+
             .key-points {
                 grid-template-columns: 1fr;
             }
-            
+
             .envelope-container {
                 width: 300px;
                 height: 210px;
             }
-            
+
             .envelope-flap {
                 border-left: 150px solid transparent;
                 border-right: 150px solid transparent;
                 border-bottom: 60px solid #e8dfd1;
             }
-            
+
             .envelope-flap::after {
                 border-left: 150px solid transparent;
                 border-right: 150px solid transparent;
                 border-bottom: 57px solid #f9f3e9;
                 left: -150px;
             }
-            
+
             .envelope-text {
                 font-size: 2rem;
             }
-            
+
             .answer-modal {
                 padding: 10px;
             }
-            
+
             .letter-container {
                 width: 95%;
                 height: 85vh;
             }
-            
+
             .letter-title {
                 font-size: 2.2rem;
             }
-            
+
             .md-section h1 {
                 font-size: 2.2rem;
             }
-            
+
             .md-section h2 {
                 font-size: 1.8rem;
             }
         }
     </style>
+
+    <style>
+        /* 隐藏 mermaid 渲染组件 */
+        .md-content section.js-render-needs-enrichment,
+        .md-content .js-render-enrichment-target,
+        .md-content .js-render-block-actions,
+        .md-content .render-container,
+        .md-content .js-render-enrichment-fallback,
+        .md-content details[class*="details"],
+        .md-content iframe[title="File display"] {
+            display: none !important;
+        }
+
+        /* 修复 GitHub 代码块样式 */
+        .md-content .highlight,
+        .md-content .highlight-source-solidity,
+        .md-content .highlight-source-js,
+        .md-content .highlight-source-javascript {
+            background: #2d2a2e !important;
+            border-radius: 10px;
+            padding: 20px !important;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3), 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #3a363b;
+        }
+
+        .md-content .highlight pre,
+        .md-content .highlight-source-solidity pre,
+        .md-content .highlight-source-js pre {
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
+
+        /* 基础代码文字颜色 - 确保所有文字都可见 */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        .md-content .highlight code,
+        .md-content .highlight pre code,
+        .md-content .highlight pre span,
+        .md-content .highlight pre * {
+            /* Added to ensure all text in pre is visible */
+            color: #f8f8f2 !important;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* 确保代码块内所有文字（包括没有 span 包裹的文字）都可见 */
+        .md-content .highlight pre,
+        .md-content .highlight pre code {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特别处理代码块中的纯文本节点（没有被 span 包裹的文字，如变量名） */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 确保所有直接文本内容都可见 - 覆盖继承的颜色 */
+        .md-content .highlight pre * {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特别处理变量名 - 确保清晰可见 */
+        .md-content .highlight pre span.pl-v,
+        .md-content .highlight pre span.pl-en,
+        .md-content .highlight pre span.pl-e {
+            color: #dcdcaa !important;
+            font-weight: 500 !important;
+        }
+
+        /* GitHub 语法高亮类颜色修复 */
+        .md-content .highlight [class*="pl-"] {
+            color: #f8f8f2 !important;
+            /* Default to light color */
+        }
+
+        .md-content .highlight .pl-c {
+            /* 注释 */
+            color: #6a9955 !important;
+        }
+
+        .md-content .highlight .pl-s,
+        .md-content .highlight .pl-s1 {
+            /* 字符串 */
+            color: #ce9178 !important;
+        }
+
+        .md-content .highlight .pl-k,
+        .md-content .highlight .pl-c1 {
+            /* 关键字/常量 */
+            color: #569cd6 !important;
+        }
+
+        .md-content .highlight .pl-v,
+        .md-content .highlight .pl-en,
+        .md-content .highlight .pl-e,
+        .md-content .highlight .pl-ent {
+            /* 变量/函数名/实体名 - 确保清晰可见 */
+            color: #dcdcaa !important;
+            font-weight: 500 !important;
+        }
+        
+        /* 确保所有 span 标签内的变量名都可见 */
+        .md-content .highlight pre span.pl-v,
+        .md-content .highlight pre span.pl-en,
+        .md-content .highlight pre span.pl-e {
+            color: #dcdcaa !important;
+            font-weight: 500 !important;
+        }
+        
+        /* 强制所有代码块内的文字可见，包括没有类的元素 */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 确保所有没有特定高亮类的文字都使用默认颜色 */
+        .md-content .highlight pre *:not(.pl-c):not(.pl-s):not(.pl-s1):not(.pl-k):not(.pl-c1):not(.pl-v):not(.pl-en):not(.pl-e) {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特别处理变量名，确保长变量名清晰可见 */
+        .md-content .highlight pre span[class*="pl-v"],
+        .md-content .highlight pre span[class*="pl-en"] {
+            color: #dcdcaa !important;
+            font-weight: 500 !important;
+        }
+
+        .md-content code {
+            background-color: rgba(139, 115, 85, 0.15);
+            color: var(--warm-brown);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
+
 <body>
     <div class="nav-bar">
         <div class="nav-left">
@@ -907,7 +1058,7 @@
                     <span class="tag">利息计算</span>
                 </div>
             </div>
-            
+
             <div class="key-points">
                 <div class="key-point">
                     <div class="key-point-title">🎯 学习目标</div>
@@ -926,7 +1077,7 @@
                     <div>⭐⭐⭐⭐⭐ 极难 - 复杂的DeFi金融逻辑和精确数学计算</div>
                 </div>
             </div>
-            
+
             <div class="key-points" style="margin-top: 20px;">
                 <div class="key-point">
                     <div class="key-point-title">📊 双重账本系统</div>
@@ -951,11 +1102,11 @@
             <h2 class="section-title">
                 <i class="fas fa-lightbulb"></i> 核心概念
             </h2>
-            
+
             <div class="concept-card">
                 <div class="concept-title">🏦 DeFi借贷机制</div>
                 <p>去中心化借贷与传统金融的对比:</p>
-                
+
                 <ol class="steps-list">
                     <li>
                         <strong>存款人存入ETH</strong><br>
@@ -1015,7 +1166,7 @@
             <div class="concept-card important">
                 <div class="concept-title">📊 基点(Basis Points)系统</div>
                 <p>金融领域常用的精确百分比表示方法:</p>
-                
+
                 <div class="success-box">
                     <strong>基点换算关系</strong><br>
                     1 Basis Point = 0.01% = 0.0001<br>
@@ -1042,7 +1193,7 @@ uint256 maxBorrow = (collateral * 7500) / 10000;
             <div class="concept-card tip">
                 <div class="concept-title">🔐 抵押率与清算机制</div>
                 <p>理解过度抵押的必要性:</p>
-                
+
                 <div class="formula-box">
                     抵押率 = 借款额 / 抵押品价值 × 100%
                 </div>
@@ -1077,7 +1228,7 @@ uint256 maxBorrow = (collateral * 7500) / 10000;
             <div class="concept-card">
                 <div class="concept-title">⏰ 利息计算机制</div>
                 <p>基于时间的复利计算:</p>
-                
+
                 <div class="formula-box">
                     利息 = 本金 × 年利率 × 时间(秒) / (365天的秒数 × 10000)
                 </div>
@@ -1113,7 +1264,7 @@ uint256 maxBorrow = (collateral * 7500) / 10000;
             <h2 class="section-title">
                 <i class="fas fa-code"></i> 代码详解
             </h2>
-            
+
             <h3>📦 状态变量设计</h3>
             <pre><code class="language-solidity">// 用户存款余额 - 流动性提供者的资金
 mapping(address => uint256) public depositBalances;
@@ -1241,7 +1392,7 @@ function getTotalLiquidity() public view returns (uint256) {
             <h2 class="section-title">
                 <i class="fas fa-dumbbell"></i> 实践要点
             </h2>
-            
+
             <div class="concept-card">
                 <div class="concept-title">📝 完整的借贷流程</div>
                 <p><strong>任务:</strong> 模拟Alice和Bob的借贷场景</p>
@@ -1253,7 +1404,7 @@ function getTotalLiquidity() public view returns (uint256) {
                     <li>Bob归还本金+利息</li>
                     <li>Bob提取抵押品</li>
                 </ol>
-                
+
                 <pre><code class="language-solidity">// 步骤1: Alice存款
 lendingPool.deposit{value: 100 ether}();
 
@@ -1382,7 +1533,7 @@ function getCurrentBorrowBalance(address user)
                 <div class="nav-footer-title">DecentraliseEscrow - 去中心化托管</div>
             </a>
         </div>
-    
+
         <!-- Sneha的一封来信模块 -->
         <div class="answer-reference">
             <div class="envelope-container" id="envelope-container">
@@ -1416,76 +1567,876 @@ function getCurrentBorrowBalance(address user)
             </div>
             <div class="letter-body">
                 <div id="md-content" class="md-content">
-                    <div class="md-section">
-                        <h1>第23天内容</h1>
-                        <p style="text-align: center; padding: 40px; color: #999;">
-                            ⏳ 内容正在精心准备中...<br>
-                            敬请期待！
-                        </p>
-                    </div>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">DeFi 借贷合约</h1></div>
+<p dir="auto">Day: Day 23
+ID: 23
+译者: sun sun
+难度等级: 高级</p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">学习内容</h1></div>
+<p dir="auto">欢迎回到 30 天 Solidity —— 每天解锁智能合约的一项新超能力。</p>
+<p dir="auto">到目前为止，你已经构建了可以发送和接收 ETH 的合约，用访问控制保护它们，甚至涉足了 NFT。但今天呢？</p>
+<p dir="auto"><strong>今天，我们构建一个银行。</strong></p>
+<p dir="auto">不是那种需要排长队、填写繁琐文件和隐藏费用的类型。</p>
+<p dir="auto">也不是那种下午五点就关门的那种。</p>
+<p dir="auto">我们谈论的是 DeFi——即去中心化金融的缩写。</p>
+<p dir="auto">这不仅仅是一个流行词汇。DeFi 是区块链领域最具变革性的运动之一。它关乎重建整个金融体系——借贷、储蓄、交易——但这一切都不需要中心化机构的参与。</p>
+<p dir="auto">想象一下：</p>
+<p dir="auto">没有银行冻结你的账户。</p>
+<p dir="auto">没有贷款员评判你的信用。</p>
+<p dir="auto">仅代码——开放、透明、不可阻挡的代码——任何人都可以与之交互。</p>
+<p dir="auto">这就是 DeFi 如此强大的原因。你将传统金融的规则转化为智能合约逻辑，然后让区块链来完成剩下的工作。</p>
+<p dir="auto">而这里的神奇之处在于：一旦部署，合约就不关心你是谁。</p>
+<p dir="auto">如果数字对得上——你可以借贷，你可以赚取利息。</p>
+<p dir="auto">我们今天要构建什么？</p>
+<p dir="auto">我们正在创建一个简单而强大的借贷池。</p>
+<p dir="auto">类似于 Aave 或 Compound 等平台提供的迷你版本——但更容易理解。</p>
+<p dir="auto">&nbsp;你将学到：</p>
+<p dir="auto">接受用户存款 ETH 💰</p>
+<p dir="auto">让他们锁定抵押品以解锁借款 🛡️</p>
+<p dir="auto">随时间收取利息 📈</p>
+<p dir="auto">允许用户偿还贷款并提取资金 ✅</p>
+<p dir="auto">这是你第一次亲身体验 DeFi 机制——相信我，它将永远改变你对智能合约的看法。</p>
+<p dir="auto">让我们开始吧。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🔍 快速了解我们正在构建的内容</strong></h3></div>
+<p dir="auto">SimpleLending 合约是你链上第一个 DeFi 银行。</p>
+<p dir="auto">它允许用户：</p>
+<ul dir="auto">
+<li>将 ETH 存入池中</li>
+<li>锁定抵押品以获取贷款</li>
+<li>基于该抵押品借入 ETH</li>
+<li>用利息偿还贷款</li>
+<li>完成后再提取资金</li>
+</ul>
+<p dir="auto">我们保持其简洁——没有 ERC20，没有外部价格信息——只是纯粹的基于 ETH 的借贷逻辑，帮助你理解 DeFi 的核心运作方式。现在让我们看看完整代码 👇</p>
+<p dir="auto"><strong>🧾 完整合约：SimpleLending.sol</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-k">pragma solidity</span> <span class="pl-k">^</span><span class="pl-c1">0.8.0</span>;
+
+<span class="pl-c">/**</span>
+<span class="pl-c"> * @title SimpleLending</span>
+<span class="pl-c"> * @dev A basic DeFi lending and borrowing platform</span>
+<span class="pl-c"> */</span>
+<span class="pl-k">contract</span> <span class="pl-en">SimpleLending</span> {
+    <span class="pl-c">// Token balances for each user</span>
+    <span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">uint256</span>) <span class="pl-k">public</span> depositBalances;
+
+    <span class="pl-c">// Borrowed amounts for each user</span>
+    <span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">uint256</span>) <span class="pl-k">public</span> borrowBalances;
+
+    <span class="pl-c">// Collateral provided by each user</span>
+    <span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">uint256</span>) <span class="pl-k">public</span> collateralBalances;
+
+    <span class="pl-c">// Interest rate in basis points (1/100 of a percent)</span>
+    <span class="pl-c">// 500 basis points = 5% interest</span>
+    <span class="pl-c1">uint256</span> <span class="pl-k">public </span>interestRateBasisPoints <span class="pl-k">=</span> <span class="pl-c1">500</span>;
+
+    <span class="pl-c">// Collateral factor in basis points (e.g., 7500 = 75%)</span>
+    <span class="pl-c">// Determines how much you can borrow against your collateral</span>
+    <span class="pl-c1">uint256</span> <span class="pl-k">public </span>collateralFactorBasisPoints <span class="pl-k">=</span> <span class="pl-c1">7500</span>;
+
+    <span class="pl-c">// Timestamp of last interest accrual</span>
+    <span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">uint256</span>) <span class="pl-k">public</span> lastInterestAccrualTimestamp;
+
+    <span class="pl-c">// Events</span>
+    <span class="pl-k">event <span class="pl-en">Deposit</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+    <span class="pl-k">event <span class="pl-en">Withdraw</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+    <span class="pl-k">event <span class="pl-en">Borrow</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+    <span class="pl-k">event <span class="pl-en">Repay</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+    <span class="pl-k">event <span class="pl-en">CollateralDeposited</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+    <span class="pl-k">event <span class="pl-en">CollateralWithdrawn</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+
+    <span class="pl-k">function<span class="pl-en"> deposit</span></span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must deposit a positive amount</span>"</span>);
+        depositBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">+=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>;
+        <span class="pl-k">emit</span> <span class="pl-en">Deposit</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> withdraw</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">external</span> {
+        <span class="pl-k">require</span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must withdraw a positive amount</span>"</span>);
+        <span class="pl-k">require</span>(depositBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">&gt;=</span> amount, <span class="pl-s">"<span class="pl-s">Insufficient balance</span>"</span>);
+        depositBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">-=</span> amount;
+        <span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>).<span class="pl-en">transfer</span>(amount);
+        <span class="pl-k">emit</span> <span class="pl-en">Withdraw</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> depositCollateral</span></span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must deposit a positive amount as collateral</span>"</span>);
+        collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">+=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>;
+        <span class="pl-k">emit</span> <span class="pl-en">CollateralDeposited</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> withdrawCollateral</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">external</span> {
+        <span class="pl-k">require</span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must withdraw a positive amount</span>"</span>);
+        <span class="pl-k">require</span>(collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">&gt;=</span> amount, <span class="pl-s">"<span class="pl-s">Insufficient collateral</span>"</span>);
+
+        <span class="pl-c1">uint256</span> borrowedAmount <span class="pl-k">=</span> <span class="pl-en">calculateInterestAccrued</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+        <span class="pl-c1">uint256</span> requiredCollateral <span class="pl-k">=</span> (borrowedAmount <span class="pl-k">*</span> <span class="pl-c1">10000</span>) <span class="pl-k">/</span> collateralFactorBasisPoints;
+
+        <span class="pl-k">require</span>(
+            collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">-</span> amount <span class="pl-k">&gt;=</span> requiredCollateral,
+            <span class="pl-s">"<span class="pl-s">Withdrawal would break collateral ratio</span>"</span>
+        );
+
+        collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">-=</span> amount;
+        <span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>).<span class="pl-en">transfer</span>(amount);
+        <span class="pl-k">emit</span> <span class="pl-en">CollateralWithdrawn</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> borrow</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">external</span> {
+        <span class="pl-k">require</span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must borrow a positive amount</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance <span class="pl-k">&gt;=</span> amount, <span class="pl-s">"<span class="pl-s">Not enough liquidity in the pool</span>"</span>);
+
+        <span class="pl-c1">uint256</span> maxBorrowAmount <span class="pl-k">=</span> (collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">*</span> collateralFactorBasisPoints) <span class="pl-k">/</span> <span class="pl-c1">10000</span>;
+        <span class="pl-c1">uint256</span> currentDebt <span class="pl-k">=</span> <span class="pl-en">calculateInterestAccrued</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+
+        <span class="pl-k">require</span>(currentDebt <span class="pl-k">+</span> amount <span class="pl-k">&lt;=</span> maxBorrowAmount, <span class="pl-s">"<span class="pl-s">Exceeds allowed borrow amount</span>"</span>);
+
+        borrowBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> currentDebt <span class="pl-k">+</span> amount;
+        lastInterestAccrualTimestamp[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>;
+
+        <span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>).<span class="pl-en">transfer</span>(amount);
+        <span class="pl-k">emit</span> <span class="pl-en">Borrow</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> repay</span></span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must repay a positive amount</span>"</span>);
+
+        <span class="pl-c1">uint256</span> currentDebt <span class="pl-k">=</span> <span class="pl-en">calculateInterestAccrued</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+        <span class="pl-k">require</span>(currentDebt <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">No debt to repay</span>"</span>);
+
+        <span class="pl-c1">uint256</span> amountToRepay <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>;
+        <span class="pl-k">if</span> (amountToRepay <span class="pl-k">&gt;</span> currentDebt) {
+            amountToRepay <span class="pl-k">=</span> currentDebt;
+            <span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>).<span class="pl-en">transfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">-</span> currentDebt);
+        }
+
+        borrowBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> currentDebt <span class="pl-k">-</span> amountToRepay;
+        lastInterestAccrualTimestamp[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>;
+
+        <span class="pl-k">emit</span> <span class="pl-en">Repay</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountToRepay);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> calculateInterestAccrued</span></span>(<span class="pl-c1">address</span> <span class="pl-v">user</span>) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+        <span class="pl-k">if</span> (borrowBalances[user] <span class="pl-k">==</span> <span class="pl-c1">0</span>) {
+            <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+        }
+
+        <span class="pl-c1">uint256</span> timeElapsed <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">-</span> lastInterestAccrualTimestamp[user];
+        <span class="pl-c1">uint256</span> interest <span class="pl-k">=</span> (borrowBalances[user] <span class="pl-k">*</span> interestRateBasisPoints <span class="pl-k">*</span> timeElapsed) <span class="pl-k">/</span> (<span class="pl-c1">10000</span> <span class="pl-k">*</span> <span class="pl-c1">365</span> days);
+
+        <span class="pl-k">return</span> borrowBalances[user] <span class="pl-k">+</span> interest;
+    }
+
+    <span class="pl-k">function<span class="pl-en"> getMaxBorrowAmount</span></span>(<span class="pl-c1">address</span> <span class="pl-v">user</span>) <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+        <span class="pl-k">return</span> (collateralBalances[user] <span class="pl-k">*</span> collateralFactorBasisPoints) <span class="pl-k">/</span> <span class="pl-c1">10000</span>;
+    }
+
+    <span class="pl-k">function<span class="pl-en"> getTotalLiquidity</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+        <span class="pl-k">return</span> <span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance;
+    }
+}
+</pre></div>
+<h3 dir="auto"></h3>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">1.产品需求书</h1></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">a.用户流程</h3></div>
+
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">b.数据库</h3></div>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th>Contract</th>
+<th>Type</th>
+<th>Bases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SimpleLending</td>
+<td>Implementation</td>
+<td></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th>└ Function Name</th>
+<th>Visibility</th>
+<th>Mutability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deposit</td>
+<td>external</td>
+<td>payable</td>
+</tr>
+<tr>
+<td>withdraw</td>
+<td>external</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>depositCollateral</td>
+<td>external</td>
+<td>payable</td>
+</tr>
+<tr>
+<td>withdrawCollateral</td>
+<td>external</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>borrow</td>
+<td>external</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>repay</td>
+<td>external</td>
+<td>payable</td>
+</tr>
+<tr>
+<td>calculateInterestAccrued</td>
+<td>public</td>
+<td>view</td>
+</tr>
+<tr>
+<td>getMaxBorrowAmount</td>
+<td>external</td>
+<td>view</td>
+</tr>
+<tr>
+<td>getTotalLiquidity</td>
+<td>external</td>
+<td>view</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">2.细节解说</h1></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🧾 合同声明</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">contract</span> <span class="pl-en">SimpleLending</span> {
+</pre></div>
+<p dir="auto">我们命名我们的合约 SimpleLending，因为，嗯……它是一个简单的借贷系统。这是我们 DeFi 银行的基础。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🧠 合约的大脑——映射</strong></h3></div>
+<p dir="auto">在任何银行系统——无论是你所在地的分行还是 DeFi 智能合约——都需要一种方法来记住谁拥有什么。</p>
+<p dir="auto">这正是我们在做的工作。</p>
+<p dir="auto">这一部分是我们借贷池的大脑。这些映射是我们追踪存款、债务、抵押品和利息的方式——就像一个数字账本，在链上保持一切井然有序。</p>
+<p dir="auto">让我们看看这个合约中的四个关键映射：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">uint256</span>) <span class="pl-k">public</span> depositBalances;
+<span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">uint256</span>) <span class="pl-k">public</span> borrowBalances;
+<span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">uint256</span>) <span class="pl-k">public</span> collateralBalances;
+<span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">uint256</span>) <span class="pl-k">public</span> lastInterestAccrualTimestamp;
+</pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>depositBalances –您的数字保险库</strong></h3></div>
+<p dir="auto">这个映射记录用户存入借贷池的 ETH 数量。</p>
+<p dir="auto">把它看作合约内部的一个个人保险库。当用户调用 deposit()函数时，他们的 ETH 会被存储在合约中，这个映射会更新以反映他们添加了多少。</p>
+<blockquote>
+<p dir="auto">📦 它就像你的活期账户余额一样——除非与贷款挂钩，否则始终可以访问。</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>borrowBalances – 你的贷款账簿</strong></h3></div>
+<p dir="auto">这个映射显示了用户从池中借了多少 ETH。</p>
+<p dir="auto">当你使用 borrow()函数借款时，ETH 会离开合约并进入你的钱包。同时，这个映射会更新以精确跟踪你欠多少债务。</p>
+<p dir="auto">我们也使用这个值（以及利息）来确定你是否可以提取你的抵押品或借更多。</p>
+<blockquote>
+<p dir="auto">🧾 这是你的贷款追踪器——那个显示“这是你欠款”的数字。</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>collateralBalances – 安全网</strong></h3></div>
+<p dir="auto">在去中心化金融（DeFi）中，借贷不是基于信任，而是基于数学。</p>
+<p dir="auto">要借款，你需要抵押资产。这个映射记录了每个用户提供的作为抵押的 ETH 数量。</p>
+<p dir="auto">当你调用 depositCollateral()时，ETH 会留在合约中，但你的 collateralBalances 条目会增加。</p>
+<p dir="auto">当你尝试借款或提取抵押资产时，合约会使用这个映射来检查你的头寸是否仍然安全。</p>
+<blockquote>
+<p dir="auto">🔐 想象一下这就像你的押金——它存在是为了在你不履行义务时保护系统。</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>lastInterestAccrualTimestamp – 计时员</strong></h3></div>
+<p dir="auto">我们的系统中的利息不会每秒自动累积——那会非常耗费 gas。</p>
+<p dir="auto">相反，我们记录每个用户上次计算利息的时间。然后，每当用户与系统交互（借款、还款等）时，我们会检查经过的时间，并计算从那时起累积了多少利息。</p>
+<p dir="auto">这使我们能够在不每块链支付利息的情况下模拟连续的利息。</p>
+<blockquote>
+<p dir="auto">🧮 这就像一个时间戳收据：“上次我们检查时，这位用户欠款 X。现在让我们根据经过的时间来更新。”</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>💰 借贷逻辑——设定金融规则</strong></h3></div>
+<p dir="auto">每个借贷平台——无论是 DeFi 协议还是当地银行——都遵循几条关键的金融规则。</p>
+<p dir="auto">在我们的智能合约中，这些规则被嵌入到两个简单的变量中：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> <span class="pl-k">public </span>interestRateBasisPoints <span class="pl-k">=</span> <span class="pl-c1">500</span>;         <span class="pl-c">// 5% annual interest rate</span>
+<span class="pl-c1">uint256</span> <span class="pl-k">public </span>collateralFactorBasisPoints <span class="pl-k">=</span> <span class="pl-c1">7500</span>;    <span class="pl-c">// 75% loan-to-value (LTV)</span>
+</pre></div>
+<p dir="auto">让我们逐一解析这些变量的含义及其重要性。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🧾 interestRateBasisPoints – 协议如何赚取收益</strong></h3></div>
+<p dir="auto">这是借款人每年需支付的贷款利率。</p>
+<p dir="auto">但我们用 500 表示 5%，而不是写 5，因为我们使用的是基点。</p>
+<blockquote>
+<p dir="auto">🔢 基点在金融中用于精确表达百分比，尤其是在处理分数利率时。1 个基点是 0.01%，所以 500 个基点是 5%</p>
+</blockquote>
+<p dir="auto">这意味着：</p>
+<p dir="auto">如果一个用户借入 1 ETH，一年后（假设他们没有提前还款）将需要偿还 1.05 ETH。</p>
+<p dir="auto">通过使用基点，我们可以避免浮点数运算（Solidity 不支持浮点数运算），并保持极高的精确度。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🛡️ collateralFactorBasisPoints – 协议如何保持安全</strong></h3></div>
+<p dir="auto">该变量决定了根据抵押品价值可以借多少。</p>
+<p dir="auto">在我们这里：</p>
+<p dir="auto">7500 个基点 = 75%</p>
+<p dir="auto">这意味着用户只能借入他们作为抵押锁定 ETH 的 75%</p>
+<p dir="auto">假设你将 2 ETH 作为抵押：</p>
+<p dir="auto">2 ETH 的 75% = 1.5 ETH</p>
+<p dir="auto">这就是你被允许借入的最大金额</p>
+<p dir="auto">为什么不是 100%？</p>
+<p dir="auto">因为存在价格波动。ETH 明天可能会贬值。所以我们总是希望借款人留下一层安全垫——这就是抵押率强制执行的机制。</p>
+<blockquote>
+<p dir="auto">🧠 现实中的比喻：这就像银行说“我们可以用你的车作为抵押贷款——但只能按其当前价值的 75%来贷。”</p>
+</blockquote>
+<p dir="auto">这有助于协议避免亏损，并确保借款人始终有足够的抵押物来支持他们的贷款。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>📣 事件 – 活动广播</strong></h3></div>
+<p dir="auto">以下是我们在 DeFi 银行中使用的事件：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">Deposit</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+<span class="pl-k">event <span class="pl-en">Withdraw</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+<span class="pl-k">event <span class="pl-en">Borrow</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+<span class="pl-k">event <span class="pl-en">Repay</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+<span class="pl-k">event <span class="pl-en">CollateralDeposited</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+<span class="pl-k">event <span class="pl-en">CollateralWithdrawn</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+</pre></div>
+<p dir="auto">让我们来分解它们：</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>💸 Deposit</strong></h3></div>
+<p dir="auto">当用户向借贷池添加 ETH 时发出。</p>
+<blockquote>
+<p dir="auto">这就像在说：“用户 X 刚刚存入了 Y ETH——更新他们的余额并在仪表板上显示！”</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🏧 Withdraw</strong></h3></div>
+<p dir="auto">当用户从他们的存款余额中取出 ETH 时触发。</p>
+<blockquote>
+<p dir="auto">用于在 UI 中反映提款情况，并记录合约的 ETH 余额已变更。</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🧾 Borrow</strong></h3></div>
+<p dir="auto">当用户成功借款时触发。</p>
+<blockquote>
+<p dir="auto">您的应用可以显示：“恭喜！您刚刚从池中借了 0.75 ETH。”</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>💳 Repay</strong></h3></div>
+<p dir="auto">当用户发送 ETH 以偿还贷款时触发。</p>
+<blockquote>
+<p dir="auto">对更新用户的贷款余额和计算剩余债务非常重要。</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🛡️ CollateralDeposited</strong></h3></div>
+<p dir="auto">当用户将 ETH 锁定作为抵押品时发出。</p>
+<blockquote>
+<p dir="auto">前端应用可以使用此功能显示：“您现在有资格借入最多 X ETH。”</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🔓 CollateralWithdrawn</strong></h3></div>
+<p dir="auto">当用户安全提取其抵押品时发生（在还款后或保持健康的贷款价值比之后）。</p>
+<blockquote>
+<p dir="auto">这是一个有用的触发器，用于可视化剩余的抵押品数量。</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🔧 Functions ——驱动 DeFi 引擎</strong></h3></div>
+<p dir="auto">我们至今所构建的一切——变量、映射、参数、事件——它们都只是基础。</p>
+<p dir="auto">真正的魔法发生在用户与合约交互时。</p>
+<p dir="auto">这些功能是用户在您的 DeFi 银行中执行操作的方式：存款 ETH、借款、偿还贷款和管理抵押品。这就是合约变得互动的地方。</p>
+<p dir="auto">让我们从该流程中的第一个功能——存款开始。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>🏦 deposit() – 向池中添加 ETH</strong></h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> deposit</span></span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must deposit a positive amount</span>"</span>);
+
+    depositBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">+=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>;
+
+    <span class="pl-k">emit</span> <span class="pl-en">Deposit</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>);
+}
+</pre></div>
+<p dir="auto">这个函数是用户向借贷池中添加 ETH 的方式——简单至极。</p>
+<p dir="auto">这是逐步操作方法：</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>1. msg.value– 接收 ETH</strong></h3></div>
+<p dir="auto">每当有人向智能合约发送 ETH 时，金额会存储在一个称为 msg.value 的特殊变量中。</p>
+<p dir="auto">所以如果我调用 deposit()并附加 1 ETH，msg.value 将是 1 以太币。</p>
+<p dir="auto">我们首先检查：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must deposit a positive amount</span>"</span>);
+</pre></div>
+<p dir="auto">这一行防止人们在不发送任何 ETH 的情况下意外调用该函数。没有免费搭便车！</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>2. 更新余额</strong></h3></div>
+<p dir="auto">接下来，我们更新跟踪每个用户存款的映射：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>depositBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">+=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>;
+</pre></div>
+<p dir="auto">这里，msg.sender 是调用函数的人——即存款人。</p>
+<p dir="auto">我们的意思是：“将他们之前拥有的金额，加上新的金额。”</p>
+<blockquote>
+<p dir="auto">🧠 简单来说：“更新这个用户的银行余额。”</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>3. 发送事件</strong></h3></div>
+<p dir="auto">最后，我们让世界知道刚刚发生了什么：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">Deposit</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>);
+</pre></div>
+<p dir="auto">这会触发存款事件，前端应用或索引器可以监听该事件。这就像合约在喊：</p>
+<blockquote>
+<p dir="auto">“嘿！Alice 刚刚存入了 1 ETH！”</p>
+</blockquote>
+<p dir="auto">这就是如何确保 UI 更新并在 Etherscan 等工具中记录交易的方式。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>💸 withdraw(uint256 amount) – 取回你的资金</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> withdraw</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">external</span> {
+    <span class="pl-k">require</span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must withdraw a positive amount</span>"</span>);
+    <span class="pl-k">require</span>(depositBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">&gt;=</span> amount, <span class="pl-s">"<span class="pl-s">Insufficient balance</span>"</span>);
+
+    depositBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">-=</span> amount;
+    <span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>).<span class="pl-en">transfer</span>(amount);
+
+    <span class="pl-k">emit</span> <span class="pl-en">Withdraw</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+}
+</pre></div>
+<p dir="auto">既然用户可以存入 ETH，我们需要给他们一个方式来取回他们的 ETH——无论何时他们需要。</p>
+<p dir="auto">这正是 withdraw()函数的作用。</p>
+<p dir="auto">让我们像一位走进银行并说...</p>
+<p dir="auto">“嘿，我想取出一些我的资金。”</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>1. ✅ 验证提款请求</strong></h3></div>
+<p dir="auto">首先，合约进行两项快速合理性检查：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must withdraw a positive amount</span>"</span>);
+</pre></div>
+<p dir="auto">这确保用户不会不小心尝试提取 0 ETH。没有奇怪的边缘情况，没有困惑——只是干净的输入。</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(depositBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">&gt;=</span> amount, <span class="pl-s">"<span class="pl-s">Insufficient balance</span>"</span>);
+</pre></div>
+<p dir="auto">接下来，我们检查用户是否有足够的 ETH 在其存款余额中来进行此次提款。</p>
+<p dir="auto">如果不是，交易将被拒绝。</p>
+<p dir="auto">DeFi 不允许透支 😉</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>2. 🧮 更新余额</strong></h3></div>
+<p dir="auto">如果两个检查都通过，用户的存款余额将得到更新：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>depositBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">-=</span> amount;
+</pre></div>
+<p dir="auto">这从他们的账户中扣除提取的金额。</p>
+<p dir="auto">就像银行账本反映已经发生了提款一样。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>3. 🪙 发送 ETH</strong></h3></div>
+<p dir="auto">更新余额后，合约将 ETH 发送回用户：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>).<span class="pl-en">transfer</span>(amount);
+</pre></div>
+<p dir="auto">这一行实际上将真实的 ETH 转回用户的钱包。</p>
+<blockquote>
+<p dir="auto">💡 Solidity 要求对可支付地址调用 .transfer() —— 这就是为什么我们将 msg.sender 强制转换为 payable(msg.sender)。</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>4. 📣 发布事件</strong></h3></div>
+<p dir="auto">最后，我们让大家知道刚才发生了什么：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">Withdraw</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+</pre></div>
+<p dir="auto">这会触发提款事件——一个你的前端可以监听以显示类似确认消息的信号：</p>
+<blockquote>
+<p dir="auto">“✅ 成功提款 0.5 ETH！”</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🧮 calculateInterestAccrued(address user) – 借款的核心</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> calculateInterestAccrued</span></span>(<span class="pl-c1">address</span> <span class="pl-v">user</span>) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    <span class="pl-k">if</span> (borrowBalances[user] <span class="pl-k">==</span> <span class="pl-c1">0</span>) {
+        <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+    }
+
+    <span class="pl-c1">uint256</span> timeElapsed <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">-</span> lastInterestAccrualTimestamp[user];
+    <span class="pl-c1">uint256</span> interest <span class="pl-k">=</span> (borrowBalances[user] <span class="pl-k">*</span> interestRateBasisPoints <span class="pl-k">*</span> timeElapsed) <span class="pl-k">/</span> (<span class="pl-c1">10000</span> <span class="pl-k">*</span> <span class="pl-c1">365</span> days);
+
+    <span class="pl-k">return</span> borrowBalances[user] <span class="pl-k">+</span> interest;
+}
+</pre></div>
+<p dir="auto">这个函数是我们借贷系统的核心引擎——在安静地驱动着借款最重要的部分：利息计算。</p>
+<p dir="auto">猜猜看？</p>
+<p dir="auto">你将在几乎所有涉及贷款的主要功能中看到这个函数出现：</p>
+<ul dir="auto">
+<li>✅ 当你借入</li>
+<li>💳 当你偿还</li>
+<li>🔓 当你提取抵押品</li>
+<li>📊 即使在查询你欠多少时</li>
+</ul>
+<p dir="auto">让我们了解它具体在做什么——以及为什么这如此重要。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>📊 我们为什么需要这个？</strong></h3></div>
+<p dir="auto">在现实生活中，贷款利息会随着时间的推移而累积。</p>
+<p dir="auto">但智能合约无法每秒更新变量——那在 gas 费用上会非常昂贵。</p>
+<p dir="auto">所以，我们不是持续更新每个用户的贷款余额...</p>
+<p dir="auto">我们使用这个函数按需计算利息——只在需要时计算。</p>
+<p dir="auto">将其视为一个即时利息计算器。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>✅ 工作原理</strong></h3></div>
+<p dir="auto"><strong>1. 检查用户是否借过任何款项</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (borrowBalances[user] <span class="pl-k">==</span> <span class="pl-c1">0</span>) {
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+</pre></div>
+<p dir="auto">没有贷款？没有利息。简单。</p>
+<p dir="auto"><strong>2. 计算已过去多少时间</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> timeElapsed <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">-</span> lastInterestAccrualTimestamp[user];
+</pre></div>
+<p dir="auto">我们计算出自上次为该用户计算利息以来已过去多少时间。</p>
+<blockquote>
+<p dir="auto">block.timestamp 给我们当前的时间。</p>
+</blockquote>
+<blockquote>
+<p dir="auto">lastInterestAccrualTimestamp 告诉我们上次更新他们债务的时间。</p>
+</blockquote>
+<p dir="auto"><strong>3. 应用利息公式</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> interest <span class="pl-k">=</span> (borrowBalances[user] <span class="pl-k">*</span> interestRateBasisPoints <span class="pl-k">*</span> timeElapsed) <span class="pl-k">/</span> (<span class="pl-c1">10000</span> <span class="pl-k">*</span> <span class="pl-c1">365</span> days);
+</pre></div>
+<p dir="auto">让我们来分解这个公式：</p>
+<p dir="auto"><strong>borrowBalances[user]</strong>&nbsp;→ 用户的当前贷款本金</p>
+<p dir="auto"><strong>interestRateBasisPoints</strong>&nbsp;→ 我们的年利率（例如，500 等于 5%）</p>
+<p dir="auto"><strong>timeElapsed</strong>&nbsp;→ 他们欠债的时间长度</p>
+<p dir="auto"><strong>10000 * 365 days</strong>&nbsp;→ 用于将基准点转换为年度分数</p>
+<p dir="auto">这根据贷款的活跃时间，给出了我们到目前为止产生的利息。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>4. 返回总债务（本金+利息）</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">return</span> borrowBalances[user] <span class="pl-k">+</span> interest;
+</pre></div>
+<p dir="auto">好了。就这样，你就能获得最新的债务信息——无需手动计算。</p>
+<blockquote>
+<p dir="auto">这个总额将用于我们所有其他功能：验证借款资格、检查还款金额以及验证抵押品提取。</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>🛡️ depositCollateral() – 锁定 ETH 以便日后借款</strong></h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> depositCollateral</span></span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must deposit a positive amount as collateral</span>"</span>);
+
+    collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">+=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>;
+
+    <span class="pl-k">emit</span> <span class="pl-en">CollateralDeposited</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>);
+}
+</pre></div>
+<p dir="auto">到目前为止，你已经看到了如何将 ETH 存入池中作为出借人——如果你想赚取被动收入，这很好。</p>
+<p dir="auto">但如果你想从池中借款呢？</p>
+<p dir="auto">嗯，就像现实生活中一样——如果你想贷款，需要提供抵押品。</p>
+<p dir="auto">这个函数就是用来完成这个操作的。</p>
+<p dir="auto">我们来分解一下 👇</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🔒 抵押品与存款——有什么区别？</strong></h3></div>
+<p dir="auto">在深入代码之前，这里有一个关键的区别：</p>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th>Deposits&nbsp;&nbsp;存款</th>
+<th>抵押品</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>你借给池子的钱 💸</td>
+<td>你用来借钱的锁钱 💳</td>
+</tr>
+<tr>
+<td>可以自由提取（除非用于借贷）</td>
+<td>仅当您的贷款安全时才可归还</td>
+</tr>
+<tr>
+<td>您可从中赚取利息（如果系统支持该功能）</td>
+<td>它支持您的借贷并保障协议安全</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto">所以是的——它们都是 ETH，但它们扮演着完全不同的角色。</p>
+<p dir="auto">这就是为什么我们有一个单独的函数用于抵押品存款。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>✅ 步骤详解</strong></h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>1. 检查真实存款</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must deposit a positive amount as collateral</span>"</span>);
+</pre></div>
+<p dir="auto">我们确保用户正在发送一些 ETH——不允许空交易。</p>
+<p dir="auto"><strong>2. 增加用户的抵押品余额</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">+=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>;
+</pre></div>
+<p dir="auto">一旦收到 ETH，我们更新用户的抵押记录。这告诉合约：</p>
+<p dir="auto">“好了，这位用户现在已经锁定了 X ETH——我们可以让他们在某个限额内安全地借款。”</p>
+<p dir="auto">这是系统中解锁借贷能力的关键。</p>
+<p dir="auto"><strong>3. 发出事件</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">CollateralDeposited</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>);
+</pre></div>
+<p dir="auto">一如既往，我们发出事件，以便前端和工具能够对存款做出反应——更新仪表板、发送通知，并将操作记录在历史中。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>🔓 withdrawCollateral(uint256 amount) – 拿回你锁定的 ETH（如果你是安全的）</strong></h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> withdrawCollateral</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">external</span> {
+    <span class="pl-k">require</span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must withdraw a positive amount</span>"</span>);
+    <span class="pl-k">require</span>(collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">&gt;=</span> amount, <span class="pl-s">"<span class="pl-s">Insufficient collateral</span>"</span>);
+
+    <span class="pl-c1">uint256</span> borrowedAmount <span class="pl-k">=</span> <span class="pl-en">calculateInterestAccrued</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+    <span class="pl-c1">uint256</span> requiredCollateral <span class="pl-k">=</span> (borrowedAmount <span class="pl-k">*</span> <span class="pl-c1">10000</span>) <span class="pl-k">/</span> collateralFactorBasisPoints;
+
+    <span class="pl-k">require</span>(
+        collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">-</span> amount <span class="pl-k">&gt;=</span> requiredCollateral,
+        <span class="pl-s">"<span class="pl-s">Withdrawal would break collateral ratio</span>"</span>
+    );
+
+    collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">-=</span> amount;
+    <span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>).<span class="pl-en">transfer</span>(amount);
+
+    <span class="pl-k">emit</span> <span class="pl-en">CollateralWithdrawn</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+}
+</pre></div>
+<p dir="auto">所以你质押了一些 ETH 作为抵押。这让你获得了从池中借入资金的权利。</p>
+<p dir="auto">现在你想拿回一些 ETH。</p>
+<p dir="auto">这看起来很公平，对吧？</p>
+<p dir="auto">嗯……只有当你仍然安全时才行。</p>
+<p dir="auto">这个功能允许用户提取他们的抵押品——但前提是这样做不会让他们的贷款处于风险之中。</p>
+<p dir="auto">让我们一步步来，就像你正在与一个非常谨慎但非常公平的智能合约银行家谈判一样。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>✅ 第一步：基本检查</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must withdraw a positive amount</span>"</span>);
+<span class="pl-k">require</span>(collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">&gt;=</span> amount, <span class="pl-s">"<span class="pl-s">Insufficient collateral</span>"</span>);
+</pre></div>
+<p dir="auto">这两行代码很直接：</p>
+<p dir="auto">确保用户正在尝试提取一个真实的金额。</p>
+<p dir="auto">确保他们确实有足够的抵押品来尝试这一点。</p>
+<p dir="auto">如果任何一项检查失败——我们立即停止。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🧠 第 2 步：风险评估</strong></h3></div>
+<p dir="auto">现在进入重要环节——确保用户在提款后仍然有抵押品。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>首先，我们检查他们欠多少债务：</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> borrowedAmount <span class="pl-k">=</span> <span class="pl-en">calculateInterestAccrued</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+</pre></div>
+<p dir="auto">这包括他们随时间累积的任何利息。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>然后我们计算他们需要多少抵押品才能保持安全：</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> requiredCollateral <span class="pl-k">=</span> (borrowedAmount <span class="pl-k">*</span> <span class="pl-c1">10000</span>) <span class="pl-k">/</span> collateralFactorBasisPoints;
+</pre></div>
+<p dir="auto">这是基于我们之前设置的贷款价值比（LTV）—— 默认为 75%。</p>
+<p dir="auto">假设你欠 1 ETH，LTV 为 75%：</p>
+<p dir="auto">你需要至少 1 / 0.75 = 1.33 ETH 作为抵押品锁定。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>❗ 第 3 步：安全检查</strong></h3></div>
+<p dir="auto">我们现在模拟未来——如果你抵押了这笔资产会发生什么？</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(
+    collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">-</span> amount <span class="pl-k">&gt;=</span> requiredCollateral,
+    <span class="pl-s">"<span class="pl-s">Withdrawal would break collateral ratio</span>"</span>
+);
+</pre></div>
+<p dir="auto">如果移除该 ETH 会导致你低于安全限制，我们将回滚交易。</p>
+<blockquote>
+<p dir="auto"><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 这就像合约发出的警告：“等一下。如果你这样做，你的贷款将不再得到保障。我不能允许那样。”</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🪙 第 4 步：放手（如果你安全）</strong></h3></div>
+<p dir="auto">如果你通过所有检查，你就可以继续。</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">-=</span> amount;
+<span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>).<span class="pl-en">transfer</span>(amount);
+<span class="pl-k">emit</span> <span class="pl-en">CollateralWithdrawn</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+</pre></div>
+<p dir="auto">我们更新你的记录，将 ETH 发回你的钱包，并发出一个事件通知前端。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>🧾 borrow(uint256 amount) – 解锁 DeFi 的超级能力：借入 ETH</strong></h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> borrow</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">external</span> {
+    <span class="pl-k">require</span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must borrow a positive amount</span>"</span>);
+    <span class="pl-k">require</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance <span class="pl-k">&gt;=</span> amount, <span class="pl-s">"<span class="pl-s">Not enough liquidity in the pool</span>"</span>);
+
+    <span class="pl-c1">uint256</span> maxBorrowAmount <span class="pl-k">=</span> (collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">*</span> collateralFactorBasisPoints) <span class="pl-k">/</span> <span class="pl-c1">10000</span>;
+    <span class="pl-c1">uint256</span> currentDebt <span class="pl-k">=</span> <span class="pl-en">calculateInterestAccrued</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+
+    <span class="pl-k">require</span>(currentDebt <span class="pl-k">+</span> amount <span class="pl-k">&lt;=</span> maxBorrowAmount, <span class="pl-s">"<span class="pl-s">Exceeds allowed borrow amount</span>"</span>);
+
+    borrowBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> currentDebt <span class="pl-k">+</span> amount;
+    lastInterestAccrualTimestamp[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>;
+
+    <span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>).<span class="pl-en">transfer</span>(amount);
+    <span class="pl-k">emit</span> <span class="pl-en">Borrow</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+}
+</pre></div>
+<p dir="auto">好吧——现在我们进入合同真正开始像银行运作的部分。</p>
+<p dir="auto">这个功能允许用户从借贷池中借入 ETH，基于他们锁定的抵押品数量。</p>
+<p dir="auto">但是——就像现实生活中一样——你不能走进银行说“给我免费的钱。”</p>
+<p dir="auto">有规则。让我们来逐一了解它们。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🧠 步骤详解</strong></h3></div>
+<p dir="auto"><strong>1. 申请真实贷款</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must borrow a positive amount</span>"</span>);
+</pre></div>
+<p dir="auto">我们确保用户不是试图借入零 ETH 或负数金额。每次借款操作都必须有一个实际数字作为支撑。</p>
+<p dir="auto"><strong>2. 确保池中有流动性</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance <span class="pl-k">&gt;=</span> amount, <span class="pl-s">"<span class="pl-s">Not enough liquidity in the pool</span>"</span>);
+</pre></div>
+<p dir="auto">该合约检查自身余额，以确认是否真的能够借出那么多 ETH。</p>
+<blockquote>
+<p dir="auto">不能借贷自己没有的资产。</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>3. 检查借款人资格</strong></h3></div>
+<p dir="auto">我们根据用户提供的抵押品数量，计算其可借款金额：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> maxBorrowAmount <span class="pl-k">=</span> (collateralBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">*</span> collateralFactorBasisPoints) <span class="pl-k">/</span> <span class="pl-c1">10000</span>;
+</pre></div>
+<p dir="auto">所以如果你抵押了 2 ETH 作为保证金，并且保证金系数是 75%：</p>
+<ul dir="auto">
+<li>maxBorrowAmount = 2 * 0.75 = 1.5 ETH</li>
+</ul>
+<p dir="auto">但这还没完——我们还需要考虑他们已经欠下的任何债务+利息：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> currentDebt <span class="pl-k">=</span> <span class="pl-en">calculateInterestAccrued</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+</pre></div>
+<p dir="auto">然后我们检查：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(currentDebt <span class="pl-k">+</span> amount <span class="pl-k">&lt;=</span> maxBorrowAmount, <span class="pl-s">"<span class="pl-s">Exceeds allowed borrow amount</span>"</span>);
+</pre></div>
+<p dir="auto">如果这次检查失败，借贷将被阻止。用户的抵押品无法安全地支持请求的金额。</p>
+<blockquote>
+<p dir="auto">✅ 只允许安全、超额抵押的贷款。</p>
+</blockquote>
+<p dir="auto"><strong>4. 更新债务和时间</strong></p>
+<p dir="auto">如果用户符合资格，我们将继续并记录新的贷款</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>borrowBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> currentDebt <span class="pl-k">+</span> amount;
+lastInterestAccrualTimestamp[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>;
+</pre></div>
+<p dir="auto">我们表示：</p>
+<ul dir="auto">
+<li>“该用户现在欠 X ETH（包括过去的债务）。”</li>
+<li>“而这将是我们未来计算利息的时间。”</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>5. 转移 ETH</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>).<span class="pl-en">transfer</span>(amount);
+</pre></div>
+<p dir="auto">合约将真实的 ETH 发送到用户的钱包中。</p>
+<p dir="auto">现在他们可以随心所欲地使用这些 ETH——交易它、交换它、质押它——它完全属于他们。</p>
+<p dir="auto"><strong>6. 发布借出事件</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">Borrow</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+</pre></div>
+<p dir="auto">这向外界（你的前端、区块浏览器、分析仪表板）表明这位用户刚刚借了款。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>💳 repay() – 还款，重获自由</strong></h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> repay</span></span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must repay a positive amount</span>"</span>);
+
+    <span class="pl-c1">uint256</span> currentDebt <span class="pl-k">=</span> <span class="pl-en">calculateInterestAccrued</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+    <span class="pl-k">require</span>(currentDebt <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">No debt to repay</span>"</span>);
+
+    <span class="pl-c1">uint256</span> amountToRepay <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>;
+    <span class="pl-k">if</span> (amountToRepay <span class="pl-k">&gt;</span> currentDebt) {
+        amountToRepay <span class="pl-k">=</span> currentDebt;
+        <span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>).<span class="pl-en">transfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">-</span> currentDebt); <span class="pl-c">// Refund the extra</span>
+    }
+
+    borrowBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> currentDebt <span class="pl-k">-</span> amountToRepay;
+    lastInterestAccrualTimestamp[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>;
+
+    <span class="pl-k">emit</span> <span class="pl-en">Repay</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountToRepay);
+}
+</pre></div>
+<p dir="auto">你借了 ETH。时间流逝。利息累积。</p>
+<p dir="auto">现在该还款了——这正是这个函数的作用。</p>
+<p dir="auto">让我们来解析当用户向 repay() 发送 ETH 时会发生什么。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>✅ 步骤详解</strong></h3></div>
+<p dir="auto"><strong>1. 确认你确实在发送 ETH</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Must repay a positive amount</span>"</span>);
+</pre></div>
+<p dir="auto">就像 deposit() 函数一样，我们不想用户误触这个操作。你需要实际在函数调用时发送一些 ETH。</p>
+<p dir="auto"><strong>2. 确认你欠多少</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> currentDebt <span class="pl-k">=</span> <span class="pl-en">calculateInterestAccrued</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+<span class="pl-k">require</span>(currentDebt <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">No debt to repay</span>"</span>);
+</pre></div>
+<p dir="auto">这里我们询问：</p>
+<p dir="auto">“这位用户欠多少——包括累积的任何利息？”</p>
+<p dir="auto">如果他们不欠任何东西，我们就到此为止。</p>
+<p dir="auto"><strong>3. 接受你发送的内容</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> amountToRepay <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>;
+</pre></div>
+<p dir="auto">现在我们记录用户尝试还款的金额。</p>
+<p dir="auto"><strong>4. 处理超额还款（退款多余部分）</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (amountToRepay <span class="pl-k">&gt;</span> currentDebt) {
+    amountToRepay <span class="pl-k">=</span> currentDebt;
+    <span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>).<span class="pl-en">transfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">-</span> currentDebt);
+}
+</pre></div>
+<p dir="auto">有时用户还款金额超过欠款（尤其是不确定已产生的利息金额时）。我们优雅地处理这种情况：</p>
+<p dir="auto">将还款金额限制在债务金额内</p>
+<p dir="auto">自动退还多余的 ETH</p>
+<p dir="auto">🧠 无需手动计算债务——只需发送足够或更多的 ETH，合约将处理其余部分。</p>
+<p dir="auto"><strong>5. 更新贷款记录</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>borrowBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> currentDebt <span class="pl-k">-</span> amountToRepay;
+lastInterestAccrualTimestamp[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>;
+</pre></div>
+<p dir="auto">这会减少用户的贷款余额并重置利息累积的计时器。</p>
+<p dir="auto">如果他们全额还款，他们的借款余额变为零——无债务！</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>6. 触发还款事件</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">Repay</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountToRepay);
+</pre></div>
+<p dir="auto">前端、浏览器或分析工具现在可以显示：</p>
+<blockquote>
+<p dir="auto">“✅ 1 ETH 的贷款已还款完成！”</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>📊 工具函数——支持 UI 与集成的辅助工具</strong></h2></div>
+<p dir="auto">智能合约中的并非每个函数都会改变状态或处理资金。</p>
+<p dir="auto">有时，你只需要检查某些内容。</p>
+<p dir="auto">这时工具函数就派上用场了——它们是简单的只读工具，帮助前端、其他智能合约或分析仪表板从合约中获取有用数据。</p>
+<p dir="auto">在我们的 DeFi 银行中，我们有两个这样的实用函数，它们确实能做到这一点：</p>
+<p dir="auto"><strong>🔍 getMaxBorrowAmount(address user)</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getMaxBorrowAmount</span></span>(<span class="pl-c1">address</span> <span class="pl-v">user</span>) <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    <span class="pl-k">return</span> (collateralBalances[user] <span class="pl-k">*</span> collateralFactorBasisPoints) <span class="pl-k">/</span> <span class="pl-c1">10000</span>;
+}
+</pre></div>
+<p dir="auto">这个函数计算特定用户根据其已抵押的保证金可以借多少 ETH。</p>
+<p dir="auto">它不在乎他们已经借了多少——它只是告诉你，在他们的保证金下，他们可以借的上限是多少。</p>
+<blockquote>
+<p dir="auto">🧠 公式：maxBorrow = collateral × collateralFactor</p>
+</blockquote>
+<p dir="auto">所以如果有人锁定了 4 ETH，而我们的抵押率是 75%，这个函数将返回：</p>
+<ul dir="auto">
+<li>4 × 0.75 = 3 ETH → 那就是他们的最大可借额度</li>
+</ul>
+<p dir="auto">这对前端开发非常有用：</p>
+<ul dir="auto">
+<li>它允许界面显示：“你可以借最多 3 ETH”</li>
+<li>或者显示一个进度条，展示他们已使用的借款额度</li>
+</ul>
+<p dir="auto"><strong>💧 getTotalLiquidity()</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getTotalLiquidity</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    <span class="pl-k">return</span> <span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance;
+}
+</pre></div>
+<p dir="auto">这个更简单——它只是告诉你当前借贷池持有多少 ETH。</p>
+<p dir="auto">由于每一笔存款和还款都会向合约添加 ETH，而每一笔提款或借款都会移除 ETH，这个函数提供了实时的资金情况。</p>
+<blockquote>
+<p dir="auto">这就像检查银行的保险库余额。</p>
+</blockquote>
+<p dir="auto">前端可以使用这个功能：</p>
+<ul dir="auto">
+<li>显示总池大小</li>
+<li>指示是否有足够的流动性来满足借贷请求</li>
+<li>若资金池余额不足，请提醒用户</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🔚 总结——你所构建的</strong></h3></div>
+<p dir="auto">你刚刚创建了一个功能完备的资金池，它可以：</p>
+<ul dir="auto">
+<li>接受存款 💰</li>
+<li>让用户锁定抵押品 🛡️</li>
+<li>借入 ETH 📤</li>
+<li>随时间累积利息 📈</li>
+<li>让用户还款并取回抵押品 ✅</li>
+</ul>
+<p dir="auto">本合同向您介绍去中心化借贷的核心机制——这是像 Aave、Compound 和 MakerDAO 这样的平台所使用的相同原则。</p>
+<p dir="auto">它简单而强大。</p>
                 </div>
             </div>
         </div>
     </div>
 
-    </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
-    <script>
-        hljs.highlightAll();
-        
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-            
-        // Sneha的一封来信模块功能
-        document.addEventListener('DOMContentLoaded', function() {
-            const envelopeContainer = document.getElementById('envelope-container');
-            const answerModal = document.getElementById('answer-modal');
-            const closeLetter = document.getElementById('close-letter');
-            
-            if (!envelopeContainer || !answerModal || !closeLetter) {
-                return; // 如果元素不存在，直接返回
-            }
-            
-            // 点击信封打开弹窗
-            envelopeContainer.addEventListener('click', function() {
-                envelopeContainer.classList.add('open');
-                
-                // 延迟显示弹窗，让信封翻转动画完成
-                setTimeout(function() {
-                    answerModal.style.display = 'flex';
-                    setTimeout(function() {
-                        answerModal.classList.add('open');
-                    }, 50);
-                }, 400);
-            });
-            
-            // 关闭弹窗
-            closeLetter.addEventListener('click', function() {
-                answerModal.classList.remove('open');
-                
-                setTimeout(function() {
-                    answerModal.style.display = 'none';
-                    envelopeContainer.classList.remove('open');
-                }, 600);
-            });
-            
-            // 点击弹窗外部关闭
-            answerModal.addEventListener('click', function(e) {
-                if (e.target === answerModal) {
-                    closeLetter.click();
-                }
-            });
-        });
-    </script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/solidity.min.js"></script>
+            <script>
+                hljs.highlightAll();
+
+                // 平滑滚动
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const target = document.querySelector(this.getAttribute('href'));
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    });
+                });
+
+                // Sneha的一封来信模块功能
+                document.addEventListener('DOMContentLoaded', function () {
+                    const envelopeContainer = document.getElementById('envelope-container');
+                    const answerModal = document.getElementById('answer-modal');
+                    const closeLetter = document.getElementById('close-letter');
+
+                    if (!envelopeContainer || !answerModal || !closeLetter) {
+                        return; // 如果元素不存在，直接返回
+                    }
+
+                    // 点击信封打开弹窗
+                    envelopeContainer.addEventListener('click', function () {
+                        envelopeContainer.classList.add('open');
+
+                        // 延迟显示弹窗，让信封翻转动画完成
+                        setTimeout(function () {
+                            answerModal.style.display = 'flex';
+                            setTimeout(function () {
+                                answerModal.classList.add('open');
+                            }, 50);
+                        }, 400);
+                    });
+
+                    // 关闭弹窗
+                    closeLetter.addEventListener('click', function () {
+                        answerModal.classList.remove('open');
+
+                        setTimeout(function () {
+                            answerModal.style.display = 'none';
+                            envelopeContainer.classList.remove('open');
+                        }, 600);
+                    });
+
+                    // 点击弹窗外部关闭
+                    answerModal.addEventListener('click', function (e) {
+                        if (e.target === answerModal) {
+                            closeLetter.click();
+                        }
+                    });
+                });
+            </script>
 </body>
+
 </html>
