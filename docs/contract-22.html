@@ -772,7 +772,94 @@
                 font-size: 1.8rem;
             }
         }
-    </style>
+    
+        /* 隐藏 mermaid 渲染组件 */
+        .md-content section.js-render-needs-enrichment,
+        .md-content .js-render-enrichment-target,
+        .md-content .js-render-block-actions,
+        .md-content .render-container,
+        .md-content .js-render-enrichment-fallback,
+        .md-content details[class*="details"],
+        .md-content iframe[title="File display"] {
+            display: none !important;
+        }
+        
+        /* 修复 GitHub 代码块样式 */
+        .md-content .highlight,
+        .md-content .highlight-source-solidity,
+        .md-content .highlight-source-js,
+        .md-content .highlight-source-javascript {
+            background: #2d2a2e !important;
+            border-radius: 10px;
+            padding: 20px !important;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content .highlight pre,
+        .md-content .highlight-source-solidity pre,
+        .md-content .highlight-source-js pre {
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
+        
+        .md-content .highlight code,
+        .md-content .highlight pre code,
+        .md-content .highlight pre span,
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* 确保所有代码块内的文本都可见 */
+        .md-content .highlight pre * {
+            color: #f8f8f2 !important;
+        }
+        
+        /* GitHub 语法高亮类颜色修复 */
+        .md-content .highlight [class*="pl-"] {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特定类型的颜色 */
+        .md-content .highlight .pl-c,   /* 注释 */
+        .md-content .highlight .pl-c1 {  /* 常量 */
+            color: #6a9955 !important;
+        }
+        
+        .md-content .highlight .pl-s,   /* 字符串 */
+        .md-content .highlight .pl-s1 {   /* 字符串 */
+            color: #ce9178 !important;
+        }
+        
+        .md-content .highlight .pl-k,   /* 关键字 */
+        .md-content .highlight .pl-en {  /* 函数名 */
+            color: #569cd6 !important;
+        }
+        
+        .md-content .highlight .pl-v,   /* 变量 */
+        .md-content .highlight .pl-e {    /* 实体 */
+            color: #dcdcaa !important;
+        }
+        
+        /* 内联 code 标签样式 */
+        .md-content code:not(pre code) {
+            background: rgba(139, 115, 85, 0.15) !important;
+            padding: 3px 8px !important;
+            border-radius: 4px !important;
+            color: var(--warm-brown) !important;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace !important;
+            font-size: 0.9em !important;
+            border: 1px solid rgba(139, 115, 85, 0.2) !important;
+        }
+        
+        </style>
 </head>
 <body>
     <div class="nav-bar">
@@ -1299,12 +1386,851 @@ function selectMultipleWinners(uint256[] memory randomWords) internal {
             </div>
             <div class="letter-body">
                 <div id="md-content" class="md-content">
-                    <div class="md-section">
-                        <h1>第22天内容</h1>
-                        <p style="text-align: center; padding: 40px; color: #999;">
-                            ⏳ 内容正在精心准备中...<br>
-                            敬请期待！
-                        </p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">去中心化彩票 - Chainlink VRF</h1></div>
+<p dir="auto">Day: Day 22
+ID: 22
+译者: Shuyi
+难度等级: 高级</p>
+<p dir="auto">欢迎回到 <strong>30 Days of Solidity</strong> —— 每一天，我们都在提升智能合约的技能。</p>
+<p dir="auto">到目前为止，你已经完成了一些相当酷的事情：</p>
+<ul dir="auto">
+<li>你制作了可以<strong>发送和接收 ETH</strong> 的合约，</li>
+<li>用<strong>修饰符</strong>像数字保镖一样保护它们，</li>
+<li>强化你的代码以抵御像<strong>重入攻击</strong>这样的阴险伎俩，</li>
+<li>甚至用你自己的 <strong>NFT</strong> 让数字艺术焕发生机。</li>
+</ul>
+<p dir="auto">但今天？</p>
+<p dir="auto">今天我们要走出合约的围墙。</p>
+<p dir="auto">我们要接入<em>真实世界</em> —— 一个智能合约可以伸手、请求数据并<strong>安全地</strong>带回来的世界。</p>
+<p dir="auto">而且我们要用一种很酷的方式来做这件事……</p>
+<p dir="auto">通过构建一个<strong>去中心化彩票</strong>。</p>
+<p dir="auto">不是普通的彩票。</p>
+<p dir="auto">这个彩票：</p>
+<ul dir="auto">
+<li>🧾 <strong>可证明公平</strong></li>
+<li>⚙️ <strong>完全自动化</strong></li>
+<li>🔐 <strong>不可能被操纵</strong></li>
+</ul>
+<p dir="auto">而它的核心是一个特别的东西：</p>
+<p dir="auto"><strong>Chainlink VRF</strong> —— 一个在链上工作的可信随机性来源。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🔮 但等等……什么<em>是</em> Chainlink VRF？</h2></div>
+<p dir="auto">问题来了：</p>
+<p dir="auto">智能合约很聪明……但它们也<strong>可预测</strong>。</p>
+<p dir="auto">它们只会做代码中写的事情 —— 不多不少。</p>
+<p dir="auto">这意味着它们<strong>无法生成随机性</strong>。</p>
+<p dir="auto">而在彩票中？这可是个致命问题。</p>
+<p dir="auto">如果你尝试使用时间戳或区块号作为随机性，矿工可以<strong>操纵</strong>它们。</p>
+<p dir="auto">这就是 <strong>Chainlink VRF</strong> 的用武之地。</p>
+<p dir="auto">可以这样想：</p>
+<p dir="auto">你叫来一个可信的裁判，递给他们一个密封的信封，然后说：</p>
+<blockquote>
+<p dir="auto">"抛个硬币。向所有人展示结果。然后把它锁定到区块链上。"</p>
+</blockquote>
+<p dir="auto">这就是 Chainlink VRF 所做的。</p>
+<p dir="auto">它给你：</p>
+<ul dir="auto">
+<li>🎲 一个<strong>随机数</strong>，</li>
+<li>🧾 一个<strong>密码学证明</strong>，证明它是公平生成的，</li>
+<li>📦 并将两者直接传递给你的智能合约。</li>
+</ul>
+<p dir="auto">这就是我们如何将<strong>可信的随机性</strong>带入一个<strong>不信任的世界</strong>。</p>
+<p dir="auto">现在你知道幕后是什么了……</p>
+<p dir="auto">让我们构建一个<em>真正配得上</em>被称为公平的彩票。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">1. 产品需求书</h2></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">流程图</h3></div>
+<p dir="auto"><em>（流程图内容已通过 CSS 隐藏）</em></p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>合约与函数清单</strong></h3></div>
+<p dir="auto"><strong>📋 合约结构表</strong></p>
+<table>
+<thead>
+<tr>
+<th>Contract Type</th>
+<th>Bases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FairChainLottery</td>
+<td>VRFConsumerBaseV2Plus</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p dir="auto"><strong>🔧 函数详细列表</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function Name</th>
+<th>Visibility</th>
+<th>Mutability</th>
+<th>Modifiers</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>constructor</strong></td>
+<td>Public</td>
+<td>🛑</td>
+<td>-</td>
+<td>初始化VRF配置、订阅ID、密钥哈希和入场费</td>
+</tr>
+<tr>
+<td><strong>enter</strong></td>
+<td>Public ❗️</td>
+<td>💵 Payable</td>
+<td>-</td>
+<td>玩家支付入场费参与彩票</td>
+</tr>
+<tr>
+<td><strong>startLottery</strong></td>
+<td>External ❗️</td>
+<td>🛑</td>
+<td>onlyOwner</td>
+<td>所有者开启新一轮彩票</td>
+</tr>
+<tr>
+<td><strong>endLottery</strong></td>
+<td>External ❗️</td>
+<td>🛑</td>
+<td>onlyOwner</td>
+<td>所有者结束彩票并请求随机数</td>
+</tr>
+<tr>
+<td><strong>fulfillRandomWords</strong></td>
+<td>Internal 🔒</td>
+<td>🛑</td>
+<td>override</td>
+<td>Chainlink自动回调，选择赢家并发送奖金</td>
+</tr>
+<tr>
+<td><strong>getPlayers</strong></td>
+<td>External ❗️</td>
+<td>👀 View</td>
+<td>-</td>
+<td>返回当前轮次的所有玩家地址</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p dir="auto"><strong>📊 状态变量清单</strong></p>
+<table>
+<thead>
+<tr>
+<th>Variable Name</th>
+<th>Type</th>
+<th>Visibility</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>lotteryState</strong></td>
+<td>LOTTERY_STATE (enum)</td>
+<td>Public</td>
+<td>彩票当前状态（OPEN/CLOSED/CALCULATING）</td>
+</tr>
+<tr>
+<td><strong>players</strong></td>
+<td>address payable[]</td>
+<td>Public</td>
+<td>当前轮次参与的玩家列表</td>
+</tr>
+<tr>
+<td><strong>recentWinner</strong></td>
+<td>address</td>
+<td>Public</td>
+<td>最近一轮的赢家地址</td>
+</tr>
+<tr>
+<td><strong>entryFee</strong></td>
+<td>uint256</td>
+<td>Public</td>
+<td>参与彩票所需的入场费</td>
+</tr>
+<tr>
+<td><strong>subscriptionId</strong></td>
+<td>uint256</td>
+<td>Public</td>
+<td>Chainlink VRF订阅ID</td>
+</tr>
+<tr>
+<td><strong>keyHash</strong></td>
+<td>bytes32</td>
+<td>Public</td>
+<td>Chainlink VRF密钥哈希</td>
+</tr>
+<tr>
+<td><strong>callbackGasLimit</strong></td>
+<td>uint32</td>
+<td>Public</td>
+<td>回调函数的gas限制（默认100000）</td>
+</tr>
+<tr>
+<td><strong>requestConfirmations</strong></td>
+<td>uint16</td>
+<td>Public</td>
+<td>随机数请求的确认区块数（默认3）</td>
+</tr>
+<tr>
+<td><strong>numWords</strong></td>
+<td>uint32</td>
+<td>Public</td>
+<td>请求的随机数数量（默认1）</td>
+</tr>
+<tr>
+<td><strong>latestRequestId</strong></td>
+<td>uint256</td>
+<td>Public</td>
+<td>最新的随机性请求ID</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p dir="auto"><strong>🎭 事件与枚举</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Name</th>
+<th>Values/Parameters</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>enum</strong></td>
+<td>LOTTERY_STATE</td>
+<td>OPEN, CLOSED, CALCULATING</td>
+<td>彩票的三种可能状态</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p dir="auto"><strong>🔐 访问控制标识</strong></p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❗️</td>
+<td>External/Public 函数</td>
+</tr>
+<tr>
+<td>🔒</td>
+<td>Internal/Private 函数</td>
+</tr>
+<tr>
+<td>🛑</td>
+<td>修改状态的函数</td>
+</tr>
+<tr>
+<td>👀</td>
+<td>View 函数（只读）</td>
+</tr>
+<tr>
+<td>💵</td>
+<td>Payable 函数（可接收ETH）</td>
+</tr>
+</tbody>
+</table>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">2.🧾 完整合约 —— FairChainLottery</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-k">pragma solidity</span> <span class="pl-k">^</span><span class="pl-c1">0.8.20</span>;
+
+<span class="pl-k">import</span> {VRFConsumerBaseV2Plus} <span class="pl-k">from</span> <span class="pl-s">"<span class="pl-s">@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol</span>"</span>;
+<span class="pl-k">import</span> {VRFV2PlusClient} <span class="pl-k">from</span> <span class="pl-s">"<span class="pl-s">@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol</span>"</span>;
+
+<span class="pl-k">contract</span> <span class="pl-en">FairChainLottery</span> <span class="pl-k">is</span> <span class="pl-en">VRFConsumerBaseV2Plus</span> {
+    <span class="pl-k">enum <span class="pl-en">LOTTERY_STATE</span></span> { OPEN, CLOSED, CALCULATING }
+    LOTTERY_STATE <span class="pl-k">public</span> lotteryState;
+
+    <span class="pl-c1">address payable</span>[] <span class="pl-k">public</span> players;
+    <span class="pl-c1">address</span> <span class="pl-k">public</span> recentWinner;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> entryFee;
+
+    <span class="pl-c">// Chainlink VRF 配置</span>
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> subscriptionId;
+    <span class="pl-c1">bytes32</span> <span class="pl-k">public</span> keyHash;
+    <span class="pl-c1">uint32</span> <span class="pl-k">public </span>callbackGasLimit <span class="pl-k">=</span> <span class="pl-c1">100000</span>;
+    <span class="pl-c1">uint16</span> <span class="pl-k">public </span>requestConfirmations <span class="pl-k">=</span> <span class="pl-c1">3</span>;
+    <span class="pl-c1">uint32</span> <span class="pl-k">public </span>numWords <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> latestRequestId;
+
+    <span class="pl-k">constructor</span>(
+        <span class="pl-c1">address</span> <span class="pl-v">vrfCoordinator</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">_subscriptionId</span>,
+        <span class="pl-c1">bytes32</span> <span class="pl-v">_keyHash</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">_entryFee</span>
+    ) <span class="pl-en">VRFConsumerBaseV2Plus</span>(vrfCoordinator) {
+        subscriptionId <span class="pl-k">=</span> _subscriptionId;
+        keyHash <span class="pl-k">=</span> _keyHash;
+        entryFee <span class="pl-k">=</span> _entryFee;
+        lotteryState <span class="pl-k">=</span> LOTTERY_STATE.CLOSED;
+    }
+
+    <span class="pl-k">function<span class="pl-en"> enter</span></span>() <span class="pl-k">public</span> <span class="pl-k">payable</span> {
+        <span class="pl-k">require</span>(lotteryState <span class="pl-k">==</span> LOTTERY_STATE.OPEN, <span class="pl-s">"<span class="pl-s">Lottery not open</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;=</span> entryFee, <span class="pl-s">"<span class="pl-s">Not enough ETH</span>"</span>);
+        players.<span class="pl-en">push</span>(<span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>));
+    }
+
+    <span class="pl-k">function<span class="pl-en"> startLottery</span></span>() <span class="pl-k">external</span> onlyOwner {
+        <span class="pl-k">require</span>(lotteryState <span class="pl-k">==</span> LOTTERY_STATE.CLOSED, <span class="pl-s">"<span class="pl-s">Can't start yet</span>"</span>);
+        lotteryState <span class="pl-k">=</span> LOTTERY_STATE.OPEN;
+    }
+
+    <span class="pl-k">function<span class="pl-en"> endLottery</span></span>() <span class="pl-k">external</span> onlyOwner {
+        <span class="pl-k">require</span>(lotteryState <span class="pl-k">==</span> LOTTERY_STATE.OPEN, <span class="pl-s">"<span class="pl-s">Lottery not open</span>"</span>);
+        lotteryState <span class="pl-k">=</span> LOTTERY_STATE.CALCULATING;
+
+        VRFV2PlusClient.RandomWordsRequest <span class="pl-k">memory</span> req <span class="pl-k">=</span> VRFV2PlusClient.<span class="pl-en">RandomWordsRequest</span>({
+            keyHash: keyHash,
+            subId: subscriptionId,
+            requestConfirmations: requestConfirmations,
+            callbackGasLimit: callbackGasLimit,
+            numWords: numWords,
+            extraArgs: VRFV2PlusClient.<span class="pl-en">_argsToBytes</span>(
+                VRFV2PlusClient.<span class="pl-en">ExtraArgsV1</span>({nativePayment: <span class="pl-c1">true</span>})
+            )
+        });
+
+        latestRequestId <span class="pl-k">=</span> s_vrfCoordinator.<span class="pl-en">requestRandomWords</span>(req);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> fulfillRandomWords</span></span>(<span class="pl-c1">uint256</span>, <span class="pl-c1">uint256</span>[] <span class="pl-k">calldata</span> <span class="pl-v">randomWords</span>) <span class="pl-k">internal</span> <span class="pl-k">override</span> {
+        <span class="pl-k">require</span>(lotteryState <span class="pl-k">==</span> LOTTERY_STATE.CALCULATING, <span class="pl-s">"<span class="pl-s">Not ready to pick winner</span>"</span>);
+
+        <span class="pl-c1">uint256</span> winnerIndex <span class="pl-k">=</span> randomWords[<span class="pl-c1">0</span>] <span class="pl-k">%</span> players.<span class="pl-mi">length</span>;
+        <span class="pl-c1">address payable</span> winner <span class="pl-k">=</span> players[winnerIndex];
+        recentWinner <span class="pl-k">=</span> winner;
+
+        players <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">address payable</span>[](<span class="pl-c1">0</span>);
+        lotteryState <span class="pl-k">=</span> LOTTERY_STATE.CLOSED;
+
+        (<span class="pl-c1">bool</span> <span class="pl-v">sent</span>, ) <span class="pl-k">=</span> winner.<span class="pl-c1">call</span>{value: <span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance}(<span class="pl-s">""</span>);
+        <span class="pl-k">require</span>(sent, <span class="pl-s">"<span class="pl-s">Failed to send ETH to winner</span>"</span>);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> getPlayers</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">address payable</span>[] <span class="pl-k">memory</span>) {
+        <span class="pl-k">return</span> players;
+    }
+}</pre></div>
+<hr>
+<p dir="auto">好的 —— 你已经了解了<strong>为什么</strong>我们需要随机性，你已经认识了我们的裁判（<em>Chainlink VRF</em>），现在是时候<strong>构建真正的游戏</strong>了。</p>
+<p dir="auto">但这不是什么老旧的抽奖箱。</p>
+<p dir="auto">我们正在构建一个<strong>防篡改</strong>、<strong>自动化</strong>、<strong>链上彩票系统</strong>，任何人都可以参与……而<strong>没有人</strong>可以作弊。</p>
+<p dir="auto">在每轮结束时，合约会向 Chainlink 请求一个随机数，从池中选出一位幸运赢家，并<strong>向他们发送所有 ETH</strong>。</p>
+<p dir="auto">没有人工干预。没有幕后花招。</p>
+<p dir="auto">只有数学、透明度，还有一点 Chainlink 魔法。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🔗 Chainlink 设置</h2></div>
+<p dir="auto">在我们转动彩票轮盘之前，我们需要一种方法将<strong>真正的随机性</strong>引入我们的合约 —— 这就是 <strong>Chainlink VRF</strong> 发挥作用的地方。</p>
+<p dir="auto">但要真正使用 Chainlink 的随机性系统，我们需要与它<em>对话</em>。在 Solidity 中，这意味着导入正确的库 —— 就像插入一个智能合约版本的对讲机，让我们的彩票与 Chainlink 的预言机网络聊天。</p>
+<p dir="auto">我们是这样做的：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">import</span> {VRFConsumerBaseV2Plus} <span class="pl-k">from</span> <span class="pl-s">"<span class="pl-s">@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol</span>"</span>;
+<span class="pl-k">import</span> {VRFV2PlusClient} <span class="pl-k">from</span> <span class="pl-s">"<span class="pl-s">@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol</span>"</span>;</pre></div>
+<p dir="auto">这些导入给我们提供了两个主要工具：</p>
+<ol dir="auto">
+<li><strong><code>VRFConsumerBaseV2Plus</code></strong> —— 这是 Chainlink 提供的一个<em>基础合约</em>。我们从它继承，作为回报，我们得到一个名为 <code>fulfillRandomWords</code> 的特殊函数，当随机数准备好时，Chainlink 会自动调用它。可以把它看作是随机数的"回调"插槽。</li>
+<li><strong><code>VRFV2PlusClient</code></strong> —— 这是一个辅助库，它给我们提供了一种简单的方式来构造和格式化我们发送给 Chainlink 的随机性请求。它让我们可以配置以下内容：
+<ul dir="auto">
+<li>我们想要多少个随机数</li>
+<li>回调使用多少 gas</li>
+<li>使用哪个 Chainlink 任务（通过 <code>keyHash</code>）</li>
+</ul>
+</li>
+</ol>
+<p dir="auto">这两个部分共同构成了<strong>我们链上随机性的直接链接</strong>。没有它们，我们将无法安全地接触外部世界。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🗝️ 让我们声明我们的合约</h2></div>
+<p dir="auto">准备好 Chainlink 设置后，是时候真正声明将运行整个节目的智能合约了。</p>
+<p dir="auto">这是我们去中心化彩票系统的开始：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">contract</span> <span class="pl-en">FairChainLottery</span> <span class="pl-k">is</span> <span class="pl-en">VRFConsumerBaseV2Plus</span> {</pre></div>
+<p dir="auto">我们称它为 <code>FairChainLottery</code> —— 因为这正是我们正在构建的：</p>
+<p dir="auto">一个<strong>生活在链上的彩票合约</strong>，<strong>公平性已经融入其 DNA</strong>。</p>
+<p dir="auto">请注意，我们继承自 <code>VRFConsumerBaseV2Plus</code> —— 这就是赋予我们的合约从 Chainlink 接收随机数并在我们的逻辑中使用它们的能力。</p>
+<hr>
+<p dir="auto">从这里开始，我们将开始定义使整个彩票系统运转的变量和函数 —— 从跟踪谁参与到加冕赢家并向他们发送整个奖池。</p>
+<p dir="auto">让我们深入了解 👇</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🧠 彩票状态 —— 保持游戏井然有序</h2></div>
+<p dir="auto">每个好系统都需要规则。</p>
+<p dir="auto">而在我们的彩票中，我们需要<strong>非常清楚</strong>合约处于哪个阶段 —— 因为在不同时间应该允许不同的事情。</p>
+<p dir="auto">我们是让玩家加入吗？</p>
+<p dir="auto">我们是在等待选出赢家吗？</p>
+<p dir="auto">还是我们只是在两轮之间休息？</p>
+<p dir="auto">这就是这段小代码的作用：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">enum <span class="pl-en">LOTTERY_STATE</span></span> { OPEN, CLOSED, CALCULATING }
+LOTTERY_STATE <span class="pl-k">public</span> lotteryState;</pre></div>
+<p dir="auto">让我们分解一下。</p>
+<hr>
+<p dir="auto"><code>enum</code> 是 <strong>enumeration</strong>（枚举）的缩写，在 Solidity 中，它是一种创建变量可以取的命名状态列表的方法。</p>
+<p dir="auto">在这种情况下，我们为彩票定义了三种可能的状态：</p>
+<ul dir="auto">
+<li><code>OPEN</code> —— 彩票正在进行，<strong>玩家可以参与</strong>。</li>
+<li><code>CLOSED</code> —— 彩票<strong>不活跃</strong>。没有参与，没有选择。只是休息。</li>
+<li><code>CALCULATING</code> —— 彩票目前<strong>正在向 Chainlink 请求随机数</strong>，在我们获得结果之前<strong>没有人可以参与或重启游戏</strong>。</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔍 为什么这很重要</h3></div>
+<p dir="auto">这个 <code>lotteryState</code> 变量是<strong>合约的大脑</strong> —— 它帮助我们管理游戏流程并在正确的时间执行正确的规则。</p>
+<p dir="auto">例如：</p>
+<ul dir="auto">
+<li>我们只在 <code>lotteryState == OPEN</code> 时允许新玩家参与</li>
+<li>我们只在状态为 <code>CLOSED</code> 时开始新一轮</li>
+<li>我们只在 <code>CALCULATING</code> 状态时选择赢家</li>
+</ul>
+<p dir="auto">这防止了：</p>
+<ul dir="auto">
+<li>人们在选择赢家期间偷偷溜进来</li>
+<li>在另一轮中间意外开始新一轮</li>
+<li>重复的随机性请求（这会很昂贵且混乱）</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">👥 玩家跟踪</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">address payable</span>[] <span class="pl-k">public</span> players;
+<span class="pl-c1">address</span> <span class="pl-k">public</span> recentWinner;
+<span class="pl-c1">uint256</span> <span class="pl-k">public</span> entryFee;</pre></div>
+<ul dir="auto">
+<li><code>players</code> 存储本轮加入的每个人。</li>
+<li><code>recentWinner</code> 记住上一轮谁赢了。</li>
+<li><code>entryFee</code> 设置某人必须支付多少 ETH 才能加入。</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">⚙️ Chainlink 配置 —— 连接随机性引擎</h2></div>
+<p dir="auto">当我们向 Chainlink 请求一个随机数时，我们不只是说：</p>
+<blockquote>
+<p dir="auto">"嘿，给我一些随机的东西。"</p>
+</blockquote>
+<p dir="auto">不 —— 我们必须非常<strong>具体</strong>地说明我们想要什么。</p>
+<p dir="auto">这就是这组配置变量的作用：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> <span class="pl-k">public</span> subscriptionId;
+<span class="pl-c1">bytes32</span> <span class="pl-k">public</span> keyHash;
+<span class="pl-c1">uint32</span> <span class="pl-k">public </span>callbackGasLimit <span class="pl-k">=</span> <span class="pl-c1">100000</span>;
+<span class="pl-c1">uint16</span> <span class="pl-k">public </span>requestConfirmations <span class="pl-k">=</span> <span class="pl-c1">3</span>;
+<span class="pl-c1">uint32</span> <span class="pl-k">public </span>numWords <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+<span class="pl-c1">uint256</span> <span class="pl-k">public</span> latestRequestId;</pre></div>
+<p dir="auto">让我们逐一了解它们的作用，以及为什么重要。</p>
+<hr>
+<p dir="auto"><strong>subscriptionId</strong></p>
+<p dir="auto">这就像你的 <strong>Chainlink 账户 ID</strong> —— 它与你的 Chainlink 订阅绑定，你用 LINK 代币为其充值以支付预言机服务。</p>
+<p dir="auto">每次发出随机性请求时，LINK 都会从你的订阅中扣除。</p>
+<p dir="auto">这个 ID 告诉 Chainlink 协调器：</p>
+<blockquote>
+<p dir="auto">"记在我账上。"</p>
+</blockquote>
+<hr>
+<p dir="auto"><strong>keyHash</strong></p>
+<p dir="auto">这标识了<strong>你想要运行哪个 Chainlink 预言机任务</strong>。</p>
+<p dir="auto">可以想象 Chainlink 有许多不同的"任务" —— 每个任务由具有不同配置的不同预言机提供支持（有些更快，有些更去中心化等）。</p>
+<p dir="auto"><code>keyHash</code> 是一个唯一标识符，它说：</p>
+<blockquote>
+<p dir="auto">"使用 VRF 服务的这个特定配置。"</p>
+</blockquote>
+<p dir="auto">它确保你连接到适合你需求的<strong>正确预言机设置</strong>。</p>
+<hr>
+<p dir="auto"><strong>callbackGasLimit</strong></p>
+<p dir="auto">这为 Chainlink 在用结果回调你的合约时设置了一个 <strong>gas 预算</strong>。</p>
+<p dir="auto">Chainlink 必须调用你的 <code>fulfillRandomWords()</code> 函数来传递随机数。</p>
+<p dir="auto">就像任何其他交易一样，它需要 gas。</p>
+<p dir="auto">这个数字告诉 Chainlink：</p>
+<blockquote>
+<p dir="auto">"在履行请求时，你可以使用最多 X 个 gas。"</p>
+</blockquote>
+<p dir="auto">太低？你的函数可能会失败。</p>
+<p dir="auto">太高？你在浪费 gas。</p>
+<p dir="auto">所以你想找到一个不错的中间地带 —— 100,000 通常是简单逻辑（如选择赢家）的良好安全默认值。</p>
+<hr>
+<p dir="auto"><strong>requestConfirmations</strong></p>
+<p dir="auto">这设置了 Chainlink 在生成随机数之前等待<strong>多少个区块确认</strong>。</p>
+<p dir="auto">为什么？</p>
+<p dir="auto">因为你等待的确认越多，结果就越<strong>难被操纵</strong>（即使是矿工）。</p>
+<p dir="auto">它增加了<strong>安全性</strong>，但也增加了轻微的<strong>延迟</strong>。</p>
+<p dir="auto">像 <code>3</code> 这样的值是速度和安全性之间的可靠平衡。</p>
+<hr>
+<p dir="auto"><strong>numWords</strong></p>
+<p dir="auto">这告诉 Chainlink 你在一次请求中想要多少个<strong>随机数</strong>。</p>
+<p dir="auto">我们只是在这里选择一个赢家，所以 <code>1</code> 就足够了。</p>
+<p dir="auto">但如果你在做像洗牌列表、选择多个赢家或生成 NFT 特征之类的事情，你可以请求更多。</p>
+<hr>
+<p dir="auto"><strong>latestRequestId</strong></p>
+<p dir="auto">每次发出随机性请求时，Chainlink 都会给你一个<strong>请求 ID</strong>。</p>
+<p dir="auto">我们将它存储在这里，主要用于跟踪目的 —— 例如，在前端或如果我们想验证响应。</p>
+<p dir="auto">你可以把它想象成你的随机性订单的票号。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🛠️ 构造函数 —— 设置游戏室</h2></div>
+<p dir="auto">好的，在我们让任何人参与彩票之前，我们需要<strong>摆好桌子</strong>。</p>
+<p dir="auto">就像你为真实世界的彩票做准备一样 —— 打印彩票、锁定奖池和设置入场价格 —— 我们需要<strong>用正确的设置初始化我们的智能合约</strong>。</p>
+<p dir="auto">这就是<strong>构造函数</strong>的作用。</p>
+<p dir="auto">这是代码：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">constructor</span>(
+    <span class="pl-c1">address</span> <span class="pl-v">vrfCoordinator</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">_subscriptionId</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_keyHash</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">_entryFee</span>
+) <span class="pl-en">VRFConsumerBaseV2Plus</span>(vrfCoordinator) {
+    subscriptionId <span class="pl-k">=</span> _subscriptionId;
+    keyHash <span class="pl-k">=</span> _keyHash;
+    entryFee <span class="pl-k">=</span> _entryFee;
+    lotteryState <span class="pl-k">=</span> LOTTERY_STATE.CLOSED;
+}</pre></div>
+<p dir="auto">让我们解开这里发生的事情：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧩 构造函数基础</h3></div>
+<p dir="auto">在 Solidity 中，<code>constructor</code> 是一个<strong>特殊函数</strong>，它<strong>只运行一次</strong> —— 在合约首次部署时。</p>
+<p dir="auto">这是你<strong>设置初始条件</strong>和锁定重要值的唯一机会。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧭 参数分解</h3></div>
+<ul dir="auto">
+<li><strong><code>vrfCoordinator</code></strong> —— 这是你要部署到的区块链上 Chainlink VRF 协调器的地址。它充当接收随机性请求并返回结果的中间人。</li>
+<li><strong><code>_subscriptionId</code></strong> —— 这是你的 Chainlink 订阅 ID（用于支付 VRF 请求）。</li>
+<li><strong><code>_keyHash</code></strong> —— 这定义了 Chainlink 应该使用哪个随机性任务。</li>
+<li><strong><code>_entryFee</code></strong> —— 这设置了玩家必须支付多少 ETH 才能参与每轮彩票。</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">⚙️ 初始化</h3></div>
+<p dir="auto">在构造函数的主体内，我们正在做几件关键的事情：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>subscriptionId <span class="pl-k">=</span> _subscriptionId;
+keyHash <span class="pl-k">=</span> _keyHash;
+entryFee <span class="pl-k">=</span> _entryFee;
+lotteryState <span class="pl-k">=</span> LOTTERY_STATE.CLOSED;</pre></div>
+<p dir="auto">这意味着什么：</p>
+<ul dir="auto">
+<li>我们正在保存部署期间传递给我们的 <strong>Chainlink 配置</strong>。</li>
+<li>我们将<strong>入场费</strong>存储为状态变量，以便可以在 <code>enter()</code> 函数中重用。</li>
+<li>最重要的是，我们默认将 <code>lotteryState</code> 设置为 <code>CLOSED</code>。</li>
+</ul>
+<p dir="auto">为什么默认关闭？</p>
+<p dir="auto">因为我们想要<strong>控制</strong>。</p>
+<p dir="auto">我们不希望玩家在我们仍在设置或在彩票正式开始之前就进入。</p>
+<p dir="auto">所以我们保持门关闭 —— 之后，所有者可以调用 <code>startLottery()</code> 来打开大门。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🚪 参与彩票 —— 请进！</h2></div>
+<p dir="auto">好的 —— 设置完成了，门开了，霓虹灯标志正在发光：<strong>"彩票进行中。"</strong></p>
+<p dir="auto">现在是人们开始排队买票的时候了。</p>
+<p dir="auto">让我们看看实现这一点的函数：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> enter</span></span>() <span class="pl-k">public</span> <span class="pl-k">payable</span> {
+    <span class="pl-k">require</span>(lotteryState <span class="pl-k">==</span> LOTTERY_STATE.OPEN, <span class="pl-s">"<span class="pl-s">Lottery not open</span>"</span>);
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;=</span> entryFee, <span class="pl-s">"<span class="pl-s">Not enough ETH</span>"</span>);
+    players.<span class="pl-en">push</span>(<span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>));
+}</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🎟️ 这里发生了什么？</h3></div>
+<p dir="auto">这个函数是你的<strong>售票亭</strong>。它允许区块链上的任何用户参与彩票，只要他们遵守规则。</p>
+<p dir="auto">让我们逐行看：</p>
+<hr>
+<p dir="auto"><code>require(lotteryState == LOTTERY_STATE.OPEN, "Lottery not open");</code></p>
+<p dir="auto">我们只允许人们在彩票处于 <code>OPEN</code> 状态时进入。</p>
+<p dir="auto">这保护系统免受试图在选择赢家或设置期间偷偷溜进来的迟到者的影响。</p>
+<p dir="auto">如果彩票仍然是 <code>CLOSED</code> 或当前正在 <code>CALCULATING</code>，这一行将阻止交易。</p>
+<p dir="auto">这就像出现在一个关闭的嘉年华 —— 大门就是不会动。</p>
+<hr>
+<p dir="auto"><code>require(msg.value >= entryFee, "Not enough ETH");</code></p>
+<p dir="auto">接下来，我们检查玩家是否已经支付了<strong>至少</strong>所需的最低 ETH。</p>
+<p dir="auto"><code>msg.value</code> 是随交易一起发送的 ETH 数量。</p>
+<p dir="auto">如果它少于 <code>entryFee</code>，交易将被还原，并带有一条礼貌（但坚定）的消息：</p>
+<blockquote>
+<p dir="auto">"ETH 不够。"</p>
+</blockquote>
+<p dir="auto">这里没有免费乘车。</p>
+<hr>
+<p dir="auto"><code>players.push(payable(msg.sender));</code></p>
+<p dir="auto">最后 —— 如果所有检查都通过 —— 我们<strong>将玩家添加到列表中</strong>。</p>
+<p dir="auto">我们用 <code>payable(...)</code> 包装 <code>msg.sender</code>，因为我们计划稍后可能会向这个地址发送 ETH（如果他们赢了）。Solidity 需要我们将其标记为 <code>payable</code>，以便向其转移资金。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🟢 开始游戏 —— 让抽奖开始！</h2></div>
+<p dir="auto">在任何彩票售出之前……</p>
+<p dir="auto">在收集任何 ETH 之前……</p>
+<p dir="auto">必须有人正式启动。</p>
+<p dir="auto">那个人？<strong>合约所有者</strong> —— 部署合约的人。</p>
+<p dir="auto">这是翻转开关的函数：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> startLottery</span></span>() <span class="pl-k">external</span> onlyOwner {
+    <span class="pl-k">require</span>(lotteryState <span class="pl-k">==</span> LOTTERY_STATE.CLOSED, <span class="pl-s">"<span class="pl-s">Can't start yet</span>"</span>);
+    lotteryState <span class="pl-k">=</span> LOTTERY_STATE.OPEN;
+}</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>onlyOwner</code> —— 一个按钮，一个老板</h3></div>
+<p dir="auto"><code>onlyOwner</code> 修饰符（从 Chainlink 的基础合约继承）确保<strong>只有部署合约的人</strong>可以调用此函数。</p>
+<p dir="auto">这意味着随机玩家不能：</p>
+<ul dir="auto">
+<li>开始新一轮</li>
+<li>干扰彩票流程</li>
+<li>通过在轮中重启来破坏游戏</li>
+</ul>
+<p dir="auto">这就像把发射发令枪的权力交给比赛协调员 —— 而不是跑步者。</p>
+<hr>
+<p dir="auto"><code>require(lotteryState == LOTTERY_STATE.CLOSED, "Can't start yet");</code></p>
+<p dir="auto">这一行确保我们不会在<strong>另一轮已经在进行时</strong>开始一轮。</p>
+<p dir="auto">换句话说：</p>
+<ul dir="auto">
+<li>如果大门已经打开，你不能再打开大门。</li>
+<li>如果彩票仍在等待 Chainlink 返回赢家，你不能重启彩票。</li>
+</ul>
+<p dir="auto">这避免了混乱的重叠并保护游戏流程。</p>
+<hr>
+<p dir="auto"><code>lotteryState = LOTTERY_STATE.OPEN;</code></p>
+<p dir="auto">现在 —— 所有检查都通过了 —— 我们翻转开关。</p>
+<p dir="auto">合约将其状态从 <code>CLOSED</code> 更新为 <code>OPEN</code>，就这样……</p>
+<p dir="auto"><strong>游戏开始了。</strong></p>
+<p dir="auto">玩家现在可以通过向合约发送 ETH 来开始参与彩票。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">结束游戏并请求随机性 —— 最后的哨声</h2></div>
+<p dir="auto">一旦有足够的玩家加入并且是时候结束了，就需要有人正式结束游戏并要求 Chainlink 掷骰子。</p>
+<p dir="auto">这就是这个函数的作用：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> endLottery</span></span>() <span class="pl-k">external</span> onlyOwner {
+    <span class="pl-k">require</span>(lotteryState <span class="pl-k">==</span> LOTTERY_STATE.OPEN, <span class="pl-s">"<span class="pl-s">Lottery not open</span>"</span>);
+    lotteryState <span class="pl-k">=</span> LOTTERY_STATE.CALCULATING;
+
+    VRFV2PlusClient.RandomWordsRequest <span class="pl-k">memory</span> req <span class="pl-k">=</span> VRFV2PlusClient.<span class="pl-en">RandomWordsRequest</span>({
+        keyHash: keyHash,
+        subId: subscriptionId,
+        requestConfirmations: requestConfirmations,
+        callbackGasLimit: callbackGasLimit,
+        numWords: numWords,
+        extraArgs: VRFV2PlusClient.<span class="pl-en">_argsToBytes</span>(
+            VRFV2PlusClient.<span class="pl-en">ExtraArgsV1</span>({nativePayment: <span class="pl-c1">true</span>})
+        )
+    });
+
+    latestRequestId <span class="pl-k">=</span> s_vrfCoordinator.<span class="pl-en">requestRandomWords</span>(req);
+}</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 这里发生了什么？</h3></div>
+<p dir="auto">让我们逐步分解：</p>
+<hr>
+<p dir="auto"><code>require(lotteryState == LOTTERY_STATE.OPEN, "Lottery not open");</code></p>
+<p dir="auto">我们只想在彩票当前处于活动状态时结束它。</p>
+<p dir="auto">这个检查确保有人不会意外（或恶意）结束一个甚至还没开始的轮次。</p>
+<hr>
+<p dir="auto"><code>lotteryState = LOTTERY_STATE.CALCULATING;</code></p>
+<p dir="auto">一旦我们结束了这一轮，我们就将状态翻转为 <code>CALCULATING</code>。</p>
+<p dir="auto">这表明我们正在选择赢家的过程中，现在没有新玩家可以进入。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔮 构建请求</h3></div>
+<p dir="auto">这是真正魔法开始的地方：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>    VRFV2PlusClient.RandomWordsRequest <span class="pl-k">memory</span> req <span class="pl-k">=</span> VRFV2PlusClient.<span class="pl-en">RandomWordsRequest</span>({
+        keyHash: keyHash,
+        subId: subscriptionId,
+        requestConfirmations: requestConfirmations,
+        callbackGasLimit: callbackGasLimit,
+        numWords: numWords,
+        extraArgs: VRFV2PlusClient.<span class="pl-en">_argsToBytes</span>(
+            VRFV2PlusClient.<span class="pl-en">ExtraArgsV1</span>({nativePayment: <span class="pl-c1">true</span>})
+        )
+    });</pre></div>
+<p dir="auto">我们正在制作一个要发送给 Chainlink 的<strong>随机性请求</strong>。</p>
+<p dir="auto">这个对象告诉 Chainlink 它需要知道的一切：</p>
+<ul dir="auto">
+<li>使用哪个随机性任务（<code>keyHash</code>）</li>
+<li>谁在付款（<code>subscriptionId</code>）</li>
+<li>等待多少确认</li>
+<li>响应时使用多少 gas</li>
+<li>我们想要多少个随机数（在这种情况下，只有 <code>1</code>）</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📡 发送请求</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>latestRequestId <span class="pl-k">=</span> s_vrfCoordinator.<span class="pl-en">requestRandomWords</span>(req);</pre></div>
+<p dir="auto">这一行实际上<strong>将请求发送到 Chainlink VRF</strong>。</p>
+<p dir="auto">此时，我们的工作完成了 —— 合约等待 Chainlink 用随机数响应。</p>
+<p dir="auto">这是很酷的部分：<strong>我们不手动调用下一个函数。</strong></p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🏆 fulfillRandomWords —— 由 Chainlink 自动调用</h2></div>
+<p dir="auto">一旦 Chainlink 收到我们的请求并完成其密码学魔法，它会通过调用此函数直接将结果发送回我们的合约：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> fulfillRandomWords</span></span>(<span class="pl-c1">uint256</span>, <span class="pl-c1">uint256</span>[] <span class="pl-k">calldata</span> <span class="pl-v">randomWords</span>) <span class="pl-k">internal</span> <span class="pl-k">override</span> {
+    <span class="pl-k">require</span>(lotteryState <span class="pl-k">==</span> LOTTERY_STATE.CALCULATING, <span class="pl-s">"<span class="pl-s">Not ready to pick winner</span>"</span>);
+
+    <span class="pl-c1">uint256</span> winnerIndex <span class="pl-k">=</span> randomWords[<span class="pl-c1">0</span>] <span class="pl-k">%</span> players.<span class="pl-mi">length</span>;
+    <span class="pl-c1">address payable</span> winner <span class="pl-k">=</span> players[winnerIndex];
+    recentWinner <span class="pl-k">=</span> winner;
+
+    players <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">address payable</span>[](<span class="pl-c1">0</span>);
+    lotteryState <span class="pl-k">=</span> LOTTERY_STATE.CLOSED;
+
+    (<span class="pl-c1">bool</span> <span class="pl-v">sent</span>, ) <span class="pl-k">=</span> winner.<span class="pl-c1">call</span>{value: <span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance}(<span class="pl-s">""</span>);
+    <span class="pl-k">require</span>(sent, <span class="pl-s">"<span class="pl-s">Failed to send ETH to winner</span>"</span>);
+}</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🛡️ 安全检查</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(lotteryState <span class="pl-k">==</span> LOTTERY_STATE.CALCULATING, <span class="pl-s">"<span class="pl-s">Not ready to pick winner</span>"</span>);</pre></div>
+<p dir="auto">为了安全起见，我们再次检查合约确实处于选择赢家的过程中。</p>
+<p dir="auto">这里不允许有任何有趣的事情。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧮 选择赢家</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> winnerIndex <span class="pl-k">=</span> randomWords[<span class="pl-c1">0</span>] <span class="pl-k">%</span> players.<span class="pl-mi">length</span>;
+<span class="pl-c1">address payable</span> winner <span class="pl-k">=</span> players[winnerIndex];</pre></div>
+<p dir="auto">我们使用 Chainlink 提供的随机数并应用**模运算符（<code>%</code>）**以确保它映射到玩家索引之一。</p>
+<p dir="auto">假设：</p>
+<ul dir="auto">
+<li>我们有 5 个玩家</li>
+<li>Chainlink 给我们 <code>482340923</code></li>
+</ul>
+<p dir="auto">那么：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>winnerIndex <span class="pl-k">=</span> <span class="pl-c1">482340923</span> <span class="pl-k">%</span> <span class="pl-c1">5</span> <span class="pl-k">=</span> <span class="pl-c1">3</span></pre></div>
+<p dir="auto">砰 —— 列表中的第 4 个玩家获胜。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🎉 宣布赢家</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>recentWinner <span class="pl-k">=</span> winner;</pre></div>
+<p dir="auto">我们存储赢家的地址以供参考，可能在 UI 中显示或稍后记录。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧼 为下一轮重置</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>players <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">address payable</span>[](<span class="pl-c1">0</span>);
+lotteryState <span class="pl-k">=</span> LOTTERY_STATE.CLOSED;</pre></div>
+<p dir="auto">我们清空玩家列表并关闭彩票 —— 重置系统，以便所有者可以在准备好时开始新一轮。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💸 发送奖金</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>(<span class="pl-c1">bool</span> <span class="pl-v">sent</span>, ) <span class="pl-k">=</span> winner.<span class="pl-c1">call</span>{value: <span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance}(<span class="pl-s">""</span>);
+<span class="pl-k">require</span>(sent, <span class="pl-s">"<span class="pl-s">Failed to send ETH to winner</span>"</span>);</pre></div>
+<p dir="auto">最后，我们将合约中存储的<strong>所有 ETH</strong> 发送给幸运的赢家。</p>
+<p dir="auto">如果转账因某种原因失败，我们会回滚以避免任何不一致。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔬 自动 Chainlink 魔法</h3></div>
+<p dir="auto">需要明确的是：</p>
+<ul dir="auto">
+<li>我们<strong>手动调用</strong> <code>endLottery()</code> 来发送随机性请求。</li>
+<li>但我们<strong>不调用</strong> <code>fulfillRandomWords()</code> —— Chainlink 在返回随机数时<strong>自动</strong>为我们做这件事。</li>
+</ul>
+<p dir="auto">这就是预言机与智能合约交互方式的美妙之处 —— <strong>事件驱动编程</strong>的最佳体现。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🧾 实用函数</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>    <span class="pl-k">function<span class="pl-en"> getPlayers</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">address payable</span>[] <span class="pl-k">memory</span>) {
+        <span class="pl-k">return</span> players;
+    }</pre></div>
+<p dir="auto">这只是返回当前玩家列表。对前端应用程序或浏览器很有用。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🧪 运行合约（在 Base Sepolia 上使用 Chainlink VRF）</h2></div>
+<p dir="auto">我们已经编写了一个可证明公平的彩票，集成了 Chainlink VRF，并完整讲解了所有逻辑。</p>
+<p dir="auto">现在是时候<strong>部署并实时测试它了</strong>。</p>
+<p dir="auto">让我们一步步来 👇</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🌐 步骤 1：设置 Remix + MetaMask</h3></div>
+<ol dir="auto">
+<li><strong>打开 Remix IDE</strong></li>
+<li>在 MetaMask 中，<strong>切换到"Base Sepolia"网络</strong>。
+<ul dir="auto">
+<li>你可以通过 <a href="https://chainlist.org/" rel="nofollow">Chainlist</a> 将 Base Sepolia 添加到 MetaMask，或手动添加：
+<ul dir="auto">
+<li><strong>RPC</strong>：<code>https://sepolia.base.org</code></li>
+<li><strong>链 ID</strong>：<code>84532</code></li>
+<li><strong>货币符号</strong>：ETH</li>
+<li><strong>浏览器</strong>：<code>https://sepolia.basescan.org</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在 Remix 中，<strong>转到"Deploy &amp; Run Transactions"标签</strong></li>
+<li>将**"Environment"设置为"Injected Provider - MetaMask"**</li>
+</ol>
+<p dir="auto">现在 Remix 正在直接与你在 Base Sepolia 上的钱包对话 ✅</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">⛽ 步骤 2：在 Base Sepolia 上获取测试 ETH</h3></div>
+<p dir="auto">要与合约交互，你需要一些测试 ETH。</p>
+<ol dir="auto">
+<li>从 Chainlink Faucet 获取 Sepolia ETH</li>
+<li>使用 Base Bridge 桥接到 Base Sepolia，或者如果可用的话使用直接的 Base Sepolia 水龙头。</li>
+</ol>
+<blockquote>
+<p dir="auto">⚠️ Base Sepolia 水龙头可能有速率限制 —— 请耐心等待或使用开发网络替代方案。</p>
+</blockquote>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔑 步骤 3：订阅 Chainlink VRF</h3></div>
+<p dir="auto">Chainlink VRF 需要一个<strong>订阅</strong>来支付随机数请求。</p>
+<p dir="auto">以下是创建和充值的方法：</p>
+<ol dir="auto">
+<li>前往 Chainlink VRF 订阅管理器</li>
+<li>连接你的钱包并切换到 <strong>Base Sepolia</strong></li>
+<li>点击 <strong>"Create Subscription"</strong></li>
+<li>记下 <strong>Subscription ID</strong>（你在部署时需要它）</li>
+<li>点击 <strong>"Add Funds"</strong> 并存入 <strong>LINK 代币</strong>
+<ul dir="auto">
+<li>你可以从同一页面的水龙头获取测试网 LINK</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p dir="auto">⚠️ 确保你有 Base Sepolia 上的 LINK，而不是以太坊 Sepolia 上的。</p>
+</blockquote>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">👤 步骤 4：将你的合约添加为消费者</h3></div>
+<p dir="auto">一旦你的合约部署完成，你需要<strong>授权它使用你的 VRF 订阅</strong>。</p>
+<ol dir="auto">
+<li>部署后复制你的合约地址</li>
+<li>返回 VRF 订阅页面</li>
+<li>点击 <strong>"Add Consumer"</strong></li>
+<li>粘贴你的合约地址</li>
+</ol>
+<p dir="auto">完成！现在你的合约被允许使用你的订阅请求随机性 ✅</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧱 步骤 5：在 Remix 中部署合约</h3></div>
+<ol dir="auto">
+<li>在 Remix 中，编译你的合约</li>
+<li>转到 <strong>Deploy &amp; Run Transactions</strong> 标签</li>
+<li>在构造函数字段中输入以下内容：
+<ul dir="auto">
+<li>
+<p dir="auto"><code>vrfCoordinator</code>：Base Sepolia VRF 协调器地址</p>
+<blockquote>
+<p dir="auto">0x2ed832ba0d0969071f133b3f07f2f79c37f511f1</p>
+</blockquote>
+</li>
+<li>
+<p dir="auto"><code>subscriptionId</code>：（来自 Chainlink VRF UI）</p>
+</li>
+<li>
+<p dir="auto"><code>keyHash</code>：你想要使用的任务</p>
+<blockquote>
+<p dir="auto">0xc17251dcf7c0358d32be3324e9b61fb71c71ff0b245f78b45f87838f19d3f01d（Base Sepolia 默认密钥哈希）</p>
+</blockquote>
+</li>
+<li>
+<p dir="auto"><code>entryFee</code>：例如，<code>1000000000000000</code> 表示 0.001 ETH</p>
+</li>
+</ul>
+</li>
+</ol>
+<p dir="auto">点击 <strong>"Deploy"</strong>，并确认 MetaMask 交易。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🎮 步骤 6：与合约交互</h3></div>
+<p dir="auto">现在它已经部署了：</p>
+<ul dir="auto">
+<li>🟢 调用 <code>startLottery()</code>（onlyOwner）</li>
+<li>🧑 任何人都可以 <code>enter()</code> 彩票（发送 ETH &gt; entryFee）</li>
+<li>🛑 准备好后，调用 <code>endLottery()</code>（onlyOwner）请求随机性</li>
+<li>🧙 Chainlink 将自动调用 <code>fulfillRandomWords()</code></li>
+<li>🏆 检查 <code>recentWinner</code> 查看谁赢了</li>
+<li>🔄 调用 <code>getPlayers()</code> 查看当前轮次的参与者</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🧠 你刚刚掌握了什么</h2></div>
+<p dir="auto">你不只是构建了一个彩票合约 ——</p>
+<p dir="auto">你刚刚迈出了进入<strong>真实世界智能合约交互</strong>世界的第一大步。</p>
+<p dir="auto">以下是你现在掌握的技能：</p>
+<ul dir="auto">
+<li>✅ 如何<strong>集成 Chainlink VRF</strong> 以将<strong>安全、可验证的随机性</strong>带到链上</li>
+<li>✅ 如何使用 <code>enum</code> 设计<strong>有状态合约</strong>来管理游戏流程</li>
+<li>✅ 如何<strong>安全处理 ETH</strong> —— 收集、存储和发送回去</li>
+<li>✅ 如何构建<strong>对外部事件做出反应</strong>的合约，比如预言机响应</li>
+</ul>
+<hr>
+<p dir="auto">这是你第二次体验<strong>链下到链上的魔法</strong> —— 你的智能合约不只是孤立存在，而是实际上与外部世界对话。</p>
+<p dir="auto">有了 Chainlink VRF，你现在有了一种可信的方法将随机性添加到你的 dApp 中 —— 这只是个开始。</p>
+<p dir="auto">你可以采用这个概念并构建：</p>
+<ul dir="auto">
+<li>🎮 具有随机战利品掉落的区块链游戏</li>
+<li>🎲 骰子、纸牌游戏和回合制机制</li>
+<li>🧬 具有随机特征的 NFT 铸造</li>
+<li>📦 神秘盒子和抽奖</li>
+<li>🗳️ 具有随机陪审团选择的公平 DAO 提案</li>
+</ul>
+<p dir="auto">还有更多。</p>
+                </div>
                     </div>
                 </div>
             </div>
