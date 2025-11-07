@@ -1511,16 +1511,16 @@ ID: 19
 </ul>
 <p dir="auto">是的，这一切都是使用以太坊内置的 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">ecrecover</code> 功能安全地完成的。</p>
 <p dir="auto"><strong>我们的游戏计划🌌</strong>
-以下是我们将要构建的内容，以及我们将如何分解它：
+ 以下是我们将要构建的内容，以及我们将如何分解它：
 <strong>1. 活动设置</strong>
-组织者定义姓名、日期和最大与会者人数。
+        组织者定义姓名、日期和最大与会者人数。
 <strong>2.加密邀请</strong>
-后端不是存储地址，而是为每个已批准的来宾签署一条消息。
+       后端不是存储地址，而是为每个已批准的来宾签署一条消息。
 <strong>3.签到流程</strong>
-来宾提交他们签名的消息。
+       来宾提交他们签名的消息。
 该合同使用 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">ecrecover</code> 来验证它是否由组织者签署。
 <strong>4.安全性和灵活性</strong>
-链上没有地址列表。没有预加载的白名单。没有浪费的气体。
+        链上没有地址列表。没有预加载的白名单。没有浪费的气体。
 只有有效的、签名的与会者才能进入——而且这一切都可以在链上完全验证。</p>
 <p dir="auto"><strong>您将学到什么</strong>
 如何对结构化数据进行哈希处理  （<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">abi.encodePacked</code>）
@@ -2180,14 +2180,14 @@ ID: 19
 <p dir="auto">🧱</p>
 <div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><style>pre code, pre span { color: #f8f8f2 !important; }</style><code> **`onlyOrganizer` 修饰符：**
 
-  确保只有部署合同的人员（ **组织者** ）才能更改此设置。这可以防止随机用户暂停或恢复事件。
+      确保只有部署合同的人员（ **组织者** ）才能更改此设置。这可以防止随机用户暂停或恢复事件。
 </code></pre></div>
 <p dir="auto"><strong><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">isEventActive = _isActive;</code></strong></p>
 <div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><style>pre code, pre span { color: #f8f8f2 !important; }</style><code>        根据传递的参数更新事件的活动状态：
 
-        如果 `_isActive` 为 `true`，则事件为打开。
+            如果 `_isActive` 为 `true`，则事件为打开。
 
-        如果 `_isActive` 为 `false`，则签入将暂时暂停。
+            如果 `_isActive` 为 `false`，则签入将暂时暂停。
 </code></pre></div>
 <p dir="auto"><strong><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">emit EventStatusChanged（_isActive）</code>;</strong></p>
 <p dir="auto">每次状态变化时都会发出链上事件——对于前端仪表板或区块链浏览器立即反映变化很有用。</p>
@@ -2947,3 +2947,37 @@ ID: 19
     </script>
 </body>
 </html>
+                
+
+                setTimeout(function() {
+
+                    answerModal.style.display = 'none';
+
+                    envelopeContainer.classList.remove('open');
+
+                }, 600);
+
+            });
+
+            
+
+            // 点击弹窗外部关闭
+
+            answerModal.addEventListener('click', function(e) {
+
+                if (e.target === answerModal) {
+
+                    closeLetter.click();
+
+                }
+
+            });
+
+        });
+
+    </script>
+
+</body>
+
+</html>
+

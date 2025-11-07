@@ -773,7 +773,109 @@
             }
         }
     </style>
-</head>
+
+        <style>
+        /* 隐藏 mermaid 渲染组件 */
+        .md-content section.js-render-needs-enrichment,
+        .md-content .js-render-enrichment-target,
+        .md-content .js-render-block-actions,
+        .md-content .render-container,
+        .md-content .js-render-enrichment-fallback,
+        .md-content details[class*="details"],
+        .md-content iframe[title="File display"] {
+            display: none !important;
+        }
+        
+        /* 修复 GitHub 代码块样式 */
+        .md-content .highlight,
+        .md-content .highlight-source-solidity,
+        .md-content .highlight-source-js,
+        .md-content .highlight-source-javascript {
+            background: #2d2a2e !important;
+            border-radius: 10px;
+            padding: 20px !important;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content .highlight pre,
+        .md-content .highlight-source-solidity pre,
+        .md-content .highlight-source-js pre {
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
+        
+        /* 基础代码文字颜色 - 确保所有文字都可见 */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        .md-content .highlight code,
+        .md-content .highlight pre code,
+        .md-content .highlight pre span,
+        .md-content .highlight pre * {
+            /* Added to ensure all text in pre is visible */
+            color: #f8f8f2 !important;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* 确保代码块内所有文字（包括没有 span 包裹的文字）都可见 */
+        .md-content .highlight pre,
+        .md-content .highlight pre code {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特别处理代码块中的纯文本节点（没有被 span 包裹的文字，如变量名） */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 确保所有直接文本内容都可见 - 覆盖继承的颜色 */
+        .md-content .highlight pre * {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特别处理变量名 - 确保清晰可见 */
+        .md-content .highlight pre span.pl-v,
+        .md-content .highlight pre span.pl-en,
+        .md-content .highlight pre span.pl-e {
+            color: #dcdcaa !important;
+            font-weight: 500 !important;
+        }
+        
+        /* GitHub 语法高亮类颜色修复 */
+        .md-content .highlight [class*="pl-"] {
+            color: #f8f8f2 !important; /* Default to light color */
+        }
+        .md-content .highlight .pl-c { /* 注释 */
+            color: #6a9955 !important;
+        }
+        .md-content .highlight .pl-s, .md-content .highlight .pl-s1 { /* 字符串 */
+            color: #ce9178 !important;
+        }
+        .md-content .highlight .pl-k, .md-content .highlight .pl-c1 { /* 关键字/常量 */
+            color: #569cd6 !important;
+        }
+        .md-content .highlight .pl-v, .md-content .highlight .pl-en, .md-content .highlight .pl-e, .md-content .highlight .pl-ent { /* 变量/函数名/实体名 */
+            color: #dcdcaa !important;
+            font-weight: 500 !important;
+        }
+        .md-content code {
+            background-color: rgba(139, 115, 85, 0.15);
+            color: var(--warm-brown);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+        }
+        </style>
+        </head>
 <body>
     <div class="nav-bar">
         <div class="nav-left">
@@ -1291,12 +1393,1077 @@ function approveCancellation() external {
             </div>
             <div class="letter-body">
                 <div id="md-content" class="md-content">
-                    <div class="md-section">
-                        <h1>第24天内容</h1>
-                        <p style="text-align: center; padding: 40px; color: #999;">
-                            ⏳ 内容正在精心准备中...<br>
-                            敬请期待！
-                        </p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">去中心化托管 - Escrow</h1></div>
+<p dir="auto">Day: Day 24
+ID: 24
+译者: Rebecca9715
+难度等级: 高级</p>
+<p dir="auto">欢迎回到 <strong>30 天 Solidity</strong>，在这里我们每天都在向掌握智能合约迈进一步——不仅仅是理论上的，更是实践中的。</p>
+<p dir="auto">今天，我们要构建一些<strong>真实的</strong>东西。一些<strong>实用的</strong>东西。一些真正可以在现实世界市场中使用的东西。</p>
+<p dir="auto">一个<strong>托管服务</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">等等——什么是托管？</h3></div>
+<p dir="auto">如果你曾经在网上购买过昂贵的东西——也许是自由职业工作、二手设备或门票——你可能希望有某个中间人来持有资金，直到<em>每个人都满意</em>。</p>
+<p dir="auto">这就是<strong>托管</strong>的全部意义。</p>
+<p dir="auto">在现实世界中，像 PayPal 或 eBay 这样的公司会为你做这件事。他们持有你的钱直到你拿到物品。如果出现问题，他们会介入。</p>
+<p dir="auto">但在 Web3 中呢？我们不需要这些公司。</p>
+<p dir="auto">我们可以<strong>编写中间人代码</strong>——并使其无需信任。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">我们要构建什么</h3></div>
+<p dir="auto">这个合约，<code>EnhancedSimpleEscrow</code>，是一个安全的智能合约，它可以：</p>
+<ul dir="auto">
+<li>持有 ETH 直到买家确认收货</li>
+<li>让任何一方在出现问题时提出争议</li>
+<li>允许中立的<strong>仲裁人</strong>介入并解决问题</li>
+<li>具有内置的<strong>超时逻辑</strong>，这样买家就不会永远被挂起</li>
+<li>支持<strong>相互取消</strong>，如果双方同意取消交易</li>
+</ul>
+<p dir="auto">没有文书工作。没有等待。没有可疑的第三方。</p>
+<p dir="auto">只有清晰的规则——用 Solidity 编写。</p>
+<hr>
+<p dir="auto">这个项目教你如何：</p>
+<ul dir="auto">
+<li>使用枚举来管理合约状态</li>
+<li>使用 <code>block.timestamp</code> 处理超时</li>
+<li>实现争议解决工作流程</li>
+<li>使用像 <code>require()</code> 这样的修饰符进行严格的访问控制</li>
+<li>并使你的合约通过清晰的事件和只读函数为前端做好准备</li>
+</ul>
+<p dir="auto">到最后，你将构建一个<strong>真正可工作的托管系统</strong>，它可以为数字市场、自由职业平台、NFT 交易等提供动力。</p>
+<p dir="auto">让我们深入研究，并用代码编写信任的规则。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🔐 EnhancedSimpleEscrow – 智能合约中间人</h2></div>
+<p dir="auto">托管服务是区块链最实用的用例之一。今天，你将从头开始构建一个。</p>
+<p dir="auto">这个智能合约就像一个<strong>数字中间人</strong>。它在两方——一个<strong>买家</strong>和一个<strong>卖家</strong>——完成交易时安全地持有 ETH。如果出现问题，一个受信任的<strong>仲裁人</strong>可以介入解决争议。</p>
+<p dir="auto">它无需信任、安全，并且完全按照编写的方式运行——没有意外。</p>
+<p dir="auto">首先是完整的合约：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🧾 完整合约代码：<code>EnhancedSimpleEscrow.sol</code></h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-k">pragma solidity</span> <span class="pl-k">^</span><span class="pl-c1">0.8.20</span>;
+
+<span class="pl-c">/// @title EnhancedSimpleEscrow - 具有超时、取消和事件的安全托管合约</span>
+<span class="pl-k">contract</span> <span class="pl-en">EnhancedSimpleEscrow</span> {
+    <span class="pl-k">enum <span class="pl-en">EscrowState</span></span> { AWAITING_PAYMENT, AWAITING_DELIVERY, COMPLETE, DISPUTED, CANCELLED }
+
+    <span class="pl-c1">address</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> buyer;
+    <span class="pl-c1">address</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> seller;
+    <span class="pl-c1">address</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> arbiter;
+
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> amount;
+    EscrowState <span class="pl-k">public</span> state;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> depositTime;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> deliveryTimeout; <span class="pl-c">// 存款后的持续时间（以秒为单位）</span>
+
+    <span class="pl-k">event <span class="pl-en">PaymentDeposited</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">buyer</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+    <span class="pl-k">event <span class="pl-en">DeliveryConfirmed</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">buyer</span>, <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">seller</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+    <span class="pl-k">event <span class="pl-en">DisputeRaised</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">initiator</span>);
+    <span class="pl-k">event <span class="pl-en">DisputeResolved</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">arbiter</span>, <span class="pl-c1">address</span> <span class="pl-v">recipient</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+    <span class="pl-k">event <span class="pl-en">EscrowCancelled</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">initiator</span>);
+    <span class="pl-k">event <span class="pl-en">DeliveryTimeoutReached</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">buyer</span>);
+
+    <span class="pl-k">constructor</span>(<span class="pl-c1">address</span> <span class="pl-v">_seller</span>, <span class="pl-c1">address</span> <span class="pl-v">_arbiter</span>, <span class="pl-c1">uint256</span> <span class="pl-v">_deliveryTimeout</span>) {
+        <span class="pl-k">require</span>(_deliveryTimeout <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Delivery timeout must be greater than zero</span>"</span>);
+        buyer <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>;
+        seller <span class="pl-k">=</span> _seller;
+        arbiter <span class="pl-k">=</span> _arbiter;
+        state <span class="pl-k">=</span> EscrowState.AWAITING_PAYMENT;
+        deliveryTimeout <span class="pl-k">=</span> _deliveryTimeout;
+    }
+
+    <span class="pl-k">receive</span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+        <span class="pl-k">revert</span>(<span class="pl-s">"<span class="pl-s">Direct payments not allowed</span>"</span>);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> deposit</span></span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer, <span class="pl-s">"<span class="pl-s">Only buyer can deposit</span>"</span>);
+        <span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.AWAITING_PAYMENT, <span class="pl-s">"<span class="pl-s">Already paid</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Amount must be greater than zero</span>"</span>);
+
+        amount <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>;
+        state <span class="pl-k">=</span> EscrowState.AWAITING_DELIVERY;
+        depositTime <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>;
+        <span class="pl-k">emit</span> <span class="pl-en">PaymentDeposited</span>(buyer, amount);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> confirmDelivery</span></span>() <span class="pl-k">external</span> {
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer, <span class="pl-s">"<span class="pl-s">Only buyer can confirm</span>"</span>);
+        <span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY, <span class="pl-s">"<span class="pl-s">Not in delivery state</span>"</span>);
+
+        state <span class="pl-k">=</span> EscrowState.COMPLETE;
+        <span class="pl-c1">payable</span>(seller).<span class="pl-en">transfer</span>(amount);
+        <span class="pl-k">emit</span> <span class="pl-en">DeliveryConfirmed</span>(buyer, seller, amount);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> raiseDispute</span></span>() <span class="pl-k">external</span> {
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer <span class="pl-k">||</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> seller, <span class="pl-s">"<span class="pl-s">Not authorized</span>"</span>);
+        <span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY, <span class="pl-s">"<span class="pl-s">Can't dispute now</span>"</span>);
+
+        state <span class="pl-k">=</span> EscrowState.DISPUTED;
+        <span class="pl-k">emit</span> <span class="pl-en">DisputeRaised</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> resolveDispute</span></span>(<span class="pl-c1">bool</span> <span class="pl-v">_releaseToSeller</span>) <span class="pl-k">external</span> {
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> arbiter, <span class="pl-s">"<span class="pl-s">Only arbiter can resolve</span>"</span>);
+        <span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.DISPUTED, <span class="pl-s">"<span class="pl-s">No dispute to resolve</span>"</span>);
+
+        state <span class="pl-k">=</span> EscrowState.COMPLETE;
+        <span class="pl-k">if</span> (_releaseToSeller) {
+            <span class="pl-c1">payable</span>(seller).<span class="pl-en">transfer</span>(amount);
+            <span class="pl-k">emit</span> <span class="pl-en">DisputeResolved</span>(arbiter, seller, amount);
+        } <span class="pl-k">else</span> {
+            <span class="pl-c1">payable</span>(buyer).<span class="pl-en">transfer</span>(amount);
+            <span class="pl-k">emit</span> <span class="pl-en">DisputeResolved</span>(arbiter, buyer, amount);
+        }
+    }
+
+    <span class="pl-k">function<span class="pl-en"> cancelAfterTimeout</span></span>() <span class="pl-k">external</span> {
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer, <span class="pl-s">"<span class="pl-s">Only buyer can trigger timeout cancellation</span>"</span>);
+        <span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY, <span class="pl-s">"<span class="pl-s">Cannot cancel in current state</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">&gt;=</span> depositTime <span class="pl-k">+</span> deliveryTimeout, <span class="pl-s">"<span class="pl-s">Timeout not reached</span>"</span>);
+
+        state <span class="pl-k">=</span> EscrowState.CANCELLED;
+        <span class="pl-c1">payable</span>(buyer).<span class="pl-en">transfer</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance);
+        <span class="pl-k">emit</span> <span class="pl-en">EscrowCancelled</span>(buyer);
+        <span class="pl-k">emit</span> <span class="pl-en">DeliveryTimeoutReached</span>(buyer);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> cancelMutual</span></span>() <span class="pl-k">external</span> {
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer <span class="pl-k">||</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> seller, <span class="pl-s">"<span class="pl-s">Not authorized</span>"</span>);
+        <span class="pl-k">require</span>(
+            state <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY <span class="pl-k">||</span> state <span class="pl-k">==</span> EscrowState.AWAITING_PAYMENT,
+            <span class="pl-s">"<span class="pl-s">Cannot cancel now</span>"</span>
+        );
+
+        EscrowState previousState <span class="pl-k">=</span> state;
+        state <span class="pl-k">=</span> EscrowState.CANCELLED;
+
+        <span class="pl-k">if</span> (previousState <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY) {
+            <span class="pl-c1">payable</span>(buyer).<span class="pl-en">transfer</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance);
+        }
+
+        <span class="pl-k">emit</span> <span class="pl-en">EscrowCancelled</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> getTimeLeft</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+        <span class="pl-k">if</span> (state <span class="pl-k">!=</span> EscrowState.AWAITING_DELIVERY) <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+        <span class="pl-k">if</span> (<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">&gt;=</span> depositTime <span class="pl-k">+</span> deliveryTimeout) <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+        <span class="pl-k">return</span> (depositTime <span class="pl-k">+</span> deliveryTimeout) <span class="pl-k">-</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>;
+    }
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">1. 产品说明书</h1></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">用户流程</h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">数据库</h3></div>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th>Contract</th>
+<th>Type</th>
+<th>Bases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Escrow</strong></td>
+<td>Implementation</td>
+<td>Ownable, ReentrancyGuard</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th>└ Function Name</th>
+<th>Visibility</th>
+<th>Mutability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>constructor</td>
+<td>public</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>deposit</td>
+<td>external</td>
+<td>payable 🛑</td>
+</tr>
+<tr>
+<td>confirmDelivery</td>
+<td>external</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>raiseDispute</td>
+<td>external</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>resolveDispute</td>
+<td>external (onlyArbiter)</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>cancelMutual</td>
+<td>external</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>cancelAfterTimeout</td>
+<td>external</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>getState</td>
+<td>public</td>
+<td>view</td>
+</tr>
+<tr>
+<td>getBalance</td>
+<td>public</td>
+<td>view</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">2. 细节解说</h1></div>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🔖 合约名称</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">contract</span> <span class="pl-en">EnhancedSimpleEscrow</span> {
+</pre></div>
+<p dir="auto">我们称它为 <strong>EnhancedSimpleEscrow</strong>，因为它建立在基本托管思想的基础上——并添加了争议处理、基于超时的取消和前端友好的事件等功能。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🧠 状态变量和设置</h2></div>
+<p dir="auto">让我们探索合约的大脑——持有所有重要数据的变量。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">涉及的各方：</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">address</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> buyer;
+<span class="pl-c1">address</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> seller;
+<span class="pl-c1">address</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> arbiter;
+</pre></div>
+<p dir="auto">这些是在合约部署时设置的三个固定地址。</p>
+<ul dir="auto">
+<li><strong>buyer</strong>（买家）是发送资金的人</li>
+<li><strong>seller</strong>（卖家）是交付商品或服务的人</li>
+<li><strong>arbiter</strong>（仲裁人）是解决争议的受信任第三方</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">托管状态管理：</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">enum <span class="pl-en">EscrowState</span></span> { AWAITING_PAYMENT, AWAITING_DELIVERY, COMPLETE, DISPUTED, CANCELLED }
+EscrowState <span class="pl-k">public</span> state;
+</pre></div>
+<p dir="auto">我们使用 <code>enum</code> 来跟踪交易处于哪个阶段。这使得流程<strong>更容易理解且更安全</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">金额和时间：</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> <span class="pl-k">public</span> amount;
+<span class="pl-c1">uint256</span> <span class="pl-k">public</span> depositTime;
+<span class="pl-c1">uint256</span> <span class="pl-k">public</span> deliveryTimeout;
+</pre></div>
+<ul dir="auto">
+<li><code>amount</code> 是锁定在托管中的 ETH</li>
+<li><code>depositTime</code> 跟踪买家何时付款</li>
+<li><code>deliveryTimeout</code> 是卖家交付的窗口期（以秒为单位）</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">事件：</h3></div>
+<p dir="auto">合约为每个关键操作发出事件：存款、确认、争议、取消。这使得合约<strong>易于与前端</strong>或监控工具集成。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre>    <span class="pl-s1">event</span> <span class="pl-v">PaymentDeposited</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">indexed</span> <span class="pl-s1">buyer</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">amount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">event</span> <span class="pl-v">DeliveryConfirmed</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">indexed</span> <span class="pl-s1">buyer</span><span class="pl-kos">,</span> <span class="pl-s1">address</span> <span class="pl-s1">indexed</span> <span class="pl-s1">seller</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">amount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">event</span> <span class="pl-v">DisputeRaised</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">indexed</span> <span class="pl-s1">initiator</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">event</span> <span class="pl-v">DisputeResolved</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">indexed</span> <span class="pl-s1">arbiter</span><span class="pl-kos">,</span> <span class="pl-s1">address</span> <span class="pl-s1">recipient</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">amount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">event</span> <span class="pl-v">EscrowCancelled</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">indexed</span> <span class="pl-s1">initiator</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">event</span> <span class="pl-v">DeliveryTimeoutReached</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">indexed</span> <span class="pl-s1">buyer</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这些事件就像<strong>广播</strong>——它们被前端、索引器或分析仪表板接收，并触发视觉反馈，如：</p>
+<ul dir="auto">
+<li>"收到付款！"</li>
+<li>"托管完成！"</li>
+<li>"提出争议！"</li>
+</ul>
+<p dir="auto">让我们逐一回顾。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">1. <code>PaymentDeposited</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">PaymentDeposited</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">buyer</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+</pre></div>
+<p dir="auto">当买家成功将 ETH 存入托管时触发。</p>
+<p dir="auto">用于：</p>
+<ul dir="auto">
+<li>确认托管已开始</li>
+<li>在前端显示锁定的金额</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">2. <code>DeliveryConfirmed</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">DeliveryConfirmed</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">buyer</span>, <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">seller</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+</pre></div>
+<p dir="auto">当买家确认他们已收到产品或服务时触发。</p>
+<p dir="auto">用于：</p>
+<ul dir="auto">
+<li>确认交易完成</li>
+<li>表明卖家已收到付款</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">3. <code>DisputeRaised</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">DisputeRaised</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">initiator</span>);
+</pre></div>
+<p dir="auto">当买家或卖家提出争议时触发。</p>
+<p dir="auto">用于：</p>
+<ul dir="auto">
+<li>通知前端并可能触发 UI 更改（如"争议进行中"）</li>
+<li>让仲裁人知道需要他们的关注</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">4. <code>DisputeResolved</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">DisputeResolved</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">arbiter</span>, <span class="pl-c1">address</span> <span class="pl-v">recipient</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>);
+</pre></div>
+<p dir="auto">当仲裁人解决争议并转移资金时触发。</p>
+<p dir="auto">用于：</p>
+<ul dir="auto">
+<li>显示争议的最终状态</li>
+<li>显示谁获得了资金以及金额</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">5. <code>EscrowCancelled</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">EscrowCancelled</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">initiator</span>);
+</pre></div>
+<p dir="auto">当托管被取消时触发，无论是通过超时还是相互协议。</p>
+<p dir="auto">用于：</p>
+<ul dir="auto">
+<li>用"托管已取消"状态更新 UI</li>
+<li>表明已发出退款</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">6. <code>DeliveryTimeoutReached</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">DeliveryTimeoutReached</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">buyer</span>);
+</pre></div>
+<p dir="auto">如果买家在交付窗口到期后取消，则触发。</p>
+<p dir="auto">用于：</p>
+<ul dir="auto">
+<li>显示超时原因</li>
+<li>解释为什么资金被自动退还</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🔧 函数 – 让托管逻辑活起来</h1></div>
+<p dir="auto">好的，我们已经设置好了参与者。我们已经定义了规则。我们已经准备好了所有变量、状态和事件。</p>
+<p dir="auto">现在是时候通过<strong>函数</strong>让这个托管系统活起来了。</p>
+<p dir="auto">函数是所有<strong>操作</strong>发生的地方。</p>
+<p dir="auto">它们是用户按下的按钮，合约执行的规则，以及确保资金<em>只在满足条件时 流动</em>的逻辑。</p>
+<p dir="auto">在这个合约中，托管流程的每一步都清晰地映射出来：</p>
+<ul dir="auto">
+<li><strong>买家存入</strong> ETH 到托管中</li>
+<li><strong>卖家交付</strong>，买家确认</li>
+<li>如果有麻烦，任何一方都可以<strong>提出争议</strong></li>
+<li>中立的<strong>仲裁人介入</strong>解决冲突</li>
+<li>如果卖家拖延太久，<strong>买家可以取消</strong></li>
+<li>双方都可以<strong>相互退出</strong></li>
+</ul>
+<p dir="auto">每个步骤都由专门的函数处理。</p>
+<p dir="auto">我们将详细查看每一个——并<strong>解码每一行在做什么</strong>，这样它就不仅仅是你复制粘贴的东西，而是你完全理解的东西。</p>
+<p dir="auto">让我们从一开始，从第一个运行的东西开始：<code>constructor()</code>。</p>
+<p dir="auto">准备好了吗？让我们开始吧。</p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🔨 <code>constructor</code> – 设置托管</h1></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">constructor</span>(<span class="pl-c1">address</span> <span class="pl-v">_seller</span>, <span class="pl-c1">address</span> <span class="pl-v">_arbiter</span>, <span class="pl-c1">uint256</span> <span class="pl-v">_deliveryTimeout</span>) {
+    <span class="pl-k">require</span>(_deliveryTimeout <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Delivery timeout must be greater than zero</span>"</span>);
+    buyer <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>;
+    seller <span class="pl-k">=</span> _seller;
+    arbiter <span class="pl-k">=</span> _arbiter;
+    state <span class="pl-k">=</span> EscrowState.AWAITING_PAYMENT;
+    deliveryTimeout <span class="pl-k">=</span> _deliveryTimeout;
+}
+</pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 什么是构造函数？</h3></div>
+<p dir="auto">在 Solidity 中，<code>constructor</code> 是一个<strong>特殊函数</strong>，它<strong>只运行一次</strong>——当合约首次部署时。</p>
+<p dir="auto">它就像合约的设置阶段。这是我们定义<strong>谁参与</strong>、<strong>事情应该花多长时间</strong>以及系统<strong>起始状态</strong>应该是什么的地方。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🚀 这个构造函数做什么</h3></div>
+<p dir="auto">当买家（部署合约的人）调用这个构造函数时，他们提供：</p>
+<ul dir="auto">
+<li><strong>卖家的</strong>地址（交付商品或服务的人）</li>
+<li><strong>仲裁人的</strong>地址（可以解决争议的中立第三方）</li>
+<li><strong>交付超时</strong>——卖家在买家可以取消之前必须交付的时间</li>
+</ul>
+<p dir="auto">然后这个函数设置好一切，让托管开始。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔍 逐行分解</h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">1. ✅ 必须设置超时</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(_deliveryTimeout <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Delivery timeout must be greater than zero</span>"</span>);
+</pre></div>
+<p dir="auto">这是一个基本的安全检查。我们确保交付超时是一个<strong>正数</strong>。</p>
+<p dir="auto">为什么？因为如果它是 0，买家可以在存入资金的那一刻立即取消托管——这违背了给卖家时间交付的整个目的。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">2. 👤 设置买家</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>buyer <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>;
+</pre></div>
+<p dir="auto">买家是<strong>部署合约的人</strong>，<code>msg.sender</code> 总是指调用函数的人——在这种情况下，是部署者。</p>
+<p dir="auto">这就是为什么我们在这里将他们分配为买家。</p>
+<p dir="auto">他们是发起交易并负责锁定资金的人。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">3. 📦 分配卖家</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>seller <span class="pl-k">=</span> _seller;
+</pre></div>
+<p dir="auto">卖家的地址在部署期间作为参数传入。</p>
+<p dir="auto"><em>如果</em> 交付被确认的话，这是最终将收到资金的人。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">4. ⚖️ 设置仲裁人</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>arbiter <span class="pl-k">=</span> _arbiter;
+</pre></div>
+<p dir="auto">同样，在部署期间传入。仲裁人是中立的法官。</p>
+<p dir="auto">他们只在出现问题时参与——比如买家提出争议并声称没有交付。</p>
+<p dir="auto">仲裁人有权通过将资金释放给买家或卖家来解决问题。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">5. 🕓 设置初始状态</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>state <span class="pl-k">=</span> EscrowState.AWAITING_PAYMENT;
+</pre></div>
+<p dir="auto">我们将合约设置为<strong>等待状态</strong>——资金尚未存入。</p>
+<p dir="auto">这确保 <code>deposit()</code> 函数是下一个逻辑步骤，任何其他操作（如确认交付）在此之前都被阻止。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">6. ⏱️ 设置超时窗口</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>deliveryTimeout <span class="pl-k">=</span> _deliveryTimeout;
+</pre></div>
+<p dir="auto">这设置了卖家必须交付的时间窗口，以秒为单位。</p>
+<p dir="auto">它只在买家将 ETH 存入合约<strong>之后</strong>开始计时。</p>
+<p dir="auto">我们稍后将在 <code>cancelAfterTimeout()</code> 函数中使用它，让买家在卖家延期时取消交易并获得退款。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🚫 <code>receive()</code> – 阻止随机 ETH 转账</h1></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">receive</span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+    <span class="pl-k">revert</span>(<span class="pl-s">"<span class="pl-s">Direct payments not allowed</span>"</span>);
+}
+</pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔍 这个函数做什么</h3></div>
+<p dir="auto">这个小函数在这里充当你合约的<strong>门卫</strong>。</p>
+<p dir="auto">它阻止任何人试图发送的<strong>任何 ETH</strong>，<strong>而不调用正确的函数</strong>——比如 <code>deposit()</code>。</p>
+<p dir="auto">你可能想知道：</p>
+<blockquote>
+<p dir="auto">为什么我们需要这个？</p>
+<p dir="auto">发送到合约的所有 ETH 不都是正常流程的一部分吗？</p>
+</blockquote>
+<p dir="auto">不完全是。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📬 Solidity 中的隐藏行为</h3></div>
+<p dir="auto">默认情况下，Solidity 中的任何智能合约都可以<strong>静默接收 ETH</strong>——即使发送者没有调用特定函数。</p>
+<p dir="auto">这意味着有人可以去 Etherscan，粘贴你的合约地址，并向其发送 ETH，<em>而不</em>与你精心编写的逻辑交互。</p>
+<p dir="auto">这就是 <code>receive()</code> 函数的用武之地。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧱 <code>receive()</code> 的目的</h3></div>
+<p dir="auto">在 Solidity 中，当合约接收 ETH <strong>而没有任何数据</strong>时，会<strong>自动</strong>调用这个特殊函数。</p>
+<p dir="auto">所以如果有人只是使用以下方式发送 ETH：</p>
+<ul dir="auto">
+<li>像 MetaMask 这样的钱包应用</li>
+<li>Etherscan 的"发送 ETH"按钮</li>
+<li>原始交易</li>
+</ul>
+<p dir="auto">...这个函数就会被触发。</p>
+<p dir="auto">但在我们的托管系统中，我们<strong>不想要那样</strong>。</p>
+<p dir="auto">我们希望每笔存款都通过正确的渠道——<code>deposit()</code> 函数——在那里我们：</p>
+<ul dir="auto">
+<li>跟踪谁发送的</li>
+<li>更新 <code>amount</code></li>
+<li>更改 <code>state</code></li>
+<li>记录时间戳</li>
+<li>发出事件</li>
+</ul>
+<p dir="auto">如果有人盲目发送 ETH，所有这些都会被跳过。</p>
+<p dir="auto">所以我们<strong>拒绝它</strong>：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">revert</span>(<span class="pl-s">"<span class="pl-s">Direct payments not allowed</span>"</span>);
+</pre></div>
+<p dir="auto">这确保没有 ETH 可以在没有适当处理的情况下意外进入合约。</p>
+<p dir="auto">没有意外存款。没有状态损坏。没有用户困惑。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">💸 <code>deposit()</code> – 买家将资金发送到托管</h1></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> deposit</span></span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer, <span class="pl-s">"<span class="pl-s">Only buyer can deposit</span>"</span>);
+    <span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.AWAITING_PAYMENT, <span class="pl-s">"<span class="pl-s">Already paid</span>"</span>);
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Amount must be greater than zero</span>"</span>);
+
+    amount <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>;
+    state <span class="pl-k">=</span> EscrowState.AWAITING_DELIVERY;
+    depositTime <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>;
+    <span class="pl-k">emit</span> <span class="pl-en">PaymentDeposited</span>(buyer, amount);
+}
+</pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 这个函数做什么</h3></div>
+<p dir="auto">这是我们托管合约中的<strong>第一个真正操作</strong>。</p>
+<p dir="auto">一旦合约被部署，所有三个角色（买家、卖家、仲裁人）都就位，这个函数允许<strong>买家将 ETH 锁定到合约中</strong>。</p>
+<p dir="auto">这个 ETH 现在处于悬而未决的状态——由智能合约安全持有——直到买家确认交付，或争议被解决。</p>
+<p dir="auto">让我们逐行分解。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔐 步骤 1：只有买家可以存款</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer, <span class="pl-s">"<span class="pl-s">Only buyer can deposit</span>"</span>);
+</pre></div>
+<p dir="auto">我们使用 <code>require()</code> 来强制只有<strong>买家</strong>（部署合约的人）可以调用此函数。</p>
+<p dir="auto">这防止随机用户与托管交互并发送合约不期望的 ETH——保持一切干净和安全。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔁 步骤 2：只有在尚未付款时</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.AWAITING_PAYMENT, <span class="pl-s">"<span class="pl-s">Already paid</span>"</span>);
+</pre></div>
+<p dir="auto">一旦买家发送了 ETH，我们就进入一个新状态：<code>AWAITING_DELIVERY</code>。</p>
+<p dir="auto">这个检查确保 <code>deposit()</code> 函数只能被调用<strong>一次</strong>——我们不希望人们充值同一个托管或在它已经开始后发送 ETH。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💰 步骤 3：ETH 必须大于零</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Amount must be greater than zero</span>"</span>);
+</pre></div>
+<p dir="auto">只是一个基本的安全检查——你不能发送 0 ETH 并期望托管开始。</p>
+<p dir="auto">没有这个，有人可能会意外地在没有资金的情况下触发函数，使合约处于奇怪的状态。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🏦 步骤 4：锁定资金</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>amount <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>;
+</pre></div>
+<p dir="auto">这将发送到合约的 ETH 存储在名为 <code>amount</code> 的状态变量中。</p>
+<p dir="auto">我们稍后将使用这个值来知道<strong>多少</strong>要发送给卖家（或退还给买家），当托管完成或取消的时候。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔄 步骤 5：更改合约状态</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>state <span class="pl-k">=</span> EscrowState.AWAITING_DELIVERY;
+</pre></div>
+<p dir="auto">一旦钱进来了，我们就进入下一个阶段：我们现在正在等待卖家交付物品或服务。</p>
+<p dir="auto">这也意味着其他函数（如确认交付或提出争议）现在被允许——但只是因为我们处于正确的状态。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">⏱️ 步骤 6：记录时间戳</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>depositTime <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>;
+</pre></div>
+<p dir="auto">这保存了 ETH 存入的确切时刻。</p>
+<p dir="auto">为什么这很重要？</p>
+<p dir="auto">我们稍后将在 <code>cancelAfterTimeout()</code> 函数中使用它。如果卖家在时间窗口（<code>deliveryTimeout</code>）内没有交付，买家可以取消并取回他们的钱——<strong>但只在这个存款时间之后</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📣 步骤 7：宣布存款</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">PaymentDeposited</span>(buyer, amount);
+</pre></div>
+<p dir="auto">事件是我们告诉外部世界刚刚发生了什么的方式。</p>
+<p dir="auto">这一行触发一个链上事件，说：</p>
+<blockquote>
+<p dir="auto">"买家刚刚将 X ETH 存入托管。"</p>
+</blockquote>
+<p dir="auto">前端和像 Etherscan 这样的工具可以监听这个并实时更新 UI。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">✅ <code>confirmDelivery()</code> – 买家标记交易完成</h1></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> confirmDelivery</span></span>() <span class="pl-k">external</span> {
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer, <span class="pl-s">"<span class="pl-s">Only buyer can confirm</span>"</span>);
+    <span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY, <span class="pl-s">"<span class="pl-s">Not in delivery state</span>"</span>);
+
+    state <span class="pl-k">=</span> EscrowState.COMPLETE;
+    <span class="pl-c1">payable</span>(seller).<span class="pl-en">transfer</span>(amount);
+    <span class="pl-k">emit</span> <span class="pl-en">DeliveryConfirmed</span>(buyer, seller, amount);
+}
+</pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 这个函数做什么</h3></div>
+<p dir="auto">一旦卖家交付了承诺的东西——无论是实物、数字文件、服务还是其他任何东西——买家需要一种方式来说：</p>
+<blockquote>
+<p dir="auto">"是的，我收到了。继续释放资金。"</p>
+</blockquote>
+<p dir="auto">这正是这个函数所做的。</p>
+<p dir="auto">它<strong>完成交易</strong>，将锁定的 ETH 转移给卖家，并更新合约以显示一切都完成了。</p>
+<p dir="auto">让我们逐行走一遍。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧍 步骤 1：只有买家可以确认</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer, <span class="pl-s">"<span class="pl-s">Only buyer can confirm</span>"</span>);
+</pre></div>
+<p dir="auto">这确保只有<strong>付款的人</strong>——买家——可以将交易标记为完成。</p>
+<p dir="auto">我们不希望卖家或任何其他随机用户过早确认交付。</p>
+<p dir="auto">批准释放资金的权力严格保留给买家。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔒 步骤 2：只允许在交付窗口期间</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY, <span class="pl-s">"<span class="pl-s">Not in delivery state</span>"</span>);
+</pre></div>
+<p dir="auto">我们确保合约目前正在等待交付。</p>
+<p dir="auto">如果我们仍在等待存款，或者交易已经被争议、取消或完成——这个操作是不允许的。</p>
+<blockquote>
+<p dir="auto">这保护了托管的流程，防止逻辑错误或重复确认。</p>
+</blockquote>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔁 步骤 3：将状态更改为完成</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>state <span class="pl-k">=</span> EscrowState.COMPLETE;
+</pre></div>
+<p dir="auto">我们更新状态以显示交易已完成。</p>
+<p dir="auto">从现在开始，不能再进行存款、争议或取消。托管正式结束。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💸 步骤 4：将资金释放给卖家</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">payable</span>(seller).<span class="pl-en">transfer</span>(amount);
+</pre></div>
+<p dir="auto">这一行<strong>转移 ETH</strong>，之前锁定在合约中的资金直接到卖家的钱包。</p>
+<p dir="auto">我们使用 <code>payable()</code> 来明确说明这个地址被允许接收 ETH。</p>
+<p dir="auto"><code>amount</code> 变量是在买家存款时设置的，所以我们现在发送的正是约定的金额。</p>
+<blockquote>
+<p dir="auto">在这一点上，卖家已经收到付款，买家已经确认收货。无需信任且自动。</p>
+</blockquote>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📣 步骤 5：发出交付确认事件</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">DeliveryConfirmed</span>(buyer, seller, amount);
+</pre></div>
+<p dir="auto">这告诉外部世界——你的前端、Etherscan、日志、通知——托管成功完成。</p>
+<p dir="auto">它包括：</p>
+<ul dir="auto">
+<li>买家是谁</li>
+<li>卖家是谁</li>
+<li>发送了多少 ETH</li>
+</ul>
+<p dir="auto">这使得跟踪链上活动和更新 UI 变得超级简单。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto"><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> <code>raiseDispute()</code> – 买家或卖家标记问题</h1></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> raiseDispute</span></span>() <span class="pl-k">external</span> {
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer <span class="pl-k">||</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> seller, <span class="pl-s">"<span class="pl-s">Not authorized</span>"</span>);
+    <span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY, <span class="pl-s">"<span class="pl-s">Can't dispute now</span>"</span>);
+
+    state <span class="pl-k">=</span> EscrowState.DISPUTED;
+    <span class="pl-k">emit</span> <span class="pl-en">DisputeRaised</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+}
+</pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 这个函数做什么</h3></div>
+<p dir="auto">托管交易并不总是顺利进行。</p>
+<p dir="auto">也许<strong>卖家没有交付</strong>。</p>
+<p dir="auto">也许<strong>买家声称他们没有收到物品</strong>，即使卖家说他们交付了。</p>
+<p dir="auto">当信任破裂时，我们需要一种方式让任何一方<strong>举手说："有问题。"</strong></p>
+<p dir="auto">这就是 <code>raiseDispute()</code> 的用途。</p>
+<p dir="auto">它将托管置于<strong>争议状态</strong>——在那里没有资金可以移动——并向仲裁人发出信号，表明需要他们的关注。</p>
+<p dir="auto">让我们逐行分解。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">👥 步骤 1：只有买家或卖家可以调用此函数</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer <span class="pl-k">||</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> seller, <span class="pl-s">"<span class="pl-s">Not authorized</span>"</span>);
+</pre></div>
+<p dir="auto">此函数<strong>严格限制</strong>于交易中涉及的两方——买家和卖家。</p>
+<p dir="auto">随机用户不能干涉。</p>
+<p dir="auto">仲裁人也不允许触发争议——他们只解决它。</p>
+<p dir="auto">这使争议系统保持<strong>干净、安全和公平</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🕒 步骤 2：只在交付阶段</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY, <span class="pl-s">"<span class="pl-s">Can't dispute now</span>"</span>);
+</pre></div>
+<p dir="auto">争议只能在<strong>交付仍在等待时</strong>提出。</p>
+<p dir="auto">如果交易已经完成、取消或争议，此函数就不再被允许。</p>
+<p dir="auto">这确保争议过程在<strong>正确的时间</strong>发生，并防止任何人在事后制造问题。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔁 步骤 3：进入争议状态</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>state <span class="pl-k">=</span> EscrowState.DISPUTED;
+</pre></div>
+<p dir="auto">这是函数的核心。它将合约转换为<strong>锁定</strong>状态，在那里没有 ETH 可以移动——不能给卖家，也不能退还给买家。</p>
+<p dir="auto">这就像在说：</p>
+<blockquote>
+<p dir="auto">"停止一切。我们需要一个人（仲裁人）介入并做出决定。"</p>
+</blockquote>
+<p dir="auto">这确保在冲突未解决时，任何一方都不能操纵系统。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📣 步骤 4：发出争议事件</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">DisputeRaised</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+</pre></div>
+<p dir="auto">这告诉外部世界——特别是仲裁人——出现了问题。</p>
+<p dir="auto">我们包含 <code>msg.sender</code>，这样我们就知道<strong>谁提出了争议</strong>（买家或卖家），这对前端反馈或通知很有用。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">⚖️ <code>resolveDispute()</code> – 仲裁人决定结果</h1></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> resolveDispute</span></span>(<span class="pl-c1">bool</span> <span class="pl-v">_releaseToSeller</span>) <span class="pl-k">external</span> {
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> arbiter, <span class="pl-s">"<span class="pl-s">Only arbiter can resolve</span>"</span>);
+    <span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.DISPUTED, <span class="pl-s">"<span class="pl-s">No dispute to resolve</span>"</span>);
+
+    state <span class="pl-k">=</span> EscrowState.COMPLETE;
+    <span class="pl-k">if</span> (_releaseToSeller) {
+        <span class="pl-c1">payable</span>(seller).<span class="pl-en">transfer</span>(amount);
+        <span class="pl-k">emit</span> <span class="pl-en">DisputeResolved</span>(arbiter, seller, amount);
+    } <span class="pl-k">else</span> {
+        <span class="pl-c1">payable</span>(buyer).<span class="pl-en">transfer</span>(amount);
+        <span class="pl-k">emit</span> <span class="pl-en">DisputeResolved</span>(arbiter, buyer, amount);
+    }
+}
+</pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 这个函数做什么</h3></div>
+<p dir="auto">一旦使用 <code>raiseDispute()</code> 提出争议，托管就被冻结了——在有人中立介入之前，没有人可以触及资金。</p>
+<p dir="auto">那个中立方就是<strong>仲裁人</strong>。</p>
+<p dir="auto">仲裁人的工作是审查情况并做出最终决定：</p>
+<p dir="auto"><strong>应该支付给卖家，还是应该退款给买家？</strong></p>
+<p dir="auto">这个函数赋予他们这样做的权力。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔍 逐行分解</h3></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">1. ✅ 只有仲裁人可以调用此函数</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> arbiter, <span class="pl-s">"<span class="pl-s">Only arbiter can resolve</span>"</span>);
+</pre></div>
+<p dir="auto">此函数对买家和卖家是禁止的。</p>
+<p dir="auto">为什么？因为这是关于<strong>公正解决</strong>的。</p>
+<p dir="auto">只有在合约开始时定义的仲裁人可以做出这个最终决定。</p>
+<p dir="auto">这使过程保持中立并保护双方。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">2. 🔒 只有在我们处于争议中时才允许</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.DISPUTED, <span class="pl-s">"<span class="pl-s">No dispute to resolve</span>"</span>);
+</pre></div>
+<p dir="auto">此函数只能在合约处于 <code>DISPUTED</code> 状态时使用——其他时间都不可以。</p>
+<p dir="auto">这意味着你不能在问题被提出之前调用它，或者在交易已经完成或取消之后。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">3. 🏁 将托管标记为完成</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>state <span class="pl-k">=</span> EscrowState.COMPLETE;
+</pre></div>
+<p dir="auto">无论仲裁人做出什么决定，托管现在都是<strong>关闭的</strong>。</p>
+<p dir="auto">这防止任何进一步的操作（如再次取消或争议）并将最终结果锁定到位。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">4. 💸 根据决定释放资金</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (_releaseToSeller) {
+    <span class="pl-c1">payable</span>(seller).<span class="pl-en">transfer</span>(amount);
+    <span class="pl-k">emit</span> <span class="pl-en">DisputeResolved</span>(arbiter, seller, amount);
+} <span class="pl-k">else</span> {
+    <span class="pl-c1">payable</span>(buyer).<span class="pl-en">transfer</span>(amount);
+    <span class="pl-k">emit</span> <span class="pl-en">DisputeResolved</span>(arbiter, buyer, amount);
+}
+</pre></div>
+<p dir="auto">仲裁人传入一个布尔值：<code>_releaseToSeller</code>。</p>
+<ul dir="auto">
+<li>如果是 <code>true</code>：卖家获得 ETH。</li>
+<li>如果是 <code>false</code>：买家取回他们的 ETH。</li>
+</ul>
+<p dir="auto">在进行转账后，函数发出 <code>DisputeResolved</code> 事件——显示谁赢得了争议以及他们收到了多少。</p>
+<blockquote>
+<p dir="auto">这使决定透明且可在链上验证。</p>
+</blockquote>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">⏱️ <code>cancelAfterTimeout()</code> – 如果卖家延迟，买家取消</h1></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> cancelAfterTimeout</span></span>() <span class="pl-k">external</span> {
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer, <span class="pl-s">"<span class="pl-s">Only buyer can trigger timeout cancellation</span>"</span>);
+    <span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY, <span class="pl-s">"<span class="pl-s">Cannot cancel in current state</span>"</span>);
+    <span class="pl-k">require</span>(<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">&gt;=</span> depositTime <span class="pl-k">+</span> deliveryTimeout, <span class="pl-s">"<span class="pl-s">Timeout not reached</span>"</span>);
+
+    state <span class="pl-k">=</span> EscrowState.CANCELLED;
+    <span class="pl-c1">payable</span>(buyer).<span class="pl-en">transfer</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance);
+    <span class="pl-k">emit</span> <span class="pl-en">EscrowCancelled</span>(buyer);
+    <span class="pl-k">emit</span> <span class="pl-en">DeliveryTimeoutReached</span>(buyer);
+}
+</pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 这个函数做什么</h3></div>
+<p dir="auto">这是你作为买家的<strong>紧急出口</strong>。</p>
+<p dir="auto">假设你已经将 ETH 锁定在托管中。卖家应该交付一些东西——但日子过去了，什么也没有出现。没有交付，没有沟通。</p>
+<p dir="auto">与其永远被困在合约中，这个函数给你一种方式<strong>退出</strong>——但只有在约定的截止日期过去之后。</p>
+<p dir="auto">让我们逐行分解。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">👤 步骤 1：只有买家可以取消</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer, <span class="pl-s">"<span class="pl-s">Only buyer can trigger timeout cancellation</span>"</span>);
+</pre></div>
+<p dir="auto">由于买家是存入资金的人，他们是唯一可以因延迟而取消交易的人。</p>
+<p dir="auto">这保护了买家，而不给卖家任何触发过早取消的方式。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">⏳ 步骤 2：只有在我们等待交付时</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(state <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY, <span class="pl-s">"<span class="pl-s">Cannot cancel in current state</span>"</span>);
+</pre></div>
+<p dir="auto">我们只能在资金已经存入并且我们处于交付阶段时使用此函数。</p>
+<p dir="auto">如果我们仍在等待买家存款，或者合约已经处于争议、完成或取消状态——此函数是不允许的。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🕒 步骤 3：检查超时是否已过</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">&gt;=</span> depositTime <span class="pl-k">+</span> deliveryTimeout, <span class="pl-s">"<span class="pl-s">Timeout not reached</span>"</span>);
+</pre></div>
+<p dir="auto">现在我们检查卖家是否错过了他们的截止日期。</p>
+<ul dir="auto">
+<li><code>depositTime</code> 是买家存入 ETH 的时间。</li>
+<li><code>deliveryTimeout</code> 是卖家必须交付的约定持续时间。</li>
+</ul>
+<p dir="auto">如果当前时间（<code>block.timestamp</code>）<strong>等于或大于</strong>那个截止日期，买家就被允许取消。</p>
+<p dir="auto">否则，他们需要再等一会儿。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">❌ 步骤 4：取消托管</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>state <span class="pl-k">=</span> EscrowState.CANCELLED;
+</pre></div>
+<p dir="auto">我们更新合约以将交易标记为已取消。</p>
+<p dir="auto">从这一点开始，没有人可以确认交付、提出争议或触发任何其他操作。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💸 步骤 5：退款给买家</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">payable</span>(buyer).<span class="pl-en">transfer</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance);
+</pre></div>
+<p dir="auto">资金全额退还给买家。</p>
+<p dir="auto">我们使用 <code>address(this).balance</code> 而不是 <code>amount</code>，只是为了额外安全——以防有任何意外进入合约（尽管通常只有 <code>amount</code> 会在那里）。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📣 步骤 6：发出取消和超时事件</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">EscrowCancelled</span>(buyer);
+<span class="pl-k">emit</span> <span class="pl-en">DeliveryTimeoutReached</span>(buyer);
+</pre></div>
+<p dir="auto">这两个事件告诉前端和任何外部监听器：</p>
+<ul dir="auto">
+<li>托管被取消了</li>
+<li>原因是<strong>交付超时</strong></li>
+</ul>
+<p dir="auto">这有助于提供透明度并解释用户审查交易历史时发生了什么。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🤝 <code>cancelMutual()</code> – 任何一方在完成前取消</h1></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> cancelMutual</span></span>() <span class="pl-k">external</span> {
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer <span class="pl-k">||</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> seller, <span class="pl-s">"<span class="pl-s">Not authorized</span>"</span>);
+    <span class="pl-k">require</span>(
+        state <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY <span class="pl-k">||</span> state <span class="pl-k">==</span> EscrowState.AWAITING_PAYMENT,
+        <span class="pl-s">"<span class="pl-s">Cannot cancel now</span>"</span>
+    );
+
+    EscrowState previousState <span class="pl-k">=</span> state;
+    state <span class="pl-k">=</span> EscrowState.CANCELLED;
+
+    <span class="pl-k">if</span> (previousState <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY) {
+        <span class="pl-c1">payable</span>(buyer).<span class="pl-en">transfer</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance);
+    }
+
+    <span class="pl-k">emit</span> <span class="pl-en">EscrowCancelled</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+}
+</pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 这个函数做什么</h3></div>
+<p dir="auto">有时，双方决定取消交易——没有争议，没有超时，没有戏剧性。</p>
+<p dir="auto">也许卖家不能再履行订单了。</p>
+<p dir="auto">也许买家改变主意了。</p>
+<p dir="auto">或者也许双方都同意它就是行不通。</p>
+<p dir="auto">此函数允许<strong>买家或卖家</strong>在<strong>完成之前</strong>取消托管——无论是刚创建还是资金已经存入。</p>
+<p dir="auto">让我们详细分解它是如何工作的。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔐 步骤 1：只有买家或卖家可以取消</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> buyer <span class="pl-k">||</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> seller, <span class="pl-s">"<span class="pl-s">Not authorized</span>"</span>);
+</pre></div>
+<p dir="auto">此函数不对公众开放。</p>
+<p dir="auto">只有<strong>买家</strong>或<strong>卖家</strong>可以触发相互取消。</p>
+<p dir="auto">这确保取消的决定留在涉及的两个人之间。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🕒 步骤 2：只能在正确的时间使用</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(
+    state <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY <span class="pl-k">||</span> state <span class="pl-k">==</span> EscrowState.AWAITING_PAYMENT,
+    <span class="pl-s">"<span class="pl-s">Cannot cancel now</span>"</span>
+);
+</pre></div>
+<p dir="auto">此函数仅在合约仍然是：</p>
+<ul dir="auto">
+<li>等待买家存款（<code>AWAITING_PAYMENT</code>）</li>
+<li>或等待卖家交付（<code>AWAITING_DELIVERY</code>）</li>
+</ul>
+<p dir="auto">如果交易已经完成、争议或取消——就太晚了。</p>
+<p dir="auto">如果已经提出争议，那么取消必须由仲裁人处理。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧭 步骤 3：存储之前的状态</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>EscrowState previousState <span class="pl-k">=</span> state;
+</pre></div>
+<p dir="auto">我们将当前状态存储在临时变量中，以便稍后检查资金是否已经存入。</p>
+<p dir="auto">为什么这很重要？</p>
+<p dir="auto">因为如果我们在存款<strong>之后</strong>取消，我们需要<strong>退款给买家</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">❌ 步骤 4：取消托管</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>state <span class="pl-k">=</span> EscrowState.CANCELLED;
+</pre></div>
+<p dir="auto">一旦决定取消，我们就将整个托管标记为 <code>CANCELLED</code>。</p>
+<p dir="auto">不能再采取进一步的操作——这永久关闭了交易。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💸 步骤 5：退款给买家（如果需要）</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (previousState <span class="pl-k">==</span> EscrowState.AWAITING_DELIVERY) {
+    <span class="pl-c1">payable</span>(buyer).<span class="pl-en">transfer</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance);
+}
+</pre></div>
+<p dir="auto">如果买家已经存入了 ETH，我们退款。</p>
+<p dir="auto">这确保卖家不会从不完整或已取消的交易中带走资金。</p>
+<blockquote>
+<p dir="auto">🔒 如果状态仍然是 AWAITING_PAYMENT，则跳过此条件——因为从未存入任何资金。</p>
+</blockquote>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📣 步骤 6：发出取消事件</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">EscrowCancelled</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+</pre></div>
+<p dir="auto">这发出一个公共事件，以便前端和浏览器可以跟踪交易被相互取消——并查看<strong>谁发起的</strong>。</p>
+<p dir="auto">这使一切透明且易于跟踪。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">⌛ <code>getTimeLeft()</code> – 查看剩余多少时间</h1></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getTimeLeft</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    <span class="pl-k">if</span> (state <span class="pl-k">!=</span> EscrowState.AWAITING_DELIVERY) <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+    <span class="pl-k">if</span> (<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">&gt;=</span> depositTime <span class="pl-k">+</span> deliveryTimeout) <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+    <span class="pl-k">return</span> (depositTime <span class="pl-k">+</span> deliveryTimeout) <span class="pl-k">-</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>;
+}
+</pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 这个函数做什么</h3></div>
+<p dir="auto">此函数不会改变任何东西。</p>
+<p dir="auto">它不会移动资金、更新状态或触发事件。</p>
+<p dir="auto">相反，它是一个<strong>只读辅助函数</strong>——设计用于<strong>前端</strong>显示卖家在买家可以使用 <code>cancelAfterTimeout()</code> 取消之前还有多少时间来履行交付。</p>
+<p dir="auto">这是一个小函数，但对透明度和用户体验非常有用。</p>
+<p dir="auto">让我们逐行过一遍。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">⛔ 步骤 1：如果我们不在等待交付，提前退出</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (state <span class="pl-k">!=</span> EscrowState.AWAITING_DELIVERY) <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+</pre></div>
+<p dir="auto">我们只关心<strong>在等待交付时</strong>剩余的时间。</p>
+<p dir="auto">如果我们处于任何其他状态——等待付款、完成、争议、取消——就<strong>没有倒计时发生</strong>。所以我们只返回 0。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🕒 步骤 2：如果超时已经过去，返回 0</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">&gt;=</span> depositTime <span class="pl-k">+</span> deliveryTimeout) <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+</pre></div>
+<p dir="auto">如果当前时间已经过了截止日期，我们再次返回 0。</p>
+<p dir="auto">在这一点上，<strong>买家有资格取消托管</strong>，没有时间可等了。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">⏳ 步骤 3：否则，返回剩余时间</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">return</span> (depositTime <span class="pl-k">+</span> deliveryTimeout) <span class="pl-k">-</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>;
+</pre></div>
+<p dir="auto">如果合约正在等待交付<em>并且</em> 截止日期还没有过，我们计算买家可以取消之前剩余的<strong>秒数</strong>。</p>
+<p dir="auto">这是一个简单的减法：</p>
+<ul dir="auto">
+<li>截止日期 = <code>depositTime + deliveryTimeout</code></li>
+<li>现在 = <code>block.timestamp</code></li>
+</ul>
+<p dir="auto">所以差值为<strong>剩余的秒数</strong>。</p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧾 演练：自由职业工作托管</h1></div>
+<p dir="auto">假设 Alice 想雇佣 Bob 为她建立一个网站。由于他们彼此不完全了解，他们决定使用智能合约安全地持有资金，直到工作完成。他们还引入了一个中立的第三方 Charlie，以便<em>在出现问题时</em>介入。</p>
+<p dir="auto">他们使用的合约是什么？</p>
+<p dir="auto"><code>EnhancedSimpleEscrow</code>——一个用 Solidity 编写的无需信任的数字中间人。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🤝 设置</h2></div>
+<ul dir="auto">
+<li><strong>买家：</strong> Alice (<code>0xAlice</code>)</li>
+<li><strong>卖家：</strong> Bob (<code>0xBob</code>)</li>
+<li><strong>仲裁人：</strong> Charlie (<code>0xCharlie</code>)</li>
+<li><strong>交付超时：</strong> 3 天 = <code>3 * 86400 = 259200</code> 秒</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">1️⃣ 合约部署 – <em>（第 0 天）</em></h2></div>
+<p dir="auto">Alice 部署合约并定义关键参与者：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">EnhancedSimpleEscrow</span>(
+    seller <span class="pl-k">=</span> 0xBob,
+    arbiter <span class="pl-k">=</span> 0xCharlie,
+    deliveryTimeout <span class="pl-k">=</span> <span class="pl-c1">259200</span>  <span class="pl-c">// 3 天</span>
+)
+</pre></div>
+<p dir="auto">在这一点上：</p>
+<ul dir="auto">
+<li>Alice 默认成为<strong>买家</strong>（因为她是部署者）。</li>
+<li>状态设置为 <code>AWAITING_PAYMENT</code>。</li>
+<li>尚未发送任何 ETH。</li>
+</ul>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>
+State: AWAITING_PAYMENT
+Funds: 0 ETH
+
+</code></pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">2️⃣ Alice 存入付款 – <em>（第 1 天）</em></h2></div>
+<p dir="auto">Alice 决定使用 <code>deposit()</code> 函数将 2 ETH 锁定到合约中：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>escrow.<span class="pl-en">deposit</span>{value: <span class="pl-c1">2</span> <span class="pl-c1">ether</span>}()
+</pre></div>
+<p dir="auto">假设区块时间戳是：</p>
+<p dir="auto"><code>depositTime = 1_715_000_000</code></p>
+<p dir="auto">现在：</p>
+<ul dir="auto">
+<li>2 ETH 被锁定在合约中。</li>
+<li>合约状态转移到 <code>AWAITING_DELIVERY</code>。</li>
+<li>超时倒计时开始。</li>
+</ul>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>
+State: AWAITING_DELIVERY
+Funds: 2 ETH
+Deposit Time: 1_715_000_000
+
+</code></pre></div>
+<blockquote>
+<p dir="auto">📣 发出事件：PaymentDeposited</p>
+</blockquote>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">3️⃣ Bob 交付工作 – 现在有 3 条可能的路径</h2></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🛣️ 路径 A：顺利交付</h3></div>
+<p dir="auto">Bob 交付了网站，Alice 很满意。</p>
+<p dir="auto">她调用：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>escrow.<span class="pl-en">confirmDelivery</span>()
+</pre></div>
+<p dir="auto">这做了三件事：</p>
+<ul dir="auto">
+<li>将托管标记为 <code>COMPLETE</code></li>
+<li>将 2 ETH 转给 Bob</li>
+<li>发出事件 <code>DeliveryConfirmed</code></li>
+</ul>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>
+State: COMPLETE
+Funds: 0 ETH
+
+</code></pre></div>
+<blockquote>
+<p dir="auto">🎉 一切按预期工作。没有人需要介入。</p>
+</blockquote>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🛣️ 路径 B：提出争议</h3></div>
+<p dir="auto">Bob 说他交付了，但 Alice 对工作不满意。</p>
+<p dir="auto">她调用：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>escrow.<span class="pl-en">raiseDispute</span>()
+</pre></div>
+<p dir="auto">这将会：</p>
+<ul dir="auto">
+<li>将状态移至 <code>DISPUTED</code></li>
+<li>发出事件 <code>DisputeRaised</code></li>
+</ul>
+<p dir="auto">现在仲裁人 Charlie 审查双方并决定买家是对的。</p>
+<p dir="auto">他调用：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>escrow.<span class="pl-en">resolveDispute</span>(<span class="pl-c1">false</span>)
+</pre></div>
+<p dir="auto">由于 <code>false</code> 意味着"释放给买家"，2 ETH 退还给 Alice。</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>
+State: COMPLETE
+Funds: 0 ETH
+
+</code></pre></div>
+<blockquote>
+<p dir="auto">🎯 争议得到公平解决。资金转给了合法方。</p>
+</blockquote>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🛣️ 路径 C：卖家消失</h3></div>
+<p dir="auto">Bob 消失了。Alice 什么也没听到。</p>
+<p dir="auto">她等了整整 3 天。超时期过去了：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">=</span> <span class="pl-c1">1_715_000_000</span> <span class="pl-k">+</span> <span class="pl-c1">259200</span> <span class="pl-k">=</span> <span class="pl-c1">1_715_259_200</span>
+</pre></div>
+<p dir="auto">现在她可以触发取消：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>escrow.<span class="pl-en">cancelAfterTimeout</span>()
+</pre></div>
+<p dir="auto">合约会：</p>
+<ul dir="auto">
+<li>确认超时已过</li>
+<li>取消托管</li>
+<li>将 2 ETH 退还给 Alice</li>
+<li>发出事件 <code>EscrowCancelled</code> 和 <code>DeliveryTimeoutReached</code></li>
+</ul>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>
+State: CANCELLED
+Funds: 0 ETH
+
+</code></pre></div>
+<blockquote>
+<p dir="auto">⏱️ 不需要仲裁人。代码执行了截止日期。</p>
+</blockquote>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🛣️ 路径 D：相互取消</h3></div>
+<p dir="auto">也许 Bob 的日程变忙了。也许 Alice 改变了工作范围。</p>
+<p dir="auto">他们都同意取消交易。</p>
+<p dir="auto">他们中的任何一个调用：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>escrow.<span class="pl-en">cancelMutual</span>()
+</pre></div>
+<p dir="auto">如果 ETH 已经存入：</p>
+<ul dir="auto">
+<li>资金退还给 Alice</li>
+<li>状态改为 <code>CANCELLED</code></li>
+<li>发出：<code>EscrowCancelled</code></li>
+</ul>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>
+State: CANCELLED
+Funds: 0 ETH
+
+</code></pre></div>
+<blockquote>
+<p dir="auto">✌️ 干净和平的退出——双方达成一致。</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🔚 总结 – 用代码建立信任</h2></div>
+<p dir="auto">今天的项目就到这里了。</p>
+<p dir="auto">我们刚刚构建的不仅仅是另一个玩具合约——这是一个解决现实世界问题的现实世界工具：</p>
+<blockquote>
+<p dir="auto">你如何信任一个你不认识的人你的钱？</p>
+</blockquote>
+<p dir="auto">使用 <code>EnhancedSimpleEscrow</code>，你不必这样做。</p>
+<p dir="auto">你学会了如何构建一个<strong>安全、透明和自我执行的托管系统</strong>，它可以：</p>
+<ul dir="auto">
+<li>持有资金直到双方都满意</li>
+<li>让用户提出争议并获得公平解决</li>
+<li>如果有人未能交付，自动退款</li>
+<li>支持干净的相互取消</li>
+<li>并在链上保持整个过程可验证且无需信任</li>
+</ul>
+<p dir="auto">所有这些——不是由公司或平台管理——而是由几行<strong>智能合约逻辑</strong>管理。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">你今天掌握的内容</h2></div>
+<ul dir="auto">
+<li>✅ 如何定义<strong>角色和访问控制</strong>（买家、卖家、仲裁人）</li>
+<li>🧠 如何使用<strong>枚举</strong>来模拟合约状态转换</li>
+<li>⏳ 如何使用 <code>block.timestamp</code> 强制执行<strong>超时</strong></li>
+<li>⚖️ 如何公平且安全地解决<strong>争议</strong></li>
+<li>📣 如何使用<strong>事件</strong>提供前端可见性</li>
+<li>🛠️ 如何编写<strong>安全、清晰且强制流程</strong>的函数</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">你可以从这里构建的真实用例</h2></div>
+<p dir="auto">这种确切的模式可以为以下提供动力：</p>
+<ul dir="auto">
+<li>自由职业市场</li>
+<li>NFT 或数字商品交易</li>
+<li>社区赏金或补助金</li>
+<li>带条件支付的众筹</li>
+<li>甚至 DAO 控制的争议解决系统</li>
+</ul>
+<p dir="auto">托管无处不在——现在，你知道如何从头开始构建它了。</p>
                     </div>
                 </div>
             </div>

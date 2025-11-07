@@ -956,6 +956,24 @@
             color: #dcdcaa !important;
             font-weight: 500 !important;
         }
+        
+        /* 强制所有代码块内的文字使用亮色，包括没有被 span 包裹的文字 */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 确保代码块内所有元素（包括文本节点）都可见 */
+        .md-content .highlight pre,
+        .md-content .highlight pre code,
+        .md-content .highlight pre * {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特别处理变量名，即使它们没有被 span 包裹 */
+        .md-content .highlight pre {
+            /* 使用 text-shadow 增强文字可见性 */
+            text-shadow: 0 0 1px rgba(248, 248, 242, 0.5) !important;
+        }
 
         /* GitHub 语法高亮类颜色修复 */
         .md-content .highlight [class*="pl-"] {
