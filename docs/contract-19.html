@@ -886,6 +886,84 @@
                 font-size: 1.8rem;
             }
         }
+    
+        /* 修复 GitHub 代码块样式 */
+        .md-content .highlight {
+            background: #2d2a2e !important;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content .highlight pre {
+            background: transparent !important;
+            padding: 0;
+            margin: 0;
+            border: none;
+        }
+        
+        .md-content .highlight code,
+        .md-content .highlight pre code,
+        .md-content .highlight pre span,
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* 确保所有代码块内的文本都可见 */
+        .md-content .highlight pre * {
+            color: #f8f8f2 !important;
+        }
+        
+        /* GitHub 语法高亮类颜色修复 - 确保所有类都有颜色 */
+        .md-content .highlight pre [class*="pl-"] {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特定类型的颜色优化 */
+        .md-content .highlight .pl-c {   /* 注释 */
+            color: #6a9955 !important;
+        }
+        
+        .md-content .highlight .pl-s,    /* 字符串 */
+        .md-content .highlight .pl-s1 {  /* 字符串 */
+            color: #ce9178 !important;
+        }
+        
+        .md-content .highlight .pl-k,    /* 关键字 */
+        .md-content .highlight .pl-c1 {   /* 常量/关键字 */
+            color: #569cd6 !important;
+        }
+        
+        .md-content .highlight .pl-v,    /* 变量 */
+        .md-content .highlight .pl-en {   /* 函数名 */
+            color: #dcdcaa !important;
+        }
+        
+        /* 确保所有未包裹的文本也可见 */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        .md-content code:not(pre code) {
+            background: rgba(139, 115, 85, 0.15) !important;
+            color: var(--warm-brown) !important;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(139, 115, 85, 0.3);
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        
+        .md-content .markdown-heading .anchor {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
@@ -971,14 +1049,14 @@
 
             <div class="concept-card">
                 <div class="concept-title">🔍 ecrecover 函数</div>
-                <p><code class="inline-code">ecrecover</code>是Solidity内置函数，用于从签名恢复签名者地址：</p>
+                <p><code class="inline-code" style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">ecrecover</code>是Solidity内置函数，用于从签名恢复签名者地址：</p>
                 <pre><code class="language-solidity">function ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) 
     returns (address signer)</code></pre>
                 <p><strong>参数说明：</strong></p>
                 <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
-                    <li><code class="inline-code">hash</code>: 消息的keccak256哈希</li>
-                    <li><code class="inline-code">v</code>: 恢复ID (通常是27或28)</li>
-                    <li><code class="inline-code">r, s</code>: 签名的两个组成部分</li>
+                    <li><code class="inline-code" style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">hash</code>: 消息的keccak256哈希</li>
+                    <li><code class="inline-code" style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">v</code>: 恢复ID (通常是27或28)</li>
+                    <li><code class="inline-code" style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">r, s</code>: 签名的两个组成部分</li>
                 </ul>
                 <pre><code class="language-solidity">// 使用示例
 bytes32 messageHash = keccak256(abi.encodePacked(user, eventId));
@@ -1266,7 +1344,7 @@ await contract.checkInWithSignature(
             <div style="margin: 30px 0;">
                 <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤2: 生成签名 (使用MetaMask)</h4>
                 <ol style="margin: 10px 0 10px 25px; line-height: 2;">
-                    <li>调用<code class="inline-code">getMessageHash(参与者地址)</code>获取消息哈希</li>
+                    <li>调用<code class="inline-code" style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">getMessageHash(参与者地址)</code>获取消息哈希</li>
                     <li>在浏览器控制台使用MetaMask签名：</li>
                 </ol>
                 <pre style="margin: 10px 0;"><code class="language-javascript">// 在浏览器控制台执行
@@ -1281,8 +1359,8 @@ const signature = await ethereum.request({
                 <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤3: 分离签名并验证</h4>
                 <ol style="margin: 10px 0 10px 25px; line-height: 2;">
                     <li>使用在线工具或脚本分离签名的v, r, s</li>
-                    <li>调用<code class="inline-code">verifySignature</code>验证签名有效性</li>
-                    <li>调用<code class="inline-code">checkInWithSignature</code>完成签到</li>
+                    <li>调用<code class="inline-code" style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">verifySignature</code>验证签名有效性</li>
+                    <li>调用<code class="inline-code" style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">checkInWithSignature</code>完成签到</li>
                 </ol>
             </div>
 
@@ -1290,7 +1368,7 @@ const signature = await ethereum.request({
                 <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">步骤4: 测试批量签到</h4>
                 <ol style="margin: 10px 0 10px 25px; line-height: 2;">
                     <li>为多个地址生成签名</li>
-                    <li>调用<code class="inline-code">batchCheckIn</code>批量处理</li>
+                    <li>调用<code class="inline-code" style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">batchCheckIn</code>批量处理</li>
                     <li>观察Gas消耗对比</li>
                 </ol>
             </div>
@@ -1397,11 +1475,1412 @@ bytes32 constant PERMIT_TYPEHASH = keccak256(
                 </button>
             </div>
             <div class="letter-body">
-                <div id="markdown-container" class="md-section">
-                    <div style="text-align: center; padding: 40px;">
-                        <div class="spinner" style="border: 4px solid rgba(139, 115, 85, 0.2); border-top: 4px solid var(--warm-brown); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
-                        <p style="color: #999;">正在加载内容...</p>
-                    </div>
+                <div id="md-content" class="md-content">
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">签名验证</h1></div>
+<p dir="auto">Day: Day 19
+ID: 19
+译者: 雷雷
+难度等级: 中级</p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">学习内容</h1></div>
+<p dir="auto">好吧——到目前为止，我们在 Solidity 之旅中取得了一些重大进展。
+我们学会了如何：</p>
+<ul dir="auto">
+<li>分配<strong>所有权</strong></li>
+<li>使用<strong>修饰符</strong>保护函数</li>
+<li>使用<strong>映射</strong>来存储用户数据</li>
+<li>进行全面的<strong>代币销售</strong></li>
+<li>使用<strong>委托调用</strong>构建基于插件的模块化系统</li>
+</ul>
+<p dir="auto">但现在，是时候将<strong>所有这些技能付诸行动</strong>并解决现实世界的问题了——这是每个 Web3 构建者都能与之相关的。</p>
+<p dir="auto"><strong>场景  ：私人 Web3 事件</strong>
+你正在组织代币<strong>门控会议</strong>、<strong>创始人聚会</strong>或<strong>链上研讨会</strong>。只有选定的客人才能进入。
+现在挑战来了......</p>
+<p dir="auto"><strong>传统方法：</strong>
+你将每个与会者的地址存储在链上。
+你可以在办理登机手续时手动检查每一项。
+每次地址更新或拼写错误都会消耗 gas。
+💢这很笨拙。太贵了。那不是 Web3。</p>
+<p dir="auto"><strong>✅更智能的方式：链下签名</strong>
+而不是上传一大堆地址......
+如果：</p>
+<ul dir="auto">
+<li>活动组织者为每位获批的来宾签署一条消息</li>
+<li>客人携带已签名的邀请函</li>
+<li>合约只是在签到时验证签名</li>
+<li>无需在链上存储任何白名单</li>
+</ul>
+<p dir="auto">是的，这一切都是使用以太坊内置的 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">ecrecover</code> 功能安全地完成的。</p>
+<p dir="auto"><strong>我们的游戏计划🌌</strong>
+以下是我们将要构建的内容，以及我们将如何分解它：
+<strong>1. 活动设置</strong>
+组织者定义姓名、日期和最大与会者人数。
+<strong>2.加密邀请</strong>
+后端不是存储地址，而是为每个已批准的来宾签署一条消息。
+<strong>3.签到流程</strong>
+来宾提交他们签名的消息。
+该合同使用 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">ecrecover</code> 来验证它是否由组织者签署。
+<strong>4.安全性和灵活性</strong>
+链上没有地址列表。没有预加载的白名单。没有浪费的气体。
+只有有效的、签名的与会者才能进入——而且这一切都可以在链上完全验证。</p>
+<p dir="auto"><strong>您将学到什么</strong>
+如何对结构化数据进行哈希处理  （<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">abi.encodePacked</code>）
+为什么以太坊使用签名消息前缀
+<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">ecrecover（）</code> 如何让你在链上验证链下批准
+如何实施当今生产中实际使用的轻量级、节能的访问系统</p>
+<p dir="auto">由此可见，在传统的活动管理系统中，身份验证往往依赖于中心化的数据库和复杂的权限控制机制。参与者需要注册账户、记住密码，组织者需要维护用户列表、处理忘记密码等繁琐事务。这种模式不仅用户体验复杂，还存在单点故障和数据泄露的风险。</p>
+<p dir="auto"><strong>区块链技术为我们提供了一种全新的思路</strong>：通过密码学证明而非中心化授权来验证身份。本「签名验证活动合约」正是这一理念的实践——利用数字签名技术，构建了一个去中心化、安全高效的活动管理系统。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🎯 设计哲学</strong></h3></div>
+<p dir="auto">本合约的核心创新在于&nbsp;<strong>"链下签名，链上验证"</strong>&nbsp;的模式：</p>
+<ul dir="auto">
+<li><strong>组织者</strong>在链下为合法参与者生成数字签名</li>
+<li><strong>参与者</strong>提交签名到区块链合约进行验证</li>
+<li><strong>智能合约</strong>通过<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">ecrecover</code>函数恢复签名者地址，确认身份有效性</li>
+</ul>
+<p dir="auto">这种方法带来了多重优势：</p>
+<ul dir="auto">
+<li><strong>零Gas预注册</strong>：参与者无需预先支付Gas费注册</li>
+<li><strong>无限扩展性</strong>：签名生成不受区块链吞吐量限制</li>
+<li><strong>隐私保护</strong>：参与者名单不会全部暴露在链上</li>
+<li><strong>成本优化</strong>：批量签到大幅降低Gas消耗</li>
+</ul>
+<p dir="auto"><strong>学习目标</strong>：掌握数字签名验证和链下认证</p>
+<p dir="auto"><strong>核心技能</strong>：ecrecover、消息哈希、签名生成</p>
+<p dir="auto"><strong>完整代码</strong>：‣</p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">1、产品需求书</h1></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>a.用户路径图</strong></h3></div>
+<p dir="auto"><strong>组织者路径organizer</strong></p>
+<ol dir="auto">
+<li><strong>合约部署</strong>
+<ul dir="auto">
+<li>调用构造函数，传入活动参数</li>
+<li>自动成为organizer，获得管理权限</li>
+</ul>
+</li>
+<li><strong>签名生成</strong>
+<ul dir="auto">
+<li>获取参与者钱包地址</li>
+<li>调用getMessageHash获取消息哈希</li>
+<li>使用私钥对哈希进行签名</li>
+<li>分离签名为v, r, s组件</li>
+</ul>
+</li>
+<li><strong>批量管理</strong>
+<ul dir="auto">
+<li>为多个参与者生成签名</li>
+<li>使用batchCheckIn进行批量签到</li>
+<li>监控活动状态和参与人数</li>
+</ul>
+</li>
+</ol>
+<p dir="auto"><strong>参与者路径Attendee</strong></p>
+<ol dir="auto">
+<li><strong>活动发现</strong>
+<ul dir="auto">
+<li>查看活动基本信息</li>
+<li>确认活动状态(isEventActive)</li>
+</ul>
+</li>
+<li><strong>签到流程</strong>
+<ul dir="auto">
+<li>从组织者获取签名数据</li>
+<li>提交v, r, s参数到合约</li>
+<li>等待签名验证和状态更新</li>
+</ul>
+</li>
+<li><strong>状态确认</strong>
+<ul dir="auto">
+<li>验证hasAttended状态</li>
+<li>查看签到历史记录</li>
+</ul>
+</li>
+</ol>
+<p dir="auto"><img src="../Notes/Notes_Herstory/签名验证 28c06421268880a1a3b5d1d75cf53398/image.png" alt="用户路径图 - 签名验证活动流程" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin: 20px 0;"></p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>b.数据库结构</strong></h3></div>
+<p dir="auto"><strong>1.合约基本信息（Contract Basic Information）</strong></p>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th><strong>Contract / 合约</strong></th>
+<th><strong>Type / 类型</strong></th>
+<th><strong>Bases / 基础合约</strong></th>
+<th><strong>含义 / Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SignThis</td>
+<td>Implementation / 实现合约</td>
+<td>None / 无</td>
+<td>签名验证活动合约 / Signature Verification Event Contract</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto"><strong>2.状态变量表 (State Variables Table)</strong></p>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th><strong>L</strong></th>
+<th><strong>Field Name / 字段名</strong></th>
+<th><strong>Visibility / 可见性</strong></th>
+<th><strong>Mutability / 可变性</strong></th>
+<th><strong>Data Type / 数据类型</strong></th>
+<th><strong>Description / 描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L</td>
+<td>eventName</td>
+<td>Public / 公开</td>
+<td>view / 只读</td>
+<td>string / 字符串</td>
+<td>活动名称 / Event Name</td>
+</tr>
+<tr>
+<td>L</td>
+<td>organizer</td>
+<td>Public / 公开</td>
+<td>view / 只读</td>
+<td>address / 地址</td>
+<td>组织者钱包地址 / Organizer Wallet Address</td>
+</tr>
+<tr>
+<td>L</td>
+<td>eventDate</td>
+<td>Public / 公开</td>
+<td>view / 只读</td>
+<td>uint256 / 无符号整数</td>
+<td>活动日期时间戳 / Event Date Timestamp</td>
+</tr>
+<tr>
+<td>L</td>
+<td>maxAttendees</td>
+<td>Public / 公开</td>
+<td>view / 只读</td>
+<td>uint256 / 无符号整数</td>
+<td>最大参与人数 / Maximum Attendee Capacity</td>
+</tr>
+<tr>
+<td>L</td>
+<td>attendeeCount</td>
+<td>Public / 公开</td>
+<td>view / 只读</td>
+<td>uint256 / 无符号整数</td>
+<td>当前参与人数 / Current Attendee Count</td>
+</tr>
+<tr>
+<td>L</td>
+<td>isEventActive</td>
+<td>Public / 公开</td>
+<td>view / 只读</td>
+<td>bool / 布尔值</td>
+<td>活动是否激活 / Whether Event is Active</td>
+</tr>
+<tr>
+<td>L</td>
+<td>hasAttended</td>
+<td>Public / 公开</td>
+<td>view / 只读</td>
+<td>mapping(address ⇒ bool) / 映射</td>
+<td>参与记录映射表 / Attendance Record Mapping</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>3. 函数接口表 (Function Interfaces Table)</strong></h3></div>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th><strong>L</strong></th>
+<th><strong>Function Name / 函数名</strong></th>
+<th><strong>Visibility / 可见性</strong></th>
+<th><strong>Mutability / 可变性</strong></th>
+<th><strong>Modifiers / 修饰器</strong></th>
+<th><strong>Description / 描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L</td>
+<td>constructor</td>
+<td>Internal / 内部</td>
+<td>state-changing / 状态修改</td>
+<td>NO / 无</td>
+<td>合约构造函数 / Contract Constructor</td>
+</tr>
+<tr>
+<td>L</td>
+<td>checkInWithSignature</td>
+<td>Public / 公开</td>
+<td>state-changing / 状态修改</td>
+<td>eventActive</td>
+<td>单用户签名验证签到 / Single User Signature Check-in</td>
+</tr>
+<tr>
+<td>L</td>
+<td>batchCheckIn</td>
+<td>Public / 公开</td>
+<td>state-changing / 状态修改</td>
+<td>eventActive</td>
+<td>批量签名验证签到 / Batch Signature Check-in</td>
+</tr>
+<tr>
+<td>L</td>
+<td>verifySignature</td>
+<td>Public / 公开</td>
+<td>view / 只读</td>
+<td>NO / 无</td>
+<td>验证签名有效性 / Verify Signature Validity</td>
+</tr>
+<tr>
+<td>L</td>
+<td>getMessageHash</td>
+<td>Public / 公开</td>
+<td>view / 只读</td>
+<td>NO / 无</td>
+<td>获取消息哈希值 / Get Message Hash for Signing</td>
+</tr>
+<tr>
+<td>L</td>
+<td>toggleEventStatus</td>
+<td>Public / 公开</td>
+<td>state-changing / 状态修改</td>
+<td>onlyOrganizer</td>
+<td>切换活动状态 / Toggle Event Status</td>
+</tr>
+<tr>
+<td>L</td>
+<td>getEventInfo</td>
+<td>Public / 公开</td>
+<td>view / 只读</td>
+<td>NO / 无</td>
+<td>获取活动完整信息 / Get Complete Event Information</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto"><strong>补充说明：</strong></p>
+<p dir="auto"><strong>修饰器表 (Modifiers Table)</strong></p>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th><strong>L</strong></th>
+<th><strong>Modifier Name / 修饰器名</strong></th>
+<th><strong>Description / 描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L</td>
+<td>onlyOrganizer</td>
+<td>仅组织者可调用 / Only Organizer Can Call</td>
+</tr>
+<tr>
+<td>L</td>
+<td>eventActive</td>
+<td>仅活动激活状态可调用 / Only When Event is Active</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto"><strong>事件日志表 (Event Logs Table)</strong></p>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th><strong>L</strong></th>
+<th><strong>Event Name / 事件名</strong></th>
+<th><strong>Parameters / 参数</strong></th>
+<th><strong>Description / 描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L</td>
+<td>EventCreated</td>
+<td>(string name, uint256 date, uint256 maxAttendees)</td>
+<td>活动创建事件 / Event Created</td>
+</tr>
+<tr>
+<td>L</td>
+<td>AttendeeCheckedIn</td>
+<td>(address attendee, uint256 timestamp)</td>
+<td>参与者签到事件 / Attendee Checked In</td>
+</tr>
+<tr>
+<td>L</td>
+<td>EventStatusChanged</td>
+<td>(bool isActive)</td>
+<td>活动状态变更事件 / Event Status Changed</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto"><strong>关键术语说明 (Key Terminology Explanation)</strong></p>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th><strong>Term / 术语</strong></th>
+<th><strong>Meaning / 含义</strong></th>
+<th><strong>Description / 描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Visibility / 可见性</strong></td>
+<td>访问权限控制</td>
+<td>定义谁可以调用函数或访问变量 / Defines who can call functions or access variables</td>
+</tr>
+<tr>
+<td><strong>Mutability / 可变性</strong></td>
+<td>状态修改能力</td>
+<td>view: 只读不修改状态; state-changing: 修改状态需要Gas费 / view: read-only; state-changing: modifies state and requires Gas</td>
+</tr>
+<tr>
+<td><strong>Modifiers / 修饰器</strong></td>
+<td>函数修饰条件</td>
+<td>在函数执行前检查的条件 / Conditions checked before function execution</td>
+</tr>
+<tr>
+<td><strong>Public / 公开</strong></td>
+<td>完全公开访问</td>
+<td>任何账户都可以调用 / Can be called by any account</td>
+</tr>
+<tr>
+<td><strong>Internal / 内部</strong></td>
+<td>内部访问</td>
+<td>仅合约内部或其他继承合约可调用 / Only within contract or inherited contracts</td>
+</tr>
+<tr>
+<td><strong>State-changing / 状态修改</strong></td>
+<td>修改区块链状态</td>
+<td>需要支付Gas费用，会产生交易 / Requires Gas fee and creates a transaction</td>
+</tr>
+<tr>
+<td><strong>View / 只读</strong></td>
+<td>仅读取状态</td>
+<td>免费调用，不修改状态 / Free to call, does not modify state</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto"><strong>数据类型说明 (Data Types Explanation)</strong></p>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th><strong>Data Type / 数据类型</strong></th>
+<th><strong>Description / 描述</strong></th>
+<th><strong>Example / 示例</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string / 字符串</td>
+<td>文本数据类型 / Text data type</td>
+<td>"Web3 Conference 2024"</td>
+</tr>
+<tr>
+<td>address / 地址</td>
+<td>以太坊账户地址 / Ethereum account address</td>
+<td>0x742d35Cc6634C0532925a3b8D0C9964E5Bd4f071</td>
+</tr>
+<tr>
+<td>uint256 / 无符号整数</td>
+<td>256位正整数 / 256-bit positive integer</td>
+<td>1735660800 (时间戳)</td>
+</tr>
+<tr>
+<td>bool / 布尔值</td>
+<td>真/假值 / True/False value</td>
+<td>true / false</td>
+</tr>
+<tr>
+<td>mapping / 映射</td>
+<td>键值对存储 / Key-value storage</td>
+<td>address → bool (地址到布尔值的映射)</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">2、细节详解</h1></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>核心概念</strong></h3></div>
+<p dir="auto"><strong>（1）数字签名原理</strong>：数字签名基于椭圆曲线密码学，提供身份验证和消息完整性：</p>
+<p dir="auto"><strong>🔹 签名过程</strong></p>
+<ol dir="auto">
+<li>用户使用私钥对消息哈希进行签名</li>
+<li>生成签名 (r, s, v) 三个参数</li>
+<li>将签名和消息一起发送</li>
+</ol>
+<p dir="auto"><strong>🔹 验证过程</strong></p>
+<ol dir="auto">
+<li>合约接收消息和签名</li>
+<li>使用ecrecover恢复签名者地址</li>
+<li>验证地址是否有权限</li>
+</ol>
+<p dir="auto">**优势：**无需在链上存储白名单，节省Gas费用</p>
+<p dir="auto"><strong>🔍（2） ecrecover 函数</strong></p>
+<p dir="auto"><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">ecrecover</code>是Solidity内置函数，用于从签名恢复签名者地址：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> ecrecover</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">hash</span>, <span class="pl-c1">uint8</span> <span class="pl-v">v</span>, <span class="pl-c1">bytes32</span> <span class="pl-v">r</span>, <span class="pl-c1">bytes32</span> <span class="pl-v">s</span>)
+    <span class="pl-k">returns</span> (<span class="pl-c1">address</span> <span class="pl-v">signer</span>)</pre></div>
+<p dir="auto"><strong>参数说明：</strong></p>
+<ul dir="auto">
+<li><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">hash</code>: 消息的keccak256哈希</li>
+<li><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">v</code>: 恢复ID (通常是27或28)</li>
+<li><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">r, s</code>: 签名的两个组成部分</li>
+</ul>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// 使用示例</span>
+<span class="pl-c1">bytes32</span> messageHash <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-c1">abi.encodePacked</span>(user, eventId));
+<span class="pl-c1">bytes32</span> ethSignedMessageHash <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-c1">abi.encodePacked</span>(<span class="pl-s">"<span class="pl-s">\x19Ethereum Signed Message:\n32</span>"</span>, messageHash));
+<span class="pl-c1">address</span> signer <span class="pl-k">=</span> <span class="pl-c1">ecrecover</span>(ethSignedMessageHash, v, r, s);</pre></div>
+<p dir="auto">📝 （3）<strong>以太坊签名消息格式</strong></p>
+<p dir="auto">以太坊钱包签名时会自动添加前缀，防止签名重放攻击：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// 原始消息哈希</span>
+<span class="pl-c1">bytes32</span> messageHash <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-c1">abi.encodePacked</span>(data));
+
+<span class="pl-c">// 以太坊签名消息哈希</span>
+<span class="pl-c1">bytes32</span> ethSignedMessageHash <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-c1">abi.encodePacked</span>(
+    <span class="pl-s">"<span class="pl-s">\x19Ethereum Signed Message:\n32</span>"</span>,
+    messageHash
+));</pre></div>
+<p dir="auto"><strong>前缀作用：</strong></p>
+<ul dir="auto">
+<li>防止用户误签交易数据</li>
+<li>区分不同类型的签名</li>
+<li>提高安全性</li>
+</ul>
+<p dir="auto">⚡ Gas优化策略</p>
+<p dir="auto">基于签名的访问控制相比传统白名单有显著的Gas优势：</p>
+<p dir="auto"><strong>✅ 签名方式</strong></p>
+<ul dir="auto">
+<li>无需存储用户列表</li>
+<li>验证成本固定 (~3000 gas)</li>
+<li>支持无限用户</li>
+<li>动态权限管理</li>
+</ul>
+<p dir="auto"><strong>❌ 传统白名单</strong></p>
+<ul dir="auto">
+<li>每个用户需要存储 (~20000 gas)</li>
+<li>查询成本随用户增加</li>
+<li>修改白名单需要交易</li>
+<li>存储成本高</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>分解代码</strong></h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>拆解的合约：<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">EventEntry.sol</code></strong></h3></div>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-s1">pragma</span> <span class="pl-s1">solidity</span> <span class="pl-c1">^</span><span class="pl-c1">0.8</span><span class="pl-c1">.17</span><span class="pl-kos">;</span>
+
+<span class="pl-s1">contract</span> <span class="pl-v">EventEntry</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">string</span> <span class="pl-s1">public</span> <span class="pl-s1">eventName</span><span class="pl-kos">;</span>
+    <span class="pl-s1">address</span> <span class="pl-s1">public</span> <span class="pl-s1">organizer</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">eventDate</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">maxAttendees</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">attendeeCount</span><span class="pl-kos">;</span>
+    <span class="pl-s1">bool</span> <span class="pl-s1">public</span> <span class="pl-s1">isEventActive</span><span class="pl-kos">;</span>
+
+    <span class="pl-en">mapping</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-c1">=&gt;</span> <span class="pl-s1">bool</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">hasAttended</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">event</span><span class="pl-kos"></span> <span class="pl-v">EventCreated</span><span class="pl-kos">(</span><span class="pl-s1">string</span> <span class="pl-s1">name</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">date</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">maxAttendees</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">event</span><span class="pl-kos"></span> <span class="pl-v">AttendeeCheckedIn</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">attendee</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">timestamp</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">event</span><span class="pl-kos"></span> <span class="pl-v">EventStatusChanged</span><span class="pl-kos">(</span><span class="pl-s1">bool</span> <span class="pl-s1">isActive</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-en">constructor</span><span class="pl-kos">(</span><span class="pl-s1">string</span> <span class="pl-s1">memory</span> <span class="pl-s1">_eventName</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">_eventDate_unix</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">_maxAttendees</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-kos">{</span>
+        <span class="pl-s1">eventName</span> <span class="pl-c1">=</span> <span class="pl-s1">_eventName</span><span class="pl-kos">;</span>
+        <span class="pl-s1">eventDate</span> <span class="pl-c1">=</span> <span class="pl-s1">_eventDate_unix</span><span class="pl-kos">;</span>
+        <span class="pl-s1">maxAttendees</span> <span class="pl-c1">=</span> <span class="pl-s1">_maxAttendees</span><span class="pl-kos">;</span>
+        <span class="pl-s1">organizer</span> <span class="pl-c1">=</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">;</span>
+        <span class="pl-s1">isEventActive</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span>
+
+        <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">EventCreated</span><span class="pl-kos">(</span><span class="pl-s1">_eventName</span><span class="pl-kos">,</span> <span class="pl-s1">_eventDate_unix</span><span class="pl-kos">,</span> <span class="pl-s1">_maxAttendees</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-s1">modifier</span><span class="pl-kos"></span> <span class="pl-en">onlyOrganizer</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-kos">{</span>
+        <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span> <span class="pl-c1">==</span> <span class="pl-s1">organizer</span><span class="pl-kos">,</span> <span class="pl-s">"Only the event organizer can call this function"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-s1">_</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-en">setEventStatus</span><span class="pl-kos">(</span><span class="pl-s1">bool</span> <span class="pl-s1">_isActive</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-s1">onlyOrganizer</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">isEventActive</span> <span class="pl-c1">=</span> <span class="pl-s1">_isActive</span><span class="pl-kos">;</span>
+        <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">EventStatusChanged</span><span class="pl-kos">(</span><span class="pl-s1">_isActive</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-en">getMessageHash</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">_attendee</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">view</span> <span class="pl-s1">returns</span> <span class="pl-kos">(</span><span class="pl-s1">bytes32</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-k">return</span> <span class="pl-en">keccak256</span><span class="pl-kos">(</span><span class="pl-s1">abi</span><span class="pl-kos">.</span><span class="pl-en">encodePacked</span><span class="pl-kos">(</span><span class="pl-en">address</span><span class="pl-kos">(</span><span class="pl-smi">this</span><span class="pl-kos">)</span><span class="pl-kos">,</span> <span class="pl-s1">eventName</span><span class="pl-kos">,</span> <span class="pl-s1">_attendee</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-en">getEthSignedMessageHash</span><span class="pl-kos">(</span><span class="pl-s1">bytes32</span> <span class="pl-s1">_messageHash</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">pure</span> <span class="pl-s1">returns</span> <span class="pl-kos">(</span><span class="pl-s1">bytes32</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-k">return</span> <span class="pl-en">keccak256</span><span class="pl-kos">(</span><span class="pl-s1">abi</span><span class="pl-kos">.</span><span class="pl-en">encodePacked</span><span class="pl-kos">(</span><span class="pl-s">"\x19Ethereum Signed Message:\n32"</span><span class="pl-kos">,</span> <span class="pl-s1">_messageHash</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-en">verifySignature</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">_attendee</span><span class="pl-kos">,</span> <span class="pl-s1">bytes</span> <span class="pl-s1">memory</span> <span class="pl-s1">_signature</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">view</span> <span class="pl-s1">returns</span> <span class="pl-kos">(</span><span class="pl-s1">bool</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">bytes32</span> <span class="pl-s1">messageHash</span> <span class="pl-c1">=</span> <span class="pl-en">getMessageHash</span><span class="pl-kos">(</span><span class="pl-s1">_attendee</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-s1">bytes32</span> <span class="pl-s1">ethSignedMessageHash</span> <span class="pl-c1">=</span> <span class="pl-en">getEthSignedMessageHash</span><span class="pl-kos">(</span><span class="pl-s1">messageHash</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-k">return</span> <span class="pl-en">recoverSigner</span><span class="pl-kos">(</span><span class="pl-s1">ethSignedMessageHash</span><span class="pl-kos">,</span> <span class="pl-s1">_signature</span><span class="pl-kos">)</span> <span class="pl-c1">==</span> <span class="pl-s1">organizer</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-s1">recoverSigner</span><span class="pl-kos">(</span><span class="pl-s1">bytes32</span> <span class="pl-s1">_ethSignedMessageHash</span><span class="pl-kos">,</span> <span class="pl-s1">bytes</span> <span class="pl-s1">memory</span> <span class="pl-s1">_signature</span><span class="pl-kos">)</span>
+        <span class="pl-s1">public</span>
+        <span class="pl-s1">pure</span>
+        <span class="pl-en">returns</span> <span class="pl-kos">(</span><span class="pl-s1">address</span><span class="pl-kos">)</span>
+    <span class="pl-kos">{</span>
+        <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">_signature</span><span class="pl-kos">.</span><span class="pl-c1">length</span> <span class="pl-c1">==</span> <span class="pl-c1">65</span><span class="pl-kos">,</span> <span class="pl-s">"Invalid signature length"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+        <span class="pl-s1">bytes32</span> <span class="pl-s1">r</span><span class="pl-kos">;</span>
+        <span class="pl-s1">bytes32</span> <span class="pl-s1">s</span><span class="pl-kos">;</span>
+        <span class="pl-s1">uint8</span> <span class="pl-s1">v</span><span class="pl-kos">;</span>
+
+        <span class="pl-s1">assembly</span><span class="pl-kos"></span> <span class="pl-kos">{</span>
+            <span class="pl-s1">r</span> :<span class="pl-c1">=</span> <span class="pl-en">mload</span><span class="pl-kos">(</span><span class="pl-en">add</span><span class="pl-kos">(</span><span class="pl-s1">_signature</span><span class="pl-kos">,</span> <span class="pl-c1">32</span><span class="pl-kos">)</span><span class="pl-kos">)</span>
+            <span class="pl-s1">s</span> :<span class="pl-c1">=</span> <span class="pl-en">mload</span><span class="pl-kos">(</span><span class="pl-en">add</span><span class="pl-kos">(</span><span class="pl-s1">_signature</span><span class="pl-kos">,</span> <span class="pl-c1">64</span><span class="pl-kos">)</span><span class="pl-kos">)</span>
+            <span class="pl-s1">v</span> :<span class="pl-c1">=</span> <span class="pl-en">byte</span><span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-en">mload</span><span class="pl-kos">(</span><span class="pl-en">add</span><span class="pl-kos">(</span><span class="pl-s1">_signature</span><span class="pl-kos">,</span> <span class="pl-c1">96</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">)</span>
+        <span class="pl-kos">}</span>
+
+        <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">v</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">27</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+            <span class="pl-s1">v</span> <span class="pl-c1">+=</span> <span class="pl-c1">27</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span>
+
+        <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">v</span> <span class="pl-c1">==</span> <span class="pl-c1">27</span> <span class="pl-c1">||</span> <span class="pl-s1">v</span> <span class="pl-c1">==</span> <span class="pl-c1">28</span><span class="pl-kos">,</span> <span class="pl-s">"Invalid signature 'v' value"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+        <span class="pl-k">return</span> <span class="pl-en">ecrecover</span><span class="pl-kos">(</span><span class="pl-s1">_ethSignedMessageHash</span><span class="pl-kos">,</span> <span class="pl-s1">v</span><span class="pl-kos">,</span> <span class="pl-s1">r</span><span class="pl-kos">,</span> <span class="pl-s1">s</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-en">checkIn</span><span class="pl-kos">(</span><span class="pl-s1">bytes</span> <span class="pl-s1">memory</span> <span class="pl-s1">_signature</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-kos">{</span>
+        <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">isEventActive</span><span class="pl-kos">,</span> <span class="pl-s">"Event is not active"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span> <span class="pl-c1">&lt;=</span> <span class="pl-s1">eventDate</span> <span class="pl-c1">+</span> <span class="pl-c1">1</span> <span class="pl-s1">days</span><span class="pl-kos">,</span> <span class="pl-s">"Event has ended"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-c1">!</span><span class="pl-s1">hasAttended</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-s">"Attendee has already checked in"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">attendeeCount</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">maxAttendees</span><span class="pl-kos">,</span> <span class="pl-s">"Maximum attendees reached"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-en">verifySignature</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-s1">_signature</span><span class="pl-kos">)</span><span class="pl-kos">,</span> <span class="pl-s">"Invalid signature"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+        <span class="pl-s1">hasAttended</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span>
+        <span class="pl-s1">attendeeCount</span><span class="pl-c1">++</span><span class="pl-kos">;</span>
+
+        <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">AttendeeCheckedIn</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">该合同专为会议、研讨会或私人聚会等 Web3 活动而设计。但是，我们没有在链上存储一长串白名单地址（这需要 Gas 且不可扩展），而是做一些更聪明的事情。</p>
+<p dir="auto">诀窍如下：</p>
+<p dir="auto">活动组织者为每个批准的与会者签署链下消息。</p>
+<p dir="auto">然后，与会者将签名消息带到链上以<strong>证明</strong>他们已被邀请。</p>
+<p dir="auto">无需预先存储任何东西。智能合约使用 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">ecrecover</code> 验证签名。</p>
+<p dir="auto">这是高效、安全的，并且反映了 IRL 门票或二维码的工作方式——但在链上。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>（1）合同声明Contract Declaration</strong></h3></div>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">pragma</span> <span class="pl-s1">solidity</span> <span class="pl-c1">^</span><span class="pl-c1">0.8</span><span class="pl-c1">.17</span><span class="pl-kos">;</span>
+
+<span class="pl-s1">contract</span> <span class="pl-v">EventEntry</span> <span class="pl-kos">{</span></pre></div>
+<p dir="auto">我们正在使用 Solidity 版本 0.8.17 并创建一个名为 EventEntry 的合约。简单的开始。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>（2）事件详细信息和状态变量Event Details &amp; State Variables</strong></h3></div>
+<p dir="auto">在我们深入了解智能合约的核心逻辑之前，让我们退后一步问一个简单的问题：</p>
+<p dir="auto">Web3 事件实际上需要在链上管理什么？</p>
+<p dir="auto">我们不仅仅是在编写一个通用的出席跟踪器——我们正在为活动构建一个<strong>基于签名、Gas 优化的私人访问系统</strong> 。这意味着我们需要跟踪以下内容：</p>
+<ul dir="auto">
+<li>活动内容</li>
+<li>谁负责</li>
+<li>当它发生时</li>
+<li>可参加人数</li>
+<li>谁已经签到了</li>
+<li>大门是否还开着</li>
+</ul>
+<p dir="auto">让我们看看所有这些是如何存储在合约中的。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">string</span> <span class="pl-s1">public</span> <span class="pl-s1">eventName</span><span class="pl-kos">;</span>
+<span class="pl-s1">address</span> <span class="pl-s1">public</span> <span class="pl-s1">organizer</span><span class="pl-kos">;</span>
+<span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">eventDate</span><span class="pl-kos">;</span>
+<span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">maxAttendees</span><span class="pl-kos">;</span>
+<span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">attendeeCount</span><span class="pl-kos">;</span>
+<span class="pl-s1">bool</span> <span class="pl-s1">public</span> <span class="pl-s1">isEventActive</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这六个变量定义<strong>了活动的一切</strong> ——从谁负责到有多少人可以参加。让我们逐行逐句地浏览一下：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">string</span> <span class="pl-s1">public</span> <span class="pl-s1">eventName</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这是你活动的<strong>人类可读名称human-readable name</strong> ——例如 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">“EthConf 2025”</code> 或 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">“Token-Gated Summit”</code>。</p>
+<p dir="auto">由于它被标记为<strong>公共public</strong> ，Solidity 会自动创建一个 getter 函数。</p>
+<p dir="auto">任何人都可以调用 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">eventName（）</code> 来获取此值——非常适合前端或浏览器显示事件的标题。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">address</span> <span class="pl-s1">public</span> <span class="pl-s1">organizer</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这是<strong>事件组织者（</strong> 部署合约的个人或实体）的以太坊地址。</p>
+<p dir="auto">只有这个地址才能<strong>签署与会者批准</strong> （链下）。</p>
+<p dir="auto">只有此地址可以<strong>更改事件状态</strong>  （<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">setEventStatus（）</code>）。</p>
+<p dir="auto">这使得组织者成为整个系统的看门人。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">eventDate</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这保存了<strong>事件的计划日期event's scheduled date</strong> ，以 <strong>Unix 时间戳</strong>表示。</p>
+<p dir="auto">示例：<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">1714569600</code> → 2024 年 4 月 30 日 00：00：00 UTC</p>
+<p dir="auto">它用于 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">checkIn（）</code> 函数，以确保人们不会签到太晚。</p>
+<p dir="auto">该合同允许在 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">eventDate + 1 天</code>之前签到，以允许时区和延迟灵活性。</p>
+<p dir="auto">因此，在实践中，事件在此时间戳后一天<strong>关闭</strong> 。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">maxAttendees</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这对可以签到的人数设定了<strong>硬性上限hard cap</strong> 。</p>
+<p dir="auto">如果设置为 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">100</code>，则只有 100 个唯一地址可以成功签入。</p>
+<p dir="auto">对于管理私人活动中的有限座位、物理限制或访问控制非常有用。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">attendeeCount</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这会保留已经签到的人数的<strong>运行总数</strong>  <strong>running total</strong>。</p>
+<p dir="auto">从 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">0</code> 开始</p>
+<p dir="auto">每次新用户成功签入时递增 1</p>
+<p dir="auto">用于强制实施 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">maxAttendees</code> 规则</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">bool</span> <span class="pl-s1">public</span> <span class="pl-s1">isEventActive</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">此变量确定事件<strong>当前是否接受签入</strong> 。</p>
+<p dir="auto">部署合约时设置为 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">true</code></p>
+<p dir="auto">可以由组织者使用 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">setEventStatus（bool）</code> 打开/关闭</p>
+<p dir="auto">在事件处于非活动状态时阻止签入</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>(3)考勤跟踪Attendance Tracking</strong></h3></div>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">mapping</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-c1">=&gt;</span> <span class="pl-s1">bool</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">hasAttended</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们使用此映射来<strong>跟踪谁已经签到</strong> ，因此没有人可以签到两次。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">****</h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>(4)事件Events</strong></h3></div>
+<p dir="auto">📢</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">event</span> <span class="pl-v">EventCreated</span><span class="pl-kos">(</span><span class="pl-s1">string</span> <span class="pl-s1">name</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">date</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">maxAttendees</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">event</span> <span class="pl-v">AttendeeCheckedIn</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">attendee</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">timestamp</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">event</span> <span class="pl-v">EventStatusChanged</span><span class="pl-kos">(</span><span class="pl-s1">bool</span> <span class="pl-s1">isActive</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们发出以下事件是为了提高透明度和前端集成：</p>
+<p dir="auto"><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">EventCreated</code>：在部署期间发出一次。</p>
+<p dir="auto"><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">AttendeeCheckedIn</code>：每次有人成功签到时触发。</p>
+<p dir="auto"><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">EventStatusChanged</code>：允许组织者暂停/恢复事件。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">****</h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>(5)构造函数：部署时设置 Constructor: Setup at Deployment</strong></h3></div>
+<p dir="auto">🏗️</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">constructor</span><span class="pl-kos">(</span><span class="pl-s1">string</span> <span class="pl-s1">memory</span> <span class="pl-s1">_eventName</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">_eventDate_unix</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">_maxAttendees</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-kos">{</span>
+    <span class="pl-s1">eventName</span> <span class="pl-c1">=</span> <span class="pl-s1">_eventName</span><span class="pl-kos">;</span>
+    <span class="pl-s1">eventDate</span> <span class="pl-c1">=</span> <span class="pl-s1">_eventDate_unix</span><span class="pl-kos">;</span>
+    <span class="pl-s1">maxAttendees</span> <span class="pl-c1">=</span> <span class="pl-s1">_maxAttendees</span><span class="pl-kos">;</span>
+    <span class="pl-s1">organizer</span> <span class="pl-c1">=</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">;</span>
+    <span class="pl-s1">isEventActive</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">EventCreated</span><span class="pl-kos">(</span><span class="pl-s1">_eventName</span><span class="pl-kos">,</span> <span class="pl-s1">_eventDate_unix</span><span class="pl-kos">,</span> <span class="pl-s1">_maxAttendees</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto"><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">构造函数</code>就像安装向导，在部署合约时运行一次——而且只运行一次。让我们来看看每行的作用以及为什么它很重要：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">eventName</span> <span class="pl-c1">=</span> <span class="pl-s1">_eventName</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这会存储您的活动的人类可读名称（例如，“<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">Web3Conf 2025</code>”）。它作为构造函数参数传入并保存在链上，以便任何人都可以稍后使用 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">eventName（）</code> 函数查询它。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">eventDate</span> <span class="pl-c1">=</span> <span class="pl-s1">_eventDate_unix</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这设置了官方活动日期——但它不是像“2025 年 4 月 21 日” 这样的格式化字符串。它是一个 <strong>Unix 时间戳</strong> （如 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">1745251200</code>），这使得在 Solidity 中进行时间比较变得更加容易。</p>
+<p dir="auto">稍后，我们将使用它来检查事件是否仍在进行或已经结束。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">maxAttendees</span> <span class="pl-c1">=</span> <span class="pl-s1">_maxAttendees</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这为可以参加的人数设定了上限。例如，如果最大值为 150，则第 151 人将在入住时被拒绝。</p>
+<p dir="auto">拥有此内置限制有助于防止过度拥挤、垃圾邮件或滥用。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">organizer</span> <span class="pl-c1">=</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这会将部署合同的人员设置为<strong>事件组织者</strong> 。</p>
+<p dir="auto"><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">msg.sender</code> 是指部署合约的地址。</p>
+<p dir="auto">该地址具有特殊能力，例如激活/停用事件。</p>
+<p dir="auto">它也是<strong>唯一</strong>应该允许签署邀请签名的地址，我们稍后会验证。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">isEventActive</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">默认情况下，活动以活动状态开始，这意味着除非组织者手动禁用它，否则允许签到。</p>
+<p dir="auto">稍后我们将创建一个名为 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">setEventStatus（）</code> 的函数，让组织者切换此标志。</p>
+<p dir="auto"><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">emit EventCreated(...)</code></p>
+<p dir="auto">这行向区块链广播事件，表明该事件已创建。</p>
+<p dir="auto">为什么要发出事件？</p>
+<p dir="auto">它可以帮助链下应用程序（如前端或浏览器）知道已经注册了新事件。</p>
+<p dir="auto">它记录有用的元数据，例如名称、日期和最大容量。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>（6）存取控制Access Control</strong></h3></div>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">modifier</span> <span class="pl-en">onlyOrganizer</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span> <span class="pl-c1">==</span> <span class="pl-s1">organizer</span><span class="pl-kos">,</span> <span class="pl-s">"Only the event organizer can call this function"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">_</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">保护某些功能的便捷<strong>修饰符</strong> 。只有组织者可以呼叫他们。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>（7） 切换事件状态Toggle Event Status</strong></h3></div>
+<p dir="auto">🔁</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-en">setEventStatus</span><span class="pl-kos">(</span><span class="pl-s1">bool</span> <span class="pl-s1">_isActive</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-s1">onlyOrganizer</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">isEventActive</span> <span class="pl-c1">=</span> <span class="pl-s1">_isActive</span><span class="pl-kos">;</span>
+    <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">EventStatusChanged</span><span class="pl-kos">(</span><span class="pl-s1">_isActive</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">使用此选项可以<strong>暂停或恢复</strong>签入。您可能希望在某个时间点之后冻结签到。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">****</h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>（8）消息散列 — 签名的关键Message Hashing — Key to Signatures</strong></h3></div>
+<p dir="auto">🔏</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-en">getMessageHash</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">_attendee</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">view</span> <span class="pl-s1">returns</span> <span class="pl-kos">(</span><span class="pl-s1">bytes32</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-en">keccak256</span><span class="pl-kos">(</span><span class="pl-s1">abi</span><span class="pl-kos">.</span><span class="pl-en">encodePacked</span><span class="pl-kos">(</span><span class="pl-en">address</span><span class="pl-kos">(</span><span class="pl-smi">this</span><span class="pl-kos">)</span><span class="pl-kos">,</span> <span class="pl-s1">eventName</span><span class="pl-kos">,</span> <span class="pl-s1">_attendee</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">此功能使<strong>组织者</strong>能够控制活动当前是否接受签到。</p>
+<p dir="auto"><strong>它能做什么：</strong></p>
+<p dir="auto">🧱</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><style>pre code, pre span { color: #f8f8f2 !important; }</style><code> **`onlyOrganizer` 修饰符：**
+
+  确保只有部署合同的人员（ **组织者** ）才能更改此设置。这可以防止随机用户暂停或恢复事件。
+</code></pre></div>
+<p dir="auto"><strong><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">isEventActive = _isActive;</code></strong></p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><style>pre code, pre span { color: #f8f8f2 !important; }</style><code>        根据传递的参数更新事件的活动状态：
+
+        如果 `_isActive` 为 `true`，则事件为打开。
+
+        如果 `_isActive` 为 `false`，则签入将暂时暂停。
+</code></pre></div>
+<p dir="auto"><strong><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">emit EventStatusChanged（_isActive）</code>;</strong></p>
+<p dir="auto">每次状态变化时都会发出链上事件——对于前端仪表板或区块链浏览器立即反映变化很有用。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>（9）以太坊签名消息哈希Ethereum Signed Message Hash</strong></h3></div>
+<p dir="auto">✍️</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-en">getEthSignedMessageHash</span><span class="pl-kos">(</span><span class="pl-s1">bytes32</span> <span class="pl-s1">_messageHash</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">pure</span> <span class="pl-s1">returns</span> <span class="pl-kos">(</span><span class="pl-s1">bytes32</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-en">keccak256</span><span class="pl-kos">(</span><span class="pl-s1">abi</span><span class="pl-kos">.</span><span class="pl-en">encodePacked</span><span class="pl-kos">(</span><span class="pl-s">"\x19Ethereum Signed Message:\n32"</span><span class="pl-kos">,</span> <span class="pl-s1">_messageHash</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">此功能是以太坊签名验证系统<strong>的重要组成部分</strong> ——这就是它存在的原因。</p>
+<hr>
+<p dir="auto"><strong>为什么存在这个函数</strong></p>
+<p dir="auto">🧠</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><style>pre code, pre span { color: #f8f8f2 !important; }</style><code> 当用户在链下签署数据（如消息的哈希）时，从技术上讲，他们正在签署**任何随机的 32 字节** 。这可能包括交易的哈希值、合约的哈希值或一些完全不相关的数据。
+</code></pre></div>
+<p dir="auto">这带来了风险：</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><style>pre code, pre span { color: #f8f8f2 !important; }</style><code> 如果有人诱骗用户在链下签署某些内容，然后在链上重复使用该签名来做一些恶意的事情怎么办？
+</code></pre></div>
+<p dir="auto">为了避免这种情况，以太坊引入了一个<strong>保护性前缀</strong> 。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">****</h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>（10）函数的作用</strong></h3></div>
+<p dir="auto">🔐</p>
+<p dir="auto">这行：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">keccak256</span><span class="pl-kos">(</span><span class="pl-s1">abi</span><span class="pl-kos">.</span><span class="pl-en">encodePacked</span><span class="pl-kos">(</span><span class="pl-s">"\x19Ethereum Signed Message:\n32"</span><span class="pl-kos">,</span> <span class="pl-s1">_messageHash</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">获取原始消息哈希并<strong>用前缀包装它</strong> ，如下所示：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s">"\x19Ethereum Signed Message:\n32"</span> <span class="pl-c1">+</span> <span class="pl-s1">original_hash</span></pre></div>
+<p dir="auto">然后它使用 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">keccak256</code> 再次对整个事情进行哈希处理。</p>
+<p dir="auto">这被称为<strong>以太坊签名消息哈希</strong> ，它是像 MetaMask 这样的钱包在你调用 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">eth_sign</code> 时使用的<strong>确切格式</strong> 。</p>
+<p dir="auto"><strong>为什么这很重要？</strong></p>
+<p dir="auto">🔄</p>
+<p dir="auto">因为当我们稍后使用 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">ecrecover（）</code> 恢复<strong>签名者的地址</strong>时，我们将从这个<strong>前缀包装的哈希中</strong>恢复它，而不是原始哈希。</p>
+<p dir="auto">如果您没有正确包装它，验证步骤将失败 - 即使用户正确签名！</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"></h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>（11） 签名验证Signature Verification</strong></h3></div>
+<p dir="auto">🕵️‍♂️</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-en">verifySignature</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">_attendee</span><span class="pl-kos">,</span> <span class="pl-s1">bytes</span> <span class="pl-s1">memory</span> <span class="pl-s1">_signature</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">view</span> <span class="pl-s1">returns</span> <span class="pl-kos">(</span><span class="pl-s1">bool</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">bytes32</span> <span class="pl-s1">messageHash</span> <span class="pl-c1">=</span> <span class="pl-en">getMessageHash</span><span class="pl-kos">(</span><span class="pl-s1">_attendee</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">bytes32</span> <span class="pl-s1">ethSignedMessageHash</span> <span class="pl-c1">=</span> <span class="pl-en">getEthSignedMessageHash</span><span class="pl-kos">(</span><span class="pl-s1">messageHash</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-k">return</span> <span class="pl-en">recoverSigner</span><span class="pl-kos">(</span><span class="pl-s1">ethSignedMessageHash</span><span class="pl-kos">,</span> <span class="pl-s1">_signature</span><span class="pl-kos">)</span> <span class="pl-c1">==</span> <span class="pl-s1">organizer</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">此功能是我们<strong>邀请验证系统</strong>的核心。它回答了一个简单但有力的问题：</p>
+<p dir="auto">“这个签名真的是由组织者创建的吗——它是为这位与会者准备的吗？”</p>
+<p dir="auto">让我们逐行分解。</p>
+<p dir="auto"><strong>第 1 步：生成基本消息哈希</strong></p>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">bytes32</span> <span class="pl-s1">messageHash</span> <span class="pl-c1">=</span> <span class="pl-en">getMessageHash</span><span class="pl-kos">(</span><span class="pl-s1">_attendee</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这会重新创建<strong>组织者</strong>为特定与会者在链下签名的确切哈希值。</p>
+<p dir="auto">该哈希值通常类似于：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">keccak256</span><span class="pl-kos">(</span><span class="pl-s1">contract</span> <span class="pl-s1">address</span> <span class="pl-c1">+</span> <span class="pl-s1">event</span> <span class="pl-s1">name</span> <span class="pl-c1">+</span> <span class="pl-s1">attendee</span> <span class="pl-s1">address</span><span class="pl-kos">)</span></pre></div>
+<p dir="auto">这确保了：</p>
+<p dir="auto">签名与<strong>此特定合约相关联</strong></p>
+<p dir="auto">仅对<strong>此活动</strong>有效</p>
+<p dir="auto">它属于<strong>这个确切的用户</strong></p>
+<p dir="auto">如果有什么不同——不同的与会者、不同的活动——哈希值就会发生变化。</p>
+<p dir="auto"><strong>第 2 步：转换为以太坊签名格式</strong></p>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">bytes32</span> <span class="pl-s1">ethSignedMessageHash</span> <span class="pl-c1">=</span> <span class="pl-en">getEthSignedMessageHash</span><span class="pl-kos">(</span><span class="pl-s1">messageHash</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">正如我们之前所解释的，这用以太坊的标准前缀包装了消息哈希：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s">"\x19Ethereum Signed Message:\n32"</span> <span class="pl-c1">+</span> <span class="pl-s1">messageHash</span></pre></div>
+<p dir="auto">为什么？</p>
+<p dir="auto">因为像 MetaMask 这样的钱包在签名时会自动添加该前缀——所以我们在验证时也需要包含它，否则检查将失败。</p>
+<p dir="auto"><strong>第 3 步：恢复签名者</strong></p>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">return</span> <span class="pl-en">recoverSigner</span><span class="pl-kos">(</span><span class="pl-s1">ethSignedMessageHash</span><span class="pl-kos">,</span> <span class="pl-s1">_signature</span><span class="pl-kos">)</span> <span class="pl-c1">==</span> <span class="pl-s1">organizer</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">在这里，我们：</p>
+<p dir="auto">使用 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">ecrecover（）</code>（ 通过辅助函数 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">recoverSigner</code>）提取签名<strong>消息的地址</strong> 。</p>
+<p dir="auto">将该地址与<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">组织者</code> （部署此合约的地址）进行比较。</p>
+<p dir="auto">如果匹配：  签名有效</p>
+<p dir="auto">如果没有：  有人伪造或由其他人签名</p>
+<p dir="auto">✅</p>
+<p dir="auto">❌</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>（12）recoverSigner – 密码侦探 The Cryptographic Detective</strong></h3></div>
+<p dir="auto">🔐</p>
+<p dir="auto">这是合约中的实际函数：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-s1">recoverSigner</span><span class="pl-kos">(</span><span class="pl-s1">bytes32</span> <span class="pl-s1">_ethSignedMessageHash</span><span class="pl-kos">,</span> <span class="pl-s1">bytes</span> <span class="pl-s1">memory</span> <span class="pl-s1">_signature</span><span class="pl-kos">)</span>
+    <span class="pl-s1">public</span>
+    <span class="pl-s1">pure</span>
+    <span class="pl-en">returns</span> <span class="pl-kos">(</span><span class="pl-s1">address</span><span class="pl-kos">)</span>
+<span class="pl-kos">{</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">_signature</span><span class="pl-kos">.</span><span class="pl-c1">length</span> <span class="pl-c1">==</span> <span class="pl-c1">65</span><span class="pl-kos">,</span> <span class="pl-s">"Invalid signature length"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">bytes32</span> <span class="pl-s1">r</span><span class="pl-kos">;</span>
+    <span class="pl-s1">bytes32</span> <span class="pl-s1">s</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint8</span> <span class="pl-s1">v</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">assembly</span><span class="pl-kos"></span> <span class="pl-kos">{</span>
+        <span class="pl-s1">r</span> :<span class="pl-c1">=</span> <span class="pl-en">mload</span><span class="pl-kos">(</span><span class="pl-en">add</span><span class="pl-kos">(</span><span class="pl-s1">_signature</span><span class="pl-kos">,</span> <span class="pl-c1">32</span><span class="pl-kos">)</span><span class="pl-kos">)</span>
+        <span class="pl-s1">s</span> :<span class="pl-c1">=</span> <span class="pl-en">mload</span><span class="pl-kos">(</span><span class="pl-en">add</span><span class="pl-kos">(</span><span class="pl-s1">_signature</span><span class="pl-kos">,</span> <span class="pl-c1">64</span><span class="pl-kos">)</span><span class="pl-kos">)</span>
+        <span class="pl-s1">v</span> :<span class="pl-c1">=</span> <span class="pl-en">byte</span><span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-en">mload</span><span class="pl-kos">(</span><span class="pl-en">add</span><span class="pl-kos">(</span><span class="pl-s1">_signature</span><span class="pl-kos">,</span> <span class="pl-c1">96</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">)</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">v</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">27</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">v</span> <span class="pl-c1">+=</span> <span class="pl-c1">27</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">v</span> <span class="pl-c1">==</span> <span class="pl-c1">27</span> <span class="pl-c1">||</span> <span class="pl-s1">v</span> <span class="pl-c1">==</span> <span class="pl-c1">28</span><span class="pl-kos">,</span> <span class="pl-s">"Invalid signature 'v' value"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-k">return</span> <span class="pl-en">ecrecover</span><span class="pl-kos">(</span><span class="pl-s1">_ethSignedMessageHash</span><span class="pl-kos">,</span> <span class="pl-s1">v</span><span class="pl-kos">,</span> <span class="pl-s1">r</span><span class="pl-kos">,</span> <span class="pl-s1">s</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">此功能是我们基于签名的输入系统中的<strong>最后一个侦探步骤</strong> 。它查看签名并找出<strong>哪个以太坊地址签署了它</strong> 。</p>
+<p dir="auto">假设有人给了我们一个签名并声称：</p>
+<p dir="auto">“这是由活动组织者签署的。这意味着我被允许参加活动。</p>
+<p dir="auto">但我们不能盲目相信他们。我们需要<strong>验证</strong>是否：</p>
+<p dir="auto">该签名是有效的。</p>
+<p dir="auto">它真的来自<strong>组织者的钱包</strong> 。</p>
+<p dir="auto">这个函数可以帮助我们做到这一点。</p>
+<p dir="auto"><strong>第 1 步：检查签名长度</strong></p>
+<p dir="auto">📏</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">_signature</span><span class="pl-kos">.</span><span class="pl-c1">length</span> <span class="pl-c1">==</span> <span class="pl-c1">65</span><span class="pl-kos">,</span> <span class="pl-s">"Invalid signature length"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">所有以太坊签名的<strong>长度都是 65 字节</strong> ——不多也不少。</p>
+<p dir="auto">如果它更短或更长，则可能是损坏的、不完整的或假的。</p>
+<p dir="auto">所以如果长度不对，我们会立即停止。</p>
+<p dir="auto"><strong>第 2 步：将签名分成 3 个部分</strong></p>
+<p dir="auto">📦</p>
+<p dir="auto">以太坊签名不仅仅是一大块——它们由 3 个部分组成，称为：</p>
+<p dir="auto"><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">r</code>（32 字节）</p>
+<p dir="auto"><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">s</code>（32 字节）</p>
+<p dir="auto"><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">v</code>（1 字节）</p>
+<p dir="auto">这三个值协同工作，以<strong>数学方式证明谁签署了邮件</strong> 。</p>
+<p dir="auto">现在，事情变得有点技术性了......</p>
+<p dir="auto"><strong>第 3步：使用程序集提取这些值</strong></p>
+<p dir="auto">🧙</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">assembly</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">r</span> :<span class="pl-c1">=</span> <span class="pl-en">mload</span><span class="pl-kos">(</span><span class="pl-en">add</span><span class="pl-kos">(</span><span class="pl-s1">_signature</span><span class="pl-kos">,</span> <span class="pl-c1">32</span><span class="pl-kos">)</span><span class="pl-kos">)</span>
+    <span class="pl-s1">s</span> :<span class="pl-c1">=</span> <span class="pl-en">mload</span><span class="pl-kos">(</span><span class="pl-en">add</span><span class="pl-kos">(</span><span class="pl-s1">_signature</span><span class="pl-kos">,</span> <span class="pl-c1">64</span><span class="pl-kos">)</span><span class="pl-kos">)</span>
+    <span class="pl-s1">v</span> :<span class="pl-c1">=</span> <span class="pl-en">byte</span><span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-en">mload</span><span class="pl-kos">(</span><span class="pl-en">add</span><span class="pl-kos">(</span><span class="pl-s1">_signature</span><span class="pl-kos">,</span> <span class="pl-c1">96</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">)</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">汇编是一种直接从内存访问数据的低级方法。</p>
+<p dir="auto">可以把它想象成挖一个盒子，准确地拿出我们需要的东西。</p>
+<p dir="auto">我们说：</p>
+<p dir="auto">“嘿以太坊，给我从位置 32 开始的前 32 个字节。那是 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">r</code>。</p>
+<p dir="auto">“现在给我接下来的 32 字节，从 64 开始。那是<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">s</code> 。</p>
+<p dir="auto">“最后给我位置 96 的 1 字节。那是 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">v</code>。</p>
+<p dir="auto">我们现在已经有了标志性拼图的所有部分。</p>
+<p dir="auto"><strong>第 4 步：根据需要修复 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">V</code> 值</strong></p>
+<p dir="auto">🧪</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">v</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">27</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">v</span> <span class="pl-c1">+=</span> <span class="pl-c1">27</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">有时，不同的钱包或系统会给你一个 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">v</code> 值，即 0 或 1。</p>
+<p dir="auto">但以太坊预计是 27 或 28。</p>
+<p dir="auto">所以我们只是在需要时进行调整。</p>
+<p dir="auto"><strong>第 5 步：验证 v 现在是否正确</strong></p>
+<p dir="auto">🚨</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">v</span> <span class="pl-c1">==</span> <span class="pl-c1">27</span> <span class="pl-c1">||</span> <span class="pl-s1">v</span> <span class="pl-c1">==</span> <span class="pl-c1">28</span><span class="pl-kos">,</span> <span class="pl-s">"Invalid signature 'v' value"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">修复后，我们确保 v 是 27 或 28 - 其他任何东西都是不可接受的。</p>
+<p dir="auto">如果是其他任何东西，我们会抛出错误，因为我们不能信任签名。</p>
+<p dir="auto"><strong>第 6 步：恢复签名者的地址</strong></p>
+<p dir="auto">🔍</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">return</span> <span class="pl-en">ecrecover</span><span class="pl-kos">(</span><span class="pl-s1">_ethSignedMessageHash</span><span class="pl-kos">,</span> <span class="pl-s1">v</span><span class="pl-kos">,</span> <span class="pl-s1">r</span><span class="pl-kos">,</span> <span class="pl-s1">s</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这是最后的时刻。</p>
+<p dir="auto">我们称之为 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">ecrecover</code>——一个内置的以太坊函数，它采用：</p>
+<p dir="auto">签名消息哈希</p>
+<p dir="auto">签名值 （<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">v、r、s</code>）</p>
+<p dir="auto">它返回<strong>签名者的地址</strong> 。</p>
+<p dir="auto">yeah！我们现在知道是谁签署了这条消息。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>(13)checkIn – Web3 活动的前门 The Front Gate of the Web3 Event</strong></h3></div>
+<p dir="auto">🎟️</p>
+<p dir="auto">这是与会者到达您的活动时将调用的主要功能—— <strong>无论是代币门控聚会、研讨会还是私人发布派对</strong> 。</p>
+<p dir="auto">让我们先重新审视一下函数：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-en">checkIn</span><span class="pl-kos">(</span><span class="pl-s1">bytes</span> <span class="pl-s1">memory</span> <span class="pl-s1">_signature</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-kos">{</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">isEventActive</span><span class="pl-kos">,</span> <span class="pl-s">"Event is not active"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span> <span class="pl-c1">&lt;=</span> <span class="pl-s1">eventDate</span> <span class="pl-c1">+</span> <span class="pl-c1">1</span> <span class="pl-s1">days</span><span class="pl-kos">,</span> <span class="pl-s">"Event has ended"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-c1">!</span><span class="pl-s1">hasAttended</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-s">"Attendee has already checked in"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">attendeeCount</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">maxAttendees</span><span class="pl-kos">,</span> <span class="pl-s">"Maximum attendees reached"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-en">verifySignature</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-s1">_signature</span><span class="pl-kos">)</span><span class="pl-kos">,</span> <span class="pl-s">"Invalid signature"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">hasAttended</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span>
+    <span class="pl-s1">attendeeCount</span><span class="pl-c1">++</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">AttendeeCheckedIn</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>这个函数在做什么？</strong></h3></div>
+<p dir="auto">🧩</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><style>pre code, pre span { color: #f8f8f2 !important; }</style><code>  此功能是**您的数字看门人** 。
+</code></pre></div>
+<p dir="auto">每次有人想要签到时，他们必须证明：</p>
+<p dir="auto">他们被邀请（通过提供有效签名）</p>
+<p dir="auto">他们在允许的窗口内签到</p>
+<p dir="auto">活动仍在进行中</p>
+<p dir="auto">他们尚未签到。</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><style>pre code, pre span { color: #f8f8f2 !important; }</style><code>   还有空余！
+</code></pre></div>
+<p dir="auto">如果他们通过了所有这些检查，他们就可以通过大门。</p>
+<p dir="auto">现在让我们逐行分解这个函数：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">isEventActive</span><span class="pl-kos">,</span> <span class="pl-s">"Event is not active"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">在我们检查其他任何事情之前——该活动是否正在直播？</p>
+<p dir="auto">组织者可能已暂停或取消活动。如果是这样， <strong>则不允许任何人签到</strong> 。</p>
+<p dir="auto">此标志 （<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">isEventActive</code>） 由组织者使用 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">setEventStatus（）</code> 函数进行控制。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span> <span class="pl-c1">&lt;=</span> <span class="pl-s1">eventDate</span> <span class="pl-c1">+</span> <span class="pl-c1">1</span> <span class="pl-s1">days</span><span class="pl-kos">,</span> <span class="pl-s">"Event has ended"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">此检查上写着：“ <strong>您只能在活动日期后 24 小时之前签到。</strong></p>
+<p dir="auto">为什么？</p>
+<p dir="auto">因为事件不会永远持续下去。您不希望有人在 5 天后尝试办理登check in手续。</p>
+<p dir="auto">通过增加一天，我们给予了轻微的宽限期，同时仍然保持现实。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-c1">!</span><span class="pl-s1">hasAttended</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-s">"Attendee has already checked in"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们不允许重复签到。</p>
+<p dir="auto">此行确保<strong>每个地址只能签到一次</strong> 。如果他们已被标记为有人值守，则他们将被阻止再次签到。</p>
+<p dir="auto">这是使用 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">hasAttended</code> 映射进行跟踪的。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">attendeeCount</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">maxAttendees</span><span class="pl-kos">,</span> <span class="pl-s">"Maximum attendees reached"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这是你<strong>活动上限</strong> 。</p>
+<p dir="auto">如果你最多与会者人数为 100 人，并且已经有 100 人签到，那么无论谁试图进入，门都会关闭。</p>
+<p dir="auto">即使他们有有效的签名，一旦达到上限，他们也无法进入。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-en">verifySignature</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-s1">_signature</span><span class="pl-kos">)</span><span class="pl-kos">,</span> <span class="pl-s">"Invalid signature"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这是真正的魔力。</p>
+<p dir="auto">此行验证：</p>
+<p dir="auto">与会者 （<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">msg.sender</code>）  <strong>实际上被邀请了</strong></p>
+<p dir="auto">他们的签名由<strong>活动组织者签名</strong></p>
+<p dir="auto">它是专门<strong>为这次活动签名</strong>的</p>
+<p dir="auto">这使用了我们之前讨论的所有加密逻辑（消息哈希、以太坊前缀、<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">ecrecover</code>）——整齐地包装在 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">verifySignature（）</code> 帮助程序中。</p>
+<p dir="auto">如果签名是假的或无效的，则拒绝访问。</p>
+<h3 dir="auto">****</h3>
+<p dir="auto"><strong>通过所有检查？太棒啦！</strong></p>
+<p dir="auto">✅</p>
+<p dir="auto">如果与会者通过了所有要求，我们将记录他们的签到：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">hasAttended</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们将呼叫者标记为现在已签到的人。</p>
+<p dir="auto">这可以防止重复签入。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">attendeeCount</span><span class="pl-c1">++</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们递增总与会者计数。</p>
+<p dir="auto">这有助于我们为下一个尝试进入的人强制执行 maxAttendees 限制。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">emit</span> <span class="pl-v">AttendeeCheckedIn</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们触发一个事件来记录此人已签到以及签到的时间。</p>
+<p dir="auto">这对以下情况很有用：</p>
+<p dir="auto">前端 UI</p>
+<p dir="auto">区块浏览器</p>
+<p dir="auto">链下数据索引（如 The Graph）</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">完整代码详解</h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📄 签名验证活动合约</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-k">pragma solidity</span> <span class="pl-k">^</span><span class="pl-c1">0.8.0</span>;
+
+<span class="pl-k">contract</span> <span class="pl-en">SignThis</span> {
+    <span class="pl-c1">string</span> <span class="pl-k">public</span> eventName;
+    <span class="pl-c1">address</span> <span class="pl-k">public</span> organizer;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> eventDate;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> maxAttendees;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> attendeeCount;
+    <span class="pl-c1">bool</span> <span class="pl-k">public</span> isEventActive;
+
+    <span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">bool</span>) <span class="pl-k">public</span> hasAttended;
+
+    <span class="pl-k">event <span class="pl-en">EventCreated</span></span>(<span class="pl-c1">string</span> <span class="pl-v">name</span>, <span class="pl-c1">uint256</span> <span class="pl-v">date</span>, <span class="pl-c1">uint256</span> <span class="pl-v">maxAttendees</span>);
+    <span class="pl-k">event <span class="pl-en">AttendeeCheckedIn</span></span>(<span class="pl-c1">address</span> <span class="pl-v">attendee</span>, <span class="pl-c1">uint256</span> <span class="pl-v">timestamp</span>);
+    <span class="pl-k">event <span class="pl-en">EventStatusChanged</span></span>(<span class="pl-c1">bool</span> <span class="pl-v">isActive</span>);
+
+    <span class="pl-k">constructor</span>(<span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">_eventName</span>, <span class="pl-c1">uint256</span> <span class="pl-v">_eventDate</span>, <span class="pl-c1">uint256</span> <span class="pl-v">_maxAttendees</span>) {
+        eventName <span class="pl-k">=</span> _eventName;
+        organizer <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>;
+        eventDate <span class="pl-k">=</span> _eventDate;
+        maxAttendees <span class="pl-k">=</span> _maxAttendees;
+        isEventActive <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+
+        <span class="pl-k">emit</span> <span class="pl-en">EventCreated</span>(_eventName, _eventDate, _maxAttendees);
+    }
+
+    <span class="pl-k">modifier<span class="pl-en"> onlyOrganizer</span></span>() {
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> organizer, <span class="pl-s">"<span class="pl-s">Only organizer</span>"</span>);
+        <span class="pl-k">_;</span>
+    }
+
+    <span class="pl-k">modifier<span class="pl-en"> eventActive</span></span>() {
+        <span class="pl-k">require</span>(isEventActive, <span class="pl-s">"<span class="pl-s">Event not active</span>"</span>);
+        <span class="pl-k">_;</span>
+    }
+
+    <span class="pl-c">// 使用签名验证参与者身份</span>
+    <span class="pl-k">function<span class="pl-en"> checkInWithSignature</span></span>(
+        <span class="pl-c1">address</span> <span class="pl-v">attendee</span>,
+        <span class="pl-c1">uint8</span> <span class="pl-v">v</span>,
+        <span class="pl-c1">bytes32</span> <span class="pl-v">r</span>,
+        <span class="pl-c1">bytes32</span> <span class="pl-v">s</span>
+    ) <span class="pl-k">external</span> eventActive {
+        <span class="pl-k">require</span>(attendeeCount <span class="pl-k">&lt;</span> maxAttendees, <span class="pl-s">"<span class="pl-s">Event full</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-k">!</span>hasAttended[attendee], <span class="pl-s">"<span class="pl-s">Already checked in</span>"</span>);
+
+        <span class="pl-c">// 构造消息哈希</span>
+        <span class="pl-c1">bytes32</span> messageHash <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-c1">abi.encodePacked</span>(
+            attendee,
+            <span class="pl-c1">address</span>(<span class="pl-mi">this</span>),  <span class="pl-c">// 合约地址</span>
+            eventName
+        ));
+
+        <span class="pl-c">// 以太坊签名消息哈希</span>
+        <span class="pl-c1">bytes32</span> ethSignedMessageHash <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-c1">abi.encodePacked</span>(
+            <span class="pl-s">"<span class="pl-s">\x19Ethereum Signed Message:\n32</span>"</span>,
+            messageHash
+        ));
+
+        <span class="pl-c">// 恢复签名者地址</span>
+        <span class="pl-c1">address</span> signer <span class="pl-k">=</span> <span class="pl-c1">ecrecover</span>(ethSignedMessageHash, v, r, s);
+
+        <span class="pl-c">// 验证签名者是组织者</span>
+        <span class="pl-k">require</span>(signer <span class="pl-k">==</span> organizer, <span class="pl-s">"<span class="pl-s">Invalid signature</span>"</span>);
+
+        <span class="pl-c">// 记录参与</span>
+        hasAttended[attendee] <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+        attendeeCount<span class="pl-k">++</span>;
+
+        <span class="pl-k">emit</span> <span class="pl-en">AttendeeCheckedIn</span>(attendee, <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>);
+    }
+
+    <span class="pl-c">// 批量签到 (Gas优化)</span>
+    <span class="pl-k">function<span class="pl-en"> batchCheckIn</span></span>(
+        <span class="pl-c1">address</span>[] <span class="pl-k">calldata</span> <span class="pl-v">attendees</span>,
+        <span class="pl-c1">uint8</span>[] <span class="pl-k">calldata</span> <span class="pl-v">v</span>,
+        <span class="pl-c1">bytes32</span>[] <span class="pl-k">calldata</span> <span class="pl-v">r</span>,
+        <span class="pl-c1">bytes32</span>[] <span class="pl-k">calldata</span> <span class="pl-v">s</span>
+    ) <span class="pl-k">external</span> eventActive {
+        <span class="pl-k">require</span>(attendees.<span class="pl-mi">length</span> <span class="pl-k">==</span> v.<span class="pl-mi">length</span>, <span class="pl-s">"<span class="pl-s">Array length mismatch</span>"</span>);
+        <span class="pl-k">require</span>(attendees.<span class="pl-mi">length</span> <span class="pl-k">==</span> r.<span class="pl-mi">length</span>, <span class="pl-s">"<span class="pl-s">Array length mismatch</span>"</span>);
+        <span class="pl-k">require</span>(attendees.<span class="pl-mi">length</span> <span class="pl-k">==</span> s.<span class="pl-mi">length</span>, <span class="pl-s">"<span class="pl-s">Array length mismatch</span>"</span>);
+        <span class="pl-k">require</span>(attendeeCount <span class="pl-k">+</span> attendees.<span class="pl-mi">length</span> <span class="pl-k">&lt;=</span> maxAttendees, <span class="pl-s">"<span class="pl-s">Would exceed capacity</span>"</span>);
+
+        <span class="pl-k">for</span> (<span class="pl-c1">uint256</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> attendees.<span class="pl-mi">length</span>; i<span class="pl-k">++</span>) {
+            <span class="pl-c1">address</span> attendee <span class="pl-k">=</span> attendees[i];
+
+            <span class="pl-k">if</span> (hasAttended[attendee]) <span class="pl-k">continue</span>;  <span class="pl-c">// 跳过已签到的</span>
+
+            <span class="pl-c1">bytes32</span> messageHash <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-c1">abi.encodePacked</span>(
+                attendee,
+                <span class="pl-c1">address</span>(<span class="pl-mi">this</span>),
+                eventName
+            ));
+
+            <span class="pl-c1">bytes32</span> ethSignedMessageHash <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-c1">abi.encodePacked</span>(
+                <span class="pl-s">"<span class="pl-s">\x19Ethereum Signed Message:\n32</span>"</span>,
+                messageHash
+            ));
+
+            <span class="pl-c1">address</span> signer <span class="pl-k">=</span> <span class="pl-c1">ecrecover</span>(ethSignedMessageHash, v[i], r[i], s[i]);
+
+            <span class="pl-k">if</span> (signer <span class="pl-k">==</span> organizer) {
+                hasAttended[attendee] <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+                attendeeCount<span class="pl-k">++</span>;
+                <span class="pl-k">emit</span> <span class="pl-en">AttendeeCheckedIn</span>(attendee, <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>);
+            }
+        }
+    }
+
+    <span class="pl-c">// 验证签名有效性 (不执行签到)</span>
+    <span class="pl-k">function<span class="pl-en"> verifySignature</span></span>(
+        <span class="pl-c1">address</span> <span class="pl-v">attendee</span>,
+        <span class="pl-c1">uint8</span> <span class="pl-v">v</span>,
+        <span class="pl-c1">bytes32</span> <span class="pl-v">r</span>,
+        <span class="pl-c1">bytes32</span> <span class="pl-v">s</span>
+    ) <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">bool</span>) {
+        <span class="pl-c1">bytes32</span> messageHash <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-c1">abi.encodePacked</span>(
+            attendee,
+            <span class="pl-c1">address</span>(<span class="pl-mi">this</span>),
+            eventName
+        ));
+
+        <span class="pl-c1">bytes32</span> ethSignedMessageHash <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-c1">abi.encodePacked</span>(
+            <span class="pl-s">"<span class="pl-s">\x19Ethereum Signed Message:\n32</span>"</span>,
+            messageHash
+        ));
+
+        <span class="pl-c1">address</span> signer <span class="pl-k">=</span> <span class="pl-c1">ecrecover</span>(ethSignedMessageHash, v, r, s);
+        <span class="pl-k">return</span> signer <span class="pl-k">==</span> organizer;
+    }
+
+    <span class="pl-c">// 获取消息哈希 (用于前端签名)</span>
+    <span class="pl-k">function<span class="pl-en"> getMessageHash</span></span>(<span class="pl-c1">address</span> <span class="pl-v">attendee</span>) <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">bytes32</span>) {
+        <span class="pl-k">return</span> <span class="pl-c1">keccak256</span>(<span class="pl-c1">abi.encodePacked</span>(
+            attendee,
+            <span class="pl-c1">address</span>(<span class="pl-mi">this</span>),
+            eventName
+        ));
+    }
+
+    <span class="pl-c">// 管理员功能</span>
+    <span class="pl-k">function<span class="pl-en"> toggleEventStatus</span></span>() <span class="pl-k">external</span> onlyOrganizer {
+        isEventActive <span class="pl-k">=</span> <span class="pl-k">!</span>isEventActive;
+        <span class="pl-k">emit</span> <span class="pl-en">EventStatusChanged</span>(isEventActive);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> getEventInfo</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (
+        <span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">name</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">date</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">maxCapacity</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">currentCount</span>,
+        <span class="pl-c1">bool</span> <span class="pl-v">active</span>
+    ) {
+        <span class="pl-k">return</span> (eventName, eventDate, maxAttendees, attendeeCount, isEventActive);
+    }
+}</pre></div>
+<p dir="auto"><strong>✅ 签名验证流程</strong></p>
+<ol dir="auto">
+<li>组织者链下生成参与者签名 → 2. 参与者提交签名到合约 → 3. 合约使用ecrecover验证签名 → 4. 验证通过则允许签到。整个过程无需预先存储白名单！</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔍 前端签名生成示例</h3></div>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// JavaScript 前端代码async function generateSignature(attendeeAddress, contractAddress, eventName) {</span>
+<span class="pl-c">// 1. 构造消息const messageHash = ethers.utils.solidityKeccak256(</span>
+        <span class="pl-kos">[</span><span class="pl-s">'address'</span><span class="pl-kos">,</span> <span class="pl-s">'address'</span><span class="pl-kos">,</span> <span class="pl-s">'string'</span><span class="pl-kos">]</span><span class="pl-kos">,</span>
+        <span class="pl-kos">[</span><span class="pl-s1">attendeeAddress</span><span class="pl-kos">,</span> <span class="pl-s1">contractAddress</span><span class="pl-kos">,</span> <span class="pl-s1">eventName</span><span class="pl-kos">]</span>
+    <span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// 2. 组织者签名const signature = await organizerWallet.signMessage(</span>
+        <span class="pl-s1">ethers</span><span class="pl-kos">.</span><span class="pl-c1">utils</span><span class="pl-kos">.</span><span class="pl-en">arrayify</span><span class="pl-kos">(</span><span class="pl-s1">messageHash</span><span class="pl-kos">)</span>
+    <span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// 3. 分离签名组件const { v, r, s } = ethers.utils.splitSignature(signature);</span>
+
+    <span class="pl-k">return</span> <span class="pl-kos">{</span> v<span class="pl-kos">,</span> r<span class="pl-kos">,</span> s <span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// 使用示例const signature = await generateSignature(</span>
+    <span class="pl-s">"0x742d35Cc6634C0532925a3b8D0C9964E5Bd4f071"</span><span class="pl-kos">,</span><span class="pl-c">// 参与者地址</span>
+    <span class="pl-s1">contractAddress</span><span class="pl-kos">,</span>
+    <span class="pl-s">"Web3 Conference 2024"</span>
+<span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// 调用合约签到await contract.checkInWithSignature(</span>
+    <span class="pl-s1">attendeeAddress</span><span class="pl-kos">,</span>
+    <span class="pl-s1">signature</span><span class="pl-kos">.</span><span class="pl-c1">v</span><span class="pl-kos">,</span>
+    <span class="pl-s1">signature</span><span class="pl-kos">.</span><span class="pl-c1">r</span><span class="pl-kos">,</span>
+    <span class="pl-s1">signature</span><span class="pl-kos">.</span><span class="pl-c1">s</span>
+<span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto"><strong><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 安全注意事项</strong></p>
+<ul dir="auto">
+<li>签名可能被重放，需要添加nonce或时间戳</li>
+<li>确保消息哈希包含足够的上下文信息</li>
+<li>验证签名者身份的权威性</li>
+<li>考虑签名的有效期限制</li>
+<li>防止签名被用于其他合约</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📝 Remix实战步骤</h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤1: 部署合约</h3></div>
+<ol dir="auto">
+<li>部署SignThis合约，设置活动信息</li>
+<li>记录合约地址和组织者地址</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤2: 生成签名 (使用MetaMask)</h3></div>
+<ol dir="auto">
+<li>调用<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">getMessageHash(参与者地址)</code>获取消息哈希</li>
+<li>在浏览器控制台使用MetaMask签名：</li>
+</ol>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// 在浏览器控制台执行const messageHash = "0x...";// 从合约获取的哈希const signature = await ethereum.request({</span>
+    method: <span class="pl-s">"personal_sign"</span><span class="pl-kos">,</span>
+    <span class="pl-s1">params</span>: <span class="pl-kos">[</span><span class="pl-s1">messageHash</span><span class="pl-kos">,</span> <span class="pl-s1">ethereum</span><span class="pl-kos">.</span><span class="pl-c1">selectedAddress</span><span class="pl-kos">]</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤3: 分离签名并验证</h3></div>
+<ol dir="auto">
+<li>使用在线工具或脚本分离签名的v, r, s</li>
+<li>调用<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">verifySignature</code>验证签名有效性</li>
+<li>调用<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">checkInWithSignature</code>完成签到</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤4: 测试批量签到</h3></div>
+<ol dir="auto">
+<li>为多个地址生成签名</li>
+<li>调用<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">batchCheckIn</code>批量处理</li>
+<li>观察Gas消耗对比</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>😁如何在 Remix 中运行基于签名的事件输入系统</strong></h3></div>
+<p dir="auto">好吧，是时候让我们的智能合约变为现实了。</p>
+<p dir="auto">你是组织者。i你即将举办 <strong>Web3 峰会</strong> 。让我们从头到尾来了解一下——包括签署邀请和签到人们！</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 1 步：部署合约</strong></h3></div>
+<p dir="auto">🔨</p>
+<p dir="auto">1.前往 Remix。</p>
+<p dir="auto">将你的 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">EventEntry 合约</code>粘贴到一个新文件中 - 将其命名为 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">EventEntry.sol</code>。</p>
+<p dir="auto">使用 <strong>Solidity Compiler</strong> 选项卡进行编译。</p>
+<p dir="auto">转到 <strong>“Deploy &amp; Run Transactions</strong> ”选项卡。</p>
+<p dir="auto">现在是时候填写构造函数了：</p>
+<p dir="auto"><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">eventName</code>：“<code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">Web3 峰会</code>”</p>
+<p dir="auto"><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">eventDate</code>：使用<strong>future Unix timestamp</strong></p>
+<p dir="auto">→ 您可以使用类似 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">Math.floor（Date.now（） / 1000） + 86400</code>（现在 + 1 天）之类的东西</p>
+<p dir="auto">→ 或者只是粘贴一个硬编码的未来时间戳，比如 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">1714000000</code></p>
+<p dir="auto"><code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">最大与会者人数 ：100</code></p>
+<p dir="auto">点击<strong>Deploy。</strong></p>
+<p dir="auto">恭喜！您现在已经启动了智能活动。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 2 步：生成消息哈希</strong></h3></div>
+<p dir="auto">🔑</p>
+<p dir="auto">要邀请客人，我们需要生成一个与他们的钱包绑定的唯一<strong>哈希值</strong> 。</p>
+<p dir="auto">在已部署的合约实例中：</p>
+<p dir="auto">叫：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">getMessageHash</span><span class="pl-kos">(</span><span class="pl-s">"0xAttendeeAddressHere"</span><span class="pl-kos">)</span></pre></div>
+<p dir="auto">将 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">“0xAttendeeAddressHere”</code> 替换为访客的钱包地址。</p>
+<p dir="auto">🧠</p>
+<p dir="auto">复制返回的哈希值 — 我们将在下一步中使用它。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 3 步：在 Remix 中签署消息</strong></h3></div>
+<p dir="auto">✍️</p>
+<p dir="auto">是时候充当<strong>活动组织者</strong>并签署客人的哈希了。</p>
+<p dir="auto"><strong>创建一个 JavaScript 文件：</strong></p>
+<p dir="auto">在<strong>文件资源管理器</strong>中，右键单击并选择<strong>新建文件</strong></p>
+<p dir="auto">命名 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">sign.js</code></p>
+<p dir="auto">粘贴此脚本：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-kos">(</span><span class="pl-k">async</span> <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+  <span class="pl-k">const</span> <span class="pl-s1">messageHash</span> <span class="pl-c1">=</span> <span class="pl-s">"&lt;paste-your-hash-here&gt;"</span><span class="pl-kos">;</span>
+  <span class="pl-k">const</span> <span class="pl-s1">accounts</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-s1">web3</span><span class="pl-kos">.</span><span class="pl-c1">eth</span><span class="pl-kos">.</span><span class="pl-en">getAccounts</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-k">const</span> <span class="pl-s1">organizer</span> <span class="pl-c1">=</span> <span class="pl-s1">accounts</span><span class="pl-kos">[</span><span class="pl-c1">0</span><span class="pl-kos">]</span><span class="pl-kos">;</span> <span class="pl-c">// first account in Remix</span>
+  <span class="pl-k">const</span> <span class="pl-s1">signature</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-s1">web3</span><span class="pl-kos">.</span><span class="pl-c1">eth</span><span class="pl-kos">.</span><span class="pl-en">sign</span><span class="pl-kos">(</span><span class="pl-s1">messageHash</span><span class="pl-kos">,</span> <span class="pl-s1">organizer</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"Signature:"</span><span class="pl-kos">,</span> <span class="pl-s1">signature</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">将 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">“&lt;paste-your-hash-here&gt;”</code> 替换为您刚刚复制的哈希值。</p>
+<p dir="auto"><strong>现在运行它：</strong></p>
+<p dir="auto">右键单击 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">sign.js</code> 并选择<strong>运行</strong> 。</p>
+<p dir="auto">Remix 会自动包含 <strong>web3.js</strong>，因此您无需安装任何东西。</p>
+<p dir="auto">✅</p>
+<p dir="auto">您将在 Remix 终端中看到打印的签名。</p>
+<p dir="auto"><strong>这是怎么回事？</strong></p>
+<p dir="auto">🧠</p>
+<p dir="auto">我们使用部署者（即组织者）的<strong>私钥</strong>在链下<strong>对消息哈希进行签名</strong> 。这模拟了您的后端服务器在现实生活中会做什么。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 4 步：以与会者身份签到</strong></h3></div>
+<p dir="auto">🪪</p>
+<p dir="auto">现在让我们切换角色 - 您是到达活动的与会者，因此切换到与会者地址</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">checkIn</span><span class="pl-kos">(</span><span class="pl-s">"&lt;paste-signature-here&gt;"</span><span class="pl-kos">)</span></pre></div>
+<p dir="auto">粘贴您从上一步获得的确切签名。</p>
+<p dir="auto">📌</p>
+<p dir="auto">如果一切顺利：</p>
+<p dir="auto">系统将标记为已签到。</p>
+<p dir="auto">活动的与会人数将增加</p>
+<p dir="auto">协定将发出 <code style="background: rgba(139, 115, 85, 0.15); color: var(--warm-brown); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(139, 115, 85, 0.3);">AttendeeCheckedIn</code> 事件</p>
+<p dir="auto">🎉</p>
+<p dir="auto">就这样，我们建立了自己的 Web3 访客名单——无需在链上存储任何地址。我们没有弄乱存储空间或支付汽油来更新白名单，而是使用加密签名让与会者证明他们是被邀请的。活动组织者就像一个数字保镖，在幕后签署批准，而智能合约则在门口检查这些签名。它干净、高效且更加灵活——这是真实事件可以实际使用的那种系统。无论您是举办代币门控派对还是开发者聚会，这种模式都能为您提供所有安全性，而无需链上包袱。</p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">3、下一步</h1></div>
+<p dir="auto"><strong>尝试以下改进:</strong></p>
+<ol dir="auto">
+<li>添加nonce防止签名重放攻击</li>
+<li>实现签名有效期机制</li>
+<li>创建多级权限系统 (组织者、志愿者、参与者)</li>
+<li>实现签名撤销功能</li>
+<li>添加签名使用次数限制</li>
+<li>创建基于签名的投票系统</li>
+</ol>
+<p dir="auto"><strong>扩展知识</strong></p>
+<p dir="auto"><strong>EIP-712 结构化签名</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><style>pre code, pre span { color: #f8f8f2 !important; }
+        /* 修复 GitHub 代码块样式 */
+        .md-content .highlight,
+        .md-content .highlight-source-solidity,
+        .md-content .highlight-source-js,
+        .md-content .highlight-source-javascript {
+            background: #2d2a2e !important;
+            border-radius: 10px;
+            padding: 20px !important;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content .highlight pre,
+        .md-content .highlight-source-solidity pre,
+        .md-content .highlight-source-js pre {
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
+        
+        .md-content .highlight code,
+        .md-content .highlight pre code,
+        .md-content .highlight pre span,
+        .md-content .highlight-source-solidity code,
+        .md-content .highlight-source-solidity pre code,
+        .md-content .highlight-source-solidity pre span,
+        .md-content .highlight-source-js code,
+        .md-content .highlight-source-js pre code,
+        .md-content .highlight-source-js pre span {
+            color: #f8f8f2 !important;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace !important;
+            font-size: 0.9rem !important;
+            line-height: 1.6 !important;
+        }
+        
+        .md-content code:not(pre code) {
+            background: rgba(139, 115, 85, 0.15) !important;
+            color: var(--warm-brown) !important;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(139, 115, 85, 0.3);
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        
+        .md-content .markdown-heading .anchor {
+            display: none !important;
+        }
+        
+        .md-content .snippet-clipboard-content {
+            background: #2d2a2e !important;
+            border-radius: 10px;
+            padding: 20px !important;
+            margin: 20px 0;
+        }
+        
+        .md-content .snippet-clipboard-content pre code {
+            color: #f8f8f2 !important;
+        }
+
+    
+        /* 修复 GitHub 代码块样式 */
+        .md-content .highlight,
+        .md-content .highlight-source-solidity,
+        .md-content .highlight-source-js,
+        .md-content .highlight-source-javascript {
+            background: #2d2a2e !important;
+            border-radius: 10px;
+            padding: 20px !important;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content .highlight pre,
+        .md-content .highlight-source-solidity pre,
+        .md-content .highlight-source-js pre {
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
+        
+        .md-content .highlight code,
+        .md-content .highlight pre code,
+        .md-content .highlight pre span,
+        .md-content .highlight-source-solidity code,
+        .md-content .highlight-source-solidity pre code,
+        .md-content .highlight-source-solidity pre span,
+        .md-content .highlight-source-js code,
+        .md-content .highlight-source-js pre code,
+        .md-content .highlight-source-js pre span {
+            color: #f8f8f2 !important;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace !important;
+            font-size: 0.9rem !important;
+            line-height: 1.6 !important;
+        }
+        
+        .md-content code:not(pre code) {
+            background: rgba(139, 115, 85, 0.15) !important;
+            color: var(--warm-brown) !important;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(139, 115, 85, 0.3);
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        
+        .md-content .markdown-heading .anchor {
+            display: none !important;
+        }
+        
+        .md-content .snippet-clipboard-content {
+            background: #2d2a2e !important;
+            border-radius: 10px;
+            padding: 20px !important;
+            margin: 20px 0;
+        }
+        
+        .md-content .snippet-clipboard-content pre code {
+            color: #f8f8f2 !important;
+        }
+
+    </style><span class="pl-c">// EIP-712 提供更安全的结构化签名</span>
+<span class="pl-k">struct<span class="pl-en"> Permit</span></span> {
+    <span class="pl-c1">address</span> owner;
+    <span class="pl-c1">address</span> spender;
+    <span class="pl-c1">uint256</span> value;
+    <span class="pl-c1">uint256</span> nonce;
+    <span class="pl-c1">uint256</span> deadline;
+}
+
+<span class="pl-c1">bytes32</span> <span class="pl-k">constant </span>PERMIT_TYPEHASH <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(
+    <span class="pl-s">"<span class="pl-s">Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)</span>"</span>
+);</pre></div>
+<p dir="auto">EIP-712提供了更安全、用户友好的签名方式，被广泛用于DeFi协议。</p>
+<p dir="auto"><strong>签名应用场景对比</strong></p>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th>应用</th>
+<th>优势</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>白名单验证</td>
+<td>Gas高效</td>
+<td>NFT铸造、活动签到</td>
+</tr>
+<tr>
+<td>元交易</td>
+<td>用户无需ETH</td>
+<td>DApp用户体验</td>
+</tr>
+<tr>
+<td>Permit授权</td>
+<td>一步完成授权</td>
+<td>DeFi协议集成</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
                 </div>
             </div>
         </div>
@@ -1430,55 +2909,10 @@ bytes32 constant PERMIT_TYPEHASH = keccak256(
             const envelopeContainer = document.getElementById('envelope-container');
             const answerModal = document.getElementById('answer-modal');
             const closeLetter = document.getElementById('close-letter');
-            const markdownContainer = document.getElementById('markdown-container');
             
-            if (!envelopeContainer || !answerModal || !closeLetter || !markdownContainer) {
+            if (!envelopeContainer || !answerModal || !closeLetter) {
                 return; // 如果元素不存在，直接返回
             }
-            
-            // 配置marked.js渲染选项
-            if (typeof marked !== 'undefined') {
-                marked.setOptions({
-                    highlight: function(code, lang) {
-                        if (lang && hljs.getLanguage(lang)) {
-                            try {
-                                return hljs.highlight(code, { language: lang }).value;
-                            } catch (err) {}
-                        }
-                        return hljs.highlightAuto(code).value;
-                    },
-                    breaks: true,
-                    gfm: true
-                });
-            }
-            
-            // 嵌入的Markdown内容（使用字符串替换方式处理转义字符）
-            const embeddedMarkdownJsonString = "# 绛惧悕楠岃瘉\n\nDay: Day 19\nID: 19\n璇戣€? 闆烽浄\n闅惧害绛夌骇: 涓骇\n\n# 瀛︿範鍐呭\n\n濂藉惂鈥斺€斿埌鐩墠涓烘锛屾垜浠湪 Solidity 涔嬫梾涓彇寰椾簡涓€浜涢噸澶ц繘灞曘€俓n鎴戜滑瀛︿細浜嗗浣曪細\n      \n\n- 鍒嗛厤**鎵€鏈夋潈**\n- 浣跨敤**淇グ绗?*淇濇姢鍑芥暟\n- 浣跨敤**鏄犲皠**鏉ュ瓨鍌ㄧ敤鎴锋暟鎹甛n- 杩涜鍏ㄩ潰鐨?*浠ｅ竵閿€鍞?*\n- 浣跨敤**濮旀墭璋冪敤**鏋勫缓鍩轰簬鎻掍欢鐨勬ā鍧楀寲绯荤粺\n\n浣嗙幇鍦紝鏄椂鍊欏皢**鎵€鏈夎繖浜涙妧鑳戒粯璇歌鍔?*骞惰В鍐崇幇瀹炰笘鐣岀殑闂浜嗏€斺€旇繖鏄瘡涓?Web3 鏋勫缓鑰呴兘鑳戒笌涔嬬浉鍏崇殑銆俓n\n**鍦烘櫙  锛氱浜?Web3 浜嬩欢**\n浣犳鍦ㄧ粍缁囦唬甯?*闂ㄦ帶浼氳**銆?*鍒涘浜鸿仛浼?*鎴?*閾句笂鐮旇浼?*銆傚彧鏈夐€夊畾鐨勫浜烘墠鑳借繘鍏ャ€俓n鐜板湪鎸戞垬鏉ヤ簡......\n\n**浼犵粺鏂规硶锛?*\n浣犲皢姣忎釜涓庝細鑰呯殑鍦板潃瀛樺偍鍦ㄩ摼涓娿€俓n浣犲彲浠ュ湪鍔炵悊鐧绘満鎵嬬画鏃舵墜鍔ㄦ鏌ユ瘡涓€椤广€俓n姣忔鍦板潃鏇存柊鎴栨嫾鍐欓敊璇兘浼氭秷鑰?gas銆俓n馃挗杩欏緢绗ㄦ嫏銆傚お璐典簡銆傞偅涓嶆槸 Web3銆俓n\n**鉁呮洿鏅鸿兘鐨勬柟寮忥細閾句笅绛惧悕**\n鑰屼笉鏄笂浼犱竴澶у爢鍦板潃......\n濡傛灉锛歕n\n- 娲诲姩缁勭粐鑰呬负姣忎綅鑾锋壒鐨勬潵瀹剧缃蹭竴鏉℃秷鎭痋n- 瀹汉鎼哄甫宸茬鍚嶇殑閭€璇峰嚱\n- 鍚堢害鍙槸鍦ㄧ鍒版椂楠岃瘉绛惧悕\n- 鏃犻渶鍦ㄩ摼涓婂瓨鍌ㄤ换浣曠櫧鍚嶅崟\n\n鏄殑锛岃繖涓€鍒囬兘鏄娇鐢ㄤ互澶潑鍐呯疆鐨?`ecrecover` 鍔熻兘瀹夊叏鍦板畬鎴愮殑銆俓n\n**鎴戜滑鐨勬父鎴忚鍒掟煂?*\n 浠ヤ笅鏄垜浠皢瑕佹瀯寤虹殑鍐呭锛屼互鍙婃垜浠皢濡備綍鍒嗚В瀹冿細\n        **1. 娲诲姩璁剧疆**\n        缁勭粐鑰呭畾涔夊鍚嶃€佹棩鏈熷拰鏈€澶т笌浼氳€呬汉鏁般€俓n       **2.鍔犲瘑閭€璇?*\n       鍚庣涓嶆槸瀛樺偍鍦板潃锛岃€屾槸涓烘瘡涓凡鎵瑰噯鐨勬潵瀹剧缃蹭竴鏉℃秷鎭€俓n       **3.绛惧埌娴佺▼**\n       鏉ュ鎻愪氦浠栦滑绛惧悕鐨勬秷鎭€俓n       璇ュ悎鍚屼娇鐢?`ecrecover` 鏉ラ獙璇佸畠鏄惁鐢辩粍缁囪€呯缃层€俓n      **4.瀹夊叏鎬у拰鐏垫椿鎬?*\n        閾句笂娌℃湁鍦板潃鍒楄〃銆傛病鏈夐鍔犺浇鐨勭櫧鍚嶅崟銆傛病鏈夋氮璐圭殑姘斾綋銆俓n         鍙湁鏈夋晥鐨勩€佺鍚嶇殑涓庝細鑰呮墠鑳借繘鍏モ€斺€旇€屼笖杩欎竴鍒囬兘鍙互鍦ㄩ摼涓婂畬鍏ㄩ獙璇併€俓n\n**鎮ㄥ皢瀛﹀埌浠€涔?*\n濡備綍瀵圭粨鏋勫寲鏁版嵁杩涜鍝堝笇澶勭悊  锛坄abi.encodePacked`锛塡n涓轰粈涔堜互澶潑浣跨敤绛惧悕娑堟伅鍓嶇紑\n`ecrecover锛堬級` 濡備綍璁╀綘鍦ㄩ摼涓婇獙璇侀摼涓嬫壒鍑哱n濡備綍瀹炴柦褰撲粖鐢熶骇涓疄闄呬娇鐢ㄧ殑杞婚噺绾с€佽妭鑳界殑璁块棶绯荤粺\n\n鐢辨鍙锛屽湪浼犵粺鐨勬椿鍔ㄧ鐞嗙郴缁熶腑锛岃韩浠介獙璇佸線寰€渚濊禆浜庝腑蹇冨寲鐨勬暟鎹簱鍜屽鏉傜殑鏉冮檺鎺у埗鏈哄埗銆傚弬涓庤€呴渶瑕佹敞鍐岃处鎴枫€佽浣忓瘑鐮侊紝缁勭粐鑰呴渶瑕佺淮鎶ょ敤鎴峰垪琛ㄣ€佸鐞嗗繕璁板瘑鐮佺瓑绻佺悙浜嬪姟銆傝繖绉嶆ā寮忎笉浠呯敤鎴蜂綋楠屽鏉傦紝杩樺瓨鍦ㄥ崟鐐规晠闅滃拰鏁版嵁娉勯湶鐨勯闄┿€俓n\n**鍖哄潡閾炬妧鏈负鎴戜滑鎻愪緵浜嗕竴绉嶅叏鏂扮殑鎬濊矾**锛氶€氳繃瀵嗙爜瀛﹁瘉鏄庤€岄潪涓績鍖栨巿鏉冩潵楠岃瘉韬唤銆傛湰銆岀鍚嶉獙璇佹椿鍔ㄥ悎绾︺€嶆鏄繖涓€鐞嗗康鐨勫疄璺碘€斺€斿埄鐢ㄦ暟瀛楃鍚嶆妧鏈紝鏋勫缓浜嗕竴涓幓涓績鍖栥€佸畨鍏ㄩ珮鏁堢殑娲诲姩绠＄悊绯荤粺銆俓n\n### **馃幆 璁捐鍝插**\n\n鏈悎绾︾殑鏍稿績鍒涙柊鍦ㄤ簬聽**\\"閾句笅绛惧悕锛岄摼涓婇獙璇乗\"**聽鐨勬ā寮忥細\n\n- **缁勭粐鑰?*鍦ㄩ摼涓嬩负鍚堟硶鍙備笌鑰呯敓鎴愭暟瀛楃鍚峔n- **鍙備笌鑰?*鎻愪氦绛惧悕鍒板尯鍧楅摼鍚堢害杩涜楠岃瘉\n- **鏅鸿兘鍚堢害**閫氳繃`ecrecover`鍑芥暟鎭㈠绛惧悕鑰呭湴鍧€锛岀‘璁よ韩浠芥湁鏁堟€n\n杩欑鏂规硶甯︽潵浜嗗閲嶄紭鍔匡細\n\n- **闆禛as棰勬敞鍐?*锛氬弬涓庤€呮棤闇€棰勫厛鏀粯Gas璐规敞鍐孿n- **鏃犻檺鎵╁睍鎬?*锛氱鍚嶇敓鎴愪笉鍙楀尯鍧楅摼鍚炲悙閲忛檺鍒禱n- **闅愮淇濇姢**锛氬弬涓庤€呭悕鍗曚笉浼氬叏閮ㄦ毚闇插湪閾句笂\n- **鎴愭湰浼樺寲**锛氭壒閲忕鍒板ぇ骞呴檷浣嶨as娑堣€梊n\n**瀛︿範鐩爣**锛氭帉鎻℃暟瀛楃鍚嶉獙璇佸拰閾句笅璁よ瘉\n\n**鏍稿績鎶€鑳?*锛歟crecover銆佹秷鎭搱甯屻€佺鍚嶇敓鎴怽n\n**瀹屾暣浠ｇ爜**锛氣€?\n\n# 1銆佷骇鍝侀渶姹備功\n\n### **a.鐢ㄦ埛璺緞鍥?*\n\n**缁勭粐鑰呰矾寰刼rganizer**\n\n1. **鍚堢害閮ㄧ讲**\n    - 璋冪敤鏋勯€犲嚱鏁帮紝浼犲叆娲诲姩鍙傛暟\n    - 鑷姩鎴愪负organizer锛岃幏寰楃鐞嗘潈闄怽n2. **绛惧悕鐢熸垚**\n    - 鑾峰彇鍙備笌鑰呴挶鍖呭湴鍧€\n    - 璋冪敤getMessageHash鑾峰彇娑堟伅鍝堝笇\n    - 浣跨敤绉侀挜瀵瑰搱甯岃繘琛岀鍚峔n    - 鍒嗙绛惧悕涓簐, r, s缁勪欢\n3. **鎵归噺绠＄悊**\n    - 涓哄涓弬涓庤€呯敓鎴愮鍚峔n    - 浣跨敤batchCheckIn杩涜鎵归噺绛惧埌\n    - 鐩戞帶娲诲姩鐘舵€佸拰鍙備笌浜烘暟\n    \n\n**鍙備笌鑰呰矾寰凙ttendee**\n\n1. **娲诲姩鍙戠幇**\n    - 鏌ョ湅娲诲姩鍩烘湰淇℃伅\n    - 纭娲诲姩鐘舵€?isEventActive)\n2. **绛惧埌娴佺▼**\n    - 浠庣粍缁囪€呰幏鍙栫鍚嶆暟鎹甛n    - 鎻愪氦v, r, s鍙傛暟鍒板悎绾n    - 绛夊緟绛惧悕楠岃瘉鍜岀姸鎬佹洿鏂癨n3. **鐘舵€佺‘璁?*\n    - 楠岃瘉hasAttended鐘舵€乗n    - 鏌ョ湅绛惧埌鍘嗗彶璁板綍\n\n![image.png](%E7%AD%BE%E5%90%8D%E9%AA%8C%E8%AF%81%2028c06421268880a1a3b5d1d75cf53398/image.png)\n\n### **b.鏁版嵁搴撶粨鏋?*\n\n**1.鍚堢害鍩烘湰淇℃伅锛圕ontract Basic Information锛?*\n\n| **Contract / 鍚堢害** | **Type / 绫诲瀷** | **Bases / 鍩虹鍚堢害** | **鍚箟 / Description** |\n| --- | --- | --- | --- |\n| SignThis | Implementation / 瀹炵幇鍚堢害 | None / 鏃?| 绛惧悕楠岃瘉娲诲姩鍚堢害 / Signature Verification Event Contract |\n\n**2.鐘舵€佸彉閲忚〃 (State Variables Table)**\n\n| **L** | **Field Name / 瀛楁鍚?* | **Visibility / 鍙鎬?* | **Mutability / 鍙彉鎬?* | **Data Type / 鏁版嵁绫诲瀷** | **Description / 鎻忚堪** |\n| --- | --- | --- | --- | --- | --- |\n| L | eventName | Public / 鍏紑 | view / 鍙 | string / 瀛楃涓?| 娲诲姩鍚嶇О / Event Name |\n| L | organizer | Public / 鍏紑 | view / 鍙 | address / 鍦板潃 | 缁勭粐鑰呴挶鍖呭湴鍧€ / Organizer Wallet Address |\n| L | eventDate | Public / 鍏紑 | view / 鍙 | uint256 / 鏃犵鍙锋暣鏁?| 娲诲姩鏃ユ湡鏃堕棿鎴?/ Event Date Timestamp |\n| L | maxAttendees | Public / 鍏紑 | view / 鍙 | uint256 / 鏃犵鍙锋暣鏁?| 鏈€澶у弬涓庝汉鏁?/ Maximum Attendee Capacity |\n| L | attendeeCount | Public / 鍏紑 | view / 鍙 | uint256 / 鏃犵鍙锋暣鏁?| 褰撳墠鍙備笌浜烘暟 / Current Attendee Count |\n| L | isEventActive | Public / 鍏紑 | view / 鍙 | bool / 甯冨皵鍊?| 娲诲姩鏄惁婵€娲?/ Whether Event is Active |\n| L | hasAttended | Public / 鍏紑 | view / 鍙 | mapping(address 鈬?bool) / 鏄犲皠 | 鍙備笌璁板綍鏄犲皠琛?/ Attendance Record Mapping |\n\n### **3. 鍑芥暟鎺ュ彛琛?(Function Interfaces Table)**\n\n| **L** | **Function Name / 鍑芥暟鍚?* | **Visibility / 鍙鎬?* | **Mutability / 鍙彉鎬?* | **Modifiers / 淇グ鍣?* | **Description / 鎻忚堪** |\n| --- | --- | --- | --- | --- | --- |\n| L | constructor | Internal / 鍐呴儴 | state-changing / 鐘舵€佷慨鏀?| NO / 鏃?| 鍚堢害鏋勯€犲嚱鏁?/ Contract Constructor |\n| L | checkInWithSignature | Public / 鍏紑 | state-changing / 鐘舵€佷慨鏀?| eventActive | 鍗曠敤鎴风鍚嶉獙璇佺鍒?/ Single User Signature Check-in |\n| L | batchCheckIn | Public / 鍏紑 | state-changing / 鐘舵€佷慨鏀?| eventActive | 鎵归噺绛惧悕楠岃瘉绛惧埌 / Batch Signature Check-in |\n| L | verifySignature | Public / 鍏紑 | view / 鍙 | NO / 鏃?| 楠岃瘉绛惧悕鏈夋晥鎬?/ Verify Signature Validity |\n| L | getMessageHash | Public / 鍏紑 | view / 鍙 | NO / 鏃?| 鑾峰彇娑堟伅鍝堝笇鍊?/ Get Message Hash for Signing |\n| L | toggleEventStatus | Public / 鍏紑 | state-changing / 鐘舵€佷慨鏀?| onlyOrganizer | 鍒囨崲娲诲姩鐘舵€?/ Toggle Event Status |\n| L | getEventInfo | Public / 鍏紑 | view / 鍙 | NO / 鏃?| 鑾峰彇娲诲姩瀹屾暣淇℃伅 / Get Complete Event Information |\n\n**琛ュ厖璇存槑锛?*\n\n**淇グ鍣ㄨ〃 (Modifiers Table)**\n\n| **L** | **Modifier Name / 淇グ鍣ㄥ悕** | **Description / 鎻忚堪** |\n| --- | --- | --- |\n| L | onlyOrganizer | 浠呯粍缁囪€呭彲璋冪敤 / Only Organizer Can Call |\n| L | eventActive | 浠呮椿鍔ㄦ縺娲荤姸鎬佸彲璋冪敤 / Only When Event is Active |\n\n**浜嬩欢鏃ュ織琛?(Event Logs Table)**\n\n| **L** | **Event Name / 浜嬩欢鍚?* | **Parameters / 鍙傛暟** | **Description / 鎻忚堪** |\n| --- | --- | --- | --- |\n| L | EventCreated | (string name, uint256 date, uint256 maxAttendees) | 娲诲姩鍒涘缓浜嬩欢 / Event Created |\n| L | AttendeeCheckedIn | (address attendee, uint256 timestamp) | 鍙備笌鑰呯鍒颁簨浠?/ Attendee Checked In |\n| L | EventStatusChanged | (bool isActive) | 娲诲姩鐘舵€佸彉鏇翠簨浠?/ Event Status Changed |\n\n**鍏抽敭鏈璇存槑 (Key Terminology Explanation)**\n\n| **Term / 鏈** | **Meaning / 鍚箟** | **Description / 鎻忚堪** |\n| --- | --- | --- |\n| **Visibility / 鍙鎬?* | 璁块棶鏉冮檺鎺у埗 | 瀹氫箟璋佸彲浠ヨ皟鐢ㄥ嚱鏁版垨璁块棶鍙橀噺 / Defines who can call functions or access variables |\n| **Mutability / 鍙彉鎬?* | 鐘舵€佷慨鏀硅兘鍔?| view: 鍙涓嶄慨鏀圭姸鎬? state-changing: 淇敼鐘舵€侀渶瑕丟as璐?/ view: read-only; state-changing: modifies state and requires Gas |\n| **Modifiers / 淇グ鍣?* | 鍑芥暟淇グ鏉′欢 | 鍦ㄥ嚱鏁版墽琛屽墠妫€鏌ョ殑鏉′欢 / Conditions checked before function execution |\n| **Public / 鍏紑** | 瀹屽叏鍏紑璁块棶 | 浠讳綍璐︽埛閮藉彲浠ヨ皟鐢?/ Can be called by any account |\n| **Internal / 鍐呴儴** | 鍐呴儴璁块棶 | 浠呭悎绾﹀唴閮ㄦ垨鍏朵粬缁ф壙鍚堢害鍙皟鐢?/ Only within contract or inherited contracts |\n| **State-changing / 鐘舵€佷慨鏀?* | 淇敼鍖哄潡閾剧姸鎬?| 闇€瑕佹敮浠楪as璐圭敤锛屼細浜х敓浜ゆ槗 / Requires Gas fee and creates a transaction |\n| **View / 鍙** | 浠呰鍙栫姸鎬?| 鍏嶈垂璋冪敤锛屼笉淇敼鐘舵€?/ Free to call, does not modify state |\n\n**鏁版嵁绫诲瀷璇存槑 (Data Types Explanation)**\n\n| **Data Type / 鏁版嵁绫诲瀷** | **Description / 鎻忚堪** | **Example / 绀轰緥** |\n| --- | --- | --- |\n| string / 瀛楃涓?| 鏂囨湰鏁版嵁绫诲瀷 / Text data type | \\"Web3 Conference 2024\\" |\n| address / 鍦板潃 | 浠ュお鍧婅处鎴峰湴鍧€ / Ethereum account address | 0x742d35Cc6634C0532925a3b8D0C9964E5Bd4f071 |\n| uint256 / 鏃犵鍙锋暣鏁?| 256浣嶆鏁存暟 / 256-bit positive integer | 1735660800 (鏃堕棿鎴? |\n| bool / 甯冨皵鍊?| 鐪?鍋囧€?/ True/False value | true / false |\n| mapping / 鏄犲皠 | 閿€煎瀛樺偍 / Key-value storage | address 鈫?bool (鍦板潃鍒板竷灏斿€肩殑鏄犲皠) |\n\n# 2銆佺粏鑺傝瑙n\n### **鏍稿績姒傚康**\n\n**锛?锛夋暟瀛楃鍚嶅師鐞?*锛氭暟瀛楃鍚嶅熀浜庢き鍦嗘洸绾垮瘑鐮佸锛屾彁渚涜韩浠介獙璇佸拰娑堟伅瀹屾暣鎬э細\n\n**馃敼 绛惧悕杩囩▼**\n\n1. 鐢ㄦ埛浣跨敤绉侀挜瀵规秷鎭搱甯岃繘琛岀鍚峔n2. 鐢熸垚绛惧悕 (r, s, v) 涓変釜鍙傛暟\n3. 灏嗙鍚嶅拰娑堟伅涓€璧峰彂閫乗n\n**馃敼 楠岃瘉杩囩▼**\n\n1. 鍚堢害鎺ユ敹娑堟伅鍜岀鍚峔n2. 浣跨敤ecrecover鎭㈠绛惧悕鑰呭湴鍧€\n3. 楠岃瘉鍦板潃鏄惁鏈夋潈闄怽n\n**浼樺娍锛?*鏃犻渶鍦ㄩ摼涓婂瓨鍌ㄧ櫧鍚嶅崟锛岃妭鐪丟as璐圭敤\n\n**馃攳锛?锛?ecrecover 鍑芥暟**\n\n`ecrecover`鏄疭olidity鍐呯疆鍑芥暟锛岀敤浜庝粠绛惧悕鎭㈠绛惧悕鑰呭湴鍧€锛歕n\n```solidity\nfunction ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s)\n    returns (address signer)\n```\n\n**鍙傛暟璇存槑锛?*\n\n- `hash`: 娑堟伅鐨刱eccak256鍝堝笇\n- `v`: 鎭㈠ID (閫氬父鏄?7鎴?8)\n- `r, s`: 绛惧悕鐨勪袱涓粍鎴愰儴鍒哱n\n```solidity\n// 浣跨敤绀轰緥\nbytes32 messageHash = keccak256(abi.encodePacked(user, eventId));\nbytes32 ethSignedMessageHash = keccak256(abi.encodePacked(\\"\\x19Ethereum Signed Message:\\n32\\", messageHash));\naddress signer = ecrecover(ethSignedMessageHash, v, r, s);\n```\n\n馃摑 锛?锛?*浠ュお鍧婄鍚嶆秷鎭牸寮?*\n\n浠ュお鍧婇挶鍖呯鍚嶆椂浼氳嚜鍔ㄦ坊鍔犲墠缂€锛岄槻姝㈢鍚嶉噸鏀炬敾鍑伙細\n\n```solidity\n// 鍘熷娑堟伅鍝堝笇\nbytes32 messageHash = keccak256(abi.encodePacked(data));\n\n// 浠ュお鍧婄鍚嶆秷鎭搱甯孿nbytes32 ethSignedMessageHash = keccak256(abi.encodePacked(\n    \\"\\x19Ethereum Signed Message:\\n32\\",\n    messageHash\n));\n```\n\n**鍓嶇紑浣滅敤锛?*\n\n- 闃叉鐢ㄦ埛璇浜ゆ槗鏁版嵁\n- 鍖哄垎涓嶅悓绫诲瀷鐨勭鍚峔n- 鎻愰珮瀹夊叏鎬n\n鈿?Gas浼樺寲绛栫暐\n\n鍩轰簬绛惧悕鐨勮闂帶鍒剁浉姣斾紶缁熺櫧鍚嶅崟鏈夋樉钁楃殑Gas浼樺娍锛歕n\n**鉁?绛惧悕鏂瑰紡**\n\n- 鏃犻渶瀛樺偍鐢ㄦ埛鍒楄〃\n- 楠岃瘉鎴愭湰鍥哄畾 (~3000 gas)\n- 鏀寔鏃犻檺鐢ㄦ埛\n- 鍔ㄦ€佹潈闄愮鐞哱n\n**鉂?浼犵粺鐧藉悕鍗?*\n\n- 姣忎釜鐢ㄦ埛闇€瑕佸瓨鍌?(~20000 gas)\n- 鏌ヨ鎴愭湰闅忕敤鎴峰鍔燶n- 淇敼鐧藉悕鍗曢渶瑕佷氦鏄揬n- 瀛樺偍鎴愭湰楂榎n\n### **鍒嗚В浠ｇ爜**\n\n### **鎷嗚В鐨勫悎绾︼細`EventEntry.sol`**\n\n```jsx\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.17;\n\ncontract EventEntry {\n    string public eventName;\n    address public organizer;\n    uint256 public eventDate;\n    uint256 public maxAttendees;\n    uint256 public attendeeCount;\n    bool public isEventActive;\n\n    mapping(address => bool) public hasAttended;\n\n    event EventCreated(string name, uint256 date, uint256 maxAttendees);\n    event AttendeeCheckedIn(address attendee, uint256 timestamp);\n    event EventStatusChanged(bool isActive);\n\n    constructor(string memory _eventName, uint256 _eventDate_unix, uint256 _maxAttendees) {\n        eventName = _eventName;\n        eventDate = _eventDate_unix;\n        maxAttendees = _maxAttendees;\n        organizer = msg.sender;\n        isEventActive = true;\n\n        emit EventCreated(_eventName, _eventDate_unix, _maxAttendees);\n    }\n\n    modifier onlyOrganizer() {\n        require(msg.sender == organizer, \\"Only the event organizer can call this function\\");\n        _;\n    }\n\n    function setEventStatus(bool _isActive) external onlyOrganizer {\n        isEventActive = _isActive;\n        emit EventStatusChanged(_isActive);\n    }\n\n    function getMessageHash(address _attendee) public view returns (bytes32) {\n        return keccak256(abi.encodePacked(address(this), eventName, _attendee));\n    }\n\n    function getEthSignedMessageHash(bytes32 _messageHash) public pure returns (bytes32) {\n        return keccak256(abi.encodePacked(\\"\\x19Ethereum Signed Message:\\n32\\", _messageHash));\n    }\n\n    function verifySignature(address _attendee, bytes memory _signature) public view returns (bool) {\n        bytes32 messageHash = getMessageHash(_attendee);\n        bytes32 ethSignedMessageHash = getEthSignedMessageHash(messageHash);\n        return recoverSigner(ethSignedMessageHash, _signature) == organizer;\n    }\n\n    function recoverSigner(bytes32 _ethSignedMessageHash, bytes memory _signature)\n        public\n        pure\n        returns (address)\n    {\n        require(_signature.length == 65, \\"Invalid signature length\\");\n\n        bytes32 r;\n        bytes32 s;\n        uint8 v;\n\n        assembly {\n            r := mload(add(_signature, 32))\n            s := mload(add(_signature, 64))\n            v := byte(0, mload(add(_signature, 96)))\n        }\n\n        if (v < 27) {\n            v += 27;\n        }\n\n        require(v == 27 || v == 28, \\"Invalid signature 'v' value\\");\n\n        return ecrecover(_ethSignedMessageHash, v, r, s);\n    }\n\n    function checkIn(bytes memory _signature) external {\n        require(isEventActive, \\"Event is not active\\");\n        require(block.timestamp <= eventDate + 1 days, \\"Event has ended\\");\n        require(!hasAttended[msg.sender], \\"Attendee has already checked in\\");\n        require(attendeeCount < maxAttendees, \\"Maximum attendees reached\\");\n        require(verifySignature(msg.sender, _signature), \\"Invalid signature\\");\n\n        hasAttended[msg.sender] = true;\n        attendeeCount++;\n\n        emit AttendeeCheckedIn(msg.sender, block.timestamp);\n    }\n}\n```\n\n璇ュ悎鍚屼笓涓轰細璁€佺爺璁ㄤ細鎴栫浜鸿仛浼氱瓑 Web3 娲诲姩鑰岃璁°€備絾鏄紝鎴戜滑娌℃湁鍦ㄩ摼涓婂瓨鍌ㄤ竴闀夸覆鐧藉悕鍗曞湴鍧€锛堣繖闇€瑕?Gas 涓斾笉鍙墿灞曪級锛岃€屾槸鍋氫竴浜涙洿鑱槑鐨勪簨鎯呫€俓n\n璇€绐嶅涓嬶細\n\n 娲诲姩缁勭粐鑰呬负姣忎釜鎵瑰噯鐨勪笌浼氳€呯缃查摼涓嬫秷鎭€俓n\n 鐒跺悗锛屼笌浼氳€呭皢绛惧悕娑堟伅甯﹀埌閾句笂浠?*璇佹槑**浠栦滑宸茶閭€璇枫€俓n\n鏃犻渶棰勫厛瀛樺偍浠讳綍涓滆タ銆傛櫤鑳藉悎绾︿娇鐢?`ecrecover` 楠岃瘉绛惧悕銆俓n\n杩欐槸楂樻晥銆佸畨鍏ㄧ殑锛屽苟涓斿弽鏄犱簡 IRL 闂ㄧエ鎴栦簩缁寸爜鐨勫伐浣滄柟寮忊€斺€斾絾鍦ㄩ摼涓娿€俓n\n### **锛?锛夊悎鍚屽０鏄嶤ontract Declaration**\n\n```jsx\npragma solidity ^0.8.17;\n\ncontract EventEntry {\n```\n\n鎴戜滑姝ｅ湪浣跨敤 Solidity 鐗堟湰 0.8.17 骞跺垱寤轰竴涓悕涓?EventEntry 鐨勫悎绾︺€傜畝鍗曠殑寮€濮嬨€俓n\n### **锛?锛変簨浠惰缁嗕俊鎭拰鐘舵€佸彉閲廍vent Details & State Variables**\n\n鍦ㄦ垜浠繁鍏ヤ簡瑙ｆ櫤鑳藉悎绾︾殑鏍稿績閫昏緫涔嬪墠锛岃鎴戜滑閫€鍚庝竴姝ラ棶涓€涓畝鍗曠殑闂锛歕n\nWeb3 浜嬩欢瀹為檯涓婇渶瑕佸湪閾句笂绠＄悊浠€涔堬紵\n\n鎴戜滑涓嶄粎浠呮槸鍦ㄧ紪鍐欎竴涓€氱敤鐨勫嚭甯窡韪櫒鈥斺€旀垜浠鍦ㄤ负娲诲姩鏋勫缓涓€涓?*鍩轰簬绛惧悕銆丟as 浼樺寲鐨勭浜鸿闂郴缁?* 銆傝繖鎰忓懗鐫€鎴戜滑闇€瑕佽窡韪互涓嬪唴瀹癸細\n\n- 娲诲姩鍐呭\n- 璋佽礋璐n- 褰撳畠鍙戠敓鏃禱n- 鍙弬鍔犱汉鏁癨n- 璋佸凡缁忕鍒颁簡\n- 澶ч棬鏄惁杩樺紑鐫€\n\n璁╂垜浠湅鐪嬫墍鏈夎繖浜涙槸濡備綍瀛樺偍鍦ㄥ悎绾︿腑鐨勩€俓n\n```jsx\nstring public eventName;\naddress public organizer;\nuint256 public eventDate;\nuint256 public maxAttendees;\nuint256 public attendeeCount;\nbool public isEventActive;\n```\n\n杩欏叚涓彉閲忓畾涔?*浜嗘椿鍔ㄧ殑涓€鍒?* 鈥斺€斾粠璋佽礋璐ｅ埌鏈夊灏戜汉鍙互鍙傚姞銆傝鎴戜滑閫愯閫愬彞鍦版祻瑙堜竴涓嬶細\n\n```jsx\nstring public eventName;\n```\n\n杩欐槸浣犳椿鍔ㄧ殑**浜虹被鍙鍚嶇Оhuman-readable name** 鈥斺€斾緥濡?`鈥淓thConf 2025鈥漙 鎴?`鈥淭oken-Gated Summit鈥漙銆俓n\n鐢变簬瀹冭鏍囪涓?*鍏叡public** 锛孲olidity 浼氳嚜鍔ㄥ垱寤轰竴涓?getter 鍑芥暟銆俓n\n浠讳綍浜洪兘鍙互璋冪敤 `eventName锛堬級` 鏉ヨ幏鍙栨鍊尖€斺€旈潪甯搁€傚悎鍓嶇鎴栨祻瑙堝櫒鏄剧ず浜嬩欢鐨勬爣棰樸€俓n\n```jsx\naddress public organizer;\n```\n\n杩欐槸**浜嬩欢缁勭粐鑰咃紙** 閮ㄧ讲鍚堢害鐨勪釜浜烘垨瀹炰綋锛夌殑浠ュお鍧婂湴鍧€銆俓n\n鍙湁杩欎釜鍦板潃鎵嶈兘**绛剧讲涓庝細鑰呮壒鍑?* 锛堥摼涓嬶級銆俓n\n鍙湁姝ゅ湴鍧€鍙互**鏇存敼浜嬩欢鐘舵€?*  锛坄setEventStatus锛堬級`锛夈€俓n\n杩欎娇寰楃粍缁囪€呮垚涓烘暣涓郴缁熺殑鐪嬮棬浜恒€俓n\n```jsx\nuint256 public eventDate;\n```\n\n杩欎繚瀛樹簡**浜嬩欢鐨勮鍒掓棩鏈焑vent's scheduled date** 锛屼互 **Unix 鏃堕棿鎴?*琛ㄧず銆俓n\n绀轰緥锛歚1714569600` 鈫?2024 骞?4 鏈?30 鏃?00锛?0锛?0 UTC\n\n瀹冪敤浜?`checkIn锛堬級` 鍑芥暟锛屼互纭繚浜轰滑涓嶄細绛惧埌澶櫄銆俓n\n璇ュ悎鍚屽厑璁稿湪 `eventDate + 1 澶ー涔嬪墠绛惧埌锛屼互鍏佽鏃跺尯鍜屽欢杩熺伒娲绘€с€俓n\n鍥犳锛屽湪瀹炶返涓紝浜嬩欢鍦ㄦ鏃堕棿鎴冲悗涓€澶?*鍏抽棴** 銆俓n\n```jsx\nuint256 public maxAttendees;\n```\n\n杩欏鍙互绛惧埌鐨勪汉鏁拌瀹氫簡**纭€т笂闄恏ard cap** 銆俓n\n濡傛灉璁剧疆涓?`100`锛屽垯鍙湁 100 涓敮涓€鍦板潃鍙互鎴愬姛绛惧叆銆俓n\n瀵逛簬绠＄悊绉佷汉娲诲姩涓殑鏈夐檺搴т綅銆佺墿鐞嗛檺鍒舵垨璁块棶鎺у埗闈炲父鏈夌敤銆俓n\n```jsx\nuint256 public attendeeCount;\n```\n\n杩欎細淇濈暀宸茬粡绛惧埌鐨勪汉鏁扮殑**杩愯鎬绘暟**  **running total**銆俓n\n浠?`0` 寮€濮媆n\n姣忔鏂扮敤鎴锋垚鍔熺鍏ユ椂閫掑 1\n\n鐢ㄤ簬寮哄埗瀹炴柦 `maxAttendees` 瑙勫垯\n\n```jsx\nbool public isEventActive;\n```\n\n姝ゅ彉閲忕‘瀹氫簨浠?*褰撳墠鏄惁鎺ュ彈绛惧叆** 銆俓n\n閮ㄧ讲鍚堢害鏃惰缃负 `true`\n\n鍙互鐢辩粍缁囪€呬娇鐢?`setEventStatus锛坆ool锛塦 鎵撳紑/鍏抽棴\n\n鍦ㄤ簨浠跺浜庨潪娲诲姩鐘舵€佹椂闃绘绛惧叆\n\n### **(3)鑰冨嫟璺熻釜Attendance Tracking**\n\n```jsx\nmapping(address => bool) public hasAttended;\n```\n\n鎴戜滑浣跨敤姝ゆ槧灏勬潵**璺熻釜璋佸凡缁忕鍒?* 锛屽洜姝ゆ病鏈変汉鍙互绛惧埌涓ゆ銆俓n\n### ****\n\n### **(4)浜嬩欢Events**\n\n[馃摙](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nevent EventCreated(string name, uint256 date, uint256 maxAttendees);\nevent AttendeeCheckedIn(address attendee, uint256 timestamp);\nevent EventStatusChanged(bool isActive);\n```\n\n鎴戜滑鍙戝嚭浠ヤ笅浜嬩欢鏄负浜嗘彁楂橀€忔槑搴﹀拰鍓嶇闆嗘垚锛歕n\n`EventCreated`锛氬湪閮ㄧ讲鏈熼棿鍙戝嚭涓€娆°€俓n\n`AttendeeCheckedIn`锛氭瘡娆℃湁浜烘垚鍔熺鍒版椂瑙﹀彂銆俓n\n`EventStatusChanged`锛氬厑璁哥粍缁囪€呮殏鍋?鎭㈠浜嬩欢銆俓n\n### ****\n\n### **(5)鏋勯€犲嚱鏁帮細閮ㄧ讲鏃惰缃?Constructor: Setup at Deployment**\n\n[馃彈锔廬(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nconstructor(string memory _eventName, uint256 _eventDate_unix, uint256 _maxAttendees) {\n    eventName = _eventName;\n    eventDate = _eventDate_unix;\n    maxAttendees = _maxAttendees;\n    organizer = msg.sender;\n    isEventActive = true;\n\n    emit EventCreated(_eventName, _eventDate_unix, _maxAttendees);\n}\n```\n\n`鏋勯€犲嚱鏁癭灏卞儚瀹夎鍚戝锛屽湪閮ㄧ讲鍚堢害鏃惰繍琛屼竴娆♀€斺€旇€屼笖鍙繍琛屼竴娆°€傝鎴戜滑鏉ョ湅鐪嬫瘡琛岀殑浣滅敤浠ュ強涓轰粈涔堝畠寰堥噸瑕侊細\n\n```jsx\neventName = _eventName;\n```\n\n杩欎細瀛樺偍鎮ㄧ殑娲诲姩鐨勪汉绫诲彲璇诲悕绉帮紙渚嬪锛屸€渀Web3Conf 2025`鈥濓級銆傚畠浣滀负鏋勯€犲嚱鏁板弬鏁颁紶鍏ュ苟淇濆瓨鍦ㄩ摼涓婏紝浠ヤ究浠讳綍浜洪兘鍙互绋嶅悗浣跨敤 `eventName锛堬級` 鍑芥暟鏌ヨ瀹冦€俓n\n```jsx\neventDate = _eventDate_unix;\n```\n\n杩欒缃簡瀹樻柟娲诲姩鏃ユ湡鈥斺€斾絾瀹冧笉鏄儚鈥?025 骞?4 鏈?21 鏃モ€?杩欐牱鐨勬牸寮忓寲瀛楃涓层€傚畠鏄竴涓?**Unix 鏃堕棿鎴?* 锛堝 `1745251200`锛夛紝杩欎娇寰楀湪 Solidity 涓繘琛屾椂闂存瘮杈冨彉寰楁洿鍔犲鏄撱€俓n\n绋嶅悗锛屾垜浠皢浣跨敤瀹冩潵妫€鏌ヤ簨浠舵槸鍚︿粛鍦ㄨ繘琛屾垨宸茬粡缁撴潫銆俓n\n```jsx\nmaxAttendees = _maxAttendees;\n```\n\n杩欎负鍙互鍙傚姞鐨勪汉鏁拌瀹氫簡涓婇檺銆備緥濡傦紝濡傛灉鏈€澶у€间负 150锛屽垯绗?151 浜哄皢鍦ㄥ叆浣忔椂琚嫆缁濄€俓n\n鎷ユ湁姝ゅ唴缃檺鍒舵湁鍔╀簬闃叉杩囧害鎷ユ尋銆佸瀮鍦鹃偖浠舵垨婊ョ敤銆俓n\n```jsx\norganizer = msg.sender;\n```\n\n杩欎細灏嗛儴缃插悎鍚岀殑浜哄憳璁剧疆涓?*浜嬩欢缁勭粐鑰?* 銆俓n\n`msg.sender` 鏄寚閮ㄧ讲鍚堢害鐨勫湴鍧€銆俓n\n璇ュ湴鍧€鍏锋湁鐗规畩鑳藉姏锛屼緥濡傛縺娲?鍋滅敤浜嬩欢銆俓n\n瀹冧篃鏄?*鍞竴**搴旇鍏佽绛剧讲閭€璇风鍚嶇殑鍦板潃锛屾垜浠◢鍚庝細楠岃瘉銆俓n\n```jsx\nisEventActive = true;\n```\n\n榛樿鎯呭喌涓嬶紝娲诲姩浠ユ椿鍔ㄧ姸鎬佸紑濮嬶紝杩欐剰鍛崇潃闄ら潪缁勭粐鑰呮墜鍔ㄧ鐢ㄥ畠锛屽惁鍒欏厑璁哥鍒般€俓n\n绋嶅悗鎴戜滑灏嗗垱寤轰竴涓悕涓?`setEventStatus锛堬級` 鐨勫嚱鏁帮紝璁╃粍缁囪€呭垏鎹㈡鏍囧織銆俓n\n`emit EventCreated(...)`\n\n杩欒鍚戝尯鍧楅摼骞挎挱浜嬩欢锛岃〃鏄庤浜嬩欢宸插垱寤恒€俓n\n涓轰粈涔堣鍙戝嚭浜嬩欢锛焅n\n瀹冨彲浠ュ府鍔╅摼涓嬪簲鐢ㄧ▼搴忥紙濡傚墠绔垨娴忚鍣級鐭ラ亾宸茬粡娉ㄥ唽浜嗘柊浜嬩欢銆俓n\n瀹冭褰曟湁鐢ㄧ殑鍏冩暟鎹紝渚嬪鍚嶇О銆佹棩鏈熷拰鏈€澶у閲忋€俓n\n### **锛?锛夊瓨鍙栨帶鍒禔ccess Control**\n\n```jsx\nmodifier onlyOrganizer() {\n    require(msg.sender == organizer, \\"Only the event organizer can call this function\\");\n    _;\n}\n```\n\n淇濇姢鏌愪簺鍔熻兘鐨勪究鎹?*淇グ绗?* 銆傚彧鏈夌粍缁囪€呭彲浠ュ懠鍙粬浠€俓n\n### **锛?锛?鍒囨崲浜嬩欢鐘舵€乀oggle Event Status**\n\n[馃攣](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nfunction setEventStatus(bool _isActive) external onlyOrganizer {\n    isEventActive = _isActive;\n    emit EventStatusChanged(_isActive);\n}\n```\n\n浣跨敤姝ら€夐」鍙互**鏆傚仠鎴栨仮澶?*绛惧叆銆傛偍鍙兘甯屾湜鍦ㄦ煇涓椂闂寸偣涔嬪悗鍐荤粨绛惧埌銆俓n\n### ****\n\n### **锛?锛夋秷鎭暎鍒?鈥?绛惧悕鐨勫叧閿甅essage Hashing 鈥?Key to Signatures**\n\n[馃攺](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nfunction getMessageHash(address _attendee) public view returns (bytes32) {\n    return keccak256(abi.encodePacked(address(this), eventName, _attendee));\n}\n```\n\n姝ゅ姛鑳戒娇**缁勭粐鑰?*鑳藉鎺у埗娲诲姩褰撳墠鏄惁鎺ュ彈绛惧埌銆俓n\n**瀹冭兘鍋氫粈涔堬細**\n\n[馃П](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n     **`onlyOrganizer` 淇グ绗︼細**\n\n      纭繚鍙湁閮ㄧ讲鍚堝悓鐨勪汉鍛橈紙 **缁勭粐鑰?* 锛夋墠鑳芥洿鏀规璁剧疆銆傝繖鍙互闃叉闅忔満鐢ㄦ埛鏆傚仠鎴栨仮澶嶄簨浠躲€俓n\n**`isEventActive = _isActive;`**\n\n            鏍规嵁浼犻€掔殑鍙傛暟鏇存柊浜嬩欢鐨勬椿鍔ㄧ姸鎬侊細\n\n            濡傛灉 `_isActive` 涓?`true`锛屽垯浜嬩欢涓烘墦寮€銆俓n\n            濡傛灉 `_isActive` 涓?`false`锛屽垯绛惧叆灏嗘殏鏃舵殏鍋溿€俓n\n**`emit EventStatusChanged锛坃isActive锛塦;**\n\n 姣忔鐘舵€佸彉鍖栨椂閮戒細鍙戝嚭閾句笂浜嬩欢鈥斺€斿浜庡墠绔华琛ㄦ澘鎴栧尯鍧楅摼娴忚鍣ㄧ珛鍗冲弽鏄犲彉鍖栧緢鏈夌敤銆俓n\n### **锛?锛変互澶潑绛惧悕娑堟伅鍝堝笇Ethereum Signed Message Hash**\n\n[鉁嶏笍](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nfunction getEthSignedMessageHash(bytes32 _messageHash) public pure returns (bytes32) {\n    return keccak256(abi.encodePacked(\\"\\x19Ethereum Signed Message:\\n32\\", _messageHash));\n}\n```\n\n姝ゅ姛鑳芥槸浠ュお鍧婄鍚嶉獙璇佺郴缁?*鐨勯噸瑕佺粍鎴愰儴鍒?* 鈥斺€旇繖灏辨槸瀹冨瓨鍦ㄧ殑鍘熷洜銆俓n\n ****\n\n**涓轰粈涔堝瓨鍦ㄨ繖涓嚱鏁?*\n\n[馃](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n     褰撶敤鎴峰湪閾句笅绛剧讲鏁版嵁锛堝娑堟伅鐨勫搱甯岋級鏃讹紝浠庢妧鏈笂璁诧紝浠栦滑姝ｅ湪绛剧讲**浠讳綍闅忔満鐨?32 瀛楄妭** 銆傝繖鍙兘鍖呮嫭浜ゆ槗鐨勫搱甯屽€笺€佸悎绾︾殑鍝堝笇鍊兼垨涓€浜涘畬鍏ㄤ笉鐩稿叧鐨勬暟鎹€俓n\n杩欏甫鏉ヤ簡椋庨櫓锛歕n\n     濡傛灉鏈変汉璇遍獥鐢ㄦ埛鍦ㄩ摼涓嬬缃叉煇浜涘唴瀹癸紝鐒跺悗鍦ㄩ摼涓婇噸澶嶄娇鐢ㄨ绛惧悕鏉ュ仛涓€浜涙伓鎰忕殑浜嬫儏鎬庝箞鍔烇紵\n\n涓轰簡閬垮厤杩欑鎯呭喌锛屼互澶潑寮曞叆浜嗕竴涓?*淇濇姢鎬у墠缂€** 銆俓n\n### ****\n\n### **锛?0锛夊嚱鏁扮殑浣滅敤**\n\n[馃攼](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n杩欒锛歕n\n```jsx\nkeccak256(abi.encodePacked(\\"\\x19Ethereum Signed Message:\\n32\\", _messageHash));\n```\n\n鑾峰彇鍘熷娑堟伅鍝堝笇骞?*鐢ㄥ墠缂€鍖呰瀹?* 锛屽涓嬫墍绀猴細\n\n```jsx\n\\"\\x19Ethereum Signed Message:\\n32\\" + original_hash\n```\n\n鐒跺悗瀹冧娇鐢?`keccak256` 鍐嶆瀵规暣涓簨鎯呰繘琛屽搱甯屽鐞嗐€俓n\n杩欒绉颁负**浠ュお鍧婄鍚嶆秷鎭搱甯?* 锛屽畠鏄儚 MetaMask 杩欐牱鐨勯挶鍖呭湪浣犺皟鐢?`eth_sign` 鏃朵娇鐢ㄧ殑**纭垏鏍煎紡** 銆俓n\n **涓轰粈涔堣繖寰堥噸瑕侊紵**\n\n[馃攧](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n鍥犱负褰撴垜浠◢鍚庝娇鐢?`ecrecover锛堬級` 鎭㈠**绛惧悕鑰呯殑鍦板潃**鏃讹紝鎴戜滑灏嗕粠杩欎釜**鍓嶇紑鍖呰鐨勫搱甯屼腑**鎭㈠瀹冿紝鑰屼笉鏄師濮嬪搱甯屻€俓n\n濡傛灉鎮ㄦ病鏈夋纭寘瑁呭畠锛岄獙璇佹楠ゅ皢澶辫触 - 鍗充娇鐢ㄦ埛姝ｇ‘绛惧悕锛乗n\n### \n\n### **锛?1锛?绛惧悕楠岃瘉Signature Verification**\n\n[馃暤锔忊€嶁檪锔廬(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nfunction verifySignature(address _attendee, bytes memory _signature) public view returns (bool) {\n    bytes32 messageHash = getMessageHash(_attendee);\n    bytes32 ethSignedMessageHash = getEthSignedMessageHash(messageHash);\n    return recoverSigner(ethSignedMessageHash, _signature) == organizer;\n}\n```\n\n姝ゅ姛鑳芥槸鎴戜滑**閭€璇烽獙璇佺郴缁?*鐨勬牳蹇冦€傚畠鍥炵瓟浜嗕竴涓畝鍗曚絾鏈夊姏鐨勯棶棰橈細\n\n鈥滆繖涓鍚嶇湡鐨勬槸鐢辩粍缁囪€呭垱寤虹殑鍚椻€斺€斿畠鏄负杩欎綅涓庝細鑰呭噯澶囩殑鍚楋紵鈥漒n\n璁╂垜浠€愯鍒嗚В銆俓n\n **绗?1 姝ワ細鐢熸垚鍩烘湰娑堟伅鍝堝笇**\n\n[鉁匽(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nbytes32 messageHash = getMessageHash(_attendee);\n```\n\n杩欎細閲嶆柊鍒涘缓**缁勭粐鑰?*涓虹壒瀹氫笌浼氳€呭湪閾句笅绛惧悕鐨勭‘鍒囧搱甯屽€笺€俓n\n璇ュ搱甯屽€奸€氬父绫讳技浜庯細\n\n```jsx\nkeccak256(contract address + event name + attendee address)\n```\n\n杩欑‘淇濅簡锛歕n\n绛惧悕涓?*姝ょ壒瀹氬悎绾︾浉鍏宠仈**\n\n浠呭**姝ゆ椿鍔?*鏈夋晥\n\n瀹冨睘浜?*杩欎釜纭垏鐨勭敤鎴?*\n\n濡傛灉鏈変粈涔堜笉鍚屸€斺€斾笉鍚岀殑涓庝細鑰呫€佷笉鍚岀殑娲诲姩鈥斺€斿搱甯屽€煎氨浼氬彂鐢熷彉鍖栥€俓n\n **绗?2 姝ワ細杞崲涓轰互澶潑绛惧悕鏍煎紡**\n\n[鉁匽(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nbytes32 ethSignedMessageHash = getEthSignedMessageHash(messageHash);\n```\n\n姝ｅ鎴戜滑涔嬪墠鎵€瑙ｉ噴鐨勶紝杩欑敤浠ュお鍧婄殑鏍囧噯鍓嶇紑鍖呰浜嗘秷鎭搱甯岋細\n\n```jsx\n\\"\\x19Ethereum Signed Message:\\n32\\" + messageHash\n```\n\n涓轰粈涔堬紵\n\n鍥犱负鍍?MetaMask 杩欐牱鐨勯挶鍖呭湪绛惧悕鏃朵細鑷姩娣诲姞璇ュ墠缂€鈥斺€旀墍浠ユ垜浠湪楠岃瘉鏃朵篃闇€瑕佸寘鍚畠锛屽惁鍒欐鏌ュ皢澶辫触銆俓n\n **绗?3 姝ワ細鎭㈠绛惧悕鑰?*\n\n[鉁匽(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nreturn recoverSigner(ethSignedMessageHash, _signature) == organizer;\n```\n\n鍦ㄨ繖閲岋紝鎴戜滑锛歕n\n浣跨敤 `ecrecover锛堬級`锛?閫氳繃杈呭姪鍑芥暟 `recoverSigner`锛夋彁鍙栫鍚?*娑堟伅鐨勫湴鍧€** 銆俓n\n灏嗚鍦板潃涓巂缁勭粐鑰卄 锛堥儴缃叉鍚堢害鐨勫湴鍧€锛夎繘琛屾瘮杈冦€俓n\n濡傛灉鍖归厤锛? 绛惧悕鏈夋晥\n\n濡傛灉娌℃湁锛? 鏈変汉浼€犳垨鐢卞叾浠栦汉绛惧悕\n\n[鉁匽(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n[鉂宂(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n### **锛?2锛塺ecoverSigner 鈥?瀵嗙爜渚︽帰 The Cryptographic Detective**\n\n[馃攼](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n杩欐槸鍚堢害涓殑瀹為檯鍑芥暟锛歕n\n```jsx\nfunction recoverSigner(bytes32 _ethSignedMessageHash, bytes memory _signature)\n    public\n    pure\n    returns (address)\n{\n    require(_signature.length == 65, \\"Invalid signature length\\");\n\n    bytes32 r;\n    bytes32 s;\n    uint8 v;\n\n    assembly {\n        r := mload(add(_signature, 32))\n        s := mload(add(_signature, 64))\n        v := byte(0, mload(add(_signature, 96)))\n    }\n\n    if (v < 27) {\n        v += 27;\n    }\n\n    require(v == 27 || v == 28, \\"Invalid signature 'v' value\\");\n\n    return ecrecover(_ethSignedMessageHash, v, r, s);\n}\n```\n\n姝ゅ姛鑳芥槸鎴戜滑鍩轰簬绛惧悕鐨勮緭鍏ョ郴缁熶腑鐨?*鏈€鍚庝竴涓睛鎺㈡楠?* 銆傚畠鏌ョ湅绛惧悕骞舵壘鍑?*鍝釜浠ュお鍧婂湴鍧€绛剧讲浜嗗畠** 銆俓n\n鍋囪鏈変汉缁欎簡鎴戜滑涓€涓鍚嶅苟澹扮О锛歕n\n鈥滆繖鏄敱娲诲姩缁勭粐鑰呯缃茬殑銆傝繖鎰忓懗鐫€鎴戣鍏佽鍙傚姞娲诲姩銆俓n\n浣嗘垜浠笉鑳界洸鐩浉淇′粬浠€傛垜浠渶瑕?*楠岃瘉**鏄惁锛歕n\n璇ョ鍚嶆槸鏈夋晥鐨勩€俓n\n瀹冪湡鐨勬潵鑷?*缁勭粐鑰呯殑閽卞寘** 銆俓n\n杩欎釜鍑芥暟鍙互甯姪鎴戜滑鍋氬埌杩欎竴鐐广€俓n\n **绗?1 姝ワ細妫€鏌ョ鍚嶉暱搴?*\n\n[馃搹](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nrequire(_signature.length == 65, \\"Invalid signature length\\");\n```\n\n鎵€鏈変互澶潑绛惧悕鐨?*闀垮害閮芥槸 65 瀛楄妭** 鈥斺€斾笉澶氫篃涓嶅皯銆俓n\n濡傛灉瀹冩洿鐭垨鏇撮暱锛屽垯鍙兘鏄崯鍧忕殑銆佷笉瀹屾暣鐨勬垨鍋囩殑銆俓n\n鎵€浠ュ鏋滈暱搴︿笉瀵癸紝鎴戜滑浼氱珛鍗冲仠姝€俓n\n **绗?2 姝ワ細灏嗙鍚嶅垎鎴?3 涓儴鍒?*\n\n[馃摝](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n浠ュお鍧婄鍚嶄笉浠呬粎鏄竴澶у潡鈥斺€斿畠浠敱 3 涓儴鍒嗙粍鎴愶紝绉颁负锛歕n\n`r`锛?2 瀛楄妭锛塡n\n`s`锛?2 瀛楄妭锛塡n\n`v`锛? 瀛楄妭锛塡n\n杩欎笁涓€煎崗鍚屽伐浣滐紝浠?*鏁板鏂瑰紡璇佹槑璋佺缃蹭簡閭欢** 銆俓n\n鐜板湪锛屼簨鎯呭彉寰楁湁鐐规妧鏈€т簡......\n\n **绗?3姝ワ細浣跨敤绋嬪簭闆嗘彁鍙栬繖浜涘€?*\n\n[馃](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nassembly {\n    r := mload(add(_signature, 32))\n    s := mload(add(_signature, 64))\n    v := byte(0, mload(add(_signature, 96)))\n}\n```\n\n姹囩紪鏄竴绉嶇洿鎺ヤ粠鍐呭瓨璁块棶鏁版嵁鐨勪綆绾ф柟娉曘€俓n\n鍙互鎶婂畠鎯宠薄鎴愭寲涓€涓洅瀛愶紝鍑嗙‘鍦版嬁鍑烘垜浠渶瑕佺殑涓滆タ銆俓n\n鎴戜滑璇达細\n\n鈥滃樋浠ュお鍧婏紝缁欐垜浠庝綅缃?32 寮€濮嬬殑鍓?32 涓瓧鑺傘€傞偅鏄?`r`銆俓n\n鈥滅幇鍦ㄧ粰鎴戞帴涓嬫潵鐨?32 瀛楄妭锛屼粠 64 寮€濮嬨€傞偅鏄痐s` 銆俓n\n鈥滄渶鍚庣粰鎴戜綅缃?96 鐨?1 瀛楄妭銆傞偅鏄?`v`銆俓n\n鎴戜滑鐜板湪宸茬粡鏈変簡鏍囧織鎬ф嫾鍥剧殑鎵€鏈夐儴鍒嗐€俓n\n **绗?4 姝ワ細鏍规嵁闇€瑕佷慨澶?`V` 鍊?*\n\n[馃И](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nif (v < 27) {\n    v += 27;\n}\n```\n\n鏈夋椂锛屼笉鍚岀殑閽卞寘鎴栫郴缁熶細缁欎綘涓€涓?`v` 鍊硷紝鍗?0 鎴?1銆俓n\n浣嗕互澶潑棰勮鏄?27 鎴?28銆俓n\n鎵€浠ユ垜浠彧鏄湪闇€瑕佹椂杩涜璋冩暣銆俓n\n **绗?5 姝ワ細楠岃瘉 v 鐜板湪鏄惁姝ｇ‘**\n\n[馃毃](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nrequire(v == 27 || v == 28, \\"Invalid signature 'v' value\\");\n```\n\n淇鍚庯紝鎴戜滑纭繚 v 鏄?27 鎴?28 - 鍏朵粬浠讳綍涓滆タ閮芥槸涓嶅彲鎺ュ彈鐨勩€俓n\n濡傛灉鏄叾浠栦换浣曚笢瑗匡紝鎴戜滑浼氭姏鍑洪敊璇紝鍥犱负鎴戜滑涓嶈兘淇′换绛惧悕銆俓n\n **绗?6 姝ワ細鎭㈠绛惧悕鑰呯殑鍦板潃**\n\n[馃攳](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n```jsx\nreturn ecrecover(_ethSignedMessageHash, v, r, s);\n```\n\n杩欐槸鏈€鍚庣殑鏃跺埢銆俓n\n鎴戜滑绉颁箣涓?`ecrecover`鈥斺€斾竴涓唴缃殑浠ュお鍧婂嚱鏁帮紝瀹冮噰鐢細\n\n绛惧悕娑堟伅鍝堝笇\n\n绛惧悕鍊?锛坄v銆乺銆乻`锛塡n\n瀹冭繑鍥?*绛惧悕鑰呯殑鍦板潃** 銆俓n\nyeah锛佹垜浠幇鍦ㄧ煡閬撴槸璋佺缃蹭簡杩欐潯娑堟伅銆俓n\n### **(13)checkIn 鈥?Web3 娲诲姩鐨勫墠闂?The Front Gate of the Web3 Event**\n\n[馃師锔廬(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n杩欐槸涓庝細鑰呭埌杈炬偍鐨勬椿鍔ㄦ椂灏嗚皟鐢ㄧ殑涓昏鍔熻兘鈥斺€?**鏃犺鏄唬甯侀棬鎺ц仛浼氥€佺爺璁ㄤ細杩樻槸绉佷汉鍙戝竷娲惧** 銆俓n\n璁╂垜浠厛閲嶆柊瀹¤涓€涓嬪嚱鏁帮細\n\n```jsx\nfunction checkIn(bytes memory _signature) external {\n    require(isEventActive, \\"Event is not active\\");\n    require(block.timestamp <= eventDate + 1 days, \\"Event has ended\\");\n    require(!hasAttended[msg.sender], \\"Attendee has already checked in\\");\n    require(attendeeCount < maxAttendees, \\"Maximum attendees reached\\");\n    require(verifySignature(msg.sender, _signature), \\"Invalid signature\\");\n\n    hasAttended[msg.sender] = true;\n    attendeeCount++;\n\n    emit AttendeeCheckedIn(msg.sender, block.timestamp);\n}\n```\n\n### **杩欎釜鍑芥暟鍦ㄥ仛浠€涔堬紵**\n\n[馃З](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n      姝ゅ姛鑳芥槸**鎮ㄧ殑鏁板瓧鐪嬮棬浜?* 銆俓n\n 姣忔鏈変汉鎯宠绛惧埌鏃讹紝浠栦滑蹇呴』璇佹槑锛歕n\n 浠栦滑琚個璇凤紙閫氳繃鎻愪緵鏈夋晥绛惧悕锛塡n\n 浠栦滑鍦ㄥ厑璁哥殑绐楀彛鍐呯鍒癨n\n 娲诲姩浠嶅湪杩涜涓璡n\n 浠栦滑灏氭湭绛惧埌銆俓n\n       杩樻湁绌轰綑锛乗n\n濡傛灉浠栦滑閫氳繃浜嗘墍鏈夎繖浜涙鏌ワ紝浠栦滑灏卞彲浠ラ€氳繃澶ч棬銆俓n\n鐜板湪璁╂垜浠€愯鍒嗚В杩欎釜鍑芥暟锛歕n\n```jsx\nrequire(isEventActive, \\"Event is not active\\");\n```\n\n鍦ㄦ垜浠鏌ュ叾浠栦换浣曚簨鎯呬箣鍓嶁€斺€旇娲诲姩鏄惁姝ｅ湪鐩存挱锛焅n\n缁勭粐鑰呭彲鑳藉凡鏆傚仠鎴栧彇娑堟椿鍔ㄣ€傚鏋滄槸杩欐牱锛?**鍒欎笉鍏佽浠讳綍浜虹鍒?* 銆俓n\n姝ゆ爣蹇?锛坄isEventActive`锛?鐢辩粍缁囪€呬娇鐢?`setEventStatus锛堬級` 鍑芥暟杩涜鎺у埗銆俓n\n```jsx\nrequire(block.timestamp <= eventDate + 1 days, \\"Event has ended\\");\n```\n\n姝ゆ鏌ヤ笂鍐欑潃锛氣€?**鎮ㄥ彧鑳藉湪娲诲姩鏃ユ湡鍚?24 灏忔椂涔嬪墠绛惧埌銆?*\n\n涓轰粈涔堬紵\n\n鍥犱负浜嬩欢涓嶄細姘歌繙鎸佺画涓嬪幓銆傛偍涓嶅笇鏈涙湁浜哄湪 5 澶╁悗灏濊瘯鍔炵悊鐧籧heck in鎵嬬画銆俓n\n閫氳繃澧炲姞涓€澶╋紝鎴戜滑缁欎簣浜嗚交寰殑瀹介檺鏈燂紝鍚屾椂浠嶇劧淇濇寔鐜板疄銆俓n\n```jsx\nrequire(!hasAttended[msg.sender], \\"Attendee has already checked in\\");\n```\n\n鎴戜滑涓嶅厑璁搁噸澶嶇鍒般€俓n\n姝よ纭繚**姣忎釜鍦板潃鍙兘绛惧埌涓€娆?* 銆傚鏋滀粬浠凡琚爣璁颁负鏈変汉鍊煎畧锛屽垯浠栦滑灏嗚闃绘鍐嶆绛惧埌銆俓n\n杩欐槸浣跨敤 `hasAttended` 鏄犲皠杩涜璺熻釜鐨勩€俓n\n```jsx\nrequire(attendeeCount < maxAttendees, \\"Maximum attendees reached\\");\n```\n\n杩欐槸浣?*娲诲姩涓婇檺** 銆俓n\n濡傛灉浣犳渶澶氫笌浼氳€呬汉鏁颁负 100 浜猴紝骞朵笖宸茬粡鏈?100 浜虹鍒帮紝閭ｄ箞鏃犺璋佽瘯鍥捐繘鍏ワ紝闂ㄩ兘浼氬叧闂€俓n\n鍗充娇浠栦滑鏈夋湁鏁堢殑绛惧悕锛屼竴鏃﹁揪鍒颁笂闄愶紝浠栦滑涔熸棤娉曡繘鍏ャ€俓n\n```jsx\nrequire(verifySignature(msg.sender, _signature), \\"Invalid signature\\");\n```\n\n杩欐槸鐪熸鐨勯瓟鍔涖€俓n\n姝よ楠岃瘉锛歕n\n涓庝細鑰?锛坄msg.sender`锛? **瀹為檯涓婅閭€璇蜂簡**\n\n浠栦滑鐨勭鍚嶇敱**娲诲姩缁勭粐鑰呯鍚?*\n\n瀹冩槸涓撻棬**涓鸿繖娆℃椿鍔ㄧ鍚?*鐨刓n\n杩欎娇鐢ㄤ簡鎴戜滑涔嬪墠璁ㄨ鐨勬墍鏈夊姞瀵嗛€昏緫锛堟秷鎭搱甯屻€佷互澶潑鍓嶇紑銆乣ecrecover`锛夆€斺€旀暣榻愬湴鍖呰鍦?`verifySignature锛堬級` 甯姪绋嬪簭涓€俓n\n濡傛灉绛惧悕鏄亣鐨勬垨鏃犳晥鐨勶紝鍒欐嫆缁濊闂€俓n\n### ****\n\n**閫氳繃鎵€鏈夋鏌ワ紵澶鍟︼紒**\n\n[鉁匽(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n濡傛灉涓庝細鑰呴€氳繃浜嗘墍鏈夎姹傦紝鎴戜滑灏嗚褰曚粬浠殑绛惧埌锛歕n\n```jsx\nhasAttended[msg.sender] = true;\n```\n\n鎴戜滑灏嗗懠鍙€呮爣璁颁负鐜板湪宸茬鍒扮殑浜恒€俓n\n杩欏彲浠ラ槻姝㈤噸澶嶇鍏ャ€俓n\n```jsx\nattendeeCount++;\n```\n\n鎴戜滑閫掑鎬讳笌浼氳€呰鏁般€俓n\n杩欐湁鍔╀簬鎴戜滑涓轰笅涓€涓皾璇曡繘鍏ョ殑浜哄己鍒舵墽琛?maxAttendees 闄愬埗銆俓n\n```jsx\nemit AttendeeCheckedIn(msg.sender, block.timestamp);\n```\n\n鎴戜滑瑙﹀彂涓€涓簨浠舵潵璁板綍姝や汉宸茬鍒颁互鍙婄鍒扮殑鏃堕棿銆俓n\n杩欏浠ヤ笅鎯呭喌寰堟湁鐢細\n\n鍓嶇 UI\n\n鍖哄潡娴忚鍣╘n\n閾句笅鏁版嵁绱㈠紩锛堝 The Graph锛塡n\n### 瀹屾暣浠ｇ爜璇﹁В\n\n### 馃搫 绛惧悕楠岃瘉娲诲姩鍚堢害\n\n```solidity\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ncontract SignThis {\n    string public eventName;\n    address public organizer;\n    uint256 public eventDate;\n    uint256 public maxAttendees;\n    uint256 public attendeeCount;\n    bool public isEventActive;\n\n    mapping(address => bool) public hasAttended;\n\n    event EventCreated(string name, uint256 date, uint256 maxAttendees);\n    event AttendeeCheckedIn(address attendee, uint256 timestamp);\n    event EventStatusChanged(bool isActive);\n\n    constructor(string memory _eventName, uint256 _eventDate, uint256 _maxAttendees) {\n        eventName = _eventName;\n        organizer = msg.sender;\n        eventDate = _eventDate;\n        maxAttendees = _maxAttendees;\n        isEventActive = true;\n\n        emit EventCreated(_eventName, _eventDate, _maxAttendees);\n    }\n\n    modifier onlyOrganizer() {\n        require(msg.sender == organizer, \\"Only organizer\\");\n        _;\n    }\n\n    modifier eventActive() {\n        require(isEventActive, \\"Event not active\\");\n        _;\n    }\n\n    // 浣跨敤绛惧悕楠岃瘉鍙備笌鑰呰韩浠絓n    function checkInWithSignature(\n        address attendee,\n        uint8 v,\n        bytes32 r,\n        bytes32 s\n    ) external eventActive {\n        require(attendeeCount < maxAttendees, \\"Event full\\");\n        require(!hasAttended[attendee], \\"Already checked in\\");\n\n        // 鏋勯€犳秷鎭搱甯孿n        bytes32 messageHash = keccak256(abi.encodePacked(\n            attendee,\n            address(this),  // 鍚堢害鍦板潃\n            eventName\n        ));\n\n        // 浠ュお鍧婄鍚嶆秷鎭搱甯孿n        bytes32 ethSignedMessageHash = keccak256(abi.encodePacked(\n            \\"\\x19Ethereum Signed Message:\\n32\\",\n            messageHash\n        ));\n\n        // 鎭㈠绛惧悕鑰呭湴鍧€\n        address signer = ecrecover(ethSignedMessageHash, v, r, s);\n\n        // 楠岃瘉绛惧悕鑰呮槸缁勭粐鑰匼n        require(signer == organizer, \\"Invalid signature\\");\n\n        // 璁板綍鍙備笌\n        hasAttended[attendee] = true;\n        attendeeCount++;\n\n        emit AttendeeCheckedIn(attendee, block.timestamp);\n    }\n\n    // 鎵归噺绛惧埌 (Gas浼樺寲)\n    function batchCheckIn(\n        address[] calldata attendees,\n        uint8[] calldata v,\n        bytes32[] calldata r,\n        bytes32[] calldata s\n    ) external eventActive {\n        require(attendees.length == v.length, \\"Array length mismatch\\");\n        require(attendees.length == r.length, \\"Array length mismatch\\");\n        require(attendees.length == s.length, \\"Array length mismatch\\");\n        require(attendeeCount + attendees.length <= maxAttendees, \\"Would exceed capacity\\");\n\n        for (uint256 i = 0; i < attendees.length; i++) {\n            address attendee = attendees[i];\n\n            if (hasAttended[attendee]) continue;  // 璺宠繃宸茬鍒扮殑\n\n            bytes32 messageHash = keccak256(abi.encodePacked(\n                attendee,\n                address(this),\n                eventName\n            ));\n\n            bytes32 ethSignedMessageHash = keccak256(abi.encodePacked(\n                \\"\\x19Ethereum Signed Message:\\n32\\",\n                messageHash\n            ));\n\n            address signer = ecrecover(ethSignedMessageHash, v[i], r[i], s[i]);\n\n            if (signer == organizer) {\n                hasAttended[attendee] = true;\n                attendeeCount++;\n                emit AttendeeCheckedIn(attendee, block.timestamp);\n            }\n        }\n    }\n\n    // 楠岃瘉绛惧悕鏈夋晥鎬?(涓嶆墽琛岀鍒?\n    function verifySignature(\n        address attendee,\n        uint8 v,\n        bytes32 r,\n        bytes32 s\n    ) external view returns (bool) {\n        bytes32 messageHash = keccak256(abi.encodePacked(\n            attendee,\n            address(this),\n            eventName\n        ));\n\n        bytes32 ethSignedMessageHash = keccak256(abi.encodePacked(\n            \\"\\x19Ethereum Signed Message:\\n32\\",\n            messageHash\n        ));\n\n        address signer = ecrecover(ethSignedMessageHash, v, r, s);\n        return signer == organizer;\n    }\n\n    // 鑾峰彇娑堟伅鍝堝笇 (鐢ㄤ簬鍓嶇绛惧悕)\n    function getMessageHash(address attendee) external view returns (bytes32) {\n        return keccak256(abi.encodePacked(\n            attendee,\n            address(this),\n            eventName\n        ));\n    }\n\n    // 绠＄悊鍛樺姛鑳絓n    function toggleEventStatus() external onlyOrganizer {\n        isEventActive = !isEventActive;\n        emit EventStatusChanged(isEventActive);\n    }\n\n    function getEventInfo() external view returns (\n        string memory name,\n        uint256 date,\n        uint256 maxCapacity,\n        uint256 currentCount,\n        bool active\n    ) {\n        return (eventName, eventDate, maxAttendees, attendeeCount, isEventActive);\n    }\n}\n```\n\n**鉁?绛惧悕楠岃瘉娴佺▼**\n\n1. 缁勭粐鑰呴摼涓嬬敓鎴愬弬涓庤€呯鍚?鈫?2. 鍙備笌鑰呮彁浜ょ鍚嶅埌鍚堢害 鈫?3. 鍚堢害浣跨敤ecrecover楠岃瘉绛惧悕 鈫?4. 楠岃瘉閫氳繃鍒欏厑璁哥鍒般€傛暣涓繃绋嬫棤闇€棰勫厛瀛樺偍鐧藉悕鍗曪紒\n\n### 馃攳 鍓嶇绛惧悕鐢熸垚绀轰緥\n\n```jsx\n// JavaScript 鍓嶇浠ｇ爜async function generateSignature(attendeeAddress, contractAddress, eventName) {\n// 1. 鏋勯€犳秷鎭痗onst messageHash = ethers.utils.solidityKeccak256(\n        ['address', 'address', 'string'],\n        [attendeeAddress, contractAddress, eventName]\n    );\n\n// 2. 缁勭粐鑰呯鍚峜onst signature = await organizerWallet.signMessage(\n        ethers.utils.arrayify(messageHash)\n    );\n\n// 3. 鍒嗙绛惧悕缁勪欢const { v, r, s } = ethers.utils.splitSignature(signature);\n\n    return { v, r, s };\n}\n\n// 浣跨敤绀轰緥const signature = await generateSignature(\n    \\"0x742d35Cc6634C0532925a3b8D0C9964E5Bd4f071\\",// 鍙備笌鑰呭湴鍧€\n    contractAddress,\n    \\"Web3 Conference 2024\\"\n);\n\n// 璋冪敤鍚堢害绛惧埌await contract.checkInWithSignature(\n    attendeeAddress,\n    signature.v,\n    signature.r,\n    signature.s\n);\n```\n\n**鈿狅笍 瀹夊叏娉ㄦ剰浜嬮」**\n\n- 绛惧悕鍙兘琚噸鏀撅紝闇€瑕佹坊鍔爊once鎴栨椂闂存埑\n- 纭繚娑堟伅鍝堝笇鍖呭惈瓒冲鐨勪笂涓嬫枃淇℃伅\n- 楠岃瘉绛惧悕鑰呰韩浠界殑鏉冨▉鎬n- 鑰冭檻绛惧悕鐨勬湁鏁堟湡闄愬埗\n- 闃叉绛惧悕琚敤浜庡叾浠栧悎绾n\n### 馃摑 Remix瀹炴垬姝ラ\n\n### 姝ラ1: 閮ㄧ讲鍚堢害\n\n1. 閮ㄧ讲SignThis鍚堢害锛岃缃椿鍔ㄤ俊鎭痋n2. 璁板綍鍚堢害鍦板潃鍜岀粍缁囪€呭湴鍧€\n\n### 姝ラ2: 鐢熸垚绛惧悕 (浣跨敤MetaMask)\n\n1. 璋冪敤`getMessageHash(鍙備笌鑰呭湴鍧€)`鑾峰彇娑堟伅鍝堝笇\n2. 鍦ㄦ祻瑙堝櫒鎺у埗鍙颁娇鐢∕etaMask绛惧悕锛歕n\n```jsx\n// 鍦ㄦ祻瑙堝櫒鎺у埗鍙版墽琛宑onst messageHash = \\"0x...\\";// 浠庡悎绾﹁幏鍙栫殑鍝堝笇const signature = await ethereum.request({\n    method: \\"personal_sign\\",\n    params: [messageHash, ethereum.selectedAddress]\n});\n```\n\n### 姝ラ3: 鍒嗙绛惧悕骞堕獙璇乗n\n1. 浣跨敤鍦ㄧ嚎宸ュ叿鎴栬剼鏈垎绂荤鍚嶇殑v, r, s\n2. 璋冪敤`verifySignature`楠岃瘉绛惧悕鏈夋晥鎬n3. 璋冪敤`checkInWithSignature`瀹屾垚绛惧埌\n\n### 姝ラ4: 娴嬭瘯鎵归噺绛惧埌\n\n1. 涓哄涓湴鍧€鐢熸垚绛惧悕\n2. 璋冪敤`batchCheckIn`鎵归噺澶勭悊\n3. 瑙傚療Gas娑堣€楀姣擻n\n### **馃榿濡備綍鍦?Remix 涓繍琛屽熀浜庣鍚嶇殑浜嬩欢杈撳叆绯荤粺**\n\n濂藉惂锛屾槸鏃跺€欒鎴戜滑鐨勬櫤鑳藉悎绾﹀彉涓虹幇瀹炰簡銆俓n\n浣犳槸缁勭粐鑰呫€俰浣犲嵆灏嗕妇鍔?**Web3 宄颁細** 銆傝鎴戜滑浠庡ご鍒板熬鏉ヤ簡瑙ｄ竴涓嬧€斺€斿寘鎷缃查個璇峰拰绛惧埌浜轰滑锛乗n\n### **绗?1 姝ワ細閮ㄧ讲鍚堢害**\n\n[馃敤](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n1.鍓嶅線 Remix銆俓n\n灏嗕綘鐨?`EventEntry 鍚堢害`绮樿创鍒颁竴涓柊鏂囦欢涓?- 灏嗗叾鍛藉悕涓?`EventEntry.sol`銆俓n\n浣跨敤 **Solidity Compiler** 閫夐」鍗¤繘琛岀紪璇戙€俓n\n杞埌 **鈥淒eploy & Run Transactions** 鈥濋€夐」鍗°€俓n\n鐜板湪鏄椂鍊欏～鍐欐瀯閫犲嚱鏁颁簡锛歕n\n`eventName`锛氣€渀Web3 宄颁細`鈥漒n\n`eventDate`锛氫娇鐢?*future Unix timestamp**\n\n鈫?鎮ㄥ彲浠ヤ娇鐢ㄧ被浼?`Math.floor锛圖ate.now锛堬級 / 1000锛?+ 86400`锛堢幇鍦?+ 1 澶╋級涔嬬被鐨勪笢瑗縗n\n鈫?鎴栬€呭彧鏄矘璐翠竴涓‖缂栫爜鐨勬湭鏉ユ椂闂存埑锛屾瘮濡?`1714000000`\n\n`鏈€澶т笌浼氳€呬汉鏁?锛?00`\n\n鐐瑰嚮**Deploy銆?*\n\n鎭枩锛佹偍鐜板湪宸茬粡鍚姩浜嗘櫤鑳芥椿鍔ㄣ€俓n\n### **绗?2 姝ワ細鐢熸垚娑堟伅鍝堝笇**\n\n[馃攽](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n瑕侀個璇峰浜猴紝鎴戜滑闇€瑕佺敓鎴愪竴涓笌浠栦滑鐨勯挶鍖呯粦瀹氱殑鍞竴**鍝堝笇鍊?* 銆俓n\n鍦ㄥ凡閮ㄧ讲鐨勫悎绾﹀疄渚嬩腑锛歕n\n鍙細\n\n```jsx\ngetMessageHash(\\"0xAttendeeAddressHere\\")\n```\n\n 灏?`鈥?xAttendeeAddressHere鈥漙 鏇挎崲涓鸿瀹㈢殑閽卞寘鍦板潃銆俓n\n[馃](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n澶嶅埗杩斿洖鐨勫搱甯屽€?鈥?鎴戜滑灏嗗湪涓嬩竴姝ヤ腑浣跨敤瀹冦€俓n\n### **绗?3 姝ワ細鍦?Remix 涓缃叉秷鎭?*\n\n[鉁嶏笍](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n鏄椂鍊欏厖褰?*娲诲姩缁勭粐鑰?*骞剁缃插浜虹殑鍝堝笇浜嗐€俓n\n**鍒涘缓涓€涓?JavaScript 鏂囦欢锛?*\n\n鍦?*鏂囦欢璧勬簮绠＄悊鍣?*涓紝鍙抽敭鍗曞嚮骞堕€夋嫨**鏂板缓鏂囦欢**\n\n鍛藉悕 `sign.js`\n\n绮樿创姝よ剼鏈細\n\n```jsx\n(async () => {\n  const messageHash = \\"<paste-your-hash-here>\\";\n  const accounts = await web3.eth.getAccounts();\n  const organizer = accounts[0]; // first account in Remix\n  const signature = await web3.eth.sign(messageHash, organizer);\n  console.log(\\"Signature:\\", signature);\n})();\n```\n\n灏?`鈥?paste-your-hash-here>鈥漙 鏇挎崲涓烘偍鍒氬垰澶嶅埗鐨勫搱甯屽€笺€俓n\n**鐜板湪杩愯瀹冿細**\n\n鍙抽敭鍗曞嚮 `sign.js` 骞堕€夋嫨**杩愯** 銆俓n\n Remix 浼氳嚜鍔ㄥ寘鍚?**web3.js**锛屽洜姝ゆ偍鏃犻渶瀹夎浠讳綍涓滆タ銆俓n\n[鉁匽(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n鎮ㄥ皢鍦?Remix 缁堢涓湅鍒版墦鍗扮殑绛惧悕銆俓n\n**杩欐槸鎬庝箞鍥炰簨锛?*\n\n[馃](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n鎴戜滑浣跨敤閮ㄧ讲鑰咃紙鍗崇粍缁囪€咃級鐨?*绉侀挜**鍦ㄩ摼涓?*瀵规秷鎭搱甯岃繘琛岀鍚?* 銆傝繖妯℃嫙浜嗘偍鐨勫悗绔湇鍔″櫒鍦ㄧ幇瀹炵敓娲讳腑浼氬仛浠€涔堛€俓n\n### **绗?4 姝ワ細浠ヤ笌浼氳€呰韩浠界鍒?*\n\n[馃](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n鐜板湪璁╂垜浠垏鎹㈣鑹?- 鎮ㄦ槸鍒拌揪娲诲姩鐨勪笌浼氳€咃紝鍥犳鍒囨崲鍒颁笌浼氳€呭湴鍧€\n\n```jsx\ncheckIn(\\"<paste-signature-here>\\")\n```\n\n 绮樿创鎮ㄤ粠涓婁竴姝ヨ幏寰楃殑纭垏绛惧悕銆俓n\n[馃搶](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n濡傛灉涓€鍒囬『鍒╋細\n\n绯荤粺灏嗘爣璁颁负宸茬鍒般€俓n\n娲诲姩鐨勪笌浼氫汉鏁板皢澧炲姞\n\n鍗忓畾灏嗗彂鍑?`AttendeeCheckedIn` 浜嬩欢 \n\n[馃帀](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)\n\n灏辫繖鏍凤紝鎴戜滑寤虹珛浜嗚嚜宸辩殑 Web3 璁垮鍚嶅崟鈥斺€旀棤闇€鍦ㄩ摼涓婂瓨鍌ㄤ换浣曞湴鍧€銆傛垜浠病鏈夊紕涔卞瓨鍌ㄧ┖闂存垨鏀粯姹芥补鏉ユ洿鏂扮櫧鍚嶅崟锛岃€屾槸浣跨敤鍔犲瘑绛惧悕璁╀笌浼氳€呰瘉鏄庝粬浠槸琚個璇风殑銆傛椿鍔ㄧ粍缁囪€呭氨鍍忎竴涓暟瀛椾繚闀栵紝鍦ㄥ箷鍚庣缃叉壒鍑嗭紝鑰屾櫤鑳藉悎绾﹀垯鍦ㄩ棬鍙ｆ鏌ヨ繖浜涚鍚嶃€傚畠骞插噣銆侀珮鏁堜笖鏇村姞鐏垫椿鈥斺€旇繖鏄湡瀹炰簨浠跺彲浠ュ疄闄呬娇鐢ㄧ殑閭ｇ绯荤粺銆傛棤璁烘偍鏄妇鍔炰唬甯侀棬鎺ф淳瀵硅繕鏄紑鍙戣€呰仛浼氾紝杩欑妯″紡閮借兘涓烘偍鎻愪緵鎵€鏈夊畨鍏ㄦ€э紝鑰屾棤闇€閾句笂鍖呰⒈銆俓n\n# 3銆佷笅涓€姝n\n**灏濊瘯浠ヤ笅鏀硅繘:**\n\n1. 娣诲姞nonce闃叉绛惧悕閲嶆斁鏀诲嚮\n2. 瀹炵幇绛惧悕鏈夋晥鏈熸満鍒禱n3. 鍒涘缓澶氱骇鏉冮檺绯荤粺 (缁勭粐鑰呫€佸織鎰胯€呫€佸弬涓庤€?\n4. 瀹炵幇绛惧悕鎾ら攢鍔熻兘\n5. 娣诲姞绛惧悕浣跨敤娆℃暟闄愬埗\n6. 鍒涘缓鍩轰簬绛惧悕鐨勬姇绁ㄧ郴缁焅n\n**鎵╁睍鐭ヨ瘑**\n\n**EIP-712 缁撴瀯鍖栫鍚?*\n\n```solidity\n// EIP-712 鎻愪緵鏇村畨鍏ㄧ殑缁撴瀯鍖栫鍚峔nstruct Permit {\n    address owner;\n    address spender;\n    uint256 value;\n    uint256 nonce;\n    uint256 deadline;\n}\n\nbytes32 constant PERMIT_TYPEHASH = keccak256(\n    \\"Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)\\"\n);\n```\n\nEIP-712鎻愪緵浜嗘洿瀹夊叏銆佺敤鎴峰弸濂界殑绛惧悕鏂瑰紡锛岃骞挎硾鐢ㄤ簬DeFi鍗忚銆俓n\n**绛惧悕搴旂敤鍦烘櫙瀵规瘮**\n\n| 搴旂敤 | 浼樺娍 | 閫傜敤鍦烘櫙 |\n| --- | --- | --- |\n| 鐧藉悕鍗曢獙璇?| Gas楂樻晥 | NFT閾搁€犮€佹椿鍔ㄧ鍒?|\n| 鍏冧氦鏄?| 鐢ㄦ埛鏃犻渶ETH | DApp鐢ㄦ埛浣撻獙 |\n| Permit鎺堟潈 | 涓€姝ュ畬鎴愭巿鏉?| DeFi鍗忚闆嗘垚 |
-";
-            // 将转义的字符串转换为实际的字符串（将 \\n 替换为 \n）
-            const embeddedMarkdown = embeddedMarkdownJsonString.replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/\\\\/g, '\\');
-            
-            // 加载并渲染Markdown
-            function loadMarkdown() {
-                // 使用marked.js渲染Markdown
-                if (typeof marked !== 'undefined') {
-                    const html = marked.parse(embeddedMarkdown);
-                    markdownContainer.innerHTML = html;
-                    
-                    // 等待DOM更新后重新高亮代码块
-                    setTimeout(function() {
-                        // 查找所有代码块并高亮
-                        markdownContainer.querySelectorAll('pre code').forEach(function(block) {
-                            hljs.highlightElement(block);
-                        });
-                    }, 100);
-                } else {
-                    markdownContainer.innerHTML = '<pre>' + embeddedMarkdown + '</pre>';
-                }
-            }
-            
-            // 页面加载时立即加载Markdown
-            loadMarkdown();
             
             // 点击信封打开弹窗
             envelopeContainer.addEventListener('click', function() {
