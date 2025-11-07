@@ -772,6 +772,124 @@
                 font-size: 1.8rem;
             }
         }
+    
+        /* 修复 GitHub 代码块样式 */
+        .md-content .highlight,
+        /* 隐藏 mermaid 渲染组件 */
+        .md-content section.js-render-needs-enrichment,
+        .md-content .js-render-enrichment-target,
+        .md-content .js-render-block-actions,
+        .md-content .render-container,
+        .md-content .js-render-enrichment-fallback,
+        .md-content details[class*="details"],
+        .md-content iframe[title="File display"] {
+            display: none !important;
+        }
+        
+        .md-content .highlight-source-solidity,
+        .md-content .highlight-source-js,
+        .md-content .highlight-source-javascript {
+            background: #2d2a2e !important;
+            border-radius: 10px;
+            padding: 20px !important;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content .highlight pre,
+        .md-content .highlight-source-solidity pre,
+        .md-content .highlight-source-js pre {
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
+        
+        .md-content .highlight code,
+        .md-content .highlight pre code,
+        .md-content .highlight pre span,
+        .md-content .highlight-source-solidity code,
+        .md-content .highlight-source-solidity pre code,
+        .md-content .highlight-source-solidity pre span,
+        .md-content .highlight-source-js code,
+        .md-content .highlight-source-js pre code,
+        .md-content .highlight-source-js pre span {
+            color: #f8f8f2 !important;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace !important;
+            font-size: 0.9rem !important;
+            line-height: 1.6 !important;
+        }
+        
+        /* 确保所有代码块内的文本都可见 */
+        .md-content .highlight pre * {
+            color: #f8f8f2 !important;
+        }
+        
+        /* GitHub 语法高亮类颜色修复 - 确保所有类都有颜色 */
+        .md-content .highlight pre [class*="pl-"] {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特定类型的颜色优化 */
+        .md-content .highlight .pl-c {   /* 注释 */
+            color: #6a9955 !important;
+        }
+        
+        .md-content .highlight .pl-s,    /* 字符串 */
+        .md-content .highlight .pl-s1 {  /* 字符串 */
+            color: #ce9178 !important;
+        }
+        
+        .md-content .highlight .pl-k,    /* 关键字 */
+        .md-content .highlight .pl-c1 {   /* 常量/关键字 */
+            color: #569cd6 !important;
+        }
+        
+        .md-content .highlight .pl-v,    /* 变量 */
+        .md-content .highlight .pl-en {   /* 函数名 */
+            color: #dcdcaa !important;
+        }
+        
+        /* 确保所有未包裹的文本也可见 */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        .md-content code:not(pre code) {
+            background: rgba(139, 115, 85, 0.15) !important;
+            color: var(--warm-brown) !important;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(139, 115, 85, 0.3);
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        
+        .md-content .markdown-heading .anchor {
+            display: none !important;
+        }
+        
+        .md-content .snippet-clipboard-content {
+            background: #2d2a2e !important;
+            border-radius: 10px;
+            padding: 20px !important;
+            margin: 20px 0;
+        }
+        
+        .md-content .snippet-clipboard-content pre code {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 图片样式优化 */
+        .md-content img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+
     </style>
 </head>
 <body>
@@ -1298,13 +1416,944 @@ contract MyContract is ReentrancyGuard {
             </div>
             <div class="letter-body">
                 <div id="md-content" class="md-content">
-                    <div class="md-section">
-                        <h1>第20天内容</h1>
-                        <p style="text-align: center; padding: 40px; color: #999;">
-                            ⏳ 内容正在精心准备中...<br>
-                            敬请期待！
-                        </p>
-                    </div>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">重入攻击</h1></div>
+<p dir="auto">Day: Day 20
+ID: 20
+译者:月亮
+难度等级: 中级</p>
+<p dir="auto">你已经路行长远走到现在这里。你学会了如何编写智能合约来<strong>保存资金</strong>、<strong>限制访问</strong>，甚至<strong>把行为委托给其它合约</strong>。</p>
+<p dir="auto">你即将进入智能合约安全的真正战场。</p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">产品需求说明书</h1></div>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">用户流程</h2></div>
+
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">数据库</h2></div>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th>Contract</th>
+<th>Type</th>
+<th>Bases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GoldVault</strong></td>
+<td>Implementation</td>
+<td></td>
+</tr>
+<tr>
+<td>└ goldBalance</td>
+<td>Public</td>
+<td>view</td>
+</tr>
+<tr>
+<td>└ deposit</td>
+<td>Public ❗️</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>└ vulnerableWithdraw</td>
+<td>Public ❗️</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>└ safeWithdraw</td>
+<td>Public ❗️</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>└ nonReentrant</td>
+<td>Modifier</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>IVault</strong></td>
+<td>Interface</td>
+<td></td>
+</tr>
+<tr>
+<td>└ deposit</td>
+<td>External</td>
+<td></td>
+</tr>
+<tr>
+<td>└ vulnerableWithdraw</td>
+<td>External</td>
+<td></td>
+</tr>
+<tr>
+<td>└ safeWithdraw</td>
+<td>External</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>GoldThief</strong></td>
+<td>Implementation</td>
+<td>IVault</td>
+</tr>
+<tr>
+<td>└ targetVault</td>
+<td>Public</td>
+<td>view</td>
+</tr>
+<tr>
+<td>└ owner</td>
+<td>Public</td>
+<td>view</td>
+</tr>
+<tr>
+<td>└ attackCount</td>
+<td>Public</td>
+<td>view</td>
+</tr>
+<tr>
+<td>└ attackingSafe</td>
+<td>Public</td>
+<td>view</td>
+</tr>
+<tr>
+<td>└ attackVulnerable</td>
+<td>Public ❗️</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>└ attackSafe</td>
+<td>Public ❗️</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>└ receive</td>
+<td>External</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>└ stealLoot</td>
+<td>Public ❗️</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>└ getBalance</td>
+<td>Public ❗️</td>
+<td>view</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto"><strong>图例说明：</strong></p>
+<ul dir="auto">
+<li>❗️ = 可修改状态</li>
+<li>🛑 = 可接收ETH</li>
+<li>view = 只读函数</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">细节解释</h1></div>
+<p dir="auto">让我们来谈谈一个连高手也会中招的经典陷阱——<strong>重入（reentrancy）</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🧠 场景：数字版诺克斯堡</h2></div>
+<p dir="auto">想象你在构建一个超安全的<strong>数字保险库</strong>——把它当作加密世界的诺克斯堡。</p>
+<p dir="auto">用户可以把代币化的黄金（或 ETH）存进来，想取就来取。直观、干净、简单。</p>
+<p dir="auto">但随后……</p>
+<p dir="auto">一个聪明的攻击者出现了。</p>
+<p dir="auto">Ta 发现这样一个点：当金库在执行提现操作把黄金发回给某人时——并且金库没有把余额更新时——攻击者可以<strong>偷偷再进入</strong>合约并要求更多的资金。</p>
+<p dir="auto">突然间，原本的一次 1 ETH 提现，变成一次性被汲取出<strong>多倍 ETH</strong>。</p>
+<p dir="auto">这就是臭名昭著的 <strong>重入攻击</strong>——正是 2016 年 <strong>DAO黑客 攻击</strong>中导致<strong>数千万美元</strong>被盗的那类漏洞。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🔍 那么“重入”到底是什么？</h2></div>
+<p dir="auto">想象一台自动售货机。</p>
+<p dir="auto">你投币、按键、等待零食吐出。机器先检查你的余额，<strong>然后</strong>给出零食，<strong>最后</strong>更新你的余额。</p>
+<p dir="auto">现在想象有个狡猾的漏洞……</p>
+<p dir="auto">就在机器给你零食之后——<strong>但在</strong>更新余额<strong>之前</strong>——你又按了一次按钮。然后再按一次。再按一次。</p>
+<p dir="auto">每一次，机器仍然认为你有余额……因为它还没来得及更新余额。</p>
+<p dir="auto">结果是<strong>无限免费零食。</strong></p>
+<p dir="auto">这就是智能合约世界中的 <strong>重入</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🕳️ 代码里到底发生了什么？</h2></div>
+<p dir="auto">把售货机的故事翻译成 Solidity：</p>
+<ol dir="auto">
+<li>你调用合约的 <strong>withdraw</strong>（提现）函数。</li>
+<li>合约使用 <code>.call{value: ...}()</code> 给你发送 ETH。</li>
+<li>但你——很狡猾——写了一个 <strong>fallback</strong>（回退）函数（一个接收 ETH 时会自动触发的函数）。</li>
+<li>在那个回退里，你<strong>再次调用 withdraw</strong>。</li>
+<li>原合约还没来得及更新你的余额……所以它仍然认为你还有钱可拿。</li>
+<li>它又发送了更多 ETH。</li>
+<li>你的回退再次调用 withdraw。</li>
+<li>如此反复……直到合约被掏空。</li>
+</ol>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🔁 为什么叫 “Reentrancy（重入）”？</h2></div>
+<p dir="auto">因为你在第一次调用尚未结束前<strong>再次进入</strong>同一个函数。</p>
+<p dir="auto">该函数还在执行重要操作（例如更新余额）的一半时，你从后门溜进来再次运行它——而它仍在工作中。</p>
+<p dir="auto">就像打开银行金库，递给人钱，<strong>还没关上金库门</strong>，有人又冲进来要钱——一次又一次。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🔨 你将构建什么（像黑客一样行动）</h2></div>
+<p dir="auto">要真正理解重入，我们不会只是解释完理论然后过去。</p>
+<p dir="auto">我们要做得更好。</p>
+<p dir="auto">我们将<strong>构建一个可运行的合约</strong>，<strong>模拟一次真实的黑客攻击</strong>，然后<strong>逐步修补漏洞</strong>。你会从开发者……变成黑客……再变成防守者——一气呵成。</p>
+<p dir="auto">下面分解步骤。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔐 <code>GoldVault.sol</code> – 你的数字诺克斯堡</h3></div>
+<p dir="auto">这是你的主合约——金库。</p>
+<ul dir="auto">
+<li>用户可以<strong>存入 ETH</strong>到金库。把它看作存储数字黄金。</li>
+<li>之后，Ta们可以随时<strong>提现</strong>这些黄金。</li>
+<li>我们会先实现一个<strong>基础的提现函数</strong>——没有保护措施、没有防护。</li>
+<li>然后我们会演示攻击者如何<strong>滥用这个漏洞</strong>来掏空合约。</li>
+<li>在你看到它被攻破后，我们会用一个简单但强力的 <code>nonReentrant</code> 修饰符来<strong>锁定它</strong>——这是一个自制的“单次进入”安全锁。</li>
+</ul>
+<p dir="auto">最终，你的合约将从“开放”变为“诺克斯堡级别的安全”。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🦹‍♂️ <code>GoldThief.sol</code> – 攻击者合约</h3></div>
+<p dir="auto">这个很有趣。你将实际扮演反派一会儿。</p>
+<ul dir="auto">
+<li>此合约旨在<strong>利用 <code>GoldVault</code> 这个合约的弱点</strong>。</li>
+<li>它会使用狡猾的fallback（回退）函数<strong>在提现过程中重入金库</strong>——一次又一次。</li>
+<li>你会近距离观察这次攻击：它是如何运作、如何抽走资金，以及速度有多快。</li>
+<li>然后——我们在应用修复程序后运行攻击……并<strong>看它失败</strong>。</li>
+</ul>
+<p dir="auto">没有什么比看着自己的合约被攻破然后阻止攻击者更能教会安全性。</p>
+<hr>
+<p dir="auto">完成后，你不仅会<em>理解</em>重入是什么——</p>
+<p dir="auto">你会知道<strong>它如何工作</strong>、<strong>如何利用它</strong>，以及最重要的<strong>如何防范它</strong>。</p>
+<p dir="auto">这将把你从只会写 Solidity 升级为会<strong>保卫 Solidity</strong>的开发者。</p>
+<p dir="auto">我们开始构建你的第一个数字金库——并把它变得牢不可破。🔒</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">💰 <code>GoldVault.sol</code> – 易受攻击与安全的金库</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-k">pragma solidity</span> <span class="pl-k">^</span><span class="pl-c1">0.8.19</span>;
+
+<span class="pl-k">contract</span> <span class="pl-en">GoldVault</span> {
+    <span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">uint256</span>) <span class="pl-k">public</span> goldBalance;
+
+    <span class="pl-c">// Reentrancy lock setup</span>
+    <span class="pl-c1">uint256</span> <span class="pl-k">private</span> _status;
+    <span class="pl-c1">uint256</span> <span class="pl-k">private constant </span>_NOT_ENTERED <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+    <span class="pl-c1">uint256</span> <span class="pl-k">private constant </span>_ENTERED <span class="pl-k">=</span> <span class="pl-c1">2</span>;
+
+    <span class="pl-k">constructor</span>() {
+        _status <span class="pl-k">=</span> _NOT_ENTERED;
+    }
+
+    <span class="pl-c">// Custom nonReentrant modifier — locks the function during execution</span>
+    <span class="pl-k">modifier<span class="pl-en"> nonReentrant</span></span>() {
+        <span class="pl-k">require</span>(_status <span class="pl-k">!=</span> _ENTERED, <span class="pl-s">"<span class="pl-s">Reentrant call blocked</span>"</span>);
+        _status <span class="pl-k">=</span> _ENTERED;
+        <span class="pl-k">_;</span>
+        _status <span class="pl-k">=</span> _NOT_ENTERED;
+    }
+
+    <span class="pl-k">function<span class="pl-en"> deposit</span></span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Deposit must be more than 0</span>"</span>);
+        goldBalance[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">+=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>;
+    }
+
+    <span class="pl-k">function<span class="pl-en"> vulnerableWithdraw</span></span>() <span class="pl-k">external</span> {
+        <span class="pl-c1">uint256</span> amount <span class="pl-k">=</span> goldBalance[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>];
+        <span class="pl-k">require</span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Nothing to withdraw</span>"</span>);
+
+        (<span class="pl-c1">bool</span> <span class="pl-v">sent</span>, ) <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>.<span class="pl-c1">call</span>{value: amount}(<span class="pl-s">""</span>);
+        <span class="pl-k">require</span>(sent, <span class="pl-s">"<span class="pl-s">ETH transfer failed</span>"</span>);
+
+        goldBalance[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+    }
+
+    <span class="pl-k">function<span class="pl-en"> safeWithdraw</span></span>() <span class="pl-k">external</span> nonReentrant {
+        <span class="pl-c1">uint256</span> amount <span class="pl-k">=</span> goldBalance[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>];
+        <span class="pl-k">require</span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Nothing to withdraw</span>"</span>);
+
+        goldBalance[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+        (<span class="pl-c1">bool</span> <span class="pl-v">sent</span>, ) <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>.<span class="pl-c1">call</span>{value: amount}(<span class="pl-s">""</span>);
+        <span class="pl-k">require</span>(sent, <span class="pl-s">"<span class="pl-s">ETH transfer failed</span>"</span>);
+    }
+}
+</pre></div>
+<p dir="auto">这个合约是我们诺克斯堡实验的核心。</p>
+<p dir="auto">它像一个数字金库——用户可以<strong>存入 ETH</strong>，并在之后<strong>提现Ta们的余额</strong>。</p>
+<p dir="auto">但有个转折：</p>
+<p dir="auto">它有<strong>两个提现函数</strong>——一个<strong>易受重入攻击</strong>，另一个已经通过<strong>自定义锁加固</strong>。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">合约包含：</h3></div>
+<ul dir="auto">
+<li>一个 <code>deposit()</code> 函数，允许用户存 ETH。</li>
+<li>一个 <code>vulnerableWithdraw()</code> 函数——这就是出错的地方。它在更新用户余额之前发送 ETH，给攻击者留下可乘之机。</li>
+<li>一个 <code>safeWithdraw()</code> 函数——这个函数使用自制的 <code>nonReentrant</code> 修饰符来阻止任何递归攻击尝试，并在提现期间安全地锁住金库。</li>
+</ul>
+<p dir="auto">你会看到同一个合约在两种截然不同的行为下的表现——以及为什么在 Solidity 中按<strong>正确顺序</strong>写安全逻辑至关重要。</p>
+<p dir="auto">我们来深入解析代码。👇</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🧱合约设置</h2></div>
+<p dir="auto">在最上方，我们声明智能合约：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">contract</span> <span class="pl-en">GoldVault</span> {
+</pre></div>
+<p dir="auto">这是我们的金库——一个简单的合约，用户可以<strong>存入</strong> ETH（看作“黄金”），并在之后<strong>提现</strong>。但在底层，我们增加了一个重要的安全机制，在有人使用它时<strong>把门锁上</strong>——以防重入攻击。</p>
+<p dir="auto">接下来看看关键的状态变量。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🗃️ 状态变量</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">uint256</span>) <span class="pl-k">public</span> goldBalance;
+</pre></div>
+<p dir="auto">这个映射记录每个用户在金库中存了多少 ETH（即黄金）。</p>
+<p dir="auto">当用户调用 <code>deposit()</code> 时，Ta们的余额会上升。</p>
+<p dir="auto">当Ta们调用 <code>withdraw()</code> 时，余额会下降。</p>
+<hr>
+<p dir="auto">下面是让我们合约能抵抗重入的那部分：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> <span class="pl-k">private</span> _status;
+<span class="pl-c1">uint256</span> <span class="pl-k">private constant </span>_NOT_ENTERED <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+<span class="pl-c1">uint256</span> <span class="pl-k">private constant </span>_ENTERED <span class="pl-k">=</span> <span class="pl-c1">2</span>;
+</pre></div>
+<p dir="auto">我们来拆解一下：</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔐 重入锁系统</h3></div>
+<ul dir="auto">
+<li><code>_status</code> 是一个私有变量，用来告诉我们敏感函数（如 <code>safeWithdraw</code>）是否<strong>正在被执行</strong>。</li>
+<li><code>_NOT_ENTERED</code>（值为 <code>1</code>）表示：「函数当前未被使用——可以使用」。</li>
+<li><code>_ENTERED</code>（值为 <code>2</code>）表示：「已经有人在使用这个函数——阻止再次使用！」</li>
+</ul>
+<p dir="auto">基本上，我们是<strong>为该函数上构建一个数字锁</strong>。</p>
+<p dir="auto">在允许某人执行像提现这样敏感的操作之前，我们会检查：</p>
+<blockquote>
+<p dir="auto">“这个函数已经有人在执行了吗？”</p>
+</blockquote>
+<p dir="auto">如果是，我们<strong>立即阻止</strong>，以防任何偷偷的二次进入。</p>
+<p dir="auto">如果不是，我们<strong>把开关翻到 <code>_ENTERED</code></strong>，做完工作，然后<strong>再把它设回 <code>_NOT_ENTERED</code></strong>。</p>
+<p dir="auto">这个锁在我们的 <code>nonReentrant</code> 修饰符中被激活——稍后我们会看它是如何工作的。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🏗️ 构造函数</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">constructor</span>() {
+    _status <span class="pl-k">=</span> _NOT_ENTERED;
+}
+</pre></div>
+<p dir="auto">这会设置重入防护的初始状态。合约部署时，它处于 <code>_NOT_ENTERED</code> 状态。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🛡️ <code>nonReentrant</code> 修饰符 —— 守门者</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">modifier<span class="pl-en"> nonReentrant</span></span>() {
+    <span class="pl-k">require</span>(_status <span class="pl-k">!=</span> _ENTERED, <span class="pl-s">"<span class="pl-s">Reentrant call blocked</span>"</span>);
+    _status <span class="pl-k">=</span> _ENTERED;
+    <span class="pl-k">_;</span>
+    _status <span class="pl-k">=</span> _NOT_ENTERED;
+}
+</pre></div>
+<p dir="auto">这个修饰符是保护合约免受重入攻击的<strong>核心防线</strong>。</p>
+<p dir="auto">把它想象成 **“禁止进入” 标志：**当有人走进房间时它立刻升起的，并且只有等人离开后才会降下。</p>
+<p dir="auto">我们一步步来看看它如何工作：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">1. <strong>检查锁：</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(_status <span class="pl-k">!=</span> _ENTERED, <span class="pl-s">"<span class="pl-s">Reentrant call blocked</span>"</span>);
+</pre></div>
+<p dir="auto">这行表示：</p>
+<blockquote>
+<p dir="auto">“是否已经有人在使用这个函数？如果是——立刻停止执行。”</p>
+</blockquote>
+<p dir="auto">如果 <code>_status</code> 已经是 <code>_ENTERED</code>，说明另一次调用正在进行中。这可能是重入攻击的迹象，所以我们用 revert <strong>立刻锁住它</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">2. 上<strong>锁：</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>_status <span class="pl-k">=</span> _ENTERED;
+</pre></div>
+<p dir="auto">这将函数状态标记为“被调用”。</p>
+<p dir="auto">我们基本上是在说：</p>
+<blockquote>
+<p dir="auto">“我们进入了函数中——把门锁上。”</p>
+</blockquote>
+<p dir="auto">这会阻止任何嵌套调用再次进入，直到我们完成工作。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">3. <strong>执行函数逻辑：</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">_;</span>
+</pre></div>
+<p dir="auto">这里是实际的函数体执行位置——无论是 <code>safeWithdraw()</code> 还是其它受 <code>nonReentrant</code> 保护的函数。Solidity 会在执行时把 <code>_</code> 替换为函数代码。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">4. <strong>解锁：</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>_status <span class="pl-k">=</span> _NOT_ENTERED;
+</pre></div>
+<p dir="auto">一旦所有事情完成——在所有 ETH 转账完成、余额更新完成之后——我们<strong>重置锁</strong>，以便未来的调用可以正常进行。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 为什么这有效</h3></div>
+<p dir="auto">这个修饰符确保<strong>一次只有一个调用</strong>可以进入受保护的函数。</p>
+<p dir="auto">所以即使外部合约（例如攻击者的fallback回退函数）尝试回调金库——它会遇到锁并<strong>被立即锁定</strong>。</p>
+<p dir="auto">这是一个超级简单但超级强大的模式——它是你在Solidity 中防御重入攻击的第一道真正护盾。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🪙 deposit()</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> deposit</span></span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Deposit must be more than 0</span>"</span>);
+    goldBalance[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">+=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>;
+}
+</pre></div>
+<p dir="auto">简单且安全。</p>
+<ul dir="auto">
+<li>用户把 ETH 发到这个函数。</li>
+<li>用户余额会增加。</li>
+<li>合约就持有了用户的资金，直到用户提现为止。</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">❌ <code>vulnerableWithdraw()</code> —— 哪里出了问题</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> vulnerableWithdraw</span></span>() <span class="pl-k">external</span> {
+    <span class="pl-c1">uint256</span> amount <span class="pl-k">=</span> goldBalance[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>];
+    <span class="pl-k">require</span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Nothing to withdraw</span>"</span>);
+
+    (<span class="pl-c1">bool</span> <span class="pl-v">sent</span>, ) <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>.<span class="pl-c1">call</span>{value: amount}(<span class="pl-s">""</span>);
+    <span class="pl-k">require</span>(sent, <span class="pl-s">"<span class="pl-s">ETH transfer failed</span>"</span>);
+
+    goldBalance[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+}
+</pre></div>
+<p dir="auto">乍一看，这完全没问题。你检查余额、发送 ETH，然后把用户余额设为 0。</p>
+<p dir="auto">但那个小细节——<strong>操作顺序</strong>——正是陷阱所在。</p>
+<p dir="auto">我们逐步看会发生什么。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧪 场景：门口的攻击者</h3></div>
+<p dir="auto">假设一个<strong>恶意合约</strong>调用 <code>vulnerableWithdraw()</code>。但与普通用户不同，这个合约有一个狡猾的 <code>receive()</code> 函数——当它收到 ETH 时 <strong>会自动调用 <code>vulnerableWithdraw()</code></strong>。</p>
+<p dir="auto">发生的事情如下：</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">1. <strong>检查用户余额</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> amount <span class="pl-k">=</span> goldBalance[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>];
+<span class="pl-k">require</span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Nothing to withdraw</span>"</span>);
+</pre></div>
+<p dir="auto">很好——用户在金库里有 1 ETH。✅</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">2. <strong>把 ETH 发回给用户</strong></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>(<span class="pl-c1">bool</span> <span class="pl-v">sent</span>, ) <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>.<span class="pl-c1">call</span>{value: amount}(<span class="pl-s">""</span>);
+</pre></div>
+<p dir="auto">我们把 ETH 发回给 <code>msg.sender</code>。</p>
+<p dir="auto">但有个转折：如果 <code>msg.sender</code> 是一个合约地址，它的 <code>receive()</code> 函数会在接收 ETH 时被触发。而在那个 <code>receive()</code> 函数中，它<strong>再次调用 <code>vulnerableWithdraw()</code></strong>。</p>
+<p dir="auto">于是……在我们还未更新用户余额之前，我们又回到了同一个发送ETH的函数内部。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">3. <strong>再次提现……再一次……</strong></h3></div>
+<p dir="auto">由于我们还没执行这一行：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>goldBalance[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+</pre></div>
+<p dir="auto">攻击者的余额<strong>看起来依然显示为 1 ETH</strong>。</p>
+<p dir="auto">因此，当检查重入调用者的余额时，Ta会再次通过检查条件。</p>
+<p dir="auto">金库<strong>再次发送 1 ETH</strong>。</p>
+<p dir="auto">接着 <code>receive()</code> 又被触发。</p>
+<p dir="auto">循环继续。</p>
+<p dir="auto">这个循环在<strong>合约把攻击者的余额置为 0 之前就把金库掏空了</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 为什么这很危险</h3></div>
+<p dir="auto">这就是教科书式的<strong>重入攻击</strong>：</p>
+<ul dir="auto">
+<li>在更新余额状态之前进行了外部调用 ✅</li>
+<li>攻击者在金库执行发送过程中重入 ✅</li>
+<li>单一余额被多次提现导致资金被榨干 ✅</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">✅ <code>safeWithdraw()</code> —— 配备 <code>nonReentrant</code> 防护</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> safeWithdraw</span></span>() <span class="pl-k">external</span> nonReentrant {
+    <span class="pl-c1">uint256</span> amount <span class="pl-k">=</span> goldBalance[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>];
+    <span class="pl-k">require</span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Nothing to withdraw</span>"</span>);
+
+    goldBalance[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+    (<span class="pl-c1">bool</span> <span class="pl-v">sent</span>, ) <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>.<span class="pl-c1">call</span>{value: amount}(<span class="pl-s">""</span>);
+    <span class="pl-k">require</span>(sent, <span class="pl-s">"<span class="pl-s">ETH transfer failed</span>"</span>);
+}
+</pre></div>
+<p dir="auto">这是我们提现函数的<strong>安全版本</strong>——它把重入攻击挡在了门外。</p>
+<p dir="auto">我们来拆解<strong>发生了什么变化</strong>以及<strong>为什么它有效</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧱 第一步修复：在发送 ETH 之前更新余额状态</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>goldBalance[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+</pre></div>
+<p dir="auto">现在这一行在我们发送任何 ETH 之前执行。这意味着提现一开始我们就把用户余额清零。</p>
+<p dir="auto">即使攻击者尝试<strong>重新进入提现函数</strong>，Ta们也会看到余额为 <code>0</code>——并且提现将立即失败。</p>
+<p dir="auto">单靠这个改变就<strong>打破了漏洞循环</strong>，该循环在易受攻击版本会掏空合约。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔒 第二步修复：<code>nonReentrant</code> 修饰符</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> safeWithdraw</span></span>() <span class="pl-k">external</span> nonReentrant { ... }
+</pre></div>
+<p dir="auto">除了修正操作顺序，我们还在函数上加了 <code>nonReentrant</code> 修饰符，作为额外的防线。</p>
+<p dir="auto">它的作用：</p>
+<ul dir="auto">
+<li>一旦有人进入函数，就<strong>锁住</strong>函数</li>
+<li>如果同一地址（或任何外部合约）试图再次调用——即使通过fallback回退函数——也会<strong>立即被阻止</strong></li>
+<li>函数执行完毕后解锁</li>
+</ul>
+<p dir="auto">即使我们忘了提前把余额置零，这个锁也能独立阻止攻击。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">✅ 遵循 “Checks-Effects-Interactions” 模式</h3></div>
+<p dir="auto">这个函数现在遵循一个<strong>著名的 Solidity 最佳实践</strong>，称为 <strong>Checks-Effects-Interactions（检查-状态变更-交互）</strong> 模式：</p>
+<ol dir="auto">
+<li>
+<p dir="auto"><strong>Check</strong>（检查条件）</p>
+<p dir="auto"><code>require(amount &gt; 0, "Nothing to withdraw");</code></p>
+</li>
+<li>
+<p dir="auto"><strong>Effect</strong>（改变状态）</p>
+<p dir="auto"><code>goldBalance[msg.sender] = 0;</code></p>
+</li>
+<li>
+<p dir="auto"><strong>Interaction</strong>（与外部合约交互）</p>
+<p dir="auto"><code>msg.sender.call{value: amount}("");</code></p>
+</li>
+</ol>
+<p dir="auto">为什么这个顺序重要：</p>
+<p dir="auto">当我们与外部世界交互（那是我们无法控制的）时，我们自己的合约状态已经安全更新。</p>
+<p dir="auto">这避免了一大类漏洞——而不仅仅是重入。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🦹‍♂️ <code>GoldThief.sol</code> —— 重入利用合约（仅供学习）</h2></div>
+<blockquote>
+<p dir="auto"><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 免责声明：</p>
+<p dir="auto">该合约纯属<strong>教学用途</strong>。</p>
+<p dir="auto">我们<strong>不</strong>鼓励以任何有害或恶意方式使用或部署此合约。目标是帮助你理解 <strong>重入攻击的工作原理</strong>——以便你学会<strong>防范</strong>，而不是去利用它们。</p>
+</blockquote>
+<hr>
+<p dir="auto">要真正理解重入攻击，仅仅加固你的合约还不够——你还需要<strong>像攻击者那样思考</strong>。</p>
+<p dir="auto">这就是这个合约的意义所在。</p>
+<p dir="auto"><code>GoldThief.sol</code> 模拟一个恶意行为者。它旨在针对 <code>GoldVault</code> 合约内的 <code>vulnerableWithdraw()</code> 函数，通过在金库更新攻击者余额之前不断重复调用该函数，来<strong>抽取比应允的更多的资金</strong>。</p>
+<p dir="auto">我们还加入了一个对 <code>safeWithdraw()</code> 版本的测试调用，以展示当正确保护到位时攻击会如何<strong>失败</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧪 这个合约的作用</h3></div>
+<ul dir="auto">
+<li>它通过简单接口连接到金库。</li>
+<li>像普通用户一样向金库存入 ETH。</li>
+<li>当它调用 <code>vulnerableWithdraw()</code> 时，会利用 Solidity 的 <code>receive()</code> 函数进入一个漏洞循环——在原始调用完成之前重复调用 <code>vulnerableWithdraw()</code>。</li>
+<li>在安全版本中，相同的攻击尝试会因为 <code>nonReentrant</code> 锁而被挡住。</li>
+</ul>
+<p dir="auto">这是一个亲手观察攻击如何发生、理解其底层机制、并有信心在你自己的合约中构建防御的实操方式。</p>
+<p dir="auto">来看完整代码：👇</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+interface IVault {
+function deposit() external payable;
+function vulnerableWithdraw() external;
+function safeWithdraw() external;
+}
+
+contract GoldThief {
+IVault public targetVault;
+address public owner;
+uint public attackCount;
+bool public attackingSafe;
+
+constructor(address _vaultAddress) {
+    targetVault = IVault(_vaultAddress);
+    owner = msg.sender;
+}
+
+function attackVulnerable() external payable {
+    require(msg.sender == owner, "Only owner");
+    require(msg.value &gt;= 1 ether, "Need at least 1 ETH to attack");
+
+    attackingSafe = false;
+    attackCount = 0;
+
+    targetVault.deposit{value: msg.value}();
+    targetVault.vulnerableWithdraw();
+}
+
+function attackSafe() external payable {
+    require(msg.sender == owner, "Only owner");
+    require(msg.value &gt;= 1 ether, "Need at least 1 ETH");
+
+    attackingSafe = true;
+    attackCount = 0;
+
+    targetVault.deposit{value: msg.value}();
+    targetVault.safeWithdraw();
+}
+
+receive() external payable {
+    attackCount++;
+
+    if (!attackingSafe &amp;&amp; address(targetVault).balance &gt;= 1 ether &amp;&amp; attackCount &lt; 5) {
+        targetVault.vulnerableWithdraw();
+    }
+
+    if (attackingSafe) {
+        targetVault.safeWithdraw(); // This will fail due to nonReentrant
+    }
+}
+
+function stealLoot() external {
+    require(msg.sender == owner, "Only owner");
+    payable(owner).transfer(address(this).balance);
+}
+
+function getBalance() external view returns (uint256) {
+    return address(this).balance;
+}
+}
+</code></pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🎯 接口设置 —— 与金库对话</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">interface</span> <span class="pl-en">IVault</span> {
+    <span class="pl-k">function<span class="pl-en"> deposit</span></span>() <span class="pl-k">external</span> <span class="pl-k">payable</span>;
+    <span class="pl-k">function<span class="pl-en"> vulnerableWithdraw</span></span>() <span class="pl-k">external</span>;
+    <span class="pl-k">function<span class="pl-en"> safeWithdraw</span></span>() <span class="pl-k">external</span>;
+}
+</pre></div>
+<p dir="auto">在 <code>GoldThief</code> 合约能与金库交互之前，它需要知道<strong>有哪些函数可用</strong>——以及如何调用它们。</p>
+<p dir="auto">这就是这个 <strong>interface（接口）</strong> 的用途。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 Solidity 中的接口是什么？</h3></div>
+<p dir="auto">把它想象成餐厅的<strong>菜单</strong>。</p>
+<p dir="auto">你不需要知道厨师如何做每道菜——你只需要知道：</p>
+<ul dir="auto">
+<li>菜单上有什么菜（函数名）</li>
+<li>需要什么材料（参数）</li>
+<li>会得到什么（返回类型，如果有的话）</li>
+</ul>
+<p dir="auto">在 Solidity 中，<code>interface</code> （接口）基本上是一个<strong>轻量级的合约定义</strong>，只包含 <strong>函数签名</strong>——没有实现细节。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧩 为什么需要它？</h3></div>
+<p dir="auto">我们的 <code>GoldThief</code> 合约想要：</p>
+<ul dir="auto">
+<li>调用 <code>deposit()</code> 来发送 ETH</li>
+<li>调用 <code>vulnerableWithdraw()</code> 来触发攻击</li>
+<li>调用 <code>safeWithdraw()</code> 来测试金库是否会阻挡</li>
+</ul>
+<p dir="auto">但我们不需要把整个 <code>GoldVault</code> 源代码导入进来——那没必要。</p>
+<p dir="auto">相反，我们定义这个 <code>IVault</code> 接口来告诉编译器：</p>
+<blockquote>
+<p dir="auto">“目标金库有这三个函数。我想跟它们交互。”</p>
+</blockquote>
+<p dir="auto">一旦声明了接口，我们就可以把金库的合约地址当作 <code>IVault</code> 接口的实例，并直接调用这些函数。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">📦 状态变量</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>IVault <span class="pl-k">public</span> targetVault;
+<span class="pl-c1">address</span> <span class="pl-k">public</span> owner;
+<span class="pl-c1">uint</span> <span class="pl-k">public</span> attackCount;
+<span class="pl-c1">bool</span> <span class="pl-k">public</span> attackingSafe;
+</pre></div>
+<p dir="auto">这些变量储存攻击者的“记忆”——目标合约是谁，谁在控制，以及当前是攻击<strong>易受攻击版本</strong>还是<strong>安全版本</strong>。</p>
+<p dir="auto">逐一解释如下：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🏹 <code>IVault public targetVault</code></h3></div>
+<p dir="auto"><code>targetVault</code>是<strong>我们要攻击的金库地址</strong>，用 <code>IVault</code> 接口包装。</p>
+<p dir="auto">接口让我们能够调用金库的公共函数，比如 <code>deposit()</code>、<code>vulnerableWithdraw()</code>、<code>safeWithdraw()</code>——即便我们没有完整源码。</p>
+<p dir="auto">就像把遥控器对准电视——我们不关心电视内部如何构造，只在乎按键（函数名）能否达到预期效果。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧑‍💼 <code>address public owner</code></h3></div>
+<p dir="auto">存储<strong>部署攻击合约的地址</strong>——“主谋”。</p>
+<p dir="auto">只有 <code>owner</code> 被允许触发攻击或提取被盗资金，防止其Ta人在部署后劫持该合约。</p>
+<p dir="auto">这是基本的访问控制——只有原始攻击者能按下红色按钮。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔁 <code>uint public attackCount</code></h3></div>
+<p dir="auto">记录我们<strong>重入循环的次数。</strong></p>
+<p dir="auto">为什么这很重要？</p>
+<p dir="auto">因为如果不限制，攻击可能会无限循环（或直到 gas 用尽）。我们用计数器来限制fallback回退函数重复调用金库的最大次数——在这个例子中，最多 5 次。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🕵️‍♂️ <code>bool public attackingSafe</code></h3></div>
+<p dir="auto">这个标志记录我们当前攻击的是哪一个版本的金库：</p>
+<ul dir="auto">
+<li>若 <code>attackingSafe</code> 为 <code>false</code>，我们在攻击 <strong>vulnerableWithdraw()</strong></li>
+<li>若为 <code>true</code>，我们在测试 <strong>safeWithdraw()</strong> ——预计会<strong>失败</strong></li>
+</ul>
+<p dir="auto">这帮助我们在 <code>receive()</code> 函数内决定在重入循环中使用哪一个方法。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🔧 构造函数 —— 布局舞台</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">constructor</span>(<span class="pl-c1">address</span> <span class="pl-v">_vaultAddress</span>) {
+    targetVault <span class="pl-k">=</span> <span class="pl-en">IVault</span>(_vaultAddress);
+    owner <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>;
+}
+</pre></div>
+<p dir="auto">这是 <code>GoldThief</code> 合约部署时运行的<strong>第一个函数</strong>——它设置攻击者开始所需的一切。</p>
+<p dir="auto">我们来拆解它的作用：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🎯 <code>targetVault = IVault(_vaultAddress);</code></h3></div>
+<p dir="auto">部署 <code>GoldThief</code> 时，我们传入想攻击的金库地址——这可以是任何遵循 <code>IVault</code> 接口的已部署的合约地址。</p>
+<p dir="auto">这行代码把要攻击的地址告知<code>GoldThief</code>合约：</p>
+<blockquote>
+<p dir="auto">“这是我们要对话的金库——下面我们会怎样与之交互。”</p>
+</blockquote>
+<p dir="auto">通过将要攻击的金库地址转换为 <code>IVault</code>，我们可以调用目标上的 <code>deposit()</code>、<code>vulnerableWithdraw()</code>、<code>safeWithdraw()</code>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧑‍💼 <code>owner = msg.sender;</code></h3></div>
+<p dir="auto">这行设置<strong>所有者</strong>——记录部署 <code>GoldThief</code> 的人(或脚本)的地址。</p>
+<p dir="auto">这里 <code>msg.sender</code> 即启动攻击合约的人/脚本。</p>
+<p dir="auto">这对以下事项很重要：</p>
+<ul dir="auto">
+<li>确保只有 <code>owner</code> 能触发攻击（<code>attackVulnerable()</code> / <code>attackSafe()</code>）</li>
+<li>防止未经授权访问 <code>stealLoot()</code> 等函数</li>
+</ul>
+<p dir="auto">就像把红色发射按钮的控制权指定给某个人——其Ta人按不到。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">💣 <code>attackVulnerable()</code> —— 开始抢劫</h2></div>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> attackVulnerable</span></span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> owner, <span class="pl-s">"<span class="pl-s">Only owner</span>"</span>);
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;=</span> <span class="pl-c1">1</span> ether, <span class="pl-s">"<span class="pl-s">Need at least 1 ETH to attack</span>"</span>);
+
+    attackingSafe <span class="pl-k">=</span> <span class="pl-c1">false</span>;
+    attackCount <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+
+    targetVault.<span class="pl-en">deposit</span>{value: <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>}();
+    targetVault.<span class="pl-en">vulnerableWithdraw</span>();
+}
+</pre></div>
+<p dir="auto">这是<strong>正式发动攻击</strong>的地方。攻击者调用该函数发起一个滥用金库脆弱逻辑的连锁反应。</p>
+<p dir="auto">我们来逐行解释背后真实机制的运作原理。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧑‍💼 访问控制</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> owner, <span class="pl-s">"<span class="pl-s">Only owner</span>"</span>);
+</pre></div>
+<p dir="auto">只有合约的原始攻击者（或该合约的部署者）被允许启动攻击。这是基本的安全层，防止Ta人劫持合约。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💰 最低 ETH 要求</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;=</span> <span class="pl-c1">1</span> ether, <span class="pl-s">"<span class="pl-s">Need at least 1 ETH to attack</span>"</span>);
+</pre></div>
+<p dir="auto">攻击者必须在调用该函数时发送<strong>至少 1 ETH</strong>——这是初始的“诱饵”存款，让金库以为这是正常用户行为。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔁 重置状态</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>attackingSafe <span class="pl-k">=</span> <span class="pl-c1">false</span>;
+attackCount <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+</pre></div>
+<p dir="auto">我们确保合约知道这是一次<strong>针对易受攻击版本</strong>的攻击，而不是对安全版本的测试。</p>
+<p dir="auto">并重置循环计数器以便从头开始。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🎣 诱饵：向金库存入 ETH</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>targetVault.<span class="pl-en">deposit</span>{value: <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>}();
+</pre></div>
+<p dir="auto">我们像普通用户一样向金库存入合法的 ETH。这会更新金库内部映射中的我们的余额——使我们有资格提现这些 ETH。</p>
+<p dir="auto">此时，金库安全地持有我们的 1 ETH……或者说，它“认为”是安全的。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🚪 入口点：触发提现</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre> targetVault.<span class="pl-en">vulnerableWithdraw</span>();
+</pre></div>
+<p dir="auto">现在我们调用金库的易受攻击提现函数。</p>
+<p dir="auto">该函数会：</p>
+<ul dir="auto">
+<li><strong>检查我们的余额</strong></li>
+<li><strong>把 ETH 发送给我们</strong></li>
+<li><strong>之后</strong>才把我们的余额设为零</li>
+</ul>
+<p dir="auto">这就是<strong>致命错误</strong>——就在金库把 ETH 发出时，我们合约的 <code>receive()</code> 被触发了……</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">⚡ <code>receive()</code> —— 重入魔术发生处</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre> <span class="pl-k">receive</span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+    attackCount<span class="pl-k">++</span>;
+
+    <span class="pl-k">if</span> (<span class="pl-k">!</span>attackingSafe <span class="pl-k">&amp;&amp;</span> <span class="pl-c1">address</span>(targetVault).balance <span class="pl-k">&gt;=</span> <span class="pl-c1">1</span> <span class="pl-c1">ether</span> <span class="pl-k">&amp;&amp;</span> attackCount <span class="pl-k">&lt;</span> <span class="pl-c1">5</span>) {
+        targetVault.<span class="pl-en">vulnerableWithdraw</span>();
+    }
+
+    <span class="pl-k">if</span> (attackingSafe) {
+        targetVault.<span class="pl-en">safeWithdraw</span>(); <span class="pl-c">// This will fail</span>
+    }
+}
+</pre></div>
+<p dir="auto">这个函数是<strong>攻击循环的核心</strong>——就是金库被同一恶意行为者一次又一次欺骗的地方。</p>
+<p dir="auto">但关键是：攻击者<strong>从未直接调用这个函数</strong>。</p>
+<p dir="auto">相反，当合约<strong>接收到 ETH</strong> 时，Solidity 会<strong>自动触发</strong>它。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔁 我们来走一遍发生的流程</h3></div>
+<p dir="auto">当金库在 <code>withdraw()</code> 中把 ETH 发回时，Solidity 会在接收合约上寻找两种情况中的一种：</p>
+<ul dir="auto">
+<li>一个 <code>receive()</code> 函数（像现在案例中的）</li>
+<li>或者（若没有 <code>receive()</code>）一个 <code>fallback()</code> 回退函数</li>
+</ul>
+<p dir="auto">因为我们定义了 <code>receive()</code>，所以<strong>每次收到 ETH 时</strong>它都会被触发。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 攻击逻辑内部解析</h3></div>
+<p dir="auto">把这个函数里的逻辑拆开看：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">1. 🧮 统计攻击循环次数</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>attackCount<span class="pl-k">++</span>;
+</pre></div>
+<p dir="auto">每运行一次这个函数，我们就把计数器加一。这有助于我们<strong>限制重入次数</strong>，避免无限循环并耗尽 gas。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">2. 🔁 如果我们目标是易受攻击金库……</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (<span class="pl-k">!</span>attackingSafe <span class="pl-k">&amp;&amp;</span> <span class="pl-c1">address</span>(targetVault).balance <span class="pl-k">&gt;=</span> <span class="pl-c1">1</span> <span class="pl-c1">ether</span> <span class="pl-k">&amp;&amp;</span> attackCount <span class="pl-k">&lt;</span> <span class="pl-c1">5</span>) {
+    targetVault.<span class="pl-en">vulnerableWithdraw</span>();
+}
+</pre></div>
+<p dir="auto">如果处于 <strong>“易受攻击模式”</strong>：</p>
+<ul dir="auto">
+<li>我们检查金库是否还有 ETH 可偷</li>
+<li>我们检查是否未达到攻击次数上限</li>
+<li>如果两个条件都满足——<strong>再次发起攻击</strong></li>
+</ul>
+<p dir="auto">这就是<strong>重入循环</strong>的实际运作：</p>
+<ul dir="auto">
+<li>金库把 ETH 发给我们 → 触发 <code>receive()</code></li>
+<li><code>receive()</code> 再次调用 <code>vulnerableWithdraw()</code></li>
+<li>金库再发更多 ETH → 再触发 <code>receive()</code></li>
+<li>如此循环……</li>
+</ul>
+<p dir="auto">每次，金库仍然<strong>认为我们尚未提现</strong>——因为它还没来得及更新余额。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">3. 🔒 如果我们在测试安全金库……</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (attackingSafe) {
+    targetVault.<span class="pl-en">safeWithdraw</span>(); <span class="pl-c">// This will fail</span>
+}
+</pre></div>
+<p dir="auto">在“安全模式”下，我们试图重入 <code>safeWithdraw()</code>——但它会失败。</p>
+<p dir="auto">为什么？</p>
+<p dir="auto">因为：</p>
+<ul dir="auto">
+<li><code>nonReentrant</code> 修饰符在起作用</li>
+<li>我们试图重入时，修饰符会检测到函数正在运行</li>
+<li>并立刻阻止重入</li>
+</ul>
+<p dir="auto">攻击在此处<strong>直接夭折</strong>，不会再有资金被发送。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🚫 <code>attackSafe()</code> —— 想利用被加固金库的失败尝试</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> attackSafe</span></span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> owner, <span class="pl-s">"<span class="pl-s">Only owner</span>"</span>);
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&gt;=</span> <span class="pl-c1">1</span> ether, <span class="pl-s">"<span class="pl-s">Need at least 1 ETH</span>"</span>);
+
+    attackingSafe <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+    attackCount <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+
+    targetVault.<span class="pl-en">deposit</span>{value: <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>}();
+
+    <span class="pl-c">// This will fail due to the reentrancy guard</span>
+    targetVault.<span class="pl-en">safeWithdraw</span>();
+}
+</pre></div>
+<p dir="auto">这个函数模拟相同的攻击策略——但这次目标是金库的<strong>安全版本</strong>：<code>safeWithdraw()</code>。</p>
+<p dir="auto">与 <code>vulnerableWithdraw()</code> 不同，这个函数<strong>受到了良好保护</strong>。</p>
+<p dir="auto">我们来看会发生什么：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🛡️ 设置安全攻击尝试</h3></div>
+<ul dir="auto">
+<li>与 <code>attackVulnerable()</code> 一样，我们：
+<ul dir="auto">
+<li>检查调用者是否为攻击者（<code>owner</code>）</li>
+<li>要求至少 1 ETH 来模拟真实存款</li>
+<li>将 <code>attackingSafe</code> 标记为 <code>true</code>，以便回退函数知道我们在测试安全路径</li>
+<li>重置攻击计数器</li>
+</ul>
+</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💰 向金库存入 ETH</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>targetVault.<span class="pl-en">deposit</span>{value: <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>}();
+</pre></div>
+<p dir="auto">我们向金库存入 ETH 以获取余额——与之前相同。此时，金库以为我们是合法用户。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🚪 尝试提现并重入</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>targetVault.<span class="pl-en">safeWithdraw</span>();
+</pre></div>
+<p dir="auto">这里差别就显现出来了。</p>
+<p dir="auto">当调用 <code>safeWithdraw()</code> 时：</p>
+<ol dir="auto">
+<li>金库检查我们的余额</li>
+<li>它将我们的余额设为 <strong>0</strong></li>
+<li>它尝试把 ETH 发回给我们</li>
+<li><code>GoldThief</code> 合约的 <code>receive()</code> 函数被触发</li>
+</ol>
+<p dir="auto">然后我们在 <code>receive()</code> 中试图再次调用 <code>safeWithdraw()</code> 重入……</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔒 但这次我们碰到了墙的阻挡</h3></div>
+<p dir="auto">当我们试图重入 <code>safeWithdraw()</code> 时，<code>nonReentrant</code> 修饰符检查 <code>_status</code> 标记，发现该函数已经在执行中。</p>
+<p dir="auto">它立刻抛出错误：</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>Reentrant call blocked
+
+</code></pre></div>
+<p dir="auto">就这样——<strong>攻击在启动前失败</strong>。</p>
+<p dir="auto">没有第二次进入。</p>
+<p dir="auto">没有循环。</p>
+<p dir="auto">没有盗窃。</p>
+<p dir="auto">只是一个干脆利落的停止。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 这为什么重要</h3></div>
+<p dir="auto">这个函数是<strong>安全性的证明</strong>——它表明通过几行额外的保护（例如重入守护和正确的操作顺序），我们就能将严重漏洞扼杀在萌芽中。</p>
+<p dir="auto">仅会写智能合约还不够——你还必须知道如何<strong>保护它们</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🏃‍♂️ <code>stealLoot()</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> stealLoot</span></span>() <span class="pl-k">external</span> {
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> owner, <span class="pl-s">"<span class="pl-s">Only owner</span>"</span>);
+    <span class="pl-c1">payable</span>(owner).<span class="pl-en">transfer</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance);
+}
+</pre></div>
+<p dir="auto">攻击结束后，这个函数允许攻击者把<strong>被盗来的的全部 ETH</strong> 从<code>GoldThief</code> 合约<strong>提现</strong>到Ta们的私人钱包。只有合约所有者可以调用它。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧾 <code>getBalance()</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getBalance</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    <span class="pl-k">return</span> <span class="pl-c1">address</span>(<span class="pl-mi">this</span>).balance;
+}
+</pre></div>
+<p dir="auto">一个简单的只读函数，返回 <code>GoldThief</code> 合约当前持有的 ETH 余额。用来查看从金库中抽走了多少资金。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🛑 这为什么重要</h3></div>
+<p dir="auto">这个合约向你精确演示了重入攻击的工作原理。</p>
+<ul dir="auto">
+<li>攻击者在<strong>函数执行中段</strong>取得控制权</li>
+<li>在余额更新之前</li>
+<li>并多次抽取相同的 ETH</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🧪 如何在 Remix 中模拟重入攻击</h2></div>
+<p dir="auto">我们把黑客帽戴上（出于好目的），一步步走过易受攻击与安全两种情形。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔨 第一步：在 Remix 中设置文件</h3></div>
+<p dir="auto">在 Remix中：</p>
+<ul dir="auto">
+<li>在文件浏览器中<strong>创建两个新文件</strong>：
+<ul dir="auto">
+<li><code>GoldVault.sol</code> – 粘贴完整的金库合约代码</li>
+<li><code>GoldThief.sol</code> – 粘贴攻击者合约和接口代码</li>
+</ul>
+</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">⚙️ 第二步：编译两个合约</h3></div>
+<ul dir="auto">
+<li>点击 <strong>Solidity Compiler</strong> 选项卡（左边栏）。</li>
+<li>确保使用 <strong>编译器版本 0.8.19</strong> 或兼容版本。</li>
+<li>点击 <strong>Compile GoldVault.sol</strong></li>
+<li>然后点击 <strong>Compile GoldThief.sol</strong></li>
+</ul>
+<p dir="auto">你应该看到 ✅ “Compilation successful”。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🚀 第三步：部署金库（诺克斯堡）</h3></div>
+<ol dir="auto">
+<li>去到 <strong>Deploy &amp; Run Transactions</strong> 选项卡。</li>
+<li>在合约下拉框中选择 <code>GoldVault</code>。</li>
+<li>点击 <strong>Deploy</strong>。</li>
+<li>Remix 会部署合约并在左侧面板显示它。</li>
+<li>复制 <strong>金库合约地址</strong>——你需要把它传给小偷合约。</li>
+</ol>
+<p dir="auto">我们称它为：</p>
+<p dir="auto"><code>vaultAddress = 0x...</code></p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🦹 第四步：部署小偷合约</h3></div>
+<ol dir="auto">
+<li>把合约下拉框切换到 <code>GoldThief</code>。</li>
+<li>在构造函数输入字段中粘贴 <code>vaultAddress</code>的地址值。
+<ul dir="auto">
+<li>确保它放在引号中，例如 <code>"0x123..."</code></li>
+</ul>
+</li>
+<li>点击 <strong>Deploy</strong>。</li>
+</ol>
+<p dir="auto">现在小偷合约知道要攻击谁了。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💣 第五步：攻击易受攻击的提现操作</h3></div>
+<ol dir="auto">
+<li>展开已部署的 <strong>GoldThief</strong> 合约。</li>
+<li>找到函数 <code>attackVulnerable()</code>。</li>
+<li>输入 <strong>1 ether</strong> 作为 value（<code>1000000000000000000</code>），点击 <strong>transact</strong>。</li>
+</ol>
+<p dir="auto">🎬 观察交易日志发生的事情：</p>
+<ul dir="auto">
+<li>攻击者会递归调用 <code>vulnerableWithdraw()</code> 多次。</li>
+<li>金库的余额会急剧下降。</li>
+<li>一切都是因为合约在转账前没有更新余额。</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧮 第六步：确认赃款</h3></div>
+<ul dir="auto">
+<li>在小偷合约中点击 <code>getBalance()</code></li>
+<li>你会看到多个ETH被抽到小偷合约中</li>
+</ul>
+<p dir="auto">尝试调用 <code>stealLoot()</code> 把它转到攻击者的钱包。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧷 第七步：尝试攻击安全版本（并看它失败）</h3></div>
+<ol dir="auto">
+<li><strong>重新部署 GoldVault</strong> 合约以重置状态</li>
+<li>重新部署 <strong>GoldThief</strong>并传入新的金库地址</li>
+<li>这次，使用 1 ETH调用 <code>attackSafe()</code></li>
+</ol>
+<p dir="auto">🧱 这个交易会<strong>失败</strong>。</p>
+<p dir="auto">为什么？因为 <code>safeWithdraw()</code> 使用了：</p>
+<ul dir="auto">
+<li><strong><code>nonReentrant</code> 修饰符</strong> 防止重入</li>
+<li>它在<strong>发送资金前</strong>更新余额</li>
+</ul>
+<p dir="auto">你已经通过最佳实践<strong>阻止了一次重入攻击</strong>。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🔒 金库已加固。黑客被击败。</h2></div>
+<p dir="auto">一个看似简单的“存取”系统，变成了一堂真实的 Solidity 安全课。</p>
+<p dir="auto">我们看到一个<strong>微小错误</strong>——在更新余额之前发送 ETH——如何打开了可致命的<strong>重入攻击</strong>大门。随后我们观察到聪明的攻击者如何<strong>像吃豆人一样在金库中循环掠食</strong>，不断抽走资金。</p>
+<p dir="auto">但有了正确的防护：</p>
+<ul dir="auto">
+<li>✅ 一个 <code>nonReentrant</code> 锁</li>
+<li>✅ 在与外部交互前更新状态</li>
+</ul>
+<p dir="auto">我们就能彻底<strong>遏制漏洞</strong>。</p>
+<p dir="auto">这就是编写智能合约真正的意义——不仅仅是构建炫酷功能，而是确保它们坚如磐石，不被滥用。</p>
+<p dir="auto">所以不管你是在构建 DApp、DeFi 协议，还是下一个 Web3 诺克斯堡……记住：</p>
+<blockquote>
+<p dir="auto">保护好你的黄金。重入漏洞是真实存在的。</p>
+</blockquote>
+<p dir="auto">下一份合约，Go!</p>
                 </div>
             </div>
         </div>
@@ -1321,7 +2370,7 @@ contract MyContract is ReentrancyGuard {
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href');
+                const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
