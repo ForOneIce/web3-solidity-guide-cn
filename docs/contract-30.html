@@ -790,7 +790,109 @@
             }
         }
     </style>
-</head>
+
+        <style>
+        /* 隐藏 mermaid 渲染组件 */
+        .md-content section.js-render-needs-enrichment,
+        .md-content .js-render-enrichment-target,
+        .md-content .js-render-block-actions,
+        .md-content .render-container,
+        .md-content .js-render-enrichment-fallback,
+        .md-content details[class*="details"],
+        .md-content iframe[title="File display"] {
+            display: none !important;
+        }
+        
+        /* 修复 GitHub 代码块样式 */
+        .md-content .highlight,
+        .md-content .highlight-source-solidity,
+        .md-content .highlight-source-js,
+        .md-content .highlight-source-javascript {
+            background: #2d2a2e !important;
+            border-radius: 10px;
+            padding: 20px !important;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content .highlight pre,
+        .md-content .highlight-source-solidity pre,
+        .md-content .highlight-source-js pre {
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
+        
+        /* 基础代码文字颜色 - 确保所有文字都可见 */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        .md-content .highlight code,
+        .md-content .highlight pre code,
+        .md-content .highlight pre span,
+        .md-content .highlight pre * {
+            /* Added to ensure all text in pre is visible */
+            color: #f8f8f2 !important;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* 确保代码块内所有文字（包括没有 span 包裹的文字）都可见 */
+        .md-content .highlight pre,
+        .md-content .highlight pre code {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特别处理代码块中的纯文本节点（没有被 span 包裹的文字，如变量名） */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 确保所有直接文本内容都可见 - 覆盖继承的颜色 */
+        .md-content .highlight pre * {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特别处理变量名 - 确保清晰可见 */
+        .md-content .highlight pre span.pl-v,
+        .md-content .highlight pre span.pl-en,
+        .md-content .highlight pre span.pl-e {
+            color: #dcdcaa !important;
+            font-weight: 500 !important;
+        }
+        
+        /* GitHub 语法高亮类颜色修复 */
+        .md-content .highlight [class*="pl-"] {
+            color: #f8f8f2 !important; /* Default to light color */
+        }
+        .md-content .highlight .pl-c { /* 注释 */
+            color: #6a9955 !important;
+        }
+        .md-content .highlight .pl-s, .md-content .highlight .pl-s1 { /* 字符串 */
+            color: #ce9178 !important;
+        }
+        .md-content .highlight .pl-k, .md-content .highlight .pl-c1 { /* 关键字/常量 */
+            color: #569cd6 !important;
+        }
+        .md-content .highlight .pl-v, .md-content .highlight .pl-en, .md-content .highlight .pl-e, .md-content .highlight .pl-ent { /* 变量/函数名/实体名 */
+            color: #dcdcaa !important;
+            font-weight: 500 !important;
+        }
+        .md-content code {
+            background-color: rgba(139, 115, 85, 0.15);
+            color: var(--warm-brown);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+        }
+        </style>
+        </head>
 <body>
     <div class="nav-bar">
         <div class="nav-left">
@@ -1271,12 +1373,1571 @@ contract MiniDexPair is ReentrancyGuard {
             </div>
             <div class="letter-body">
                 <div id="md-content" class="md-content">
-                    <div class="md-section">
-                        <h1>第30天内容</h1>
-                        <p style="text-align: center; padding: 40px; color: #999;">
-                            ⏳ 内容正在精心准备中...<br>
-                            敬请期待！
-                        </p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">Mini-交易所</h1></div>
+<p dir="auto">Day: Day 30
+ID: 30
+译者: Bala Chen
+难度等级: 高级</p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🎉 第30天 – 最终构建：你自己的简约版DEX</h1></div>
+<p dir="auto"><strong>你做到了。</strong></p>
+<p dir="auto">整整三十天深入学习Solidity。一次一个合约。一次一个概念。从你的第一个<code>uint</code>到你的第一次代币销售，你一直在坚持、构建、学习——现在？你准备好创建从DeFi巨鲸到收益农场Degens都在使用的东西：</p>
+<p dir="auto">一个<strong>去中心化交易所</strong>——你自己的<strong>简约版DEX</strong>。</p>
+<p dir="auto">但在我们继续之前——</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧡 让我们花一点时间来欣赏这一点</h3></div>
+<p dir="auto">认真的。回顾第1天。</p>
+<p dir="auto">你从基本的存储、结构体和函数开始。你学习了全局变量、控制流、修饰符、继承和接口。你亲手实践了NFT、DAO、AMM、稳定币、预言机、随机性、可升级合约等等。</p>
+<p dir="auto">而且你不仅仅是阅读它们——</p>
+<p dir="auto"><strong>你构建了它们。</strong></p>
+<p dir="auto">这不是那种读了就忘的系列。
+这是：编写、调试、理解、破坏、修复和部署。</p>
+<p dir="auto">这是你培养的真正的Solidity肌肉。现在，在第30天，是时候进行你的顶点项目了：</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🚀 一个简约版去中心化交易所</h3></div>
+<p dir="auto">不是模拟。不是复制粘贴的Uniswap克隆。我们说的是一个干净、简单、精简的、<strong>从头开始实现</strong>的DEX——足以理解交换、流动性和LP代币的真正工作原理。</p>
+<p dir="auto">这不是前端的东西。这是DEX的<strong>链上后端</strong>。智能合约逻辑。金库。池子。价格曲线。</p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">产品需求说明</h1></div>
+<p dir="auto">用户流程</p>
+<p dir="auto">需要的数据结构</p>
+<markdown-accessiblity-table data-catalyst=""><table tabindex="0">
+<thead>
+<tr>
+<th>Contract</th>
+<th>Type</th>
+<th>Bases</th>
+<th>Function Name</th>
+<th>Visibility</th>
+<th>Mutability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MiniDexPair</td>
+<td>Implementation</td>
+<td>ReentrancyGuard</td>
+<td>constructor</td>
+<td>Public</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>addLiquidity(amountA, amountB)</td>
+<td>External</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>removeLiquidity(lpAmount)</td>
+<td>External</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>swap(inputAmount, inputToken)</td>
+<td>External</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>getAmountOut(inputAmount, inputToken)</td>
+<td>Public</td>
+<td>View</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>getReserves()</td>
+<td>External</td>
+<td>View</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>getLPBalance(user)</td>
+<td>External</td>
+<td>View</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>getTotalLPSupply()</td>
+<td>External</td>
+<td>View</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>sqrt(y)</td>
+<td>Internal</td>
+<td>Pure</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>min(a, b)</td>
+<td>Internal</td>
+<td>Pure</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>_updateReserves()</td>
+<td>Private</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>MiniDexFactory</td>
+<td>Implementation</td>
+<td>Ownable</td>
+<td>constructor(_owner)</td>
+<td>Public</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>createPair(_tokenA, _tokenB)</td>
+<td>External</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>allPairsLength()</td>
+<td>External</td>
+<td>View</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>getPairAtIndex(index)</td>
+<td>External</td>
+<td>View</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>getPair[tokenA][tokenB]</td>
+<td>Public</td>
+<td>View (mapping)</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>PairCreated (event)</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>MiniDexPair (events)</td>
+<td>—</td>
+<td>—</td>
+<td>LiquidityAdded</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>LiquidityRemoved</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>Swapped</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">细节解说</h1></div>
+<p dir="auto">为了让这一切都清楚，我们将这个最终挑战分成<strong>两个合约</strong>：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🛠️ <code>MiniDexPair.sol</code> – 池子合约</h3></div>
+<p dir="auto">这是行动发生的地方：</p>
+<ul dir="auto">
+<li>它接受两个代币：TokenA和TokenB</li>
+<li>它允许用户<strong>添加流动性</strong>，作为回报，他们获得LP代币</li>
+<li>它允许用户<strong>移除流动性</strong>，并获得他们的比例份额</li>
+<li>它使用经典的恒定乘积公式启用TokenA和TokenB之间的<strong>交换</strong>：<code>x * y = k</code></li>
+<li>它跟踪内部储备、LP余额和费用</li>
+</ul>
+<p dir="auto">这是运行每个代币对的核心逻辑——无论是ETH/DAI、USDC/WBTC，还是任何其他组合。</p>
+<p dir="auto">我们将深入了解这是如何工作的，费用是如何计算的，以及储备更新如何保持池子平衡。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🏗️ <code>MiniDexFactory.sol</code> – 池子创建者</h3></div>
+<p dir="auto">一旦我们理解了单个配对合约的工作原理，我们就会将其提升到下一个级别。</p>
+<p dir="auto">我们不会为每个代币组合手动部署新的配对合约，而是构建一个工厂：</p>
+<ul dir="auto">
+<li>可以<strong>动态创建</strong>新的MiniDexPair合约</li>
+<li>跟踪<strong>所有现有配对</strong></li>
+<li>确保没有重复的池子</li>
+<li>让我们探索像Uniswap这样的协议如何扩展到数千个配对</li>
+</ul>
+<p dir="auto">在本课程结束时，你将拥有：</p>
+<ul dir="auto">
+<li>一个工作的去中心化交易所的迷你版本</li>
+<li>部署任何你想要的配对的能力</li>
+<li>对交换、储备、LP代币和AMM如何在底层工作的完全理解</li>
+</ul>
+<p dir="auto">更重要的是？
+你会意识到这些看似复杂的协议只是智能合约模式，由你已经知道的工具组成。</p>
+<hr>
+<p dir="auto">所以。最后一次。</p>
+<p dir="auto">让我们编写一个合约。让我们学习一些真实的东西。让我们以开始时的同样能量结束这个旅程：</p>
+<p dir="auto"><strong>构建者模式开启。</strong></p>
+<p dir="auto">让我们深入<code>MiniDexPair.sol</code>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📦 核心池子：<code>MiniDexPair.sol</code></h3></div>
+<p dir="auto">在我们深入<em>如何</em>之前，让我们先看看<em>什么</em>。</p>
+<p dir="auto">这是<strong>MiniDexPair</strong>合约——为我们简约版DEX中的每个代币交换提供动力的引擎。</p>
+<p dir="auto">它是金库。流动性池。LP代币计算器。</p>
+<p dir="auto">它负责持有两个代币，让人们在它们之间交换，并管理保持整个系统公平和流畅的内部储备。</p>
+<p dir="auto">你可以把这想象成你的个人代币交换摊位。</p>
+<p dir="auto">放入TokenA，取出TokenB——基于供应、需求和一些简单但强大的数学自动定价。</p>
+<p dir="auto">我们将详细分解每个函数，但首先，让我们一次性看看整个合约：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-k">pragma solidity</span> <span class="pl-k">^</span><span class="pl-c1">0.8.20</span>;
+
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/token/ERC20/IERC20.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/security/ReentrancyGuard.sol</span>"</span>;
+
+<span class="pl-k">contract</span> <span class="pl-en">MiniDexPair</span> <span class="pl-k">is</span> <span class="pl-en">ReentrancyGuard</span> {
+    <span class="pl-c1">address</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> tokenA;
+    <span class="pl-c1">address</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> tokenB;
+
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> reserveA;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> reserveB;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> totalLPSupply;
+
+    <span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">uint256</span>) <span class="pl-k">public</span> lpBalances;
+
+    <span class="pl-k">event <span class="pl-en">LiquidityAdded</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">provider</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amountA</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amountB</span>, <span class="pl-c1">uint256</span> <span class="pl-v">lpMinted</span>);
+    <span class="pl-k">event <span class="pl-en">LiquidityRemoved</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">provider</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amountA</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amountB</span>, <span class="pl-c1">uint256</span> <span class="pl-v">lpBurned</span>);
+    <span class="pl-k">event <span class="pl-en">Swapped</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">address</span> <span class="pl-v">inputToken</span>, <span class="pl-c1">uint256</span> <span class="pl-v">inputAmount</span>, <span class="pl-c1">address</span> <span class="pl-v">outputToken</span>, <span class="pl-c1">uint256</span> <span class="pl-v">outputAmount</span>);
+
+    <span class="pl-k">constructor</span>(<span class="pl-c1">address</span> <span class="pl-v">_tokenA</span>, <span class="pl-c1">address</span> <span class="pl-v">_tokenB</span>) {
+        <span class="pl-k">require</span>(_tokenA <span class="pl-k">!=</span> _tokenB, <span class="pl-s">"<span class="pl-s">Identical tokens</span>"</span>);
+        <span class="pl-k">require</span>(_tokenA <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>) <span class="pl-k">&amp;&amp;</span> _tokenB <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Zero address</span>"</span>);
+
+        tokenA <span class="pl-k">=</span> _tokenA;
+        tokenB <span class="pl-k">=</span> _tokenB;
+    }
+
+    <span class="pl-c">// 实用工具</span>
+    <span class="pl-k">function<span class="pl-en"> sqrt</span></span>(<span class="pl-c1">uint</span> <span class="pl-v">y</span>) <span class="pl-k">internal</span> <span class="pl-k">pure</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span> <span class="pl-v">z</span>) {
+        <span class="pl-k">if</span> (y <span class="pl-k">&gt;</span> <span class="pl-c1">3</span>) {
+            z <span class="pl-k">=</span> y;
+            <span class="pl-c1">uint</span> x <span class="pl-k">=</span> y <span class="pl-k">/</span> <span class="pl-c1">2</span> <span class="pl-k">+</span> <span class="pl-c1">1</span>;
+            <span class="pl-k">while</span> (x <span class="pl-k">&lt;</span> z) {
+                z <span class="pl-k">=</span> x;
+                x <span class="pl-k">=</span> (y <span class="pl-k">/</span> x <span class="pl-k">+</span> x) <span class="pl-k">/</span> <span class="pl-c1">2</span>;
+            }
+        } <span class="pl-k">else</span> <span class="pl-k">if</span> (y <span class="pl-k">!=</span> <span class="pl-c1">0</span>) {
+            z <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+        }
+    }
+
+    <span class="pl-k">function<span class="pl-en"> min</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">a</span>, <span class="pl-c1">uint256</span> <span class="pl-v">b</span>) <span class="pl-k">internal</span> <span class="pl-k">pure</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+        <span class="pl-k">return</span> a <span class="pl-k">&lt;</span> b <span class="pl-k">?</span> a<span class="pl-k"> : </span>b;
+    }
+
+    <span class="pl-k">function<span class="pl-en"> _updateReserves</span></span>() <span class="pl-k">private</span> {
+        reserveA <span class="pl-k">=</span> <span class="pl-c1">IERC20</span>(tokenA).<span class="pl-en">balanceOf</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>));
+        reserveB <span class="pl-k">=</span> <span class="pl-c1">IERC20</span>(tokenB).<span class="pl-en">balanceOf</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>));
+    }
+
+    <span class="pl-k">function<span class="pl-en"> addLiquidity</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amountA</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amountB</span>) <span class="pl-k">external</span> nonReentrant {
+        <span class="pl-k">require</span>(amountA <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">&amp;&amp;</span> amountB <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Invalid amounts</span>"</span>);
+
+        <span class="pl-c1">IERC20</span>(tokenA).<span class="pl-en">transferFrom</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>), amountA);
+        <span class="pl-c1">IERC20</span>(tokenB).<span class="pl-en">transferFrom</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>), amountB);
+
+        <span class="pl-c1">uint256</span> lpToMint;
+        <span class="pl-k">if</span> (totalLPSupply <span class="pl-k">==</span> <span class="pl-c1">0</span>) {
+            lpToMint <span class="pl-k">=</span> <span class="pl-en">sqrt</span>(amountA <span class="pl-k">*</span> amountB);
+        } <span class="pl-k">else</span> {
+            lpToMint <span class="pl-k">=</span> <span class="pl-en">min</span>(
+                (amountA <span class="pl-k">*</span> totalLPSupply) <span class="pl-k">/</span> reserveA,
+                (amountB <span class="pl-k">*</span> totalLPSupply) <span class="pl-k">/</span> reserveB
+            );
+        }
+
+        <span class="pl-k">require</span>(lpToMint <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Zero LP minted</span>"</span>);
+
+        lpBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">+=</span> lpToMint;
+        totalLPSupply <span class="pl-k">+=</span> lpToMint;
+
+        <span class="pl-en">_updateReserves</span>();
+
+        <span class="pl-k">emit</span> <span class="pl-en">LiquidityAdded</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountA, amountB, lpToMint);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> removeLiquidity</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">lpAmount</span>) <span class="pl-k">external</span> nonReentrant {
+        <span class="pl-k">require</span>(lpAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">&amp;&amp;</span> lpAmount <span class="pl-k">&lt;=</span> lpBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>], <span class="pl-s">"<span class="pl-s">Invalid LP amount</span>"</span>);
+
+        <span class="pl-c1">uint256</span> amountA <span class="pl-k">=</span> (lpAmount <span class="pl-k">*</span> reserveA) <span class="pl-k">/</span> totalLPSupply;
+        <span class="pl-c1">uint256</span> amountB <span class="pl-k">=</span> (lpAmount <span class="pl-k">*</span> reserveB) <span class="pl-k">/</span> totalLPSupply;
+
+        lpBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">-=</span> lpAmount;
+        totalLPSupply <span class="pl-k">-=</span> lpAmount;
+
+        <span class="pl-c1">IERC20</span>(tokenA).<span class="pl-en">transfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountA);
+        <span class="pl-c1">IERC20</span>(tokenB).<span class="pl-en">transfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountB);
+
+        <span class="pl-en">_updateReserves</span>();
+
+        <span class="pl-k">emit</span> <span class="pl-en">LiquidityRemoved</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountA, amountB, lpAmount);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> getAmountOut</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">inputAmount</span>, <span class="pl-c1">address</span> <span class="pl-v">inputToken</span>) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span> <span class="pl-v">outputAmount</span>) {
+        <span class="pl-k">require</span>(inputToken <span class="pl-k">==</span> tokenA <span class="pl-k">||</span> inputToken <span class="pl-k">==</span> tokenB, <span class="pl-s">"<span class="pl-s">Invalid input token</span>"</span>);
+
+        <span class="pl-c1">bool</span> isTokenA <span class="pl-k">=</span> inputToken <span class="pl-k">==</span> tokenA;
+        (<span class="pl-c1">uint256</span> <span class="pl-v">inputReserve</span>, <span class="pl-c1">uint256</span> <span class="pl-v">outputReserve</span>) <span class="pl-k">=</span> isTokenA <span class="pl-k">?</span> (reserveA, reserveB)<span class="pl-k"> : </span>(reserveB, reserveA);
+
+        <span class="pl-c1">uint256</span> inputWithFee <span class="pl-k">=</span> inputAmount <span class="pl-k">*</span> <span class="pl-c1">997</span>;
+        <span class="pl-c1">uint256</span> numerator <span class="pl-k">=</span> inputWithFee <span class="pl-k">*</span> outputReserve;
+        <span class="pl-c1">uint256</span> denominator <span class="pl-k">=</span> (inputReserve <span class="pl-k">*</span> <span class="pl-c1">1000</span>) <span class="pl-k">+</span> inputWithFee;
+
+        outputAmount <span class="pl-k">=</span> numerator <span class="pl-k">/</span> denominator;
+    }
+
+    <span class="pl-k">function<span class="pl-en"> swap</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">inputAmount</span>, <span class="pl-c1">address</span> <span class="pl-v">inputToken</span>) <span class="pl-k">external</span> nonReentrant {
+        <span class="pl-k">require</span>(inputAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Zero input</span>"</span>);
+        <span class="pl-k">require</span>(inputToken <span class="pl-k">==</span> tokenA <span class="pl-k">||</span> inputToken <span class="pl-k">==</span> tokenB, <span class="pl-s">"<span class="pl-s">Invalid token</span>"</span>);
+
+        <span class="pl-c1">address</span> outputToken <span class="pl-k">=</span> inputToken <span class="pl-k">==</span> tokenA <span class="pl-k">?</span> tokenB<span class="pl-k"> : </span>tokenA;
+        <span class="pl-c1">uint256</span> outputAmount <span class="pl-k">=</span> <span class="pl-en">getAmountOut</span>(inputAmount, inputToken);
+
+        <span class="pl-k">require</span>(outputAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Insufficient output</span>"</span>);
+
+        <span class="pl-c1">IERC20</span>(inputToken).<span class="pl-en">transferFrom</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>), inputAmount);
+        <span class="pl-c1">IERC20</span>(outputToken).<span class="pl-en">transfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, outputAmount);
+
+        <span class="pl-en">_updateReserves</span>();
+
+        <span class="pl-k">emit</span> <span class="pl-en">Swapped</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, inputToken, inputAmount, outputToken, outputAmount);
+    }
+
+    <span class="pl-c">// 查看函数</span>
+    <span class="pl-k">function<span class="pl-en"> getReserves</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>, <span class="pl-c1">uint256</span>) {
+        <span class="pl-k">return</span> (reserveA, reserveB);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> getLPBalance</span></span>(<span class="pl-c1">address</span> <span class="pl-v">user</span>) <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+        <span class="pl-k">return</span> lpBalances[user];
+    }
+
+    <span class="pl-k">function<span class="pl-en"> getTotalLPSupply</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+        <span class="pl-k">return</span> totalLPSupply;
+    }
+}
+```<span class="pl-k">---</span>
+
+### 🧱 让我们从顶部开始：导入
+
+在我们的`MiniDexPair`合约的顶部，你会立即看到这个：
+
+```<span class="pl-k">solidity</span>
+
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/token/ERC20/IERC20.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/security/ReentrancyGuard.sol</span>"</span>;
+</pre></div>
+<p dir="auto">这是每个导入的作用：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📦 <code>IERC20.sol</code></h3></div>
+<p dir="auto">这引入了ERC-20代币标准的<strong>接口</strong>。</p>
+<blockquote>
+<p dir="auto">简单来说：它告诉我们的合约如何与任何ERC-20代币对话——即使我们自己没有编写代币的代码。</p>
+</blockquote>
+<p dir="auto">有了这个接口，我们可以：</p>
+<ul dir="auto">
+<li>在<strong>任何兼容的ERC-20代币</strong>上调用<code>transferFrom</code>、<code>transfer</code>和<code>balanceOf</code></li>
+<li>在我们的流动性池中使用这些代币</li>
+<li>保持完全的代币无关性——DAI、USDC、WETH，无论什么——都能正常工作</li>
+</ul>
+<p dir="auto">没有这个导入，Solidity就不知道如何与你传入的代币合约对话。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🛡️ <code>ReentrancyGuard.sol</code></h3></div>
+<p dir="auto">这个是为了<strong>安全</strong>。</p>
+<p dir="auto">它帮助我们防范一类称为<strong>重入攻击</strong>的智能合约攻击——有人试图在第一个函数调用完成<em>之前</em>回调到合约中。</p>
+<blockquote>
+<p dir="auto">重入是智能合约历史上最常见和最危险的漏洞之一——它是导致臭名昭著的DAO黑客攻击的原因。</p>
+</blockquote>
+<p dir="auto">通过继承<code>ReentrancyGuard</code>，我们可以在敏感函数如<code>addLiquidity</code>、<code>removeLiquidity</code>和<code>swap</code>上使用<code>nonReentrant</code>修饰符。</p>
+<p dir="auto">这确保：</p>
+<ul dir="auto">
+<li>一次一个调用</li>
+<li>没有恶意行为</li>
+<li>你的流动性保持安全</li>
+</ul>
+<hr>
+<p dir="auto">这两个导入一起构成了安全、可互操作、ERC-20驱动的DEX的基础。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧮 状态变量——池子的记忆</h3></div>
+<p dir="auto">这是我们<code>MiniDexPair</code>合约中状态变量的第一个块：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">address</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> tokenA;
+<span class="pl-c1">address</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> tokenB;
+
+<span class="pl-c1">uint256</span> <span class="pl-k">public</span> reserveA;
+<span class="pl-c1">uint256</span> <span class="pl-k">public</span> reserveB;
+<span class="pl-c1">uint256</span> <span class="pl-k">public</span> totalLPSupply;
+</pre></div>
+<p dir="auto">让我们逐一分析：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>tokenA</code>和<code>tokenB</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">address</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> tokenA;
+<span class="pl-c1">address</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> tokenB;
+</pre></div>
+<p dir="auto">这些是这个特定DEX配对支持的<strong>两个代币</strong>。</p>
+<p dir="auto">每个<code>MiniDexPair</code>合约将永远只处理恰好两个代币。</p>
+<p dir="auto">例如：</p>
+<ul dir="auto">
+<li>如果这个池子是DAI/WETH，那么<code>tokenA = DAI</code>，<code>tokenB = WETH</code>。</li>
+</ul>
+<p dir="auto">它们被标记为<code>public</code>，所以任何人都可以读取它们，<code>immutable</code>是因为：</p>
+<blockquote>
+<p dir="auto">一旦在构造函数中设置，它们就永远不能被更改。</p>
+</blockquote>
+<p dir="auto"><code>immutable</code>是一个Solidity关键字：</p>
+<ul dir="auto">
+<li>让你<strong>一次</strong>分配一个值（在构造函数内部）</li>
+<li>但之后<strong>永远锁定</strong>该值</li>
+<li>并且比使用常规<code>storage</code>变量更<strong>节省gas</strong></li>
+</ul>
+<p dir="auto">所以：一旦设置了这些代币，没有人可以交换它们或搞乱它们。这正是我们想要的——池子应该是永久和可预测的。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>reserveA</code>和<code>reserveB</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> <span class="pl-k">public</span> reserveA;
+<span class="pl-c1">uint256</span> <span class="pl-k">public</span> reserveB;
+</pre></div>
+<p dir="auto">这些跟踪当前<strong>在池子中</strong>的每个代币数量。</p>
+<p dir="auto">每当有人添加流动性、进行交换或移除流动性时，我们更新这些储备以反映新的余额。</p>
+<p dir="auto">这些<strong>不仅仅是合约中的实际代币余额</strong>——我们将它们单独存储有两个原因：</p>
+<ol dir="auto">
+<li><strong>读取效率</strong>——引用变量比不断调用<code>balanceOf</code>更快更便宜。</li>
+<li><strong>价格准确性</strong>——我们在交换计算中使用它们来确保恒定乘积公式（<code>x * y = k</code>）保持平衡。</li>
+</ol>
+<p dir="auto">我们将在每次主要操作后使用<code>_updateReserves()</code>手动更新这些。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>totalLPSupply</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> <span class="pl-k">public</span> totalLPSupply;
+</pre></div>
+<p dir="auto">这跟踪<strong>曾经铸造的LP代币总量</strong>——有点像公司的总股份。</p>
+<p dir="auto">当有人添加流动性时，我们为他们铸造LP代币（在这种情况下不是实际的ERC-20代币，只是内部跟踪）。</p>
+<p dir="auto">当他们移除流动性时，我们销毁他们的LP数量并减少这个总数。</p>
+<blockquote>
+<p dir="auto">LP代币代表池子的所有权。如果你拥有10%的LP供应量，你就拥有池子中10%的代币。</p>
+</blockquote>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧾 跟踪谁拥有什么：<code>lpBalances</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">uint256</span>) <span class="pl-k">public</span> lpBalances;
+</pre></div>
+<p dir="auto">这个映射是我们跟踪<strong>每个用户在这个池子中拥有多少流动性</strong>的方式。</p>
+<p dir="auto">它的工作原理：</p>
+<ul dir="auto">
+<li><code>address</code>是用户的钱包（流动性提供者）。</li>
+<li><code>uint256</code>是他们被分配的LP代币数量（再次，这些不是ERC-20代币——只是我们在合约内部跟踪的数字）。</li>
+</ul>
+<p dir="auto">所以如果Alice向这个池子添加DAI和WETH，我们可能有：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>lpBalances[alice] <span class="pl-k">=</span> <span class="pl-c1">1200</span>;
+</pre></div>
+<p dir="auto">这意味着Alice有1,200个LP代币——这给了她对池子中代币的比例权利。</p>
+<p dir="auto">当她决定提取（移除流动性）时，我们将使用这个映射来：</p>
+<ul dir="auto">
+<li>检查她有多少LP代币</li>
+<li>计算她有权获得多少TokenA和TokenB</li>
+<li>销毁她的LP余额并相应更新储备</li>
+</ul>
+<blockquote>
+<p dir="auto">把lpBalances想象成池子版本的股东登记册。</p>
+<p dir="auto">它保持会计诚实和公平。</p>
+</blockquote>
+<p dir="auto">因为它被标记为<code>public</code>，任何用户都可以通过调用<code>lpBalances(address)</code>函数来检查他们在池子中有多少LP。</p>
+<hr>
+<p dir="auto">与<code>totalLPSupply</code>一起，这个映射让我们实现围绕<strong>比例所有权</strong>的所有数学。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📢 事件——记录链上发生的事情</h3></div>
+<p dir="auto">这是在<code>MiniDexPair</code>合约中声明的事件：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">LiquidityAdded</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">provider</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amountA</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amountB</span>, <span class="pl-c1">uint256</span> <span class="pl-v">lpMinted</span>);
+<span class="pl-k">event <span class="pl-en">LiquidityRemoved</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">provider</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amountA</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amountB</span>, <span class="pl-c1">uint256</span> <span class="pl-v">lpBurned</span>);
+<span class="pl-k">event <span class="pl-en">Swapped</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">address</span> <span class="pl-v">inputToken</span>, <span class="pl-c1">uint256</span> <span class="pl-v">inputAmount</span>, <span class="pl-c1">address</span> <span class="pl-v">outputToken</span>, <span class="pl-c1">uint256</span> <span class="pl-v">outputAmount</span>);
+</pre></div>
+<p dir="auto">事件就像<strong>链上日志</strong>——它们不影响合约逻辑，但它们使<strong>跟踪和索引合约内部发生的事情</strong>变得容易。</p>
+<p dir="auto">你可以把它们想象成智能合约的控制台日志——除了用户、应用程序、浏览器和机器人都可以监听它们。</p>
+<p dir="auto">让我们逐一分析：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>LiquidityAdded</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">LiquidityAdded</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">provider</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amountA</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amountB</span>, <span class="pl-c1">uint256</span> <span class="pl-v">lpMinted</span>);
+</pre></div>
+<p dir="auto">当有人向池子添加流动性时触发此事件。</p>
+<p dir="auto">它告诉世界：</p>
+<ul dir="auto">
+<li>谁添加了流动性（<code>provider</code>）</li>
+<li>他们提供了多少每种代币（<code>amountA</code>、<code>amountB</code>）</li>
+<li>他们作为回报收到了多少LP代币（<code>lpMinted</code>）</li>
+</ul>
+<p dir="auto"><code>provider</code>上的关键字<code>indexed</code>意味着我们可以<strong>按提供者地址过滤日志</strong>——对前端和分析仪表板非常有用。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>LiquidityRemoved</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">LiquidityRemoved</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">provider</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amountA</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amountB</span>, <span class="pl-c1">uint256</span> <span class="pl-v">lpBurned</span>);
+</pre></div>
+<p dir="auto">这是前一个事件的镜像。</p>
+<p dir="auto">当有人从池子<strong>移除流动性</strong>时触发。</p>
+<p dir="auto">我们记录：</p>
+<ul dir="auto">
+<li>谁移除了流动性</li>
+<li>他们提取了多少每种代币</li>
+<li>销毁了多少LP代币</li>
+</ul>
+<p dir="auto">这为每个人提供了池子流动性流入和流出的可见性。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>Swapped</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">Swapped</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">address</span> <span class="pl-v">inputToken</span>, <span class="pl-c1">uint256</span> <span class="pl-v">inputAmount</span>, <span class="pl-c1">address</span> <span class="pl-v">outputToken</span>, <span class="pl-c1">uint256</span> <span class="pl-v">outputAmount</span>);
+</pre></div>
+<p dir="auto">此事件记录池子中发生的每个代币<strong>交换</strong>。</p>
+<p dir="auto">它包括：</p>
+<ul dir="auto">
+<li>交换者的地址</li>
+<li>他们发送的代币（<code>inputToken</code>）和数量</li>
+<li>他们收到的代币（<code>outputToken</code>）和数量</li>
+</ul>
+<p dir="auto">这是DEX前端、仪表板和浏览器需要<strong>跟踪实时交易活动</strong>的核心数据。</p>
+<blockquote>
+<p dir="auto">每次有人使用DEX交换代币时，这个事件就会被触发——让世界知道确切发生了什么。</p>
+</blockquote>
+<hr>
+<p dir="auto">这些事件一起为我们提供了这个池子中发生的一切的完整<strong>审计跟踪</strong>：</p>
+<ul dir="auto">
+<li>流动性流动</li>
+<li>代币交换</li>
+<li>LP代币发行和销毁--</li>
+<li></li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🏗️ 构造函数——启动池子</h3></div>
+<p dir="auto">这是<code>MiniDexPair</code>的构造函数：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">constructor</span>(<span class="pl-c1">address</span> <span class="pl-v">_tokenA</span>, <span class="pl-c1">address</span> <span class="pl-v">_tokenB</span>) {
+    <span class="pl-k">require</span>(_tokenA <span class="pl-k">!=</span> _tokenB, <span class="pl-s">"<span class="pl-s">Identical tokens</span>"</span>);
+    <span class="pl-k">require</span>(_tokenA <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>) <span class="pl-k">&amp;&amp;</span> _tokenB <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Zero address</span>"</span>);
+
+    tokenA <span class="pl-k">=</span> _tokenA;
+    tokenB <span class="pl-k">=</span> _tokenB;
+}
+</pre></div>
+<p dir="auto">这个函数<strong>只运行一次</strong>，就在合约部署时。它设置这个特定池子的身份——并锁定它将支持的两个代币。</p>
+<p dir="auto">让我们分解一下：</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">constructor</span>(<span class="pl-c1">address</span> <span class="pl-v">_tokenA</span>, <span class="pl-c1">address</span> <span class="pl-v">_tokenB</span>)
+</pre></div>
+<p dir="auto">我们传入这个池子应该支持的两个代币地址。</p>
+<p dir="auto">例如，如果我们想要一个WETH/DAI池子，我们会在这里传入WETH和DAI合约地址。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(_tokenA <span class="pl-k">!=</span> _tokenB, <span class="pl-s">"<span class="pl-s">Identical tokens</span>"</span>);
+</pre></div>
+<p dir="auto">这一行确保我们不会意外地尝试为同一个代币创建两次池子——比如WETH/WETH。那将是毫无意义的。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(_tokenA <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>) <span class="pl-k">&amp;&amp;</span> _tokenB <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Zero address</span>"</span>);
+</pre></div>
+<p dir="auto">这个检查确保我们没有为任一代币使用空地址——这可能导致错误甚至安全问题。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>tokenA <span class="pl-k">=</span> _tokenA; tokenB <span class="pl-k">=</span> _tokenB;
+</pre></div>
+<p dir="auto">最后，我们将输入值分配给合约的<code>immutable</code>状态变量。</p>
+<blockquote>
+<p dir="auto">因为它们是不可变的，它们只能设置一次——在这里的构造函数中——之后永远不能更改。</p>
+</blockquote>
+<p dir="auto">这确保：</p>
+<ul dir="auto">
+<li>每个合约实例永久绑定到只有两个代币</li>
+<li>部署后没有人可以搞乱代币地址</li>
+</ul>
+<hr>
+<p dir="auto">一旦这个构造函数运行，池子就被锁定、安全，并准备开始接受存款。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🛠️ 实用函数——数学背后的无名英雄</h3></div>
+<p dir="auto">在我们进入真正的行动——交换代币、添加流动性、铸造LP代币——之前，我们需要几个数学助手。</p>
+<p dir="auto">这两个函数不直接接触代币或用户，但它们在<strong>幕后是必不可少的</strong>。</p>
+<p dir="auto">它们保持我们的数字公平，我们的计算安全，我们的逻辑干净。</p>
+<p dir="auto">它们是：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> sqrt</span></span>(<span class="pl-c1">uint</span> <span class="pl-v">y</span>) <span class="pl-k">internal</span> <span class="pl-k">pure</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span> <span class="pl-v">z</span>) {
+    <span class="pl-k">if</span> (y <span class="pl-k">&gt;</span> <span class="pl-c1">3</span>) {
+        z <span class="pl-k">=</span> y;
+        <span class="pl-c1">uint</span> x <span class="pl-k">=</span> y <span class="pl-k">/</span> <span class="pl-c1">2</span> <span class="pl-k">+</span> <span class="pl-c1">1</span>;
+        <span class="pl-k">while</span> (x <span class="pl-k">&lt;</span> z) {
+            z <span class="pl-k">=</span> x;
+            x <span class="pl-k">=</span> (y <span class="pl-k">/</span> x <span class="pl-k">+</span> x) <span class="pl-k">/</span> <span class="pl-c1">2</span>;
+        }
+    } <span class="pl-k">else</span> <span class="pl-k">if</span> (y <span class="pl-k">!=</span> <span class="pl-c1">0</span>) {
+        z <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+    }
+}
+
+<span class="pl-k">function<span class="pl-en"> min</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">a</span>, <span class="pl-c1">uint256</span> <span class="pl-v">b</span>) <span class="pl-k">internal</span> <span class="pl-k">pure</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    <span class="pl-k">return</span> a <span class="pl-k">&lt;</span> b <span class="pl-k">?</span> a<span class="pl-k"> : </span>b;
+}
+</pre></div>
+<p dir="auto">让我们谈谈每个函数的作用以及它在合约后面的出现位置：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>sqrt(uint y)</code></h3></div>
+<p dir="auto">这是一个平方根计算器——使用<strong>巴比伦方法</strong>实现，这是在纯整数数学中估算平方根的经典方法。</p>
+<p dir="auto">为什么我们需要它？</p>
+<p dir="auto">当<strong>第一个流动性提供者</strong>进入池子时，我们使用这个函数。</p>
+<p dir="auto">当储备中还没有代币时，我们不能使用通常的比例LP计算。</p>
+<p dir="auto">相反，我们使用他们存入的代币数量的几何平均值来计算要铸造的LP代币：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>lpToMint <span class="pl-k">=</span> <span class="pl-en">sqrt</span>(amountA <span class="pl-k">*</span> amountB);
+</pre></div>
+<p dir="auto">这给第一个提供者一个基于两个代币的公平份额——不仅仅是较大的那个——并为池子的初始比率定下基调。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>min(uint256 a, uint256 b)</code></h3></div>
+<p dir="auto">这个很直接：它返回两个输入中较小的那个。</p>
+<p dir="auto">我们在池子初始化后使用它——当池子有储备且用户正在添加流动性时。</p>
+<p dir="auto">为了保持池子比率完整，我们在铸造LP代币时只考虑<strong>较小的有效贡献</strong>：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>lpToMint <span class="pl-k">=</span> <span class="pl-en">min</span>(
+    (amountA <span class="pl-k">*</span> totalLPSupply) <span class="pl-k">/</span> reserveA,
+    (amountB <span class="pl-k">*</span> totalLPSupply) <span class="pl-k">/</span> reserveB
+);
+</pre></div>
+<p dir="auto">这样：</p>
+<ul dir="auto">
+<li>你不能通过过度供应一个代币来欺骗系统</li>
+<li>LP代币只为你存款的平衡部分铸造</li>
+</ul>
+<hr>
+<p dir="auto">这两个助手在大小上很小，但影响很大。</p>
+<p dir="auto">没有它们，合约其余部分的数学将是笨拙的、重复的和容易出错的。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔄 <code>_updateReserves()</code> — 保持数字同步</h3></div>
+<p dir="auto">这是函数：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> _updateReserves</span></span>() <span class="pl-k">private</span> {
+    reserveA <span class="pl-k">=</span> <span class="pl-c1">IERC20</span>(tokenA).<span class="pl-en">balanceOf</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>));
+    reserveB <span class="pl-k">=</span> <span class="pl-c1">IERC20</span>(tokenB).<span class="pl-en">balanceOf</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>));
+}
+</pre></div>
+<p dir="auto">这个函数很简单——但它在维护我们池子的完整性方面发挥着<strong>关键作用</strong>。</p>
+<p dir="auto">让我们分解一下：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">它做什么？</h3></div>
+<p dir="auto">它通过实际读取合约中有多少代币来更新我们的内部跟踪变量——<code>reserveA</code>和<code>reserveB</code>：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">IERC20</span>(tokenA).<span class="pl-en">balanceOf</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>));
+<span class="pl-c1">IERC20</span>(tokenB).<span class="pl-en">balanceOf</span>(<span class="pl-c1">address</span>(<span class="pl-mi">this</span>));
+</pre></div>
+<p dir="auto">这些是合约在任何时刻持有的每个代币的<strong>真实余额</strong>。</p>
+<p dir="auto">我们将这些值存储在<code>reserveA</code>和<code>reserveB</code>状态变量中，这样我们就不必一遍又一遍地调用<code>balanceOf</code>——这会花费更多gas并使代码混乱。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">为什么标记为<code>private</code>？</h3></div>
+<p dir="auto">因为这个函数不是为了被用户或外部合约直接调用。</p>
+<p dir="auto">它是一个<strong>内部助手</strong>——被以下函数使用：</p>
+<ul dir="auto">
+<li><code>addLiquidity</code></li>
+<li><code>removeLiquidity</code></li>
+<li><code>swap</code></li>
+</ul>
+<p dir="auto">基本上，任何时候代币进出合约，我们调用<code>_updateReserves()</code>来同步数字。</p>
+<p dir="auto">这保持内部状态准确，并确保我们所有的数学（特别是在交换计算中）基于<strong>最新的实际余额</strong>。</p>
+<hr>
+<p dir="auto">没有这个函数，我们会面临：</p>
+<ul dir="auto">
+<li>基于过时储备计算LP代币</li>
+<li>破坏恒定乘积公式</li>
+<li>让用户抢跑过时的池子数据</li>
+</ul>
+<p dir="auto">所以虽然它可能很小且隐藏，<code>_updateReserves()</code>是保持我们池子诚实的胶水。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💧 <code>addLiquidity()</code> — 向池子提供代币</h3></div>
+<p dir="auto">在我们可以交换代币或赚取费用之前，池子需要<strong>流动性</strong>。</p>
+<p dir="auto">这意味着有人必须进来存入两种代币——TokenA和TokenB——来启动系统。</p>
+<p dir="auto">这个函数让任何人都可以这样做。</p>
+<p dir="auto">这是完整的代码：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> addLiquidity</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amountA</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amountB</span>) <span class="pl-k">external</span> nonReentrant {
+    <span class="pl-k">require</span>(amountA <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">&amp;&amp;</span> amountB <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Invalid amounts</span>"</span>);
+
+    <span class="pl-c1">IERC20</span>(tokenA).<span class="pl-en">transferFrom</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>), amountA);
+    <span class="pl-c1">IERC20</span>(tokenB).<span class="pl-en">transferFrom</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>), amountB);
+
+    <span class="pl-c1">uint256</span> lpToMint;
+    <span class="pl-k">if</span> (totalLPSupply <span class="pl-k">==</span> <span class="pl-c1">0</span>) {
+        lpToMint <span class="pl-k">=</span> <span class="pl-en">sqrt</span>(amountA <span class="pl-k">*</span> amountB);
+    } <span class="pl-k">else</span> {
+        lpToMint <span class="pl-k">=</span> <span class="pl-en">min</span>(
+            (amountA <span class="pl-k">*</span> totalLPSupply) <span class="pl-k">/</span> reserveA,
+            (amountB <span class="pl-k">*</span> totalLPSupply) <span class="pl-k">/</span> reserveB
+        );
+    }
+
+    <span class="pl-k">require</span>(lpToMint <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Zero LP minted</span>"</span>);
+
+    lpBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">+=</span> lpToMint;
+    totalLPSupply <span class="pl-k">+=</span> lpToMint;
+
+    <span class="pl-en">_updateReserves</span>();
+
+    <span class="pl-k">emit</span> <span class="pl-en">LiquidityAdded</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountA, amountB, lpToMint);
+}
+</pre></div>
+<hr>
+<p dir="auto">让我们逐步分解：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤1：基本检查</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(amountA <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">&amp;&amp;</span> amountB <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Invalid amounts</span>"</span>);
+</pre></div>
+<p dir="auto">你不能添加零代币——两个数量都需要大于零才能继续。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤2：拉入代币</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">IERC20</span>(tokenA).<span class="pl-en">transferFrom</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>), amountA);
+<span class="pl-c1">IERC20</span>(tokenB).<span class="pl-en">transferFrom</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>), amountB);
+</pre></div>
+<p dir="auto">这将两种代币从用户钱包拉入池子。</p>
+<p dir="auto">注意：用户必须事先为两种代币调用<code>approve()</code>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤3：确定要铸造多少LP代币</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> lpToMint;
+<span class="pl-k">if</span> (totalLPSupply <span class="pl-k">==</span> <span class="pl-c1">0</span>) {
+    lpToMint <span class="pl-k">=</span> <span class="pl-en">sqrt</span>(amountA <span class="pl-k">*</span> amountB);
+} <span class="pl-k">else</span> {
+    lpToMint <span class="pl-k">=</span> <span class="pl-en">min</span>(
+        (amountA <span class="pl-k">*</span> totalLPSupply) <span class="pl-k">/</span> reserveA,
+        (amountB <span class="pl-k">*</span> totalLPSupply) <span class="pl-k">/</span> reserveB
+    );
+}
+</pre></div>
+<p dir="auto">这是数学开始的地方。</p>
+<ul dir="auto">
+<li>如果这是<strong>第一次存款</strong>，我们使用<code>sqrt(amountA * amountB)</code>来设置初始LP供应量。</li>
+<li>如果这是<strong>后续存款</strong>，我们使用<code>min(...)</code>逻辑来确保流动性以正确的比例添加，LP代币按比例铸造。</li>
+</ul>
+<p dir="auto">这部分保持一切公平，防止人们通过过度供应一个代币来玩弄系统。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤4：最终检查和状态更新</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(lpToMint <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Zero LP minted</span>"</span>);
+lpBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">+=</span> lpToMint;
+totalLPSupply <span class="pl-k">+=</span> lpToMint;
+</pre></div>
+<p dir="auto">我们检查LP数量不是零，然后：</p>
+<ul dir="auto">
+<li>将新的LP代币添加到用户余额</li>
+<li>增加总LP供应量</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤5：更新储备</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">_updateReserves</span>();
+</pre></div>
+<p dir="auto">这将池子的内部状态与实际代币余额同步，确保所有未来的数学都基于最新值。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤6：发出事件</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">LiquidityAdded</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountA, amountB, lpToMint);
+</pre></div>
+<p dir="auto">触发链上日志，以便前端、浏览器和分析工具可以跟踪流动性操作。</p>
+<hr>
+<p dir="auto">这就是完整的流程：</p>
+<p dir="auto">从代币存款到LP铸造到状态更新——全部在一个干净、受保护的函数中。---</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💸 <code>removeLiquidity()</code> — 从池子中提取你的份额</h3></div>
+<p dir="auto">如果你已经向池子添加了代币并收到了LP代币作为回报，你最终会想要<strong>兑现</strong>。</p>
+<p dir="auto">这个函数让流动性提供者提取他们在池子中的份额——基于他们持有的LP代币数量。</p>
+<p dir="auto">这是完整的函数：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> removeLiquidity</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">lpAmount</span>) <span class="pl-k">external</span> nonReentrant {
+    <span class="pl-k">require</span>(lpAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">&amp;&amp;</span> lpAmount <span class="pl-k">&lt;=</span> lpBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>], <span class="pl-s">"<span class="pl-s">Invalid LP amount</span>"</span>);
+
+    <span class="pl-c1">uint256</span> amountA <span class="pl-k">=</span> (lpAmount <span class="pl-k">*</span> reserveA) <span class="pl-k">/</span> totalLPSupply;
+    <span class="pl-c1">uint256</span> amountB <span class="pl-k">=</span> (lpAmount <span class="pl-k">*</span> reserveB) <span class="pl-k">/</span> totalLPSupply;
+
+    lpBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">-=</span> lpAmount;
+    totalLPSupply <span class="pl-k">-=</span> lpAmount;
+
+    <span class="pl-c1">IERC20</span>(tokenA).<span class="pl-en">transfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountA);
+    <span class="pl-c1">IERC20</span>(tokenB).<span class="pl-en">transfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountB);
+
+    <span class="pl-en">_updateReserves</span>();
+
+    <span class="pl-k">emit</span> <span class="pl-en">LiquidityRemoved</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountA, amountB, lpAmount);
+}
+</pre></div>
+<p dir="auto">让我们看看这里发生了什么：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤1：验证要销毁的LP代币</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(lpAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">&amp;&amp;</span> lpAmount <span class="pl-k">&lt;=</span> lpBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>], <span class="pl-s">"<span class="pl-s">Invalid LP amount</span>"</span>);
+</pre></div>
+<p dir="auto">我们确保：</p>
+<ul dir="auto">
+<li>用户实际上试图移除<strong>正数</strong>数量</li>
+<li>他们没有试图移除<strong>超过他们拥有的</strong></li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤2：计算要返回多少每种代币</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> amountA <span class="pl-k">=</span> (lpAmount <span class="pl-k">*</span> reserveA) <span class="pl-k">/</span> totalLPSupply;
+<span class="pl-c1">uint256</span> amountB <span class="pl-k">=</span> (lpAmount <span class="pl-k">*</span> reserveB) <span class="pl-k">/</span> totalLPSupply;
+</pre></div>
+<p dir="auto">这是比例份额公式。</p>
+<p dir="auto">如果你拥有10%的LP供应量，你应该得到两种代币储备的10%。</p>
+<p dir="auto">这正是这个数学所做的——基于当前储备和你的LP余额。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤3：销毁LP代币</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>lpBalances[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">-=</span> lpAmount;
+totalLPSupply <span class="pl-k">-=</span> lpAmount;
+</pre></div>
+<p dir="auto">我们更新我们的内部跟踪：</p>
+<ul dir="auto">
+<li>用户的LP余额下降</li>
+<li>LP代币的总供应量也下降</li>
+</ul>
+<p dir="auto">这模拟了<strong>销毁</strong>LP代币。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤4：将代币转回给用户</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">IERC20</span>(tokenA).<span class="pl-en">transfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountA);
+<span class="pl-c1">IERC20</span>(tokenB).<span class="pl-en">transfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountB);
+</pre></div>
+<p dir="auto">现在我们知道用户应得什么，我们直接从池子将两种代币转回给他们。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤5：同步内部储备</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">_updateReserves</span>();
+</pre></div>
+<p dir="auto">因为代币刚刚离开池子，我们需要更新我们的内部<code>reserveA</code>和<code>reserveB</code>值以匹配现实。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤6：发出透明度日志</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">LiquidityRemoved</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amountA, amountB, lpAmount);
+</pre></div>
+<p dir="auto">这个事件告诉外部世界：</p>
+<ul dir="auto">
+<li>谁移除了流动性</li>
+<li>他们得到了多少每种代币</li>
+<li>销毁了多少LP代币</li>
+</ul>
+<hr>
+<p dir="auto">就是这样——有了这个函数，流动性提供者可以安全公平地提取他们在池子中的份额。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔄 <code>getAmountOut()</code> — 计算交换输出</h3></div>
+<p dir="auto">在我们实际执行交换之前，我们需要知道：</p>
+<p dir="auto"><strong>"如果我给池子X数量的TokenA，我会得到多少TokenB？"</strong></p>
+<p dir="auto">这正是这个函数所做的——它使用<strong>恒定乘积公式</strong>根据当前储备计算公平的输出数量。</p>
+<p dir="auto">这是函数：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getAmountOut</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">inputAmount</span>, <span class="pl-c1">address</span> <span class="pl-v">inputToken</span>) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span> <span class="pl-v">outputAmount</span>) {
+    <span class="pl-k">require</span>(inputToken <span class="pl-k">==</span> tokenA <span class="pl-k">||</span> inputToken <span class="pl-k">==</span> tokenB, <span class="pl-s">"<span class="pl-s">Invalid input token</span>"</span>);
+
+    <span class="pl-c1">bool</span> isTokenA <span class="pl-k">=</span> inputToken <span class="pl-k">==</span> tokenA;
+    (<span class="pl-c1">uint256</span> <span class="pl-v">inputReserve</span>, <span class="pl-c1">uint256</span> <span class="pl-v">outputReserve</span>) <span class="pl-k">=</span> isTokenA <span class="pl-k">?</span> (reserveA, reserveB)<span class="pl-k"> : </span>(reserveB, reserveA);
+
+    <span class="pl-c1">uint256</span> inputWithFee <span class="pl-k">=</span> inputAmount <span class="pl-k">*</span> <span class="pl-c1">997</span>;
+    <span class="pl-c1">uint256</span> numerator <span class="pl-k">=</span> inputWithFee <span class="pl-k">*</span> outputReserve;
+    <span class="pl-c1">uint256</span> denominator <span class="pl-k">=</span> (inputReserve <span class="pl-k">*</span> <span class="pl-c1">1000</span>) <span class="pl-k">+</span> inputWithFee;
+
+    outputAmount <span class="pl-k">=</span> numerator <span class="pl-k">/</span> denominator;
+}
+</pre></div>
+<p dir="auto">让我们分解一下：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤1：代币验证</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(inputToken <span class="pl-k">==</span> tokenA <span class="pl-k">||</span> inputToken <span class="pl-k">==</span> tokenB, <span class="pl-s">"<span class="pl-s">Invalid input token</span>"</span>);
+</pre></div>
+<p dir="auto">用户必须交换<code>tokenA</code>或<code>tokenB</code>——不接受其他任何东西。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤2：识别交易的输入和输出方</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">bool</span> isTokenA <span class="pl-k">=</span> inputToken <span class="pl-k">==</span> tokenA;
+(<span class="pl-c1">uint256</span> <span class="pl-v">inputReserve</span>, <span class="pl-c1">uint256</span> <span class="pl-v">outputReserve</span>) <span class="pl-k">=</span> isTokenA <span class="pl-k">?</span> (reserveA, reserveB)<span class="pl-k"> : </span>(reserveB, reserveA);
+</pre></div>
+<p dir="auto">我们确定交易的方向：</p>
+<ul dir="auto">
+<li>如果<code>inputToken == tokenA</code>，我们正在交换A → B</li>
+<li>否则，我们正在交换B → A</li>
+</ul>
+<p dir="auto">然后我们相应地提取正确的储备。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤3：应用交换费用</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> inputWithFee <span class="pl-k">=</span> inputAmount <span class="pl-k">*</span> <span class="pl-c1">997</span>;
+</pre></div>
+<p dir="auto">我们应用<strong>0.3%费用</strong>——就像Uniswap V2一样。</p>
+<ul dir="auto">
+<li>完整的输入数量将是<code>inputAmount * 1000</code></li>
+<li>但我们只使用997，将0.3%保留在池子内作为协议费用</li>
+</ul>
+<p dir="auto">这个小费用使DEX流动性可持续——用交换费用奖励LP。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤4：使用AMM公式计算输出</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> numerator <span class="pl-k">=</span> inputWithFee <span class="pl-k">*</span> outputReserve;
+<span class="pl-c1">uint256</span> denominator <span class="pl-k">=</span> (inputReserve <span class="pl-k">*</span> <span class="pl-c1">1000</span>) <span class="pl-k">+</span> inputWithFee;
+outputAmount <span class="pl-k">=</span> numerator <span class="pl-k">/</span> denominator;
+</pre></div>
+<p dir="auto">这是恒定乘积AMM（<code>x * y = k</code>）的<strong>核心公式</strong>，重新排列以计算输出：</p>
+<p dir="auto">这确保：</p>
+<ul dir="auto">
+<li>你一次尝试交换得越多，你的价格就越差（滑点）</li>
+<li>池子永远不会完全耗尽</li>
+<li>交换总是使乘积<code>x * y</code>大致相同</li>
+</ul>
+<hr>
+<p dir="auto">这个函数是只读的（<code>view</code>）——它不移动任何代币。</p>
+<p dir="auto">它是为了在你实际执行之前<strong>模拟</strong>交换会产生什么。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔁 <code>swap()</code> — 执行代币交换</h3></div>
+<p dir="auto">这个函数让用户基于当前池子储备和恒定乘积公式将一个代币交易为另一个。</p>
+<p dir="auto">这是完整的函数：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> swap</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">inputAmount</span>, <span class="pl-c1">address</span> <span class="pl-v">inputToken</span>) <span class="pl-k">external</span> nonReentrant {
+    <span class="pl-k">require</span>(inputAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Zero input</span>"</span>);
+    <span class="pl-k">require</span>(inputToken <span class="pl-k">==</span> tokenA <span class="pl-k">||</span> inputToken <span class="pl-k">==</span> tokenB, <span class="pl-s">"<span class="pl-s">Invalid token</span>"</span>);
+
+    <span class="pl-c1">address</span> outputToken <span class="pl-k">=</span> inputToken <span class="pl-k">==</span> tokenA <span class="pl-k">?</span> tokenB<span class="pl-k"> : </span>tokenA;
+    <span class="pl-c1">uint256</span> outputAmount <span class="pl-k">=</span> <span class="pl-en">getAmountOut</span>(inputAmount, inputToken);
+
+    <span class="pl-k">require</span>(outputAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Insufficient output</span>"</span>);
+
+    <span class="pl-c1">IERC20</span>(inputToken).<span class="pl-en">transferFrom</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>), inputAmount);
+    <span class="pl-c1">IERC20</span>(outputToken).<span class="pl-en">transfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, outputAmount);
+
+    <span class="pl-en">_updateReserves</span>();
+
+    <span class="pl-k">emit</span> <span class="pl-en">Swapped</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, inputToken, inputAmount, outputToken, outputAmount);
+}
+</pre></div>
+<p dir="auto">让我们看看交换是如何工作的：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤1：输入验证</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(inputAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Zero input</span>"</span>);
+<span class="pl-k">require</span>(inputToken <span class="pl-k">==</span> tokenA <span class="pl-k">||</span> inputToken <span class="pl-k">==</span> tokenB, <span class="pl-s">"<span class="pl-s">Invalid token</span>"</span>);
+</pre></div>
+<p dir="auto">我们确保用户发送：</p>
+<ul dir="auto">
+<li>非零数量</li>
+<li>两个有效池子代币之一</li>
+</ul>
+<p dir="auto">这里不允许随机代币合约。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤2：确定输出代币</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">address</span> outputToken <span class="pl-k">=</span> inputToken <span class="pl-k">==</span> tokenA <span class="pl-k">?</span> tokenB<span class="pl-k"> : </span>tokenA;
+</pre></div>
+<p dir="auto">如果输入是TokenA，输出是TokenB——反之亦然。</p>
+<p dir="auto">我们正在构建一个简单的双代币池子，所以这个逻辑总是二进制的。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤3：计算要发送回多少</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> outputAmount <span class="pl-k">=</span> <span class="pl-en">getAmountOut</span>(inputAmount, inputToken);
+<span class="pl-k">require</span>(outputAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Insufficient output</span>"</span>);
+</pre></div>
+<p dir="auto">我们调用刚刚分解的<code>getAmountOut()</code>函数。</p>
+<p dir="auto">这使用AMM公式和当前储备来计算公平价格（包括0.3%费用）。</p>
+<p dir="auto">如果结果为零——也许因为输入太小——我们回滚。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤4：转移代币</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">IERC20</span>(inputToken).<span class="pl-en">transferFrom</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>), inputAmount);
+<span class="pl-c1">IERC20</span>(outputToken).<span class="pl-en">transfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, outputAmount);
+</pre></div>
+<p dir="auto">现在我们实际移动代币：</p>
+<ul dir="auto">
+<li>将输入代币从用户拉入池子</li>
+<li>将计算的输出代币发送回用户</li>
+</ul>
+<p dir="auto">这是<strong>真正的交换</strong>在行动。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤5：同步储备</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">_updateReserves</span>();
+</pre></div>
+<p dir="auto">代币移动后，我们调用<code>_updateReserves()</code>来反映新的池子状态。</p>
+<p dir="auto">没有这个，未来的交换可能破坏数学或变得可操纵。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤6：发出交换事件</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">Swapped</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, inputToken, inputAmount, outputToken, outputAmount);
+</pre></div>
+<p dir="auto">这帮助前端和仪表板显示交换活动——包括滑点、交易量和配对移动。</p>
+<hr>
+<p dir="auto">这就是完整的交换逻辑——干净、快速、安全。</p>
+<p dir="auto">你现在已经完成了工作流动性池的整个逻辑：</p>
+<p dir="auto">✅ 添加流动性</p>
+<p dir="auto">✅ 移除流动性</p>
+<p dir="auto">✅ 计算公平价格</p>
+<p dir="auto">✅ 执行代币交换</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">👀 查看函数——读取池子状态</h3></div>
+<p dir="auto">它们是：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getReserves</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>, <span class="pl-c1">uint256</span>) {
+    <span class="pl-k">return</span> (reserveA, reserveB);
+}
+
+<span class="pl-k">function<span class="pl-en"> getLPBalance</span></span>(<span class="pl-c1">address</span> <span class="pl-v">user</span>) <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    <span class="pl-k">return</span> lpBalances[user];
+}
+
+<span class="pl-k">function<span class="pl-en"> getTotalLPSupply</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    <span class="pl-k">return</span> totalLPSupply;
+}
+</pre></div>
+<p dir="auto">让我们快速看看每个函数的作用：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>getReserves()</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getReserves</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>, <span class="pl-c1">uint256</span>)
+</pre></div>
+<p dir="auto">这返回池子中当前的<strong>TokenA和TokenB</strong>数量——根据内部跟踪变量<code>reserveA</code>和<code>reserveB</code>。</p>
+<p dir="auto">有用于：</p>
+<ul dir="auto">
+<li>前端显示池子的当前状态</li>
+<li>用户计算预期交换价格或滑点</li>
+<li>验证可用的实际流动性</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>getLPBalance(address user)</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getLPBalance</span></span>(<span class="pl-c1">address</span> <span class="pl-v">user</span>) <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>)
+</pre></div>
+<p dir="auto">这告诉你给定地址持有<strong>多少LP代币</strong>——本质上是他们在池子中的<strong>所有权份额</strong>。</p>
+<p dir="auto">有用于：</p>
+<ul dir="auto">
+<li>让用户检查他们提供了多少流动性</li>
+<li>构建LP仪表板</li>
+<li>计算他们在提取时会得到多少</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>getTotalLPSupply()</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getTotalLPSupply</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>)
+</pre></div>
+<p dir="auto">返回曾经铸造的LP代币总数——等于所有个人LP余额的总和。</p>
+<p dir="auto">这有助于：</p>
+<ul dir="auto">
+<li>维护准确的比例数学</li>
+<li>检查任何单个LP拥有池子的多少（通过<code>用户LP / 总LP</code>）</li>
+<li>可视化池子如何随时间增长</li>
+</ul>
+<hr>
+<p dir="auto">有了这个，<code>MiniDexPair</code>合约就<strong>完成了</strong>。</p>
+<p dir="auto">你现在有一个完全工作的DEX配对：</p>
+<ul dir="auto">
+<li>支持ERC-20代币</li>
+<li>让用户交换、添加和移除流动性</li>
+<li>使用恒定乘积AMM模型计算价格</li>
+<li>发出干净的事件并公开有用的查看函数---</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🧰 在Remix中运行<code>MiniDexPair</code>——逐步指南</h2></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">✅ 先决条件</h3></div>
+<p dir="auto">在我们深入之前：</p>
+<ol dir="auto">
+<li>打开Remix IDE</li>
+<li>确保你使用<strong>Solidity版本0.8.20</strong>或更高</li>
+<li>安装或导入<strong>2个ERC-20模拟代币</strong>（我们将为演示目的创建这些）</li>
+</ol>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧪 步骤1：创建两个模拟ERC-20代币</h3></div>
+<p dir="auto">我们需要两个代币来模拟交换配对——让我们称它们为<code>TokenA</code>和<code>TokenB</code>。</p>
+<p dir="auto">这是一个你可以为两者使用的超级简单的ERC-20实现：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-k">pragma solidity</span> <span class="pl-k">^</span><span class="pl-c1">0.8.20</span>;
+
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/token/ERC20/ERC20.sol</span>"</span>;
+
+<span class="pl-k">contract</span> <span class="pl-en">MockToken</span> <span class="pl-k">is</span> <span class="pl-en">ERC20</span> {
+    <span class="pl-k">constructor</span>(<span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">name</span>, <span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">symbol</span>, <span class="pl-c1">uint256</span> <span class="pl-v">initialSupply</span>) <span class="pl-c1">ERC20</span>(name, symbol) {
+        <span class="pl-en">_mint</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, initialSupply);
+    }
+}
+</pre></div>
+<p dir="auto">部署<strong>两个</strong>这样的代币，使用不同的名称、符号和大的初始供应量（例如，<code>1_000_000 ether</code>）——一个用于<code>TokenA</code>，一个用于<code>TokenB</code>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🏗️ 步骤2：部署MiniDexPair合约</h3></div>
+<p dir="auto">现在粘贴你的<code>MiniDexPair</code>合约，编译它，并通过传入步骤1中的两个代币地址来部署它：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">new</span> <span class="pl-en">MiniDexPair</span>(TokenA_address, TokenB_address)
+</pre></div>
+<p dir="auto">这初始化配对合约只接受这两个特定代币。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💰 步骤3：批准配对合约花费代币</h3></div>
+<p dir="auto">在调用<code>addLiquidity</code>之前，你的代币需要被转移的权限。</p>
+<p dir="auto">在两个代币合约上调用<code>approve()</code>函数（通过Remix UI）：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>TokenA.<span class="pl-en">approve</span>(MiniDexPair_address, amount)
+TokenB.<span class="pl-en">approve</span>(MiniDexPair_address, amount)
+</pre></div>
+<p dir="auto">使用一个大数字，如<code>1000000000000000000000</code>（对于18位小数的代币，这是<code>1000 * 10^18</code>）。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">➕ 步骤4：添加流动性</h3></div>
+<p dir="auto">现在调用：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">addLiquidity</span>(amountA, amountB)
+</pre></div>
+<p dir="auto">例如：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">addLiquidity</span>(<span class="pl-c1">1000</span> ether, <span class="pl-c1">2000</span> ether)
+</pre></div>
+<p dir="auto">这将存入代币并向你的钱包铸造LP代币。</p>
+<p dir="auto">使用<code>getReserves()</code>和<code>getLPBalance(yourAddress)</code>来验证结果。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔁 步骤5：交换代币</h3></div>
+<p dir="auto">现在尝试从另一个地址（或同一个）调用<code>swap</code>，在再次批准后：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">swap</span>(<span class="pl-c1">500</span> ether, TokenA_address)
+</pre></div>
+<p dir="auto">这应该发送TokenA并根据当前池子比率给你TokenB。</p>
+<p dir="auto">在交换之前使用<code>getAmountOut(inputAmount, inputToken)</code>来预览结果。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💸 步骤6：移除流动性</h3></div>
+<p dir="auto">要取回你的代币，只需调用：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">removeLiquidity</span>(lpAmount)
+</pre></div>
+<p dir="auto">你可以使用<code>getLPBalance(yourAddress)</code>来找到你确切的LP持有量并传入。</p>
+<p dir="auto">你应该收到两种代币，减去之前任何交换的池子费用效应。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📊 步骤7：跟踪发生的事情</h3></div>
+<p dir="auto">使用Remix"日志"面板观察：</p>
+<ul dir="auto">
+<li><code>LiquidityAdded</code></li>
+<li><code>LiquidityRemoved</code></li>
+<li><code>Swapped</code></li>
+</ul>
+<p dir="auto">你也可以使用只读查看函数来检查：</p>
+<ul dir="auto">
+<li><code>getReserves()</code></li>
+<li><code>getTotalLPSupply()</code></li>
+<li><code>getLPBalance(address)</code></li>
+</ul>
+<hr>
+<p dir="auto">就是这样——你刚刚使用Remix部署并运行了你自己的迷你Uniswap风格池子。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🏗️ 让它变得动态——进入<code>MiniDexFactory</code></h3></div>
+<p dir="auto">到目前为止，我们的<code>MiniDexPair</code>合约一直很稳固——它作为独立池子工作得很好。</p>
+<p dir="auto">但这里有个问题：</p>
+<p dir="auto">每次我们想创建新的代币配对——比如<code>WETH/USDC</code>、<code>DAI/FRAX</code>或<code>PEPE/SOL</code>——我们都必须手动部署<code>MiniDexPair</code>合约的新副本。</p>
+<p dir="auto">如果你正在构建一次性原型，这很好。</p>
+<p dir="auto">但在DeFi的现实世界中，DEX不仅支持<strong>一个</strong>交易配对。</p>
+<p dir="auto">它们支持<strong>数百个</strong>，有时<strong>数千个</strong>，所有这些都需要：</p>
+<ul dir="auto">
+<li>可以即时部署</li>
+<li>可发现和可索引</li>
+<li>可被其他合约和前端重用</li>
+</ul>
+<p dir="auto">那么我们该怎么办？</p>
+<blockquote>
+<p dir="auto">我们引入一个工厂——一个可以部署新池子、跟踪它们并使整个DEX系统动态化的智能合约。</p>
+</blockquote>
+<p dir="auto">这正是<code>MiniDexFactory</code>所做的。</p>
+<p dir="auto">这个合约成为我们DEX中所有配对的<strong>中央注册表</strong>。</p>
+<p dir="auto">有了它，我们可以：</p>
+<ul dir="auto">
+<li><strong>按需</strong>创建新的代币配对</li>
+<li>防止重复</li>
+<li>仅使用代币地址检索配对的地址</li>
+<li>如果需要，循环遍历所有配对（用于分析、UI等）</li>
+</ul>
+<p dir="auto">简而言之，这就是我们如何从单池原型扩展到<strong>完全功能的去中心化交易所</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧱 完整的<code>MiniDexFactory</code>合约——池子的启动台</h3></div>
+<p dir="auto">现在我们已经构建并测试了单个<code>MiniDexPair</code>，是时候<strong>扩展</strong>了。</p>
+<p dir="auto">这个合约——<code>MiniDexFactory</code>——是我们DEX系统的支柱。它是让我们<strong>动态创建新流动性池</strong>的部分，无论何时需要任何代币配对。</p>
+<p dir="auto">这是高级逻辑：</p>
+<ul dir="auto">
+<li>只有合约所有者可以创建新配对（目前）</li>
+<li>当调用<code>createPair()</code>时，它使用给定代币启动新的<code>MiniDexPair</code></li>
+<li>它将该配对的地址存储在映射中，以便我们稍后可以获取它</li>
+<li>它确保<strong>不创建重复配对</strong>（例如，<code>DAI/WETH</code>和<code>WETH/DAI</code>应该被视为相同）</li>
+<li>它用<code>PairCreated</code>事件记录一切</li>
+</ul>
+<p dir="auto">简而言之：这是与你一起成长的DEX部分。</p>
+<p dir="auto">这是完整的代码：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-k">pragma solidity</span> <span class="pl-k">^</span><span class="pl-c1">0.8.20</span>;
+
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/access/Ownable.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">./MiniDexPair.sol</span>"</span>; <span class="pl-c">// 假设MiniDexPair.sol在同一目录中</span>
+
+<span class="pl-k">contract</span> <span class="pl-en">MiniDexFactory</span> <span class="pl-k">is</span> <span class="pl-en">Ownable</span> {
+    <span class="pl-k">event <span class="pl-en">PairCreated</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenA</span>, <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenB</span>, <span class="pl-c1">address</span> <span class="pl-v">pairAddress</span>, <span class="pl-c1">uint</span>);
+
+    <span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">address</span>)) <span class="pl-k">public</span> getPair;
+    <span class="pl-c1">address</span>[] <span class="pl-k">public</span> allPairs;
+
+    <span class="pl-k">constructor</span>(<span class="pl-c1">address</span> <span class="pl-v">_owner</span>) <span class="pl-en">Ownable</span>(_owner) {}
+
+    <span class="pl-k">function<span class="pl-en"> createPair</span></span>(<span class="pl-c1">address</span> <span class="pl-v">_tokenA</span>, <span class="pl-c1">address</span> <span class="pl-v">_tokenB</span>) <span class="pl-k">external</span> onlyOwner <span class="pl-k">returns</span> (<span class="pl-c1">address</span> <span class="pl-v">pair</span>) {
+        <span class="pl-k">require</span>(_tokenA <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>) <span class="pl-k">&amp;&amp;</span> _tokenB <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Invalid token address</span>"</span>);
+        <span class="pl-k">require</span>(_tokenA <span class="pl-k">!=</span> _tokenB, <span class="pl-s">"<span class="pl-s">Identical tokens</span>"</span>);
+        <span class="pl-k">require</span>(getPair[_tokenA][_tokenB] <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Pair already exists</span>"</span>);
+
+        <span class="pl-c">// 为一致性排序代币</span>
+        (<span class="pl-c1">address</span> <span class="pl-v">token0</span>, <span class="pl-c1">address</span> <span class="pl-v">token1</span>) <span class="pl-k">=</span> _tokenA <span class="pl-k">&lt;</span> _tokenB <span class="pl-k">?</span> (_tokenA, _tokenB)<span class="pl-k"> : </span>(_tokenB, _tokenA);
+
+        pair <span class="pl-k">=</span> <span class="pl-c1">address</span>(<span class="pl-k">new</span> <span class="pl-en">MiniDexPair</span>(token0, token1));
+        getPair[token0][token1] <span class="pl-k">=</span> pair;
+        getPair[token1][token0] <span class="pl-k">=</span> pair;
+
+        allPairs.<span class="pl-en">push</span>(pair);
+        <span class="pl-k">emit</span> <span class="pl-en">PairCreated</span>(token0, token1, pair, allPairs.<span class="pl-mi">length</span> <span class="pl-k">-</span> <span class="pl-c1">1</span>);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> allPairsLength</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span>) {
+        <span class="pl-k">return</span> allPairs.<span class="pl-mi">length</span>;
+    }
+
+    <span class="pl-k">function<span class="pl-en"> getPairAtIndex</span></span>(<span class="pl-c1">uint</span> <span class="pl-v">index</span>) <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">address</span>) {
+        <span class="pl-k">require</span>(index <span class="pl-k">&lt;</span> allPairs.<span class="pl-mi">length</span>, <span class="pl-s">"<span class="pl-s">Index out of bounds</span>"</span>);
+        <span class="pl-k">return</span> allPairs[index];
+    }
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📦 导入——引入我们需要的工具</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/access/Ownable.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">./MiniDexPair.sol</span>"</span>; <span class="pl-c">// 假设MiniDexPair.sol在同一目录中</span>
+</pre></div>
+<p dir="auto">这两行设置了<code>MiniDexFactory</code>安全高效运行所需的一切。</p>
+<p dir="auto">让我们看看每一个：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>Ownable.sol</code></h3></div>
+<p dir="auto">这个导入来自<strong>OpenZeppelin</strong>，它为我们的合约提供<strong>访问控制</strong>。</p>
+<p dir="auto">通过继承<code>Ownable</code>，我们可以：</p>
+<ul dir="auto">
+<li>自动跟踪合约的<code>owner</code></li>
+<li>限制像<code>createPair()</code>这样的敏感函数只能由所有者调用</li>
+<li>使用<code>onlyOwner</code>修饰符进行安全</li>
+</ul>
+<p dir="auto">换句话说，我们确保<strong>不是任何人</strong>都可以开始创建新的代币配对——除非你稍后决定放宽它。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>MiniDexPair.sol</code></h3></div>
+<p dir="auto">这是我们自己的本地导入——它引入了我们之前编写的<strong>配对合约</strong>。</p>
+<blockquote>
+<p dir="auto">工厂的整个工作就是为不同的代币组合部署这个合约的新实例。</p>
+</blockquote>
+<p dir="auto">所以每当我们调用<code>createPair()</code>时，我们将启动一个新的<code>MiniDexPair</code>，传入我们希望池子支持的两个代币地址。</p>
+<p dir="auto">这里的关键点是：</p>
+<p dir="auto">工厂<em>了解</em>配对合约并将其用作模板——有点像每次有人需要新的交易配对时铸造新池子。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🏗️ 合约声明</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">contract</span> <span class="pl-en">MiniDexFactory</span> <span class="pl-k">is</span> <span class="pl-en">Ownable</span> {
+</pre></div>
+<p dir="auto">这一行定义了我们合约的名称以及它继承自OpenZeppelin的<code>Ownable</code>合约的事实。让我们解开两个部分：</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>MiniDexFactory
+</pre></div>
+<p dir="auto">这是DEX管理器的<strong>蓝图</strong>——一个可以：</p>
+<ul dir="auto">
+<li>部署多个流动性池合约（<code>MiniDexPair</code>）</li>
+<li>跟踪它们</li>
+<li>确保不创建重复池子</li>
+</ul>
+<p dir="auto">你可以把这想象成你的去中心化交易所的<strong>后端管理员</strong>——它不进行交换，但它保持一切有序。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">is</span> Ownable
+</pre></div>
+<p dir="auto">这给我们的合约一个<strong>所有者</strong>——以及对<code>onlyOwner</code>修饰符的访问。</p>
+<p dir="auto">这意味着：</p>
+<ul dir="auto">
+<li>只有合约部署者（或部署者转移所有权的人）可以调用像<code>createPair()</code>这样的函数</li>
+<li>我们添加了基本的<strong>访问控制</strong>和<strong>安全</strong>层，特别是在初始设置或测试时有用</li>
+</ul>
+<p dir="auto">这有助于防止随机用户垃圾邮件池创建——尽管在生产级系统中，你可能稍后通过适当的验证开放这个。</p>
+<hr>
+<p dir="auto">所以仅仅这一行，我们就设置了一个合约：</p>
+<ul dir="auto">
+<li>可以部署新的配对合约</li>
+<li>拥有控制如何以及何时创建池子的权威</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 工厂如何跟踪一切？</h3></div>
+<p dir="auto">如果这个合约将成为池子创建的中央枢纽，它需要一种可靠的方式来<strong>跟踪</strong>、<strong>存储</strong>和<strong>公开</strong>每个MiniDex配对背后的数据。</p>
+<p dir="auto">我们需要：</p>
+<ul dir="auto">
+<li>记录何时创建新配对</li>
+<li>让用户或前端通过代币地址查询任何配对</li>
+<li>保留所有创建配对的完整列表，用于分析或索引</li>
+</ul>
+<p dir="auto">这正是这一部分处理的。</p>
+<p dir="auto">这是使所有这些成为可能的代码：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">PairCreated</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenA</span>, <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenB</span>, <span class="pl-c1">address</span> <span class="pl-v">pairAddress</span>, <span class="pl-c1">uint</span>);
+
+<span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">address</span>)) <span class="pl-k">public</span> getPair;
+<span class="pl-c1">address</span>[] <span class="pl-k">public</span> allPairs;
+</pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>event PairCreated(...)</code></h3></div>
+<p dir="auto">每次通过<code>createPair()</code>创建新配对时，这个事件就会触发。</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">PairCreated</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenA</span>, <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenB</span>, <span class="pl-c1">address</span> <span class="pl-v">pairAddress</span>, <span class="pl-c1">uint</span>);
+</pre></div>
+<p dir="auto">这是每个部分记录的内容：</p>
+<ul dir="auto">
+<li><code>tokenA</code>和<code>tokenB</code>：配对中的两个代币（索引，所以你可以按它们过滤）</li>
+<li><code>pairAddress</code>：新<code>MiniDexPair</code>合约的实际部署地址</li>
+<li>一个<code>uint</code>，作为配对在<code>allPairs</code>数组中的索引</li>
+</ul>
+<p dir="auto">这对以下非常有用：</p>
+<ul dir="auto">
+<li>前端应用试图显示所有可用配对</li>
+<li>索引器跟踪链上配对创建</li>
+<li>开发者调试部署</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>mapping getPair</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">address</span>)) <span class="pl-k">public</span> getPair;
+</pre></div>
+<p dir="auto">这是一个<strong>双重映射</strong>，用于存储每个创建的配对的部署地址。</p>
+<p dir="auto">你可以把它想象成查找表：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>getPair[DAI][WETH] <span class="pl-k">=</span> 0x...PairAddress
+getPair[WETH][DAI] <span class="pl-k">=</span> 0x...SamePairAddress
+</pre></div>
+<p dir="auto">两个方向都存储，所以用户可以查询配对，无论代币顺序如何——在<code>createPair()</code>函数中会详细说明。</p>
+<p dir="auto">因为它被标记为<code>public</code>，Solidity自动为它创建一个getter函数。</p>
+<p dir="auto">你可以随时调用<code>getPair(tokenA, tokenB)</code>来检查该配对是否存在并检索部署的池地址。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>address[] public allPairs</code></h3></div>
+<p dir="auto">这个数组存储这个工厂创建的<strong>所有配对合约</strong>。</p>
+<p dir="auto">每次创建新池子时，它都会被推入这个数组。</p>
+<p dir="auto">它允许：</p>
+<ul dir="auto">
+<li>循环遍历所有创建的池子</li>
+<li>按索引返回池地址</li>
+<li>构建分页UI和分析仪表板</li>
+</ul>
+<p dir="auto">我们将在像<code>allPairsLength()</code>和<code>getPairAtIndex()</code>这样的函数中使用这个。</p>
+<hr>
+<p dir="auto">所以仅仅这三行，我们就构建了：</p>
+<ul dir="auto">
+<li>一种<strong>记录</strong>每个新配对的方式</li>
+<li>一种高效<strong>存储</strong>和<strong>查找</strong>每个配对的方式</li>
+<li>一种<strong>列出和计数</strong>系统中每个池子的方式---</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🏁 构造函数——设置所有者</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">constructor</span>(<span class="pl-c1">address</span> <span class="pl-v">_owner</span>) <span class="pl-en">Ownable</span>(_owner) {}
+</pre></div>
+<p dir="auto">这个构造函数做一件简单但重要的事情：它设置工厂合约的<strong>初始所有者</strong>。</p>
+<p dir="auto">让我们解开它：</p>
+<ul dir="auto">
+<li>我们在部署期间接受<code>_owner</code>地址作为输入。</li>
+<li>我们将该地址直接传递给OpenZeppelin的<code>Ownable</code>构造函数。</li>
+</ul>
+<p dir="auto">结果？</p>
+<p dir="auto">部署合约的人可以<strong>立即将所有权分配给其他人</strong>——而不是总是默认为部署者。</p>
+<p dir="auto">这在以下情况下很方便：</p>
+<ul dir="auto">
+<li>你代表DAO或前端部署合约</li>
+<li>你希望所有权转到多重签名、时间锁或其他合约</li>
+</ul>
+<p dir="auto">通过从一开始就使所有权灵活，我们保持事物更可组合和生产友好。</p>
+<p dir="auto">现在我们已经初始化了所有者，让我们看看明星：<code>createPair()</code>函数。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🛠️ <code>createPair()</code> — 部署新的流动性池</h3></div>
+<p dir="auto">这个函数允许工厂为任何两个代币<strong>部署全新的MiniDexPair合约</strong>——只要它们还没有配对。</p>
+<p dir="auto">这是完整的代码：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> createPair</span></span>(<span class="pl-c1">address</span> <span class="pl-v">_tokenA</span>, <span class="pl-c1">address</span> <span class="pl-v">_tokenB</span>) <span class="pl-k">external</span> onlyOwner <span class="pl-k">returns</span> (<span class="pl-c1">address</span> <span class="pl-v">pair</span>) {
+    <span class="pl-k">require</span>(_tokenA <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>) <span class="pl-k">&amp;&amp;</span> _tokenB <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Invalid token address</span>"</span>);
+    <span class="pl-k">require</span>(_tokenA <span class="pl-k">!=</span> _tokenB, <span class="pl-s">"<span class="pl-s">Identical tokens</span>"</span>);
+    <span class="pl-k">require</span>(getPair[_tokenA][_tokenB] <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Pair already exists</span>"</span>);
+
+    <span class="pl-c">// 为一致性排序代币</span>
+    (<span class="pl-c1">address</span> <span class="pl-v">token0</span>, <span class="pl-c1">address</span> <span class="pl-v">token1</span>) <span class="pl-k">=</span> _tokenA <span class="pl-k">&lt;</span> _tokenB <span class="pl-k">?</span> (_tokenA, _tokenB)<span class="pl-k"> : </span>(_tokenB, _tokenA);
+
+    pair <span class="pl-k">=</span> <span class="pl-c1">address</span>(<span class="pl-k">new</span> <span class="pl-en">MiniDexPair</span>(token0, token1));
+    getPair[token0][token1] <span class="pl-k">=</span> pair;
+    getPair[token1][token0] <span class="pl-k">=</span> pair;
+
+    allPairs.<span class="pl-en">push</span>(pair);
+    <span class="pl-k">emit</span> <span class="pl-en">PairCreated</span>(token0, token1, pair, allPairs.<span class="pl-mi">length</span> <span class="pl-k">-</span> <span class="pl-c1">1</span>);
+}
+</pre></div>
+<p dir="auto">让我们逐步分解：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔒 访问控制</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">external</span> onlyOwner
+</pre></div>
+<p dir="auto">只有<strong>工厂的所有者</strong>（在构造函数中设置）可以调用这个函数。</p>
+<p dir="auto">这防止任何人垃圾邮件新池子——尽管在公共DEX中，你可能最终会放宽这个限制。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧼 基本验证</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(_tokenA <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>) <span class="pl-k">&amp;&amp;</span> _tokenB <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Invalid token address</span>"</span>);
+<span class="pl-k">require</span>(_tokenA <span class="pl-k">!=</span> _tokenB, <span class="pl-s">"<span class="pl-s">Identical tokens</span>"</span>);
+<span class="pl-k">require</span>(getPair[_tokenA][_tokenB] <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Pair already exists</span>"</span>);
+</pre></div>
+<p dir="auto">我们确保：</p>
+<ul dir="auto">
+<li>两个代币地址都有效</li>
+<li>代币不相同</li>
+<li>这个组合的配对还不存在</li>
+</ul>
+<p dir="auto">这保持事物干净、安全并避免重复。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧭 代币排序</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>(<span class="pl-c1">address</span> <span class="pl-v">token0</span>, <span class="pl-c1">address</span> <span class="pl-v">token1</span>) <span class="pl-k">=</span> _tokenA <span class="pl-k">&lt;</span> _tokenB <span class="pl-k">?</span> (_tokenA, _tokenB)<span class="pl-k"> : </span>(_tokenB, _tokenA);
+</pre></div>
+<p dir="auto">这很微妙但<strong>非常重要</strong>。</p>
+<p dir="auto">我们总是以<code>(token0, token1)</code>的顺序存储配对，其中<code>token0 &lt; token1</code>。</p>
+<p dir="auto">这确保：</p>
+<ul dir="auto">
+<li>我们将<code>DAI/WETH</code>和<code>WETH/DAI</code>视为<strong>同一个</strong>配对</li>
+<li>我们的映射在两个方向都工作</li>
+<li>前端和索引器不会混淆</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧱 部署配对合约</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>pair <span class="pl-k">=</span> <span class="pl-c1">address</span>(<span class="pl-k">new</span> <span class="pl-en">MiniDexPair</span>(token0, token1));
+</pre></div>
+<p dir="auto">我们使用排序的代币创建<code>MiniDexPair</code>合约的新实例。</p>
+<p dir="auto">这是实际的<strong>链上流动性池</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧾 存储配对</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>getPair[token0][token1] <span class="pl-k">=</span> pair;
+getPair[token1][token0] <span class="pl-k">=</span> pair;
+allPairs.<span class="pl-en">push</span>(pair);
+</pre></div>
+<p dir="auto">我们：</p>
+<ul dir="auto">
+<li>在映射中的两个组合下存储配对地址</li>
+<li>将配对添加到我们的<code>allPairs</code>数组中，以便可以索引</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📢 发出事件</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">PairCreated</span>(token0, token1, pair, allPairs.<span class="pl-mi">length</span> <span class="pl-k">-</span> <span class="pl-c1">1</span>);
+</pre></div>
+<p dir="auto">最后，我们发出<code>PairCreated</code>事件，以便任何监听者（前端、浏览器、机器人）知道创建了新池子。</p>
+<hr>
+<p dir="auto">就是这样——一个完整的链上<strong>配对工厂</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">👀 查看函数——探索工厂</h3></div>
+<p dir="auto">这些函数不修改任何东西——它们纯粹用于<strong>读取</strong>工厂创建的池子列表。</p>
+<p dir="auto">这是代码：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> allPairsLength</span></span>() <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span>) {
+    <span class="pl-k">return</span> allPairs.<span class="pl-mi">length</span>;
+}
+
+<span class="pl-k">function<span class="pl-en"> getPairAtIndex</span></span>(<span class="pl-c1">uint</span> <span class="pl-v">index</span>) <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">address</span>) {
+    <span class="pl-k">require</span>(index <span class="pl-k">&lt;</span> allPairs.<span class="pl-mi">length</span>, <span class="pl-s">"<span class="pl-s">Index out of bounds</span>"</span>);
+    <span class="pl-k">return</span> allPairs[index];
+}
+</pre></div>
+<p dir="auto">让我们分解它们：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>allPairsLength()</code></h3></div>
+<p dir="auto">这是获取工厂创建的<strong>配对总数</strong>的简单方法。</p>
+<p dir="auto">有用于：</p>
+<ul dir="auto">
+<li>前端分页（例如，"第1页，共X个配对"）</li>
+<li>索引器循环遍历所有现有池子</li>
+<li>协议分析或仪表板</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><code>getPairAtIndex(index)</code></h3></div>
+<p dir="auto">这个函数让你通过其在列表中的位置检索特定的配对合约。</p>
+<p dir="auto">例如：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">getPairAtIndex</span>(<span class="pl-c1">0</span>)
+</pre></div>
+<p dir="auto">可能返回第一个创建的池子——比如<code>DAI/WETH</code>。</p>
+<p dir="auto">我们还包括一个<code>require</code>检查以确保索引有效，防止意外的越界错误。</p>
+<hr>
+<p dir="auto">这些查看函数一起使<strong>浏览、获取和交互</strong>通过工厂部署的所有MiniDex配对变得容易。</p>
+<p dir="auto">就是这样——你的工厂现在是一个成熟的、动态的池子管理器。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🧪 如何在Remix中运行MiniDexFactory + MiniDexPair</h2></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">✅ 步骤0：打开Remix并设置你的环境</h3></div>
+<ol dir="auto">
+<li>转到Remix IDE</li>
+<li>确保编译器设置为<strong>Solidity 0.8.20</strong>或更高</li>
+<li>创建<strong>三个文件</strong>：
+<ul dir="auto">
+<li><code>MockToken.sol</code></li>
+<li><code>MiniDexPair.sol</code></li>
+<li><code>MiniDexFactory.sol</code></li>
+</ul>
+</li>
+</ol>
+<p dir="auto">将相应的合约代码粘贴到每个文件中。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧱 步骤1：部署两个模拟ERC-20代币</h3></div>
+<p dir="auto">在<code>MockToken.sol</code>中，粘贴：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-k">pragma solidity</span> <span class="pl-k">^</span><span class="pl-c1">0.8.20</span>;
+
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/token/ERC20/ERC20.sol</span>"</span>;
+
+<span class="pl-k">contract</span> <span class="pl-en">MockToken</span> <span class="pl-k">is</span> <span class="pl-en">ERC20</span> {
+    <span class="pl-k">constructor</span>(<span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">name</span>, <span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">symbol</span>, <span class="pl-c1">uint256</span> <span class="pl-v">initialSupply</span>) <span class="pl-c1">ERC20</span>(name, symbol) {
+        <span class="pl-en">_mint</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, initialSupply);
+    }
+}
+</pre></div>
+<p dir="auto">编译并部署<strong>两个代币</strong>，例如：</p>
+<ul dir="auto">
+<li>TokenA：<code>("Token A", "TKA", 1000000 ether)</code></li>
+<li>TokenB：<code>("Token B", "TKB", 1000000 ether)</code></li>
+</ul>
+<p dir="auto">记下它们的地址。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🏭 步骤2：部署<code>MiniDexFactory</code></h3></div>
+<p dir="auto">在<code>MiniDexFactory.sol</code>中，确保它导入<code>MiniDexPair.sol</code>，然后编译并部署工厂：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">new</span> <span class="pl-en">MiniDexFactory</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>)
+</pre></div>
+<p dir="auto">这将工厂的所有权给予你在Remix中的当前账户。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">⚙️ 步骤3：使用工厂创建池子</h3></div>
+<p dir="auto">调用：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">createPair</span>(TokenA_address, TokenB_address)
+</pre></div>
+<p dir="auto">工厂将：</p>
+<ul dir="auto">
+<li>部署新的MiniDexPair合约</li>
+<li>将其保存在注册表中</li>
+<li>发出<code>PairCreated</code>事件</li>
+</ul>
+<p dir="auto">要获取新的配对地址：</p>
+<ul dir="auto">
+<li>调用<code>getPair(tokenA, tokenB)</code></li>
+<li>或使用<code>getPairAtIndex(0)</code></li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📋 步骤4：与部署的配对交互</h3></div>
+<p dir="auto">现在池子存在了：</p>
+<ol dir="auto">
+<li>从工厂复制配对地址</li>
+<li>转到Remix中的"Deploy &amp; Run"面板</li>
+<li>在"At Address"下，粘贴配对地址并选择<code>MiniDexPair</code>作为合约</li>
+</ol>
+<p dir="auto">你现在可以直接与池子交互！</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔑 步骤5：批准配对合约花费代币</h3></div>
+<p dir="auto">从<strong>MockToken合约</strong>：</p>
+<ul dir="auto">
+<li>为<strong>两种代币</strong>调用<code>approve(pairAddress, amount)</code></li>
+</ul>
+<p dir="auto">你必须在<code>addLiquidity</code>之前批准。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💧 步骤6：添加流动性</h3></div>
+<p dir="auto">从<code>MiniDexPair</code>实例，调用：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">addLiquidity</span>(amountA, amountB)
+</pre></div>
+<p dir="auto">例如：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">addLiquidity</span>(<span class="pl-c1">1000</span> ether, <span class="pl-c1">2000</span> ether)
+</pre></div>
+<p dir="auto">然后验证：</p>
+<ul dir="auto">
+<li>你的LP余额：<code>getLPBalance(yourAddress)</code></li>
+<li>当前储备：<code>getReserves()</code></li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔁 步骤7：尝试交换</h3></div>
+<p dir="auto">从同一个配对合约：</p>
+<ol dir="auto">
+<li>从第二个账户再次批准（或同一个）</li>
+<li>调用：</li>
+</ol>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">swap</span>(inputAmount, inputToken)
+</pre></div>
+<p dir="auto">首先使用<code>getAmountOut()</code>看看你会得到什么。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💸 步骤8：移除流动性</h3></div>
+<p dir="auto">调用：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">removeLiquidity</span>(lpAmount)
+</pre></div>
+<p dir="auto">这会发送回你在两种代币中的比例份额。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔍 步骤9：探索和监控</h3></div>
+<p dir="auto">使用：</p>
+<ul dir="auto">
+<li><code>getPair(tokenA, tokenB)</code>获取任何池子</li>
+<li><code>allPairsLength()</code>计数它们</li>
+<li><code>getPairAtIndex(index)</code>循环遍历所有池子</li>
+<li>Remix日志查看所有事件</li>
+</ul>
                     </div>
                 </div>
             </div>

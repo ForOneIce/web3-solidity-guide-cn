@@ -773,7 +773,109 @@
             }
         }
     </style>
-</head>
+
+        <style>
+        /* 隐藏 mermaid 渲染组件 */
+        .md-content section.js-render-needs-enrichment,
+        .md-content .js-render-enrichment-target,
+        .md-content .js-render-block-actions,
+        .md-content .render-container,
+        .md-content .js-render-enrichment-fallback,
+        .md-content details[class*="details"],
+        .md-content iframe[title="File display"] {
+            display: none !important;
+        }
+        
+        /* 修复 GitHub 代码块样式 */
+        .md-content .highlight,
+        .md-content .highlight-source-solidity,
+        .md-content .highlight-source-js,
+        .md-content .highlight-source-javascript {
+            background: #2d2a2e !important;
+            border-radius: 10px;
+            padding: 20px !important;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content .highlight pre,
+        .md-content .highlight-source-solidity pre,
+        .md-content .highlight-source-js pre {
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
+        
+        /* 基础代码文字颜色 - 确保所有文字都可见 */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        .md-content .highlight code,
+        .md-content .highlight pre code,
+        .md-content .highlight pre span,
+        .md-content .highlight pre * {
+            /* Added to ensure all text in pre is visible */
+            color: #f8f8f2 !important;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* 确保代码块内所有文字（包括没有 span 包裹的文字）都可见 */
+        .md-content .highlight pre,
+        .md-content .highlight pre code {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特别处理代码块中的纯文本节点（没有被 span 包裹的文字，如变量名） */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 确保所有直接文本内容都可见 - 覆盖继承的颜色 */
+        .md-content .highlight pre * {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特别处理变量名 - 确保清晰可见 */
+        .md-content .highlight pre span.pl-v,
+        .md-content .highlight pre span.pl-en,
+        .md-content .highlight pre span.pl-e {
+            color: #dcdcaa !important;
+            font-weight: 500 !important;
+        }
+        
+        /* GitHub 语法高亮类颜色修复 */
+        .md-content .highlight [class*="pl-"] {
+            color: #f8f8f2 !important; /* Default to light color */
+        }
+        .md-content .highlight .pl-c { /* 注释 */
+            color: #6a9955 !important;
+        }
+        .md-content .highlight .pl-s, .md-content .highlight .pl-s1 { /* 字符串 */
+            color: #ce9178 !important;
+        }
+        .md-content .highlight .pl-k, .md-content .highlight .pl-c1 { /* 关键字/常量 */
+            color: #569cd6 !important;
+        }
+        .md-content .highlight .pl-v, .md-content .highlight .pl-en, .md-content .highlight .pl-e, .md-content .highlight .pl-ent { /* 变量/函数名/实体名 */
+            color: #dcdcaa !important;
+            font-weight: 500 !important;
+        }
+        .md-content code {
+            background-color: rgba(139, 115, 85, 0.15);
+            color: var(--warm-brown);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+        }
+        </style>
+        </head>
 <body>
     <div class="nav-bar">
         <div class="nav-left">
@@ -1274,12 +1376,1013 @@ contract SimpleStablecoin is ERC20, Ownable, ReentrancyGuard, AccessControl {
             </div>
             <div class="letter-body">
                 <div id="md-content" class="md-content">
-                    <div class="md-section">
-                        <h1>第29天内容</h1>
-                        <p style="text-align: center; padding: 40px; color: #999;">
-                            ⏳ 内容正在精心准备中...<br>
-                            敬请期待！
-                        </p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">稳定币</h1></div>
+<p dir="auto">Day: Day 29
+ID: 29
+译者: Rebecca9715
+难度等级: 高级</p>
+<p dir="auto">好的，建设者们——</p>
+<p dir="auto">花一秒钟回顾一下你走了多远。</p>
+<p dir="auto">仅仅几天时间，你就从编写简单变量……</p>
+<p dir="auto">到创建<strong>你自己的 ERC-20 代币</strong>，</p>
+<p dir="auto"><strong>锁定宝藏</strong>，</p>
+<p dir="auto"><strong>设置访问控制</strong>，</p>
+<p dir="auto"><strong>保护合约免受攻击</strong>，</p>
+<p dir="auto">甚至<strong>在智能合约中安全地处理资金</strong>。</p>
+<p dir="auto"><strong>你不仅仅是阅读了 Solidity——你<em>用它构建</em>了。</strong></p>
+<p dir="auto">现在，你已经准备好迎接下一步了。</p>
+<p dir="auto">今天，我们将从"玩具合约"转向<strong>构建一个真实世界的、必不可少的工具</strong>，它为加密世界中最大的应用提供动力：</p>
+<blockquote>
+<p dir="auto">稳定币。</p>
+</blockquote>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🌍 为什么稳定币如此重要</h2></div>
+<p dir="auto">想象一下试图过你的日常生活——</p>
+<p dir="auto">但你钱包里的钱的价值每隔几个小时就会<em>跳动</em>上下 30%。</p>
+<ul dir="auto">
+<li>昨天，你的咖啡花了 3 美元。</li>
+<li>今天，是 6 美元。</li>
+<li>明天，也许是 1.50 美元。</li>
+</ul>
+<p dir="auto">这就是像比特币和以太坊这样的加密货币可能有多疯狂。</p>
+<ul dir="auto">
+<li>*对投资者来说有趣？**也许吧。</li>
+<li>*对支付来说实用？**绝对不是。</li>
+</ul>
+<p dir="auto">这就是<strong>稳定币</strong>的用武之地。</p>
+<p dir="auto">🔹 它们就像加密世界风暴海洋中的锚。</p>
+<p dir="auto">🔹 它们被设计为保持<em>稳定</em>，通常与主要货币如<strong>美元</strong>1:1 挂钩。</p>
+<p dir="auto">🔹 它们是 Web3 中<strong>交易</strong>、<strong>储蓄</strong>、<strong>借贷</strong>、<strong>放贷</strong>和<strong>日常交易</strong>背后的沉默英雄。</p>
+<p dir="auto">事实上，如果你今天环顾 DeFi——</p>
+<p dir="auto"><strong>几乎每个 dApp</strong>、每个 NFT 市场、每个借贷池、每个 DEX——</p>
+<p dir="auto">它们在幕后都严重依赖稳定币。</p>
+<p dir="auto">没有稳定币？</p>
+<p dir="auto">整个 DeFi 世界就会感觉像是试图在价格每五秒钟变化一次的市场上购物。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🛠️ 但真正的稳定币不是超级复杂吗？</h2></div>
+<p dir="auto">是的——绝对是。</p>
+<p dir="auto">像 USDC、DAI 和 USDT 这样的现实世界稳定币是<strong>极其复杂的系统</strong>。</p>
+<p dir="auto">它们涉及：</p>
+<ul dir="auto">
+<li>抵押储备</li>
+<li>链上和链下预言机</li>
+<li>动态供应调整</li>
+<li>治理投票</li>
+<li>全面审计和法律合规</li>
+</ul>
+<p dir="auto">这只是冰山一角！</p>
+<p dir="auto"><strong>但事情是这样的：</strong></p>
+<p dir="auto">你不需要深入那种复杂性来<em>理解</em>核心思想是如何运作的。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🚀 我们今天要构建什么</h2></div>
+<p dir="auto">今天，我们正在构建你自己的<strong>SimpleStablecoin</strong>。</p>
+<p dir="auto">一个<strong>初学者友好</strong>的版本。</p>
+<p dir="auto"><strong>精心设计</strong>以剥离所有令人不知所措的复杂性——</p>
+<p dir="auto">并<strong>放大</strong>真正重要的东西：</p>
+<ul dir="auto">
+<li>你如何<strong>铸造</strong>稳定币？</li>
+<li>你如何<strong>赎回</strong>它们？</li>
+<li>你如何用<strong>真实抵押品****支持</strong>它们？</li>
+<li>你如何<strong>计算</strong>安全边际并保护系统？</li>
+</ul>
+<p dir="auto">👉 这不是生产级稳定币。</p>
+<p dir="auto">👉 这是<strong>你的训练场</strong>——</p>
+<p dir="auto">一个干净、易于理解的游乐场，你将在这里学习驱动世界上最大稳定币的<em>机制</em>。</p>
+<p dir="auto">当我们完成时，你不仅会知道稳定币合约是如何构建的——</p>
+<p dir="auto">你将编写你<strong>自己的</strong>。</p>
+<p dir="auto">相信我——</p>
+<p dir="auto"><strong>这是成为真正的 Web3 开发者的一大飞跃。</strong></p>
+<hr>
+<p dir="auto"><strong>准备好了吗？</strong></p>
+<p dir="auto">让我们深入合约——并开始解开你的 SimpleStablecoin 实际上是如何工作的！</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧠 快速概览：我们的 SimpleStablecoin 如何工作</h1></div>
+<p dir="auto">在我们深入代码之前，这里快速概览一下幕后发生的事情：</p>
+<p dir="auto">用户将存入一个受信任的抵押代币（如 ETH、USDC 或我们决定的任何 ERC-20 代币），并根据从价格源获取的最新价格，合约计算他们可以铸造多少稳定币。为了保持系统安全，我们确保用户始终存入<em>多于</em>他们获得的稳定币价值的抵押品——这要归功于 150% 的抵押率。稍后，当有人想要他们的抵押品回来时，他们可以通过销毁它们来赎回他们的稳定币。该合约还包括基本的所有者控制（如更新价格源或抵押设置）并防止像重入攻击这样的常见漏洞。</p>
+<p dir="auto">这是一个<strong>初学者友好</strong>的版本——专门关注<strong>铸造</strong>、<strong>赎回</strong>和<strong>抵押管理</strong>等核心机制，这样你就可以真正理解稳定币在幕后是如何工作的，而不会被生产级的复杂性所淹没。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">📝 这是完整的合约</h1></div>
+<p dir="auto">现在你知道了高层次的想法，</p>
+<p dir="auto">让我们跳进代码，看看一切是如何组合在一起的！</p>
+<p dir="auto">👇</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-k">pragma solidity</span> <span class="pl-k">^</span><span class="pl-c1">0.8.20</span>;
+
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/token/ERC20/ERC20.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/access/Ownable.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/security/ReentrancyGuard.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/access/AccessControl.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/interfaces/IERC20Metadata.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol</span>"</span>;
+
+<span class="pl-k">contract</span> <span class="pl-en">SimpleStablecoin</span> <span class="pl-k">is</span> <span class="pl-en">ERC20</span>, <span class="pl-en">Ownable</span>, <span class="pl-en">ReentrancyGuard</span>, <span class="pl-en">AccessControl</span> {
+    <span class="pl-k">using<span class="pl-en"> SafeERC20</span></span> <span class="pl-k">for</span> <span class="pl-c1">IERC20</span>;
+
+    <span class="pl-c1">bytes32</span> <span class="pl-k">public constant </span>PRICE_FEED_MANAGER_ROLE <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-s">"<span class="pl-s">PRICE_FEED_MANAGER_ROLE</span>"</span>);
+    <span class="pl-c1">IERC20</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> collateralToken;
+    <span class="pl-c1">uint8</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> collateralDecimals;
+    AggregatorV3Interface <span class="pl-k">public</span> priceFeed;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public </span>collateralizationRatio <span class="pl-k">=</span> <span class="pl-c1">150</span>; <span class="pl-c">// 以百分比表示（150 = 150%）</span>
+
+    <span class="pl-k">event <span class="pl-en">Minted</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>, <span class="pl-c1">uint256</span> <span class="pl-v">collateralDeposited</span>);
+    <span class="pl-k">event <span class="pl-en">Redeemed</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>, <span class="pl-c1">uint256</span> <span class="pl-v">collateralReturned</span>);
+    <span class="pl-k">event <span class="pl-en">PriceFeedUpdated</span></span>(<span class="pl-c1">address</span> <span class="pl-v">newPriceFeed</span>);
+    <span class="pl-k">event <span class="pl-en">CollateralizationRatioUpdated</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">newRatio</span>);
+
+    <span class="pl-k">error<span class="pl-en"> InvalidCollateralTokenAddress</span></span>();
+    <span class="pl-k">error<span class="pl-en"> InvalidPriceFeedAddress</span></span>();
+    <span class="pl-k">error<span class="pl-en"> MintAmountIsZero</span></span>();
+    <span class="pl-k">error<span class="pl-en"> InsufficientStablecoinBalance</span></span>();
+    <span class="pl-k">error<span class="pl-en"> CollateralizationRatioTooLow</span></span>();
+
+    <span class="pl-k">constructor</span>(
+        <span class="pl-c1">address</span> <span class="pl-v">_collateralToken</span>,
+        <span class="pl-c1">address</span> <span class="pl-v">_initialOwner</span>,
+        <span class="pl-c1">address</span> <span class="pl-v">_priceFeed</span>
+    ) <span class="pl-c1">ERC20</span>(<span class="pl-s">"<span class="pl-s">Simple USD Stablecoin</span>"</span>, <span class="pl-s">"<span class="pl-s">sUSD</span>"</span>) <span class="pl-en">Ownable</span>(_initialOwner) {
+        <span class="pl-k">if</span> (_collateralToken <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) <span class="pl-k">revert</span> <span class="pl-en">InvalidCollateralTokenAddress</span>();
+        <span class="pl-k">if</span> (_priceFeed <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) <span class="pl-k">revert</span> <span class="pl-en">InvalidPriceFeedAddress</span>();
+
+        collateralToken <span class="pl-k">=</span> <span class="pl-c1">IERC20</span>(_collateralToken);
+        collateralDecimals <span class="pl-k">=</span> <span class="pl-c1">IERC20Metadata</span>(_collateralToken).<span class="pl-en">decimals</span>();
+        priceFeed <span class="pl-k">=</span> <span class="pl-en">AggregatorV3Interface</span>(_priceFeed);
+
+        <span class="pl-en">_grantRole</span>(DEFAULT_ADMIN_ROLE, _initialOwner);
+        <span class="pl-en">_grantRole</span>(PRICE_FEED_MANAGER_ROLE, _initialOwner);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> getCurrentPrice</span></span>() <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+        (, <span class="pl-c1">int256</span> <span class="pl-v">price</span>, , , ) <span class="pl-k">=</span> priceFeed.<span class="pl-en">latestRoundData</span>();
+        <span class="pl-k">require</span>(price <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Invalid price feed response</span>"</span>);
+        <span class="pl-k">return</span> <span class="pl-c1">uint256</span>(price);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> mint</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">external</span> nonReentrant {
+        <span class="pl-k">if</span> (amount <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">revert</span> <span class="pl-en">MintAmountIsZero</span>();
+
+        <span class="pl-c1">uint256</span> collateralPrice <span class="pl-k">=</span> <span class="pl-en">getCurrentPrice</span>();
+        <span class="pl-c1">uint256</span> requiredCollateralValueUSD <span class="pl-k">=</span> amount <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> <span class="pl-en">decimals</span>()); <span class="pl-c">// 假设 sUSD 为 18 位小数</span>
+        <span class="pl-c1">uint256</span> requiredCollateral <span class="pl-k">=</span> (requiredCollateralValueUSD <span class="pl-k">*</span> collateralizationRatio) <span class="pl-k">/</span> (<span class="pl-c1">100</span> <span class="pl-k">*</span> collateralPrice);
+        <span class="pl-c1">uint256</span> adjustedRequiredCollateral <span class="pl-k">=</span> (requiredCollateral <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> collateralDecimals)) <span class="pl-k">/</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> priceFeed.<span class="pl-en">decimals</span>());
+
+        collateralToken.<span class="pl-en">safeTransferFrom</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>), adjustedRequiredCollateral);
+        <span class="pl-en">_mint</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+
+        <span class="pl-k">emit</span> <span class="pl-en">Minted</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount, adjustedRequiredCollateral);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> redeem</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">external</span> nonReentrant {
+        <span class="pl-k">if</span> (amount <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">revert</span> <span class="pl-en">MintAmountIsZero</span>();
+        <span class="pl-k">if</span> (<span class="pl-en">balanceOf</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>) <span class="pl-k">&lt;</span> amount) <span class="pl-k">revert</span> <span class="pl-en">InsufficientStablecoinBalance</span>();
+
+        <span class="pl-c1">uint256</span> collateralPrice <span class="pl-k">=</span> <span class="pl-en">getCurrentPrice</span>();
+        <span class="pl-c1">uint256</span> stablecoinValueUSD <span class="pl-k">=</span> amount <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> <span class="pl-en">decimals</span>());
+        <span class="pl-c1">uint256</span> collateralToReturn <span class="pl-k">=</span> (stablecoinValueUSD <span class="pl-k">*</span> <span class="pl-c1">100</span>) <span class="pl-k">/</span> (collateralizationRatio <span class="pl-k">*</span> collateralPrice);
+        <span class="pl-c1">uint256</span> adjustedCollateralToReturn <span class="pl-k">=</span> (collateralToReturn <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> collateralDecimals)) <span class="pl-k">/</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> priceFeed.<span class="pl-en">decimals</span>());
+
+        <span class="pl-en">_burn</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+        collateralToken.<span class="pl-en">safeTransfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, adjustedCollateralToReturn);
+
+        <span class="pl-k">emit</span> <span class="pl-en">Redeemed</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount, adjustedCollateralToReturn);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> setCollateralizationRatio</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">newRatio</span>) <span class="pl-k">external</span> onlyOwner {
+        <span class="pl-k">if</span> (newRatio <span class="pl-k">&lt;</span> <span class="pl-c1">100</span>) <span class="pl-k">revert</span> <span class="pl-en">CollateralizationRatioTooLow</span>();
+        collateralizationRatio <span class="pl-k">=</span> newRatio;
+        <span class="pl-k">emit</span> <span class="pl-en">CollateralizationRatioUpdated</span>(newRatio);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> setPriceFeedContract</span></span>(<span class="pl-c1">address</span> <span class="pl-v">_newPriceFeed</span>) <span class="pl-k">external</span> <span class="pl-en">onlyRole</span>(PRICE_FEED_MANAGER_ROLE) {
+        <span class="pl-k">if</span> (_newPriceFeed <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) <span class="pl-k">revert</span> <span class="pl-en">InvalidPriceFeedAddress</span>();
+        priceFeed <span class="pl-k">=</span> <span class="pl-en">AggregatorV3Interface</span>(_newPriceFeed);
+        <span class="pl-k">emit</span> <span class="pl-en">PriceFeedUpdated</span>(_newPriceFeed);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> getRequiredCollateralForMint</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+        <span class="pl-k">if</span> (amount <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+
+        <span class="pl-c1">uint256</span> collateralPrice <span class="pl-k">=</span> <span class="pl-en">getCurrentPrice</span>();
+        <span class="pl-c1">uint256</span> requiredCollateralValueUSD <span class="pl-k">=</span> amount <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> <span class="pl-en">decimals</span>());
+        <span class="pl-c1">uint256</span> requiredCollateral <span class="pl-k">=</span> (requiredCollateralValueUSD <span class="pl-k">*</span> collateralizationRatio) <span class="pl-k">/</span> (<span class="pl-c1">100</span> <span class="pl-k">*</span> collateralPrice);
+        <span class="pl-c1">uint256</span> adjustedRequiredCollateral <span class="pl-k">=</span> (requiredCollateral <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> collateralDecimals)) <span class="pl-k">/</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> priceFeed.<span class="pl-en">decimals</span>());
+
+        <span class="pl-k">return</span> adjustedRequiredCollateral;
+    }
+
+    <span class="pl-k">function<span class="pl-en"> getCollateralForRedeem</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+        <span class="pl-k">if</span> (amount <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+
+        <span class="pl-c1">uint256</span> collateralPrice <span class="pl-k">=</span> <span class="pl-en">getCurrentPrice</span>();
+        <span class="pl-c1">uint256</span> stablecoinValueUSD <span class="pl-k">=</span> amount <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> <span class="pl-en">decimals</span>());
+        <span class="pl-c1">uint256</span> collateralToReturn <span class="pl-k">=</span> (stablecoinValueUSD <span class="pl-k">*</span> <span class="pl-c1">100</span>) <span class="pl-k">/</span> (collateralizationRatio <span class="pl-k">*</span> collateralPrice);
+        <span class="pl-c1">uint256</span> adjustedCollateralToReturn <span class="pl-k">=</span> (collateralToReturn <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> collateralDecimals)) <span class="pl-k">/</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> priceFeed.<span class="pl-en">decimals</span>());
+
+        <span class="pl-k">return</span> adjustedCollateralToReturn;
+    }
+
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">1. 产品需求书</h1></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">用户流程</h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">数据库</h3></div>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th>Contract</th>
+<th>Type</th>
+<th>Bases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SimpleStablecoin</strong></td>
+<td>Implementation</td>
+<td>ERC20, Ownable, ReentrancyGuard, AccessControl</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th>└ Function Name</th>
+<th>Visibility</th>
+<th>Mutability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>constructor</td>
+<td>public</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>getCurrentPrice</td>
+<td>public</td>
+<td>view</td>
+</tr>
+<tr>
+<td>mint</td>
+<td>external</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>redeem</td>
+<td>external</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>setCollateralizationRatio</td>
+<td>external (onlyOwner)</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>setPriceFeedContract</td>
+<td>external (onlyRole)</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>getRequiredCollateralForMint</td>
+<td>public</td>
+<td>view</td>
+</tr>
+<tr>
+<td>getCollateralForRedeem</td>
+<td>public</td>
+<td>view</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">2. 细节解说</h1></div>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">📦 <code>SimpleStablecoin.sol</code> 中的导入</h1></div>
+<p dir="auto">在我们深入稳定币的逻辑之前，我们首先引入一些强大的库和接口。这些导入带来了经过实战检验的工具，用于代币行为、所有权、安全性、角色管理——以及第一次从 Chainlink 获得实时价格数据。</p>
+<p dir="auto">这是我们引入合约的所有内容：</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/token/ERC20/ERC20.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/access/Ownable.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/security/ReentrancyGuard.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/access/AccessControl.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/interfaces/IERC20Metadata.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol</span>"</span>;
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧩 详细解读</h1></div>
+<p dir="auto">我们首先从 OpenZeppelin 导入 <strong>ERC20</strong>，它为我们提供了所有标准代币功能——铸造、转账和管理余额——无需从头开始编写。</p>
+<p dir="auto">然后，<strong>Ownable</strong> 介入引入一个简单的所有权系统。敏感设置，如更新抵押率，应该只由合约所有者更改，而这个模块为我们处理这个问题。</p>
+<p dir="auto">接下来导入 <strong>ReentrancyGuard</strong>，以保护像 <code>mint</code> 和 <code>redeem</code> 这样的重要函数免受一种称为"重入"的攻击，在这种攻击中，恶意合约试图在第一次调用完成之前重复调用函数。</p>
+<p dir="auto"><strong>SafeERC20</strong> 是处理其他 ERC-20 代币的安全网。有时，代币合约表现不佳（如在没有错误的情况下转账失败），而 SafeERC20 确保所有代币操作要么成功完成，要么干净地失败。</p>
+<p dir="auto">我们还引入 <strong>AccessControl</strong>，它允许合约定义自定义角色。在这个稳定币中，我们有一个特殊的 <strong>价格源管理器</strong> 角色——所以特定账户可以在没有完全管理员控制的情况下更新价格源。</p>
+<p dir="auto"><strong>IERC20Metadata</strong> 在这里帮助我们获取关于抵押代币的额外信息，如它使用多少位小数。不同的代币有不同的小数设置，我们的数学需要考虑到这一点。</p>
+<p dir="auto">最后，也是最重要的，我们从 Chainlink 导入 <strong>AggregatorV3Interface</strong>。</p>
+<p dir="auto">这是让我们的稳定币<strong>看到抵押代币的真实世界价格</strong>的东西。</p>
+<p dir="auto">而不是猜测或依赖手动更新，合约可以自动获取受信任的、去中心化的价格数据——保持系统准确、最新并防止操纵。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🏗️ 合约声明</h1></div>
+<p dir="auto">在通过导入设置好所有工具之后，我们现在正式开始构建我们的合约。</p>
+<p dir="auto">这是启动一切的第一行：</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">contract</span> <span class="pl-en">SimpleStablecoin</span> <span class="pl-k">is</span> <span class="pl-en">ERC20</span>, <span class="pl-en">Ownable</span>, <span class="pl-en">ReentrancyGuard</span>, <span class="pl-en">AccessControl</span> {
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧩 详细解读</h1></div>
+<p dir="auto">我们声明我们的合约并给它一个名字：<strong>SimpleStablecoin</strong>。</p>
+<p dir="auto">但我们不是从头开始构建一切——我们<strong>扩展</strong>四个强大的 OpenZeppelin 合约以继承现成的功能：</p>
+<ul dir="auto">
+<li><strong>ERC20</strong>——这为我们的稳定币提供了所有基本的代币行为，如转账代币、批准支出者和检查余额。</li>
+<li><strong>Ownable</strong>——添加一个简单的所有权模型，所以我们可以控制谁有权执行敏感操作，如更新系统设置。</li>
+<li><strong>ReentrancyGuard</strong>——保护关键函数免受重入攻击，使铸造和赎回等操作更加安全。</li>
+<li><strong>AccessControl</strong>——允许我们定义自定义角色（如价格源管理器），并精细控制谁可以调用某些函数。</li>
+</ul>
+<p dir="auto">通过一次继承所有这些，我们建立了一个强大的基础，其中安全性、访问控制和代币行为已经得到专业处理——我们可以纯粹专注于稳定币特定的逻辑。</p>
+<hr>
+<h1 dir="auto"></h1>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🏗️ 状态变量</h1></div>
+<p dir="auto">现在合约已经被声明，我们继续设置<strong>关键变量</strong>，这些变量定义了我们的稳定币将如何在内部工作。</p>
+<p dir="auto">这些变量将存储从抵押代币到当前价格源的所有内容，确保我们的系统知道它正在管理什么资产以及在什么规则下。</p>
+<p dir="auto">这是代码：</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">using<span class="pl-en"> SafeERC20</span></span> <span class="pl-k">for</span> <span class="pl-c1">IERC20</span>;
+
+<span class="pl-c1">bytes32</span> <span class="pl-k">public constant </span>PRICE_FEED_MANAGER_ROLE <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-s">"<span class="pl-s">PRICE_FEED_MANAGER_ROLE</span>"</span>);
+<span class="pl-c1">IERC20</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> collateralToken;
+<span class="pl-c1">uint8</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> collateralDecimals;
+AggregatorV3Interface <span class="pl-k">public</span> priceFeed;
+<span class="pl-c1">uint256</span> <span class="pl-k">public </span>collateralizationRatio <span class="pl-k">=</span> <span class="pl-c1">150</span>; <span class="pl-c">// 以百分比表示（150 = 150%）</span>
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧩 详细解读</h1></div>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">using<span class="pl-en"> SafeERC20</span></span> <span class="pl-k">for</span> <span class="pl-c1">IERC20</span>;
+</pre></div>
+<p dir="auto">这一行为我们与之交互的所有 <code>IERC20</code> 代币激活 <strong>SafeERC20</strong>。</p>
+<p dir="auto">它自动用安全检查包装像 <code>transferFrom</code> 和 <code>transfer</code> 这样的方法——确保代币操作要么正确成功，要么在出现任何问题时安全地回滚。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">bytes32</span> <span class="pl-k">public constant </span>PRICE_FEED_MANAGER_ROLE <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-s">"<span class="pl-s">PRICE_FEED_MANAGER_ROLE</span>"</span>);
+</pre></div>
+<p dir="auto">我们创建一个名为 <code>PRICE_FEED_MANAGER_ROLE</code> 的特殊角色，它控制谁可以更新价格源。</p>
+<p dir="auto">你会注意到它被存储为 <code>bytes32</code> <code>constant</code>。
+原因如下：</p>
+<p dir="auto"><code>bytes32</code> 被使用是因为 AccessControl 中的角色标识符总是期望正好 32 字节——这是一个标准化格式，使角色检查在以太坊虚拟机（EVM）内部快速高效。</p>
+<p dir="auto">constant 意味着这个值一旦部署就永远不会改变。它被永久硬编码到合约中，使其在 gas 上更便宜、更安全——没有人有机会意外地（或恶意地）稍后修改角色标识符。</p>
+<p dir="auto">我们使用 <code>keccak256("PRICE_FEED_MANAGER_ROLE")</code> 生成它，这样角色就有一个独特的、加密强度的标识符，而不是只使用一个普通字符串。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">IERC20</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> collateralToken;
+</pre></div>
+<p dir="auto">这个变量存储用户必须作为抵押品存入的 <strong>ERC-20 代币的地址</strong>。</p>
+<p dir="auto">通过使它成为 <code>immutable</code>，我们确保它只能设置一次——在部署时——并且以后永远不能更改，增加了额外的安全层。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint8</span> <span class="pl-k">public</span> <span class="pl-k">immutable</span> collateralDecimals;
+</pre></div>
+<p dir="auto">不同的 ERC-20 代币可以有不同数量的小数（例如，USDC 使用 6，ETH 使用 18）。</p>
+<p dir="auto">我们在合约部署时将抵押代币的小数存储在这里，这样以后的铸造和赎回计算就保持准确。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>AggregatorV3Interface <span class="pl-k">public</span> priceFeed;
+</pre></div>
+<p dir="auto">这个变量指向 <strong>Chainlink 价格源</strong> 合约。</p>
+<p dir="auto">我们将使用它在有人铸造或赎回稳定币时获取我们抵押代币的实时价格。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> <span class="pl-k">public </span>collateralizationRatio <span class="pl-k">=</span> <span class="pl-c1">150</span>; <span class="pl-c">// 以百分比表示（150 = 150%）</span>
+</pre></div>
+<p dir="auto">这设置了<strong>抵押率</strong>——意味着用户在铸造稳定币时必须始终存入其价值的 <strong>150%</strong> 的抵押品。</p>
+<p dir="auto">这是一个内置的安全缓冲，以保护系统免受抵押品价值突然下降的影响。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">📣 事件</h1></div>
+<p dir="auto">智能合约不能只是直接与网站或用户"对话"。</p>
+<p dir="auto">相反，它们<strong>发出事件</strong>——记录在区块链上的小信号。</p>
+<p dir="auto">像前端、区块浏览器和钱包这样的应用可以监听这些事件，并实时向用户显示正在发生的事情。</p>
+<p dir="auto">这是我们从 SimpleStablecoin 发出的一组事件：</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">Minted</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>, <span class="pl-c1">uint256</span> <span class="pl-v">collateralDeposited</span>);
+<span class="pl-k">event <span class="pl-en">Redeemed</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>, <span class="pl-c1">uint256</span> <span class="pl-v">collateralReturned</span>);
+<span class="pl-k">event <span class="pl-en">PriceFeedUpdated</span></span>(<span class="pl-c1">address</span> <span class="pl-v">newPriceFeed</span>);
+<span class="pl-k">event <span class="pl-en">CollateralizationRatioUpdated</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">newRatio</span>);
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧩 详细解读</h1></div>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">Minted</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>, <span class="pl-c1">uint256</span> <span class="pl-v">collateralDeposited</span>);
+</pre></div>
+<p dir="auto">每当有人成功铸造新稳定币时，就会触发此事件。</p>
+<p dir="auto">它记录：</p>
+<ul dir="auto">
+<li><strong>谁铸造的</strong>（<code>user</code>）</li>
+<li><strong>他们收到多少稳定币</strong>（<code>amount</code>）</li>
+<li><strong>他们存入多少抵押品</strong>（<code>collateralDeposited</code>）</li>
+</ul>
+<p dir="auto"><code>user</code> 上的 <code>indexed</code> 关键字允许你轻松地在区块链上按特定用户地址过滤和搜索所有铸造操作。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">Redeemed</span></span>(<span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">user</span>, <span class="pl-c1">uint256</span> <span class="pl-v">amount</span>, <span class="pl-c1">uint256</span> <span class="pl-v">collateralReturned</span>);
+</pre></div>
+<p dir="auto">每当有人将稳定币赎回为抵押品时，就会触发此事件。</p>
+<p dir="auto">它告诉我们：</p>
+<ul dir="auto">
+<li><strong>谁赎回的</strong>（<code>user</code>）</li>
+<li><strong>他们销毁了多少稳定币</strong>（<code>amount</code>）</li>
+<li><strong>他们取回了多少抵押品</strong>（<code>collateralReturned</code>）</li>
+</ul>
+<p dir="auto">同样，<code>user</code> 是 <code>indexed</code> 的，所以前端应用可以快速显示用户的个人赎回历史。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">PriceFeedUpdated</span></span>(<span class="pl-c1">address</span> <span class="pl-v">newPriceFeed</span>);
+</pre></div>
+<p dir="auto">此事件表示<strong>价格源地址</strong>已更新。</p>
+<p dir="auto">它记录新的源地址，所以一切都保持完全透明——</p>
+<p dir="auto">用户可以相信对关键数据源的任何更改都是公开可见的。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">CollateralizationRatioUpdated</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">newRatio</span>);
+</pre></div>
+<p dir="auto">最后，每当<strong>抵押率</strong>被更改时，就会发出此事件。</p>
+<p dir="auto">监控系统的用户和 dApp 可以在所需的安全缓冲被提高或降低时立即做出反应。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🚨 自定义错误</h1></div>
+<p dir="auto">当智能合约内部出现问题时，如无效输入或检查失败，我们希望交易<strong>优雅地失败</strong>并解释<em>原因</em>。</p>
+<p dir="auto">在较旧的 Solidity 代码中，这通常使用带有错误字符串的 <code>require()</code> 语句完成——但这种方法在 gas 上很昂贵。</p>
+<p dir="auto"><strong>自定义错误</strong>是一种更新、更清洁的处理失败的方式。</p>
+<p dir="auto">它们更便宜、更易于阅读，并且使用户和开发人员的调试变得更简单。</p>
+<p dir="auto">这是我们声明的自定义错误：</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">error<span class="pl-en"> InvalidCollateralTokenAddress</span></span>();
+<span class="pl-k">error<span class="pl-en"> InvalidPriceFeedAddress</span></span>();
+<span class="pl-k">error<span class="pl-en"> MintAmountIsZero</span></span>();
+<span class="pl-k">error<span class="pl-en"> InsufficientStablecoinBalance</span></span>();
+<span class="pl-k">error<span class="pl-en"> CollateralizationRatioTooLow</span></span>();
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧩 详细解读</h1></div>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">error<span class="pl-en"> InvalidCollateralTokenAddress</span></span>();
+</pre></div>
+<p dir="auto">如果有人试图用无效（零）抵押代币地址部署合约，就会抛出此错误。</p>
+<p dir="auto">没有真正的代币支持系统，整个稳定币将无法工作——所以我们一开始就阻止它。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">error<span class="pl-en"> InvalidPriceFeedAddress</span></span>();
+</pre></div>
+<p dir="auto">如果提供的价格源地址无效，就会触发此错误。</p>
+<p dir="auto">由于我们严重依赖实时价格数据，连接到坏的源会使系统不安全——所以我们立即阻止它。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">error<span class="pl-en"> MintAmountIsZero</span></span>();
+</pre></div>
+<p dir="auto">如果用户试图铸造<strong>零</strong>稳定币，我们抛出此错误。</p>
+<p dir="auto">铸造零代币没有意义，只会浪费 gas，所以我们干净地阻止它。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">error<span class="pl-en"> InsufficientStablecoinBalance</span></span>();
+</pre></div>
+<p dir="auto">当用户试图<strong>赎回</strong>比他们实际余额更多的稳定币时，使用此错误。</p>
+<p dir="auto">它防止意外错误和潜在滥用。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">error<span class="pl-en"> CollateralizationRatioTooLow</span></span>();
+</pre></div>
+<p dir="auto">如果有人试图将抵押率设置为低于 100%，就会抛出此错误。</p>
+<p dir="auto">允许低于 100% 的比率意味着稳定币没有完全支持——这是一个巨大的风险——所以我们执行严格的最低限度。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🏗️ 构造函数</h1></div>
+<p dir="auto">构造函数是我们合约的<strong>启动序列</strong>。</p>
+<p dir="auto">它运行<strong>一次</strong>——在合约部署的那一刻——并设置所有关键部分：我们接受什么代币作为抵押品、我们从哪里获得价格数据以及谁控制合约。</p>
+<p dir="auto">这是代码：</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">constructor</span>(
+    <span class="pl-c1">address</span> <span class="pl-v">_collateralToken</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">_initialOwner</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">_priceFeed</span>
+) <span class="pl-c1">ERC20</span>(<span class="pl-s">"<span class="pl-s">Simple USD Stablecoin</span>"</span>, <span class="pl-s">"<span class="pl-s">sUSD</span>"</span>) <span class="pl-en">Ownable</span>(_initialOwner) {
+    <span class="pl-k">if</span> (_collateralToken <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) <span class="pl-k">revert</span> <span class="pl-en">InvalidCollateralTokenAddress</span>();
+    <span class="pl-k">if</span> (_priceFeed <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) <span class="pl-k">revert</span> <span class="pl-en">InvalidPriceFeedAddress</span>();
+
+    collateralToken <span class="pl-k">=</span> <span class="pl-c1">IERC20</span>(_collateralToken);
+    collateralDecimals <span class="pl-k">=</span> <span class="pl-c1">IERC20Metadata</span>(_collateralToken).<span class="pl-en">decimals</span>();
+    priceFeed <span class="pl-k">=</span> <span class="pl-en">AggregatorV3Interface</span>(_priceFeed);
+
+    <span class="pl-en">_grantRole</span>(DEFAULT_ADMIN_ROLE, _initialOwner);
+    <span class="pl-en">_grantRole</span>(PRICE_FEED_MANAGER_ROLE, _initialOwner);
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧩 详细解读</h1></div>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">constructor</span>(
+    <span class="pl-c1">address</span> <span class="pl-v">_collateralToken</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">_initialOwner</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">_priceFeed</span>
+)
+</pre></div>
+<p dir="auto">在部署合约时，我们必须提供：</p>
+<ul dir="auto">
+<li><strong>抵押代币</strong>的地址（像 USDC、WETH 等 ERC-20）</li>
+<li><strong>初始所有者</strong>的地址（管理员）</li>
+<li><strong>Chainlink 价格源</strong>的地址（获取实时抵押品价格）</li>
+</ul>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">ERC20</span>(<span class="pl-s">"<span class="pl-s">Simple USD Stablecoin</span>"</span>, <span class="pl-s">"<span class="pl-s">sUSD</span>"</span>)
+</pre></div>
+<p dir="auto">就在这里，在构造函数内部，我们调用 OpenZeppelin 的 ERC-20 构造函数——</p>
+<p dir="auto">给我们的代币一个<strong>名称</strong>（"Simple USD Stablecoin"）和一个<strong>符号</strong>（"sUSD"），它们将出现在钱包和浏览器中。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">Ownable</span>(_initialOwner)
+</pre></div>
+<p dir="auto">我们还调用 <code>Ownable</code> 构造函数，设置合约的初始所有者——</p>
+<p dir="auto">将拥有特殊管理员权限的人，如稍后调整设置。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (_collateralToken <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) <span class="pl-k">revert</span> <span class="pl-en">InvalidCollateralTokenAddress</span>();
+</pre></div>
+<p dir="auto">在做任何其他事情之前，我们仔细检查提供的抵押代币地址是有效的（不是零地址）。</p>
+<p dir="auto">如果它无效，我们立即<strong>回滚</strong>部署，并显示清晰的自定义错误。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (_priceFeed <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) <span class="pl-k">revert</span> <span class="pl-en">InvalidPriceFeedAddress</span>();
+</pre></div>
+<p dir="auto">同样的想法在这里——我们确保 Chainlink 价格源地址在继续之前是有效的。</p>
+<p dir="auto">没有价格源，就没有稳定币逻辑。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>collateralToken <span class="pl-k">=</span> <span class="pl-c1">IERC20</span>(_collateralToken);
+</pre></div>
+<p dir="auto">我们保存抵押代币的地址，所以合约知道用户在铸造稳定币时将存入<strong>什么代币</strong>。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>collateralDecimals <span class="pl-k">=</span> <span class="pl-c1">IERC20Metadata</span>(_collateralToken).<span class="pl-en">decimals</span>();
+</pre></div>
+<p dir="auto">不同的代币有不同的小数格式。</p>
+<p dir="auto">我们现在获取并存储抵押代币的小数，这样我们就可以在以后正确处理所有数学。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>priceFeed <span class="pl-k">=</span> <span class="pl-en">AggregatorV3Interface</span>(_priceFeed);
+</pre></div>
+<p dir="auto">我们将合约连接到 <strong>Chainlink 价格源</strong>，使其能够按需获取实时价格数据。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">_grantRole</span>(DEFAULT_ADMIN_ROLE, _initialOwner);
+<span class="pl-en">_grantRole</span>(PRICE_FEED_MANAGER_ROLE, _initialOwner);
+</pre></div>
+<p dir="auto">最后，我们授予两个重要角色：</p>
+<ul dir="auto">
+<li><strong>DEFAULT_ADMIN_ROLE</strong>——让所有者完全控制合约的角色系统</li>
+<li><strong>PRICE_FEED_MANAGER_ROLE</strong>——让所有者在将来需要时更新价格源</li>
+</ul>
+<p dir="auto">通过在部署时分配这些角色，我们确保系统从第一天起就是安全且可管理的。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧮 从 Chainlink 获取实时价格</h1></div>
+<p dir="auto">这个函数是我们在整个合约中使用的<strong>辅助函数</strong>——在铸造和赎回逻辑以及视图函数中。</p>
+<p dir="auto">而不是在每个地方重复相同的价格获取逻辑，我们将它整齐地包装在 <code>getCurrentPrice()</code> 中，这样它就可重用且易于维护。</p>
+<p dir="auto">这是代码：</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getCurrentPrice</span></span>() <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    (, <span class="pl-c1">int256</span> <span class="pl-v">price</span>, , , ) <span class="pl-k">=</span> priceFeed.<span class="pl-en">latestRoundData</span>();
+    <span class="pl-k">require</span>(price <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Invalid price feed response</span>"</span>);
+    <span class="pl-k">return</span> <span class="pl-c1">uint256</span>(price);
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧩 详细解读</h1></div>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getCurrentPrice</span></span>() <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>)
+</pre></div>
+<p dir="auto">这是一个<strong>公共视图</strong>函数——任何人都可以调用它来获取最新价格，并且它不会改变任何状态。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>(, <span class="pl-c1">int256</span> <span class="pl-v">price</span>, , , ) <span class="pl-k">=</span> priceFeed.<span class="pl-en">latestRoundData</span>();
+</pre></div>
+<p dir="auto">我们从 Chainlink 聚合器接口调用 <code>latestRoundData()</code>。</p>
+<p dir="auto">这给我们<strong>最新报告的价格</strong>——但我们只关心元组中的第二个值，这是实际价格（作为 <code>int256</code> 返回）。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(price <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Invalid price feed response</span>"</span>);
+</pre></div>
+<p dir="auto">只是为了安全起见，我们检查返回的价格大于零。</p>
+<p dir="auto">如果预言机曾经失败或返回坏数据，我们阻止交易以防止错误的抵押品计算。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">return</span> <span class="pl-c1">uint256</span>(price);
+</pre></div>
+<p dir="auto">由于 Solidity 数学与无符号整数（<code>uint256</code>）配合最佳，我们将 <code>int256</code> 值转换为正数并返回它。</p>
+<hr>
+<p dir="auto">这个函数在我们需要实时价格时被调用——这在稳定币中<strong>很常见</strong>。</p>
+<p dir="auto">通过在这里集中逻辑，我们保持事物干净、安全，并且如果需要的话，易于在一个地方更新。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🏗️ 铸造稳定币</h1></div>
+<p dir="auto">mint 函数是用户<strong>将抵押品存入</strong>合约并接收<strong>新铸造的稳定币</strong>作为回报的地方。</p>
+<p dir="auto">这是任何想要基于其存入资产的价值创建新 sUSD 代币的人的入口点。</p>
+<p dir="auto">这是代码：</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> mint</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">external</span> nonReentrant {
+    <span class="pl-k">if</span> (amount <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">revert</span> <span class="pl-en">MintAmountIsZero</span>();
+
+    <span class="pl-c1">uint256</span> collateralPrice <span class="pl-k">=</span> <span class="pl-en">getCurrentPrice</span>();
+    <span class="pl-c1">uint256</span> requiredCollateralValueUSD <span class="pl-k">=</span> amount <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> <span class="pl-en">decimals</span>()); <span class="pl-c">// 假设 sUSD 为 18 位小数</span>
+    <span class="pl-c1">uint256</span> requiredCollateral <span class="pl-k">=</span> (requiredCollateralValueUSD <span class="pl-k">*</span> collateralizationRatio) <span class="pl-k">/</span> (<span class="pl-c1">100</span> <span class="pl-k">*</span> collateralPrice);
+    <span class="pl-c1">uint256</span> adjustedRequiredCollateral <span class="pl-k">=</span> (requiredCollateral <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> collateralDecimals)) <span class="pl-k">/</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> priceFeed.<span class="pl-en">decimals</span>());
+
+    collateralToken.<span class="pl-en">safeTransferFrom</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>), adjustedRequiredCollateral);
+    <span class="pl-en">_mint</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+
+    <span class="pl-k">emit</span> <span class="pl-en">Minted</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount, adjustedRequiredCollateral);
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧩 详细解读</h1></div>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> mint</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">external</span> nonReentrant {
+</pre></div>
+<p dir="auto">这是一个<strong>面向公众的函数</strong>——任何用户都可以调用它来铸造稳定币。</p>
+<p dir="auto">我们还用 <code>nonReentrant</code> 保护它，以防止铸造过程中的狡猾攻击。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (amount <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">revert</span> <span class="pl-en">MintAmountIsZero</span>();
+</pre></div>
+<p dir="auto">我们立即阻止用户铸造<strong>零</strong>稳定币。</p>
+<p dir="auto">铸造零是毫无意义的，只会浪费 gas。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> collateralPrice <span class="pl-k">=</span> <span class="pl-en">getCurrentPrice</span>();
+</pre></div>
+<p dir="auto">我们使用连接的 Chainlink 价格源获取抵押代币的<strong>当前实时价格</strong>。</p>
+<p dir="auto">这确保所需的抵押品计算始终基于<strong>真实世界数据</strong>，而不是过时的假设。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> requiredCollateralValueUSD <span class="pl-k">=</span> amount <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> <span class="pl-en">decimals</span>());
+</pre></div>
+<p dir="auto">我们计算用户想要铸造的稳定币的 <strong>USD 价值</strong>。</p>
+<p dir="auto">由于 sUSD 使用 18 位小数（如 ETH），我们乘以 <code>10 ** 18</code> 以正确处理缩放。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> requiredCollateral <span class="pl-k">=</span> (requiredCollateralValueUSD <span class="pl-k">*</span> collateralizationRatio) <span class="pl-k">/</span> (<span class="pl-c1">100</span> <span class="pl-k">*</span> collateralPrice);
+</pre></div>
+<p dir="auto">接下来，我们根据抵押率（如 150%）计算用户需要存入多少<strong>抵押品价值</strong>（以 USD 计）。</p>
+<p dir="auto">如果你想以 150% 铸造 $100 的 sUSD，你应该提供价值 $150 的抵押品。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> adjustedRequiredCollateral <span class="pl-k">=</span> (requiredCollateral <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> collateralDecimals)) <span class="pl-k">/</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> priceFeed.<span class="pl-en">decimals</span>());
+</pre></div>
+<p dir="auto">由于代币和价格源通常使用不同数量的小数（例如，6 vs 18），</p>
+<p dir="auto">我们在这里调整数字以确保计算对于抵押代币和价格源都是<strong>精度正确</strong>的。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>collateralToken.<span class="pl-en">safeTransferFrom</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>), adjustedRequiredCollateral);
+</pre></div>
+<p dir="auto">我们安全地将所需数量的抵押品从用户转入合约。</p>
+<p dir="auto"><code>safeTransferFrom</code> 确保操作要么完全成功，要么干净地失败——没有静默错误。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">_mint</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+</pre></div>
+<p dir="auto">一旦抵押品安全存入，我们<strong>铸造</strong>请求数量的 sUSD 稳定币直接进入用户的钱包。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">Minted</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount, adjustedRequiredCollateral);
+</pre></div>
+<p dir="auto">最后，我们触发 <strong>Minted</strong> 事件——记录谁铸造的、他们铸造了多少以及他们存入了多少抵押品——</p>
+<p dir="auto">为 dApp 和用户提供对刚刚发生的事情的完全可见性。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🔄 赎回稳定币</h1></div>
+<p dir="auto">如果铸造是用户通过存入抵押品来创建 sUSD 的方式，</p>
+<p dir="auto"><strong>赎回</strong>是他们销毁他们的 sUSD 并<strong>取回他们的抵押品</strong>的方式。</p>
+<p dir="auto">这个函数与 <code>mint</code> 相反：它确保用户有足够的稳定币，根据最新价格计算他们应该取回多少抵押品，并安全地将其返回给他们。</p>
+<p dir="auto">这是代码：</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> redeem</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">external</span> nonReentrant {
+    <span class="pl-k">if</span> (amount <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">revert</span> <span class="pl-en">MintAmountIsZero</span>();
+    <span class="pl-k">if</span> (<span class="pl-en">balanceOf</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>) <span class="pl-k">&lt;</span> amount) <span class="pl-k">revert</span> <span class="pl-en">InsufficientStablecoinBalance</span>();
+
+    <span class="pl-c1">uint256</span> collateralPrice <span class="pl-k">=</span> <span class="pl-en">getCurrentPrice</span>();
+    <span class="pl-c1">uint256</span> stablecoinValueUSD <span class="pl-k">=</span> amount <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> <span class="pl-en">decimals</span>());
+    <span class="pl-c1">uint256</span> collateralToReturn <span class="pl-k">=</span> (stablecoinValueUSD <span class="pl-k">*</span> <span class="pl-c1">100</span>) <span class="pl-k">/</span> (collateralizationRatio <span class="pl-k">*</span> collateralPrice);
+    <span class="pl-c1">uint256</span> adjustedCollateralToReturn <span class="pl-k">=</span> (collateralToReturn <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> collateralDecimals)) <span class="pl-k">/</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> priceFeed.<span class="pl-en">decimals</span>());
+
+    <span class="pl-en">_burn</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+    collateralToken.<span class="pl-en">safeTransfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, adjustedCollateralToReturn);
+
+    <span class="pl-k">emit</span> <span class="pl-en">Redeemed</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount, adjustedCollateralToReturn);
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧩 详细解读</h1></div>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (amount <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">revert</span> <span class="pl-en">MintAmountIsZero</span>();
+</pre></div>
+<p dir="auto">我们立即阻止零值赎回。</p>
+<p dir="auto">赎回零只是浪费 gas。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (<span class="pl-en">balanceOf</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>) <span class="pl-k">&lt;</span> amount) <span class="pl-k">revert</span> <span class="pl-en">InsufficientStablecoinBalance</span>();
+</pre></div>
+<p dir="auto">我们检查用户实际拥有足够的 sUSD 来赎回。</p>
+<p dir="auto">如果他们试图销毁比他们持有的更多，交易被回滚——干净而清晰。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> collateralPrice <span class="pl-k">=</span> <span class="pl-en">getCurrentPrice</span>();
+</pre></div>
+<p dir="auto">我们从 Chainlink 获取抵押代币的<strong>最新真实世界价格</strong>。</p>
+<p dir="auto">这确保用户收到的抵押品数量基于最新的、受信任的市场数据。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> stablecoinValueUSD <span class="pl-k">=</span> amount <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> <span class="pl-en">decimals</span>());
+</pre></div>
+<p dir="auto">我们计算正在赎回的 sUSD 代币的 USD 价值，使用 18 位小数正确缩放（因为这是 sUSD 使用的）。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> collateralToReturn <span class="pl-k">=</span> (stablecoinValueUSD <span class="pl-k">*</span> <span class="pl-c1">100</span>) <span class="pl-k">/</span> (collateralizationRatio <span class="pl-k">*</span> collateralPrice);
+</pre></div>
+<p dir="auto">然后我们计算<strong>应该返回多少抵押品价值</strong>——</p>
+<p dir="auto">基于抵押率和当前市场价格。</p>
+<blockquote>
+<p dir="auto">例如：如果你以 150% 赎回 $100，你应该取回大约 $66.66 价值的抵押品。</p>
+</blockquote>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> adjustedCollateralToReturn <span class="pl-k">=</span> (collateralToReturn <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> collateralDecimals)) <span class="pl-k">/</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> priceFeed.<span class="pl-en">decimals</span>());
+</pre></div>
+<p dir="auto">在这里，我们调整抵押代币使用的小数数量与价格源之间的任何差异——</p>
+<p dir="auto">所以返回的金额是<strong>精确和准确的</strong>。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">_burn</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount);
+</pre></div>
+<p dir="auto">我们<strong>销毁</strong>正在赎回的稳定币——永久将它们从流通中移除。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>collateralToken.<span class="pl-en">safeTransfer</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, adjustedCollateralToReturn);
+</pre></div>
+<p dir="auto">一旦 sUSD 被销毁，计算的抵押品数量<strong>安全地发送回</strong>用户的钱包。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">Redeemed</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, amount, adjustedCollateralToReturn);
+</pre></div>
+<p dir="auto">我们发出一个 <strong>Redeemed</strong> 事件，记录：</p>
+<ul dir="auto">
+<li>谁赎回的</li>
+<li>他们销毁了多少 sUSD</li>
+<li>他们收到了多少抵押品</li>
+</ul>
+<p dir="auto">这使一切在链上保持透明和可追溯。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">⚙️ 更新抵押率</h1></div>
+<p dir="auto">这个函数允许<strong>所有者</strong>调整系统的安全缓冲——铸造新稳定币时所需的超额抵押百分比。</p>
+<p dir="auto">调整这个比率可以帮助应对不断变化的市场条件（如高波动性），但它受到严格控制以避免危险设置。</p>
+<p dir="auto">这是函数：</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> setCollateralizationRatio</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">newRatio</span>) <span class="pl-k">external</span> onlyOwner {
+    <span class="pl-k">if</span> (newRatio <span class="pl-k">&lt;</span> <span class="pl-c1">100</span>) <span class="pl-k">revert</span> <span class="pl-en">CollateralizationRatioTooLow</span>();
+    collateralizationRatio <span class="pl-k">=</span> newRatio;
+    <span class="pl-k">emit</span> <span class="pl-en">CollateralizationRatioUpdated</span>(newRatio);
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧩 详细解读</h1></div>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> setCollateralizationRatio</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">newRatio</span>) <span class="pl-k">external</span> onlyOwner {
+</pre></div>
+<p dir="auto">这是一个<strong>仅限所有者的函数</strong>——没有其他人可以调用它。</p>
+<p dir="auto">它让所有者能够更新用户在铸造时必须存入多少抵押品。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (newRatio <span class="pl-k">&lt;</span> <span class="pl-c1">100</span>) <span class="pl-k">revert</span> <span class="pl-en">CollateralizationRatioTooLow</span>();
+</pre></div>
+<p dir="auto">我们执行一个<strong>严格的下限</strong>：比率永远不能低于 100%。</p>
+<p dir="auto">这确保每个稳定币始终至少由其全部价值的抵押品支持——不允许部分准备金。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>collateralizationRatio <span class="pl-k">=</span> newRatio;
+</pre></div>
+<p dir="auto">如果新比率有效，我们存储它。</p>
+<p dir="auto">这个新值将在所有未来的 <code>mint</code> 和 <code>redeem</code> 计算中使用。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">CollateralizationRatioUpdated</span>(newRatio);
+</pre></div>
+<p dir="auto">我们发出一个事件，所以更改<strong>在链上可见</strong>。</p>
+<p dir="auto">这保持系统透明——dApp 和用户可以看到规则何时（以及如何）改变。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🔄 更新价格源</h1></div>
+<p dir="auto">价格源是任何抵押支持的稳定币的支柱。</p>
+<p dir="auto">如果数据源中断或需要升级，我们需要一种方式<strong>安全地更新它</strong>而不重新部署整个合约。</p>
+<p dir="auto">这个函数让受信任的角色——不仅仅是所有者——在需要时更新 Chainlink 源。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> setPriceFeedContract</span></span>(<span class="pl-c1">address</span> <span class="pl-v">_newPriceFeed</span>) <span class="pl-k">external</span> <span class="pl-en">onlyRole</span>(PRICE_FEED_MANAGER_ROLE) {
+    <span class="pl-k">if</span> (_newPriceFeed <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) <span class="pl-k">revert</span> <span class="pl-en">InvalidPriceFeedAddress</span>();
+    priceFeed <span class="pl-k">=</span> <span class="pl-en">AggregatorV3Interface</span>(_newPriceFeed);
+    <span class="pl-k">emit</span> <span class="pl-en">PriceFeedUpdated</span>(_newPriceFeed);
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧩 详细解读</h1></div>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> setPriceFeedContract</span></span>(<span class="pl-c1">address</span> <span class="pl-v">_newPriceFeed</span>) <span class="pl-k">external</span> <span class="pl-en">onlyRole</span>(PRICE_FEED_MANAGER_ROLE) {
+</pre></div>
+<p dir="auto">这个函数只能由拥有 <strong>PRICE_FEED_MANAGER_ROLE</strong> 的人调用。</p>
+<p dir="auto">这样，我们不会将所有价格源控制权交给所有者——它是一个单独的、严格限定范围的角色。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (_newPriceFeed <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) <span class="pl-k">revert</span> <span class="pl-en">InvalidPriceFeedAddress</span>();
+</pre></div>
+<p dir="auto">我们检查新地址是有效的（不是零）。</p>
+<p dir="auto">如果不是，我们立即用清晰的自定义错误停止交易。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>priceFeed <span class="pl-k">=</span> <span class="pl-en">AggregatorV3Interface</span>(_newPriceFeed);
+</pre></div>
+<p dir="auto">一旦验证，我们更新内部 <code>priceFeed</code> 引用——将合约连接到新的 Chainlink 源。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">PriceFeedUpdated</span>(_newPriceFeed);
+</pre></div>
+<p dir="auto">我们发出一个事件，所以更新是公开可见的。</p>
+<p dir="auto">这保持系统透明，并确保任何使用此合约的 dApp 或前端可以响应更改。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">📊 预览所需抵押品</h1></div>
+<p dir="auto">在用户调用 <code>mint</code> 之前，知道他们需要存入<strong>多少抵押品</strong>是有帮助的。</p>
+<p dir="auto">这个函数使这变得容易——它让前端和用户<strong>预览所需金额</strong>，基于实时价格源和当前比率，而无需实际发送交易。</p>
+<p dir="auto">这是代码：</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getRequiredCollateralForMint</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    <span class="pl-k">if</span> (amount <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+
+    <span class="pl-c1">uint256</span> collateralPrice <span class="pl-k">=</span> <span class="pl-en">getCurrentPrice</span>();
+    <span class="pl-c1">uint256</span> requiredCollateralValueUSD <span class="pl-k">=</span> amount <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> <span class="pl-en">decimals</span>());
+    <span class="pl-c1">uint256</span> requiredCollateral <span class="pl-k">=</span> (requiredCollateralValueUSD <span class="pl-k">*</span> collateralizationRatio) <span class="pl-k">/</span> (<span class="pl-c1">100</span> <span class="pl-k">*</span> collateralPrice);
+    <span class="pl-c1">uint256</span> adjustedRequiredCollateral <span class="pl-k">=</span> (requiredCollateral <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> collateralDecimals)) <span class="pl-k">/</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> priceFeed.<span class="pl-en">decimals</span>());
+
+    <span class="pl-k">return</span> adjustedRequiredCollateral;
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧩 详细解读</h1></div>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getRequiredCollateralForMint</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>)
+</pre></div>
+<p dir="auto">这是一个<strong>视图函数</strong>，意味着它不修改状态——它只从合约中读取。</p>
+<p dir="auto">任何人都可以调用它来检查他们铸造给定数量的 sUSD 需要多少抵押品。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (amount <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+</pre></div>
+<p dir="auto">如果用户询问铸造零代币需要多少抵押品，答案很简单：无。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> collateralPrice <span class="pl-k">=</span> <span class="pl-en">getCurrentPrice</span>();
+</pre></div>
+<p dir="auto">我们使用实时 Chainlink 源获取抵押品的<strong>当前市场价格</strong>。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> requiredCollateralValueUSD <span class="pl-k">=</span> amount <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> <span class="pl-en">decimals</span>());
+</pre></div>
+<p dir="auto">我们将稳定币的数量缩放到 18 位小数以用完整的 USD 价值术语表达它。</p>
+<p dir="auto">这给我们抵押品必须覆盖的总 USD 价值。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> requiredCollateral <span class="pl-k">=</span> (requiredCollateralValueUSD <span class="pl-k">*</span> collateralizationRatio) <span class="pl-k">/</span> (<span class="pl-c1">100</span> <span class="pl-k">*</span> collateralPrice);
+</pre></div>
+<p dir="auto">我们应用<strong>抵押率</strong>（例如，150%）来确定用户必须提供比 USD 价值多多少。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> adjustedRequiredCollateral <span class="pl-k">=</span> (requiredCollateral <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> collateralDecimals)) <span class="pl-k">/</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> priceFeed.<span class="pl-en">decimals</span>());
+</pre></div>
+<p dir="auto">我们调整抵押代币和价格源之间的任何<strong>小数不匹配</strong>。</p>
+<p dir="auto">这确保最终数字以抵押代币的单位正确缩放。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">return</span> adjustedRequiredCollateral;
+</pre></div>
+<p dir="auto">最后，我们返回用户需要发送以铸造所需 sUSD 数量的**抵押代币（以最小单位）**的确切数量。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">💵 预览赎回时返回的抵押品</h1></div>
+<p dir="auto">这个函数是 <strong><code>getRequiredCollateralForMint</code> 的对应物</strong>——它帮助用户检查如果他们赎回一定数量的 sUSD，他们将收到<strong>多少抵押品</strong>。</p>
+<p dir="auto">这是一个纯粹的、只读的函数，对于前端和钱包在用户采取任何行动之前给用户清晰度非常有用。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getCollateralForRedeem</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">amount</span>) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    <span class="pl-k">if</span> (amount <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+
+    <span class="pl-c1">uint256</span> collateralPrice <span class="pl-k">=</span> <span class="pl-en">getCurrentPrice</span>();
+    <span class="pl-c1">uint256</span> stablecoinValueUSD <span class="pl-k">=</span> amount <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> <span class="pl-en">decimals</span>());
+    <span class="pl-c1">uint256</span> collateralToReturn <span class="pl-k">=</span> (stablecoinValueUSD <span class="pl-k">*</span> <span class="pl-c1">100</span>) <span class="pl-k">/</span> (collateralizationRatio <span class="pl-k">*</span> collateralPrice);
+    <span class="pl-c1">uint256</span> adjustedCollateralToReturn <span class="pl-k">=</span> (collateralToReturn <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> collateralDecimals)) <span class="pl-k">/</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> priceFeed.<span class="pl-en">decimals</span>());
+
+    <span class="pl-k">return</span> adjustedCollateralToReturn;
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧩 详细解读</h1></div>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (amount <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+</pre></div>
+<p dir="auto">如果用户询问赎回<strong>零</strong>稳定币，答案显然是零——不需要运行其余的计算。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> collateralPrice <span class="pl-k">=</span> <span class="pl-en">getCurrentPrice</span>();
+</pre></div>
+<p dir="auto">我们使用我们之前定义的同一辅助函数获取抵押代币的<strong>实时价格</strong>。</p>
+<p dir="auto">这确保所有数学都基于最新的市场数据。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> stablecoinValueUSD <span class="pl-k">=</span> amount <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> <span class="pl-en">decimals</span>());
+</pre></div>
+<p dir="auto">我们将用户想要赎回的 sUSD 数量转换为其 <strong>USD 价值</strong>，使用 18 位小数缩放，因为我们的稳定币使用该格式。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> collateralToReturn <span class="pl-k">=</span> (stablecoinValueUSD <span class="pl-k">*</span> <span class="pl-c1">100</span>) <span class="pl-k">/</span> (collateralizationRatio <span class="pl-k">*</span> collateralPrice);
+</pre></div>
+<p dir="auto">这告诉我们用户有权获得的<strong>抵押品的 USD 价值</strong>。</p>
+<p dir="auto">由于系统是超额抵押的（例如，150%），用户只能取回他们最初锁定的全部价值的一部分。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> adjustedCollateralToReturn <span class="pl-k">=</span> (collateralToReturn <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> collateralDecimals)) <span class="pl-k">/</span> (<span class="pl-c1">10</span> <span class="pl-k">**</span> priceFeed.<span class="pl-en">decimals</span>());
+</pre></div>
+<p dir="auto">再次，我们处理抵押代币和价格源之间<strong>小数格式</strong>的差异——所以结果以代币单位正确缩放。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">return</span> adjustedCollateralToReturn;
+</pre></div>
+<p dir="auto">最后，我们返回用户如果赎回给定 sUSD 数量将收到的抵押品数量（以最小单位如 wei）。</p>
+<hr>
+<p dir="auto">有了这个，用户对系统的两面都有完全的可见性：</p>
+<ul dir="auto">
+<li>他们需要多少抵押品来铸造。</li>
+<li>他们赎回时会取回多少抵押品。</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">🧰 在 Remix 上使用主网分叉部署 SimpleStablecoin 的分步指南</h1></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">1. 打开 Remix IDE</h3></div>
+<ul dir="auto">
+<li>在浏览器中导航到 Remix IDE。</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">2. 设置主网分叉环境</h3></div>
+<ol dir="auto">
+<li>单击左侧边栏上的 <strong>"Deploy &amp; Run Transactions"</strong> 标签（🚀 图标）。</li>
+<li>在 <strong>"Environment"</strong> 下拉菜单中，选择 <strong>"Remix VM - Mainnet fork"</strong>。
+<ul dir="auto">
+<li>这会分叉以太坊主网并将其加载到 Remix VM 中，允许你与已部署的主网合约交互。</li>
+<li>Remix 提供 10 个账户，每个账户预加载 100 ETH 用于测试目的</li>
+</ul>
+</li>
+</ol>
+<p dir="auto"><em>注意：使用主网分叉时要小心，因为它模拟主网环境。确保你不会发送真实交易，除非有意为之。</em></p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">3. 创建并编译你的自定义 ERC20 代币</h3></div>
+<ol dir="auto">
+<li>
+<p dir="auto">在 <strong>File Explorer</strong>（📁 图标）中，创建一个名为 <code>MyToken.sol</code> 的新文件。</p>
+</li>
+<li>
+<p dir="auto">将以下代码粘贴到 <code>MyToken.sol</code> 中：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-k">pragma solidity</span> <span class="pl-k">^</span><span class="pl-c1">0.8.20</span>;
+
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/token/ERC20/ERC20.sol</span>"</span>;
+
+<span class="pl-k">contract</span> <span class="pl-en">MyToken</span> <span class="pl-k">is</span> <span class="pl-en">ERC20</span> {
+    <span class="pl-k">constructor</span>() <span class="pl-c1">ERC20</span>(<span class="pl-s">"<span class="pl-s">MyToken</span>"</span>, <span class="pl-s">"<span class="pl-s">MTK</span>"</span>) {
+        <span class="pl-en">_mint</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">1_000_000</span> <span class="pl-k">*</span> <span class="pl-c1">10</span> <span class="pl-k">**</span> <span class="pl-en">decimals</span>());
+    }
+}
+</pre></div>
+</li>
+<li>
+<p dir="auto">单击 <strong>"Solidity Compiler"</strong> 标签（🛠️ 图标）。</p>
+</li>
+<li>
+<p dir="auto">确保编译器版本与你的合约中的 pragma 匹配（例如，<code>0.8.20</code>）。</p>
+</li>
+<li>
+<p dir="auto">单击 <strong>"Compile MyToken.sol"</strong>。</p>
+</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">4. 部署你的自定义 ERC20 代币</h3></div>
+<ol dir="auto">
+<li>在 <strong>"Deploy &amp; Run Transactions"</strong> 标签中：
+<ul dir="auto">
+<li>确保 <strong>Environment</strong> 设置为 <strong>"Remix VM - Mainnet fork"</strong>。</li>
+<li>从下拉菜单中选择 <code>MyToken</code> 合约。</li>
+</ul>
+</li>
+<li>单击 <strong>"Deploy"</strong>。</li>
+<li>部署后，你将在 <strong>Deployed Contracts</strong> 下看到你的合约。展开它以查看可用函数。</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">5. 识别 Chainlink 价格源地址</h3></div>
+<p dir="auto">由于你正在使用主网分叉，你可以与实际部署的合约交互。例如：</p>
+<ul dir="auto">
+<li><strong>Chainlink ETH/USD 价格源（以太坊主网）：</strong>
+<ul dir="auto">
+<li>地址：<code>0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419</code></li>
+<li>小数：8</li>
+</ul>
+</li>
+</ul>
+<p dir="auto"><em>注意：这些地址特定于以太坊主网。通过参考 <a href="https://docs.chain.link/data-feeds/price-feeds/addresses" rel="nofollow">Chainlink 的官方文档</a>确保它们准确且最新。</em></p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">6. 创建并编译 SimpleStablecoin 合约</h3></div>
+<ol dir="auto">
+<li>在 <strong>File Explorer</strong> 中，创建一个名为 <code>SimpleStablecoin.sol</code> 的新文件。</li>
+<li>将你完整的 <strong>SimpleStablecoin</strong> 合约代码粘贴到此文件中。
+<ul dir="auto">
+<li>确保包含所有必要的 OpenZeppelin 导入。</li>
+</ul>
+</li>
+<li>单击 <strong>"Solidity Compiler"</strong> 标签。</li>
+<li>确保编译器版本与你的合约中的 pragma 匹配。</li>
+<li>单击 <strong>"Compile SimpleStablecoin.sol"</strong>。</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">7. 部署 SimpleStablecoin 合约</h3></div>
+<ol dir="auto">
+<li>在 <strong>"Deploy &amp; Run Transactions"</strong> 标签中：
+<ul dir="auto">
+<li>确保 <strong>Environment</strong> 设置为 <strong>"Remix VM - Mainnet fork"</strong>。</li>
+<li>从下拉菜单中选择 <code>SimpleStablecoin</code> 合约。</li>
+</ul>
+</li>
+<li>输入构造函数参数：
+<ul dir="auto">
+<li><code>_collateralToken</code>：粘贴你部署的 <code>MyToken</code> 合约的地址。</li>
+<li><code>_initialOwner</code>：使用 Remix 提供的预资助账户地址之一。</li>
+<li><code>_priceFeedContract</code>：粘贴 Chainlink ETH/USD 价格源地址。</li>
+</ul>
+</li>
+<li>单击 <strong>"Deploy"</strong>。</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">8. 与已部署的合约交互</h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">批准 SimpleStablecoin 合约花费你的代币</h3></div>
+<ol dir="auto">
+<li>在 <strong>Deployed Contracts</strong> 部分，展开你的 <code>MyToken</code> 合约。</li>
+<li>调用 <code>approve</code> 函数：
+<ul dir="auto">
+<li><code>_spender</code>：你部署的 <code>SimpleStablecoin</code> 合约的地址。</li>
+<li><code>_value</code>：要批准的代币数量（例如，<code>1000000000000000000000</code> 表示 1000 个 18 位小数的代币）。</li>
+</ul>
+</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">铸造稳定币</h3></div>
+<ol dir="auto">
+<li>在 <strong>Deployed Contracts</strong> 部分展开你的 <code>SimpleStablecoin</code> 合约。</li>
+<li>调用 <code>mint</code> 函数：
+<ul dir="auto">
+<li><code>amount</code>：你希望铸造的稳定币数量（100 个代币）。</li>
+</ul>
+</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">赎回稳定币</h3></div>
+<ol dir="auto">
+<li>调用 <code>redeem</code> 函数：
+<ul dir="auto">
+<li><code>amount</code>：你希望赎回的稳定币数量。</li>
+</ul>
+</li>
+</ol>
+<p dir="auto"><em>注意：在执行这些操作之前，请确保你有足够的余额和批准。</em></p>
                     </div>
                 </div>
             </div>

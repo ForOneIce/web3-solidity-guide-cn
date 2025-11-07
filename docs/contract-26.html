@@ -861,7 +861,109 @@
             }
         }
     </style>
-</head>
+
+        <style>
+        /* 隐藏 mermaid 渲染组件 */
+        .md-content section.js-render-needs-enrichment,
+        .md-content .js-render-enrichment-target,
+        .md-content .js-render-block-actions,
+        .md-content .render-container,
+        .md-content .js-render-enrichment-fallback,
+        .md-content details[class*="details"],
+        .md-content iframe[title="File display"] {
+            display: none !important;
+        }
+        
+        /* 修复 GitHub 代码块样式 */
+        .md-content .highlight,
+        .md-content .highlight-source-solidity,
+        .md-content .highlight-source-js,
+        .md-content .highlight-source-javascript {
+            background: #2d2a2e !important;
+            border-radius: 10px;
+            padding: 20px !important;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content .highlight pre,
+        .md-content .highlight-source-solidity pre,
+        .md-content .highlight-source-js pre {
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
+        
+        /* 基础代码文字颜色 - 确保所有文字都可见 */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        .md-content .highlight code,
+        .md-content .highlight pre code,
+        .md-content .highlight pre span,
+        .md-content .highlight pre * {
+            /* Added to ensure all text in pre is visible */
+            color: #f8f8f2 !important;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* 确保代码块内所有文字（包括没有 span 包裹的文字）都可见 */
+        .md-content .highlight pre,
+        .md-content .highlight pre code {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特别处理代码块中的纯文本节点（没有被 span 包裹的文字，如变量名） */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 确保所有直接文本内容都可见 - 覆盖继承的颜色 */
+        .md-content .highlight pre * {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特别处理变量名 - 确保清晰可见 */
+        .md-content .highlight pre span.pl-v,
+        .md-content .highlight pre span.pl-en,
+        .md-content .highlight pre span.pl-e {
+            color: #dcdcaa !important;
+            font-weight: 500 !important;
+        }
+        
+        /* GitHub 语法高亮类颜色修复 */
+        .md-content .highlight [class*="pl-"] {
+            color: #f8f8f2 !important; /* Default to light color */
+        }
+        .md-content .highlight .pl-c { /* 注释 */
+            color: #6a9955 !important;
+        }
+        .md-content .highlight .pl-s, .md-content .highlight .pl-s1 { /* 字符串 */
+            color: #ce9178 !important;
+        }
+        .md-content .highlight .pl-k, .md-content .highlight .pl-c1 { /* 关键字/常量 */
+            color: #569cd6 !important;
+        }
+        .md-content .highlight .pl-v, .md-content .highlight .pl-en, .md-content .highlight .pl-e, .md-content .highlight .pl-ent { /* 变量/函数名/实体名 */
+            color: #dcdcaa !important;
+            font-weight: 500 !important;
+        }
+        .md-content code {
+            background-color: rgba(139, 115, 85, 0.15);
+            color: var(--warm-brown);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+        }
+        </style>
+        </head>
 <body>
     <div class="nav-bar">
         <div class="nav-left">
@@ -1276,12 +1378,1403 @@ fallback() external payable {
             </div>
             <div class="letter-body">
                 <div id="md-content" class="md-content">
-                    <div class="md-section">
-                        <h1>第26天内容</h1>
-                        <p style="text-align: center; padding: 40px; color: #999;">
-                            ⏳ 内容正在精心准备中...<br>
-                            敬请期待！
-                        </p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">NFT市场合约学习内容</h1></div>
+<p dir="auto">Day: Day 26
+ID: 26
+译者: Bala Chen
+难度等级: 高级</p>
+<p dir="auto">嘿嘿，欢迎回到<strong>30天Solidity学习</strong>——每天，你不仅通过阅读智能合约的工作原理来升级，而是通过实际构建感觉像真实世界应用的东西。</p>
+<p dir="auto">今天，我们从<strong>铸造NFT</strong>转向<strong>将它们货币化</strong>。</p>
+<p dir="auto">这不仅仅是练习。</p>
+<p dir="auto">这是你构建真实产品的第一步。</p>
+<p dir="auto">可以在主网上运行的东西。你最喜欢的NFT艺术家可以用来列出他们作品的东西。</p>
+<p dir="auto">今天...</p>
+<p dir="auto">你正在构建自己的<strong>NFT市场</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🛍️ 让我们谈谈市场</h3></div>
+<p dir="auto">想想你最喜欢的在线市场——也许是OpenSea，也许是淘宝，也许是你附近的跳蚤市场。</p>
+<p dir="auto">总是有相同的3个角色：</p>
+<ul dir="auto">
+<li>有人<strong>出售</strong>有价值的东西</li>
+<li>有人<strong>购买</strong>它</li>
+<li>中间有一个平台处理交易，抽取佣金，并移动商品</li>
+</ul>
+<p dir="auto">现在把这个想法——完全放在链上。</p>
+<p dir="auto">没有中间人。没有后端。没有人阻挡道路。</p>
+<p dir="auto">只是一个智能合约：</p>
+<ul dir="auto">
+<li>列出NFT</li>
+<li>处理ETH支付</li>
+<li>支付给卖家、平台，甚至原创者——<strong>自动地</strong></li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 为什么这个项目很重要</h3></div>
+<p dir="auto">NFT市场是一切汇聚的地方：</p>
+<ul dir="auto">
+<li>ERC721逻辑 ✅</li>
+<li>安全的ETH转账 ✅</li>
+<li>创作者版税 ✅</li>
+<li>费用分配 ✅</li>
+<li>重入保护 ✅</li>
+<li>所有权+批准流程 ✅</li>
+</ul>
+<p dir="auto">这是展示真实世界里Web3应用如何在底层工作的合约类型。</p>
+<p dir="auto">当你构建这个时...你不仅仅是在复制OpenSea。</p>
+<p dir="auto">你在理解它——并创建你自己的精简版、不臃肿版本。</p>
+<p dir="auto">一个<strong>你控制</strong>的版本。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧾 你今天将学到什么</h3></div>
+<ul dir="auto">
+<li>如何<strong>列出</strong>带有自定义价格和可选版税的NFT</li>
+<li>如何使用ETH<strong>购买</strong>NFT（自动分配给卖家、创作者和市场）</li>
+<li>如果卖家改变主意，如何<strong>取消列出</strong>NFT</li>
+<li>如何使用<code>ReentrancyGuard</code><strong>保护</strong>一切</li>
+<li>以及如何作为合约所有者<strong>跟踪和更新费用</strong>并拥有完全控制权</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💡 是什么让这个特别？</h3></div>
+<p dir="auto">这个市场不仅让人们交易NFT。它：</p>
+<ul dir="auto">
+<li>尊重创作者版税</li>
+<li>自动执行所有权</li>
+<li>确保每个人都得到正确的报酬（卖家、创作者和你！）</li>
+<li>不需要<strong>后端</strong>和<strong>信任</strong>——一切都由代码执行</li>
+</ul>
+<p dir="auto">你不是在构建一个<em>假装</em>做事情的UI。</p>
+<p dir="auto">你在构建实际<em>做</em>这些事情的后端逻辑——实时，在链上。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🚀 到最后</h3></div>
+<p dir="auto">你将拥有一个自包含的NFT市场合约，可以：</p>
+<ul dir="auto">
+<li>列出任何ERC-721</li>
+<li>用ETH出售它</li>
+<li>分配费用</li>
+<li>安全地转移NFT</li>
+<li>用事件记录所有活动，供前端获取</li>
+</ul>
+<p dir="auto">这就像你自己的小OpenSea——但按你的条件。</p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">产品需求说明</h1></div>
+<p dir="auto">用户流程</p>
+<p dir="auto">需要的数据结构</p>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th>└ Function Name</th>
+<th>Visibility</th>
+<th>Mutability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>constructor</td>
+<td>Public</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>setMarketplaceFeePercent</td>
+<td>External</td>
+<td>⚙️</td>
+</tr>
+<tr>
+<td>setFeeRecipient</td>
+<td>External</td>
+<td>⚙️</td>
+</tr>
+<tr>
+<td>listNFT</td>
+<td>External</td>
+<td>⚙️</td>
+</tr>
+<tr>
+<td>buyNFT</td>
+<td>External</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>cancelListing</td>
+<td>External</td>
+<td>⚙️</td>
+</tr>
+<tr>
+<td>getListing</td>
+<td>External</td>
+<td>View</td>
+</tr>
+<tr>
+<td>receive</td>
+<td>External</td>
+<td>🛑</td>
+</tr>
+<tr>
+<td>fallback</td>
+<td>External</td>
+<td>🛑</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">细节解说</h1></div>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🧾 概述：这个NFT市场合约如何工作</h2></div>
+<p dir="auto">那么我们真正在构建什么？</p>
+<p dir="auto">这个合约是一个<strong>完全链上的NFT市场</strong>，用纯Solidity编写。它让人们：</p>
+<ul dir="auto">
+<li><strong>列出他们的NFT出售</strong>，设置价格甚至自定义版税</li>
+<li>通过直接向合约发送ETH来<strong>购买NFT</strong></li>
+<li><strong>自动分割销售</strong>在卖家、创作者（版税）和平台（市场费用）之间</li>
+<li>随时<strong>取消列表</strong></li>
+<li>作为市场所有者<strong>更新费用设置</strong></li>
+</ul>
+<p dir="auto">所有这些都<strong>安全地</strong>发生，具有内置保护，如<code>ReentrancyGuard</code>来防止攻击。</p>
+<p dir="auto">这里没有前端，没有JavaScript，没有后端数据库——只是一个智能合约：</p>
+<ul dir="auto">
+<li>跟踪每个列表</li>
+<li>验证每个NFT和卖家</li>
+<li>正确移动ETH和NFT</li>
+<li>发出事件，以便UI可以跟随</li>
+</ul>
+<p dir="auto">这是像<strong>OpenSea</strong>和<strong>LooksRare</strong>这样的平台构建的相同基础——但更干净、更简单、对初学者友好。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🧾 完整的NFT市场合约代码</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-k">pragma solidity</span> <span class="pl-k">^</span><span class="pl-c1">0.8.20</span>;
+
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/token/ERC721/IERC721.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/security/ReentrancyGuard.sol</span>"</span>;
+
+<span class="pl-k">contract</span> <span class="pl-en">NFTMarketplace</span> <span class="pl-k">is</span> <span class="pl-en">ReentrancyGuard</span> {
+    <span class="pl-c1">address</span> <span class="pl-k">public</span> owner;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> marketplaceFeePercent; <span class="pl-c">// 以基点为单位 (100 = 1%)</span>
+    <span class="pl-c1">address</span> <span class="pl-k">public</span> feeRecipient;
+
+    <span class="pl-k">struct<span class="pl-en"> Listing</span></span> {
+        <span class="pl-c1">address</span> seller;
+        <span class="pl-c1">address</span> nftAddress;
+        <span class="pl-c1">uint256</span> tokenId;
+        <span class="pl-c1">uint256</span> price;
+        <span class="pl-c1">address</span> royaltyReceiver;
+        <span class="pl-c1">uint256</span> royaltyPercent; <span class="pl-c">// 以基点为单位</span>
+        <span class="pl-c1">bool</span> isListed;
+    }
+
+    <span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-k">mapping</span>(<span class="pl-c1">uint256</span> <span class="pl-k">=&gt;</span> Listing)) <span class="pl-k">public</span> listings;
+
+    <span class="pl-k">event <span class="pl-en">Listed</span></span>(
+        <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">seller</span>,
+        <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">nftAddress</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenId</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">price</span>,
+        <span class="pl-c1">address</span> <span class="pl-v">royaltyReceiver</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">royaltyPercent</span>
+    );
+
+    <span class="pl-k">event <span class="pl-en">Purchase</span></span>(
+        <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">buyer</span>,
+        <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">nftAddress</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenId</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">price</span>,
+        <span class="pl-c1">address</span> <span class="pl-v">seller</span>,
+        <span class="pl-c1">address</span> <span class="pl-v">royaltyReceiver</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">royaltyAmount</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">marketplaceFeeAmount</span>
+    );
+
+    <span class="pl-k">event <span class="pl-en">Unlisted</span></span>(
+        <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">seller</span>,
+        <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">nftAddress</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenId</span>
+    );
+
+    <span class="pl-k">event <span class="pl-en">FeeUpdated</span></span>(
+        <span class="pl-c1">uint256</span> <span class="pl-v">newMarketplaceFee</span>,
+        <span class="pl-c1">address</span> <span class="pl-v">newFeeRecipient</span>
+    );
+
+    <span class="pl-k">constructor</span>(<span class="pl-c1">uint256</span> <span class="pl-v">_marketplaceFeePercent</span>, <span class="pl-c1">address</span> <span class="pl-v">_feeRecipient</span>) {
+        <span class="pl-k">require</span>(_marketplaceFeePercent <span class="pl-k">&lt;=</span> <span class="pl-c1">1000</span>, <span class="pl-s">"<span class="pl-s">Marketplace fee too high (max 10%)</span>"</span>);
+        <span class="pl-k">require</span>(_feeRecipient <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Fee recipient cannot be zero</span>"</span>);
+
+        owner <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>;
+        marketplaceFeePercent <span class="pl-k">=</span> _marketplaceFeePercent;
+        feeRecipient <span class="pl-k">=</span> _feeRecipient;
+    }
+
+    <span class="pl-k">modifier<span class="pl-en"> onlyOwner</span></span>() {
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> owner, <span class="pl-s">"<span class="pl-s">Only owner</span>"</span>);
+        <span class="pl-k">_;</span>
+    }
+
+    <span class="pl-k">function<span class="pl-en"> setMarketplaceFeePercent</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">_newFee</span>) <span class="pl-k">external</span> onlyOwner {
+        <span class="pl-k">require</span>(_newFee <span class="pl-k">&lt;=</span> <span class="pl-c1">1000</span>, <span class="pl-s">"<span class="pl-s">Marketplace fee too high</span>"</span>);
+        marketplaceFeePercent <span class="pl-k">=</span> _newFee;
+        <span class="pl-k">emit</span> <span class="pl-en">FeeUpdated</span>(_newFee, feeRecipient);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> setFeeRecipient</span></span>(<span class="pl-c1">address</span> <span class="pl-v">_newRecipient</span>) <span class="pl-k">external</span> onlyOwner {
+        <span class="pl-k">require</span>(_newRecipient <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Invalid fee recipient</span>"</span>);
+        feeRecipient <span class="pl-k">=</span> _newRecipient;
+        <span class="pl-k">emit</span> <span class="pl-en">FeeUpdated</span>(marketplaceFeePercent, _newRecipient);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> listNFT</span></span>(
+        <span class="pl-c1">address</span> <span class="pl-v">nftAddress</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">tokenId</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">price</span>,
+        <span class="pl-c1">address</span> <span class="pl-v">royaltyReceiver</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">royaltyPercent</span>
+    ) <span class="pl-k">external</span> {
+        <span class="pl-k">require</span>(price <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Price must be above zero</span>"</span>);
+        <span class="pl-k">require</span>(royaltyPercent <span class="pl-k">&lt;=</span> <span class="pl-c1">1000</span>, <span class="pl-s">"<span class="pl-s">Max 10% royalty allowed</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-k">!</span>listings[nftAddress][tokenId].isListed, <span class="pl-s">"<span class="pl-s">Already listed</span>"</span>);
+
+        <span class="pl-c1">IERC721</span> nft <span class="pl-k">=</span> <span class="pl-c1">IERC721</span>(nftAddress);
+        <span class="pl-k">require</span>(nft.<span class="pl-en">ownerOf</span>(tokenId) <span class="pl-k">==</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-s">"<span class="pl-s">Not the owner</span>"</span>);
+        <span class="pl-k">require</span>(
+            nft.<span class="pl-en">getApproved</span>(tokenId) <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-mi">this</span>) <span class="pl-k">||</span> nft.<span class="pl-en">isApprovedForAll</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>)),
+            <span class="pl-s">"<span class="pl-s">Marketplace not approved</span>"</span>
+        );
+
+        listings[nftAddress][tokenId] <span class="pl-k">=</span> <span class="pl-en">Listing</span>({
+            seller: <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>,
+            nftAddress: nftAddress,
+            tokenId: tokenId,
+            price: price,
+            royaltyReceiver: royaltyReceiver,
+            royaltyPercent: royaltyPercent,
+            isListed: <span class="pl-c1">true</span>
+        });
+
+        <span class="pl-k">emit</span> <span class="pl-en">Listed</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, nftAddress, tokenId, price, royaltyReceiver, royaltyPercent);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> buyNFT</span></span>(<span class="pl-c1">address</span> <span class="pl-v">nftAddress</span>, <span class="pl-c1">uint256</span> <span class="pl-v">tokenId</span>) <span class="pl-k">external</span> <span class="pl-k">payable</span> nonReentrant {
+        Listing <span class="pl-k">memory</span> item <span class="pl-k">=</span> listings[nftAddress][tokenId];
+        <span class="pl-k">require</span>(item.isListed, <span class="pl-s">"<span class="pl-s">Not listed</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">==</span> item.price, <span class="pl-s">"<span class="pl-s">Incorrect ETH sent</span>"</span>);
+        <span class="pl-k">require</span>(
+            item.royaltyPercent <span class="pl-k">+</span> marketplaceFeePercent <span class="pl-k">&lt;=</span> <span class="pl-c1">10000</span>,
+            <span class="pl-s">"<span class="pl-s">Combined fees exceed 100%</span>"</span>
+        );
+
+        <span class="pl-c1">uint256</span> feeAmount <span class="pl-k">=</span> (<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">*</span> marketplaceFeePercent) <span class="pl-k">/</span> <span class="pl-c1">10000</span>;
+        <span class="pl-c1">uint256</span> royaltyAmount <span class="pl-k">=</span> (<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">*</span> item.royaltyPercent) <span class="pl-k">/</span> <span class="pl-c1">10000</span>;
+        <span class="pl-c1">uint256</span> sellerAmount <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">-</span> feeAmount <span class="pl-k">-</span> royaltyAmount;
+
+        <span class="pl-c">// 市场费用</span>
+        <span class="pl-k">if</span> (feeAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>) {
+            <span class="pl-c1">payable</span>(feeRecipient).<span class="pl-en">transfer</span>(feeAmount);
+        }
+
+        <span class="pl-c">// 创作者版税</span>
+        <span class="pl-k">if</span> (royaltyAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">&amp;&amp;</span> item.royaltyReceiver <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) {
+            <span class="pl-c1">payable</span>(item.royaltyReceiver).<span class="pl-en">transfer</span>(royaltyAmount);
+        }
+
+        <span class="pl-c">// 卖家支付</span>
+        <span class="pl-c1">payable</span>(item.seller).<span class="pl-en">transfer</span>(sellerAmount);
+
+        <span class="pl-c">// 将NFT转移给买家</span>
+        <span class="pl-c1">IERC721</span>(item.nftAddress).<span class="pl-en">safeTransferFrom</span>(item.seller, <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, item.tokenId);
+
+        <span class="pl-c">// 删除列表</span>
+        <span class="pl-k">delete</span> listings[nftAddress][tokenId];
+
+        <span class="pl-k">emit</span> <span class="pl-en">Purchase</span>(
+            <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>,
+            nftAddress,
+            tokenId,
+            <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>,
+            item.seller,
+            item.royaltyReceiver,
+            royaltyAmount,
+            feeAmount
+        );
+    }
+
+    <span class="pl-k">function<span class="pl-en"> cancelListing</span></span>(<span class="pl-c1">address</span> <span class="pl-v">nftAddress</span>, <span class="pl-c1">uint256</span> <span class="pl-v">tokenId</span>) <span class="pl-k">external</span> {
+        Listing <span class="pl-k">memory</span> item <span class="pl-k">=</span> listings[nftAddress][tokenId];
+        <span class="pl-k">require</span>(item.isListed, <span class="pl-s">"<span class="pl-s">Not listed</span>"</span>);
+        <span class="pl-k">require</span>(item.seller <span class="pl-k">==</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-s">"<span class="pl-s">Not the seller</span>"</span>);
+
+        <span class="pl-k">delete</span> listings[nftAddress][tokenId];
+        <span class="pl-k">emit</span> <span class="pl-en">Unlisted</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, nftAddress, tokenId);
+    }
+
+    <span class="pl-k">function<span class="pl-en"> getListing</span></span>(<span class="pl-c1">address</span> <span class="pl-v">nftAddress</span>, <span class="pl-c1">uint256</span> <span class="pl-v">tokenId</span>) <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (Listing <span class="pl-k">memory</span>) {
+        <span class="pl-k">return</span> listings[nftAddress][tokenId];
+    }
+
+    <span class="pl-k">receive</span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+        <span class="pl-k">revert</span>(<span class="pl-s">"<span class="pl-s">Direct ETH not accepted</span>"</span>);
+    }
+
+    <span class="pl-k">fallback</span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+        <span class="pl-k">revert</span>(<span class="pl-s">"<span class="pl-s">Unknown function</span>"</span>);
+    }
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">1. 📦 导入——引入可信的构建块</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/token/ERC721/IERC721.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/security/ReentrancyGuard.sol</span>"</span>;
+</pre></div>
+<p dir="auto">这两行是从OpenZeppelin合约库<strong>引入强大的、经过实战测试的组件</strong>。让我们看看它们的作用：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">✅ <code>IERC721</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/token/ERC721/IERC721.sol</span>"</span>;
+</pre></div>
+<p dir="auto">这引入了任何ERC-721 NFT的<strong>接口</strong>——这是非同质化代币（NFT）使用的标准。</p>
+<p dir="auto">把<code>IERC721</code>想象成定义以下内容的合约蓝图：</p>
+<ul dir="auto">
+<li>谁拥有代币（<code>ownerOf</code>）</li>
+<li>如何安全发送代币（<code>safeTransferFrom</code>）</li>
+<li>如何批准某人转移你的NFT（<code>approve</code>、<code>isApprovedForAll</code>等）</li>
+</ul>
+<p dir="auto">通过导入这个，我们可以<strong>与任何NFT合约交互</strong>——不仅仅是我们创建的NFT，而是<em>任何ERC-721兼容合约</em>，比如无聊猿或自定义游戏内物品。</p>
+<blockquote>
+<p dir="auto">🧠 我们这里不需要完整的NFT合约——我们不是在创建NFT。</p>
+<p dir="auto">我们只是<strong>与现有NFT一起工作</strong>，所以我们只需要接口来调用它们的函数。</p>
+</blockquote>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🛡️ <code>ReentrancyGuard</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/security/ReentrancyGuard.sol</span>"</span>;
+</pre></div>
+<p dir="auto">这是一个<strong>安全工具</strong>，帮助保护我们的合约免受称为<strong>重入攻击</strong>的常见黑客攻击。</p>
+<p dir="auto">那是什么？</p>
+<blockquote>
+<p dir="auto">想象有人开始购买NFT，在该交易完成之前，他们偷偷进入另一个（或一系列交易），搞乱余额并耗尽资金。</p>
+</blockquote>
+<p dir="auto">通过使用<code>ReentrancyGuard</code>，我们可以<strong>锁定我们的敏感函数</strong>，如<code>buyNFT()</code>，这样没有人可以重新进入并在中途利用逻辑。</p>
+<p dir="auto">我们将使用<code>nonReentrant</code>修饰符应用这个保护。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">2. 🏗️ 合约声明——启动市场</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">contract</span> <span class="pl-en">NFTMarketplace</span> <span class="pl-k">is</span> <span class="pl-en">ReentrancyGuard</span> {
+</pre></div>
+<p dir="auto">这一行启动了实际的智能合约——它做了<strong>两件大事</strong>：</p>
+<ol dir="auto">
+<li><strong>命名我们的合约</strong>
+<ul dir="auto">
+<li>它叫做<code>NFTMarketplace</code>——这是其他合约、工具和前端将引用它的方式。</li>
+</ul>
+</li>
+<li><strong>从ReentrancyGuard继承</strong>
+<ul dir="auto">
+<li>通过这样做，我们的合约<em>自动获得保护</em>，在我们使用<code>nonReentrant</code>修饰符的任何函数上免受重入攻击。</li>
+<li>这就像给我们的敏感函数一个私人保镖。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p dir="auto">🔑 为什么这个设置很重要</p>
+<p dir="auto">仅仅通过这两个导入和声明，我们就为以下内容奠定了基础：</p>
+<ul dir="auto">
+<li>与任何ERC-721 NFT合约一起工作</li>
+<li>保持我们的市场免受关键漏洞的影响</li>
+</ul>
+<p dir="auto">现在我们准备深入<strong>状态变量</strong>——我们的合约存储的数据，用于跟踪列表、费用和所有权。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">3. 状态变量</h2></div>
+<p dir="auto">这些变量位于合约的顶部：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">address</span> <span class="pl-k">public</span> owner;
+<span class="pl-c1">uint256</span> <span class="pl-k">public</span> marketplaceFeePercent; <span class="pl-c">// 以基点为单位 (100 = 1%)</span>
+<span class="pl-c1">address</span> <span class="pl-k">public</span> feeRecipient;
+</pre></div>
+<hr>
+<p dir="auto"><strong>🧠 这些变量的作用</strong></p>
+<p dir="auto">这三个值为我们的市场提供了<strong>基本的管理控制和收入逻辑</strong>。它们定义：</p>
+<ul dir="auto">
+<li>谁负责</li>
+<li>市场收取多少费用</li>
+<li>这些费用去哪里</li>
+</ul>
+<p dir="auto">让我们逐一分析：</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">👑 <code>owner</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">address</span> <span class="pl-k">public</span> owner;
+</pre></div>
+<ul dir="auto">
+<li>这存储了<strong>部署合约的地址</strong>。</li>
+<li>所有者被认为是<strong>管理员</strong>——唯一被允许更新费用或更改费用接收者的人。</li>
+</ul>
+<blockquote>
+<p dir="auto">💡 为什么手动跟踪所有权？</p>
+<p dir="auto">因为这没有使用OpenZeppelin的<code>Ownable</code>合约——我们保持精简并编写自己的基本访问控制。</p>
+</blockquote>
+<p dir="auto">你稍后会在代码中看到一个名为<code>onlyOwner</code>的修饰符，它使用这个值。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">💸 <code>marketplaceFeePercent</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> <span class="pl-k">public</span> marketplaceFeePercent; <span class="pl-c">// 以基点为单位 (100 = 1%)</span>
+</pre></div>
+<p dir="auto">这设置了市场将从每次销售中收取的<strong>费用百分比</strong>——但以<strong>基点</strong>为单位。</p>
+<blockquote>
+<p dir="auto">🧾 什么是基点？</p>
+<p dir="auto">1基点 = 0.01%。</p>
+<p dir="auto">所以100基点 = 1%。</p>
+<p dir="auto">1000基点 = 10%。</p>
+</blockquote>
+<p dir="auto">使用基点为我们提供了对费用的<strong>细粒度控制</strong>，并避免了Solidity缺乏小数的问题。</p>
+<p dir="auto">例如：</p>
+<ul dir="auto">
+<li>费用为<code>250</code>意味着每次销售的2.5%归市场所有。</li>
+</ul>
+<p dir="auto">这个变量稍后可以由所有者更新。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🏦 <code>feeRecipient</code></h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">address</span> <span class="pl-k">public</span> feeRecipient;
+</pre></div>
+<p dir="auto">这是从每次NFT销售中<strong>接收市场份额</strong>的<strong>钱包</strong>。</p>
+<p dir="auto">它可能是：</p>
+<ul dir="auto">
+<li>市场创始人</li>
+<li>DAO金库</li>
+<li>多重签名钱包</li>
+<li>甚至是自动分配资金的智能合约</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">4. 结构体和映射</h2></div>
+<p dir="auto">现在我们进入市场的<strong>核心数据模型</strong>：<strong><code>Listing</code>结构体</strong>和存储所有列出NFT的<strong>映射</strong>。</p>
+<p dir="auto">这是你的市场跟踪什么在出售、谁拥有它、成本多少以及谁得到什么报酬的地方。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧱 <code>Listing</code>结构体</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">struct<span class="pl-en"> Listing</span></span> {
+    <span class="pl-c1">address</span> seller;
+    <span class="pl-c1">address</span> nftAddress;
+    <span class="pl-c1">uint256</span> tokenId;
+    <span class="pl-c1">uint256</span> price;
+    <span class="pl-c1">address</span> royaltyReceiver;
+    <span class="pl-c1">uint256</span> royaltyPercent; <span class="pl-c">// 以基点为单位</span>
+    <span class="pl-c1">bool</span> isListed;
+}
+</pre></div>
+<p dir="auto">这个结构体就像在市场上列出的单个NFT的<strong>迷你数据库条目</strong>。</p>
+<p dir="auto">让我们分解每个字段：</p>
+<hr>
+<p dir="auto">🧍 <code>seller</code></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">address</span> seller;
+</pre></div>
+<p dir="auto">列出NFT的人。</p>
+<p dir="auto">他们将是接收大部分付款的人（在市场费用和版税之后）。</p>
+<hr>
+<p dir="auto">🖼️ <code>nftAddress</code></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">address</span> nftAddress;
+</pre></div>
+<p dir="auto">这是NFT的<strong>合约地址</strong>。</p>
+<p dir="auto">你的市场支持<em>任何</em>ERC-721代币——不仅仅是一个收藏——所以我们需要知道<strong>这个代币属于哪个NFT合约</strong>。</p>
+<hr>
+<p dir="auto">🏷️ <code>tokenId</code></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> tokenId;
+</pre></div>
+<p dir="auto">被列出的<strong>NFT的ID</strong>。</p>
+<p dir="auto">与<code>nftAddress</code>一起，这指向区块链上的特定NFT。</p>
+<hr>
+<p dir="auto">💰 <code>price</code></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> price;
+</pre></div>
+<p dir="auto">卖家想要NFT的金额（以<strong>ETH</strong>为单位）。</p>
+<p dir="auto">当有人购买它时，他们需要发送确切的这个ETH数量。</p>
+<hr>
+<p dir="auto">🎨 <code>royaltyReceiver</code></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">address</span> royaltyReceiver;
+</pre></div>
+<p dir="auto">可选：应该从此次销售中接收<strong>创作者版税</strong>的地址。</p>
+<p dir="auto">这允许创作者继续从二次销售中赚钱，即使他们不再是卖家。</p>
+<hr>
+<p dir="auto">📈 <code>royaltyPercent</code></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> royaltyPercent; <span class="pl-c">// 以基点为单位</span>
+</pre></div>
+<p dir="auto"><code>royaltyReceiver</code>应该获得多少版税——以基点为单位（1% = 100）。</p>
+<p dir="auto">例子：</p>
+<ul dir="auto">
+<li>如果<code>price = 1 ETH</code>且<code>royaltyPercent = 500</code>，创作者获得<code>0.05 ETH</code>。</li>
+</ul>
+<blockquote>
+<p dir="auto">🎯 你可以为每个列表自定义这个——不需要在NFT合约中烘焙固定版税。</p>
+</blockquote>
+<hr>
+<p dir="auto">📦 <code>isListed</code></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">bool</span> isListed;
+</pre></div>
+<p dir="auto">告诉我们NFT是否<strong>当前列出</strong>的标志。</p>
+<p dir="auto">我们用这个来：</p>
+<ul dir="auto">
+<li>防止重复列表</li>
+<li>检查某些东西是否仍在出售</li>
+<li>控制在市场前端显示什么</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📚 映射：存储所有列表</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-k">mapping</span>(<span class="pl-c1">uint256</span> <span class="pl-k">=&gt;</span> Listing)) <span class="pl-k">public</span> listings;
+</pre></div>
+<p dir="auto">这是我们在合约中<strong>存储和组织</strong>所有列表的方式。</p>
+<p dir="auto">这是一个<strong>嵌套映射</strong>，意味着：</p>
+<ul dir="auto">
+<li>第一个键是<strong>NFT合约地址</strong></li>
+<li>第二个键是<strong>代币ID</strong></li>
+</ul>
+<p dir="auto">所以如果你想访问特定NFT的列表，你会使用：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>listings[nftAddress][tokenId]
+</pre></div>
+<blockquote>
+<p dir="auto">💡 为什么嵌套？</p>
+<p dir="auto">因为这允许支持多个不同的NFT收藏——全部在一个合约中。它干净、可扩展，并且与任何ERC-721都能很好地工作。</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">5. 🔔 NFT市场中的关键事件</h2></div>
+<p dir="auto">事件起初可能看起来像背景噪音...但它们实际上是智能合约与外部世界对话的<strong>主要方式</strong>。</p>
+<p dir="auto">当链上发生某事时——比如列出NFT或进行销售——我们发出一个<strong>事件</strong>，以便：</p>
+<ul dir="auto">
+<li>前端应用（如你的市场UI）可以获取并显示它</li>
+<li>索引器（如The Graph）可以跟踪和分类它</li>
+<li>开发者和用户可以在像Etherscan这样的区块浏览器上查看它</li>
+</ul>
+<p dir="auto">它们不影响合约内部的逻辑——但它们对<strong>透明度和可用性</strong>至关重要。</p>
+<p dir="auto">这里是合约中定义的四个事件：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">Listed</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">seller</span>,
+    <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">nftAddress</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenId</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">price</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">royaltyReceiver</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">royaltyPercent</span>
+);
+
+<span class="pl-k">event <span class="pl-en">Purchase</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">buyer</span>,
+    <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">nftAddress</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenId</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">price</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">seller</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">royaltyReceiver</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">royaltyAmount</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">marketplaceFeeAmount</span>
+);
+
+<span class="pl-k">event <span class="pl-en">Unlisted</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">seller</span>,
+    <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">nftAddress</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenId</span>
+);
+
+<span class="pl-k">event <span class="pl-en">FeeUpdated</span></span>(
+    <span class="pl-c1">uint256</span> <span class="pl-v">newMarketplaceFee</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">newFeeRecipient</span>
+);
+</pre></div>
+<hr>
+<p dir="auto">现在，让我们逐一分解它们：</p>
+<hr>
+<p dir="auto">✅ 1. <code>Listed</code></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">Listed</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">seller</span>,
+    <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">nftAddress</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenId</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">price</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">royaltyReceiver</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">royaltyPercent</span>
+);
+</pre></div>
+<p dir="auto">当NFT被<strong>列出</strong>出售时发出此事件。</p>
+<p dir="auto">它告诉世界：</p>
+<ul dir="auto">
+<li><strong>谁</strong>列出了它（<code>seller</code>）</li>
+<li><strong>哪个NFT</strong>正在被出售（<code>nftAddress</code>、<code>tokenId</code>）</li>
+<li><strong>多少钱</strong>（<code>price</code>）</li>
+<li><strong>谁获得版税</strong>，以及<strong>多少</strong>（<code>royaltyReceiver</code>、<code>royaltyPercent</code>）</li>
+</ul>
+<p dir="auto"><code>indexed</code>字段使得在UI和浏览器工具中按卖家或NFT过滤列表变得容易。</p>
+<hr>
+<p dir="auto">🛍️ 2. <code>Purchase</code></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">Purchase</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">buyer</span>,
+    <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">nftAddress</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenId</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">price</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">seller</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">royaltyReceiver</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">royaltyAmount</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">marketplaceFeeAmount</span>
+);
+</pre></div>
+<p dir="auto">当有人<strong>购买NFT</strong>时触发此事件。</p>
+<p dir="auto">它包括：</p>
+<ul dir="auto">
+<li><strong>买家</strong>的地址</li>
+<li>被出售的<strong>NFT</strong>（通过<code>nftAddress</code>和<code>tokenId</code>）</li>
+<li>支付的<strong>总价格</strong></li>
+<li>接收ETH的<strong>卖家</strong>（减去费用）</li>
+<li><strong>版税接收者</strong>（如果有）以及他们得到多少</li>
+<li><strong>市场费用金额</strong></li>
+</ul>
+<p dir="auto">这是最详细的事件——它跟踪<strong>交易的每个部分</strong>。对以下有用：</p>
+<ul dir="auto">
+<li>前端显示购买收据</li>
+<li>显示市场收入的分析仪表板</li>
+<li>创作者版税报告</li>
+</ul>
+<hr>
+<p dir="auto">🚫 3. <code>Unlisted</code></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">Unlisted</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">seller</span>,
+    <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">nftAddress</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-k">indexed</span> <span class="pl-v">tokenId</span>
+);
+</pre></div>
+<p dir="auto">当卖家<strong>取消</strong>他们的列表时发出。</p>
+<p dir="auto">这个事件帮助：</p>
+<ul dir="auto">
+<li>UI停止显示过期或删除的列表</li>
+<li>索引器更新他们的数据库</li>
+<li>每个人都保持对实际出售内容的同步</li>
+</ul>
+<hr>
+<p dir="auto">🛠️ 4. <code>FeeUpdated</code></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">event <span class="pl-en">FeeUpdated</span></span>(
+    <span class="pl-c1">uint256</span> <span class="pl-v">newMarketplaceFee</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">newFeeRecipient</span>
+);
+</pre></div>
+<p dir="auto">当<strong>市场所有者更改费用设置</strong>时记录此事件。</p>
+<p dir="auto">这包括：</p>
+<ul dir="auto">
+<li><strong>新费用</strong>（以基点为单位，例如250 = 2.5%）</li>
+<li>费用ETH将被发送到的<strong>新接收者地址</strong></li>
+</ul>
+<p dir="auto">它主要对管理面板、DAO控制的平台或用户透明度有用。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">6. 🏗️构造函数——引导市场</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">constructor</span>(<span class="pl-c1">uint256</span> <span class="pl-v">_marketplaceFeePercent</span>, <span class="pl-c1">address</span> <span class="pl-v">_feeRecipient</span>) {
+    <span class="pl-k">require</span>(_marketplaceFeePercent <span class="pl-k">&lt;=</span> <span class="pl-c1">1000</span>, <span class="pl-s">"<span class="pl-s">Marketplace fee too high (max 10%)</span>"</span>);
+    <span class="pl-k">require</span>(_feeRecipient <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Fee recipient cannot be zero</span>"</span>);
+
+    owner <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>;
+    marketplaceFeePercent <span class="pl-k">=</span> _marketplaceFeePercent;
+    feeRecipient <span class="pl-k">=</span> _feeRecipient;
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🧠 目标是什么？</strong></h3></div>
+<p dir="auto">当有人部署这个合约时，我们希望他们：</p>
+<ul dir="auto">
+<li>设置市场将收取多少<strong>费用</strong>（例如，2.5%）</li>
+<li>决定这些费用应该<strong>去哪里</strong>（例如，到DAO金库或开发钱包）</li>
+<li>自动成为合约的<strong>所有者/管理员</strong></li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔍 逐行分解</h3></div>
+<p dir="auto">✅ 费用验证</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(_marketplaceFeePercent <span class="pl-k">&lt;=</span> <span class="pl-c1">1000</span>, <span class="pl-s">"<span class="pl-s">Marketplace fee too high (max 10%)</span>"</span>);
+</pre></div>
+<ul dir="auto">
+<li>防止在部署时设置疯狂的费用设置。</li>
+<li>费用以<strong>基点</strong>为单位，其中：
+<ul dir="auto">
+<li><code>1000</code> = 10%</li>
+<li><code>500</code> = 5%</li>
+<li><code>250</code> = 2.5%</li>
+</ul>
+</li>
+<li>这一行确保部署者不能设置像99%这样荒谬的东西。</li>
+</ul>
+<hr>
+<p dir="auto"><strong>✅ 费用接收者检查</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(_feeRecipient <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Fee recipient cannot be zero</span>"</span>);
+</pre></div>
+<p dir="auto">我们确保部署者传入一个<strong>有效的ETH地址</strong>来接收市场费用。</p>
+<blockquote>
+<p dir="auto">将其设置为零地址（0x000...000）会使费用永远消失——所以我们阻止这种情况。</p>
+</blockquote>
+<hr>
+<p dir="auto"><strong>👑 设置所有者</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>owner <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>;
+</pre></div>
+<p dir="auto">部署合约的人成为<strong>管理员/所有者</strong>。</p>
+<p dir="auto">为什么这很重要：</p>
+<ul dir="auto">
+<li>只有所有者可以更新费用或更改费用接收者</li>
+<li>这是你说"这个人控制市场设置"的方式</li>
+</ul>
+<hr>
+<p dir="auto"><strong>💰 设置费用设置</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>marketplaceFeePercent <span class="pl-k">=</span> _marketplaceFeePercent;
+feeRecipient <span class="pl-k">=</span> _feeRecipient;
+</pre></div>
+<ul dir="auto">
+<li><code>marketplaceFeePercent</code>：平台从每次销售中收取多少</li>
+<li><code>feeRecipient</code>：费用发送到哪里</li>
+</ul>
+<p dir="auto">一旦设置了这些，市场就准备好处理列表和销售了。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">7. 🛡️<code>onlyOwner</code>修饰符——锁定管理函数</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">modifier<span class="pl-en"> onlyOwner</span></span>() {
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> owner, <span class="pl-s">"<span class="pl-s">Only owner</span>"</span>);
+    <span class="pl-k">_;</span>
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🧠 什么是修饰符？</strong></h3></div>
+<p dir="auto">在Solidity中，<strong>修饰符</strong>就像可重用的保护子句。</p>
+<p dir="auto">你可以将其附加到函数上，以<strong>在该函数运行之前要求某些条件</strong>。</p>
+<p dir="auto">它有助于保持你的代码<strong>干净</strong>、<strong>可重用</strong>和<strong>易于阅读</strong>。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔍 逐行分解</h3></div>
+<hr>
+<p dir="auto"><strong>✅ 检查谁在调用</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> owner, <span class="pl-s">"<span class="pl-s">Only owner</span>"</span>);
+</pre></div>
+<p dir="auto">这一行确保函数<strong>只能由所有者调用</strong>——部署合约的地址。</p>
+<ul dir="auto">
+<li><code>msg.sender</code>是试图调用函数的地址</li>
+<li>如果它不等于<code>owner</code>，函数<strong>立即停止</strong></li>
+<li>返回错误消息<code>"Only owner"</code></li>
+</ul>
+<p dir="auto">这是你的<strong>访问控制</strong>机制。</p>
+<hr>
+<p dir="auto"><strong>📦 继续函数</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">_;</span>
+</pre></div>
+<p dir="auto">这个有趣的小下划线意味着：</p>
+<blockquote>
+<p dir="auto">"如果require检查通过，现在继续运行函数的其余部分。"</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">8. 💸 <code>setMarketplaceFeePercent()</code> — 更新市场费用</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> setMarketplaceFeePercent</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">_newFee</span>) <span class="pl-k">external</span> onlyOwner {
+    <span class="pl-k">require</span>(_newFee <span class="pl-k">&lt;=</span> <span class="pl-c1">1000</span>, <span class="pl-s">"<span class="pl-s">Marketplace fee too high</span>"</span>);
+    marketplaceFeePercent <span class="pl-k">=</span> _newFee;
+    <span class="pl-k">emit</span> <span class="pl-en">FeeUpdated</span>(_newFee, feeRecipient);
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 它做什么？</h3></div>
+<p dir="auto">这个函数允许<strong>合约的所有者</strong>更改<strong>市场费用</strong>（平台在每次销售中收取的百分比）。</p>
+<p dir="auto">它对以下有用：</p>
+<ul dir="auto">
+<li>随着平台增长调整费用</li>
+<li>在促销期间降低费用</li>
+<li>增加费用以维持运营</li>
+<li>响应社区治理，如果由DAO运行</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔍 逐行分解</h3></div>
+<p dir="auto"><strong>🔐 访问限制</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">external</span> onlyOwner
+</pre></div>
+<ul dir="auto">
+<li><code>external</code>：意味着这个函数是为了从合约外部调用（比如通过前端或由所有者直接调用）。</li>
+<li><code>onlyOwner</code>：确保<strong>只有管理员</strong>可以调用它——感谢我们刚刚介绍的修饰符。</li>
+</ul>
+<hr>
+<p dir="auto"><strong>✅ 输入检查</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(_newFee <span class="pl-k">&lt;=</span> <span class="pl-c1">1000</span>, <span class="pl-s">"<span class="pl-s">Marketplace fee too high</span>"</span>);
+</pre></div>
+<ul dir="auto">
+<li>防止设置不合理的高费用。</li>
+<li>费用以<strong>基点</strong>为单位，所以：
+<ul dir="auto">
+<li><code>1000</code> = 10%</li>
+<li><code>100</code> = 1%</li>
+</ul>
+</li>
+<li>如果<code>_newFee</code>大于1000，交易被回滚。</li>
+</ul>
+<p dir="auto">这防止市场变得滥用或不可用。</p>
+<hr>
+<p dir="auto"><strong>📝 更新状态</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>marketplaceFeePercent <span class="pl-k">=</span> _newFee;
+</pre></div>
+<p dir="auto">这设置新值，更新在所有未来销售中使用的<strong>全局费用百分比</strong>。</p>
+<p dir="auto">它<strong>不</strong>影响现有列表——只影响未来的购买。</p>
+<hr>
+<p dir="auto"><strong>📢 发出事件</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">FeeUpdated</span>(_newFee, feeRecipient);
+</pre></div>
+<p dir="auto">这触发一个事件，以便：</p>
+<ul dir="auto">
+<li>前端可以获取更改并更新UI</li>
+<li>审计员和用户可以看到费用被更改了</li>
+<li>你为每次费用调整获得链上透明度</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">9. 🏦  <code>setFeeRecipient()</code> — 更新市场费用去向</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> setFeeRecipient</span></span>(<span class="pl-c1">address</span> <span class="pl-v">_newRecipient</span>) <span class="pl-k">external</span> onlyOwner {
+    <span class="pl-k">require</span>(_newRecipient <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Invalid fee recipient</span>"</span>);
+    feeRecipient <span class="pl-k">=</span> _newRecipient;
+    <span class="pl-k">emit</span> <span class="pl-en">FeeUpdated</span>(marketplaceFeePercent, _newRecipient);
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🧠 这是为了什么？</strong></h3></div>
+<p dir="auto">在任何NFT市场中，<strong>费用接收者</strong>是收集市场每次销售份额的地址。</p>
+<p dir="auto">这可能是：</p>
+<ul dir="auto">
+<li><strong>创始人的钱包</strong></li>
+<li><strong>DAO金库</strong></li>
+<li>团队管理的<strong>多重签名</strong></li>
+<li>甚至是进一步分割收入的<strong>智能合约</strong></li>
+</ul>
+<p dir="auto">这个函数让市场<strong>随时间适应</strong>——无论是为了安全升级、去中心化，还是将收入转移到社区控制的合约。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔍 逐行分解</h3></div>
+<p dir="auto"><strong>🔐 限制为所有者</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">external</span> onlyOwner
+</pre></div>
+<p dir="auto">就像之前一样：</p>
+<ul dir="auto">
+<li><code>external</code> = 只能从合约外部调用</li>
+<li><code>onlyOwner</code> = <strong>只有管理员</strong>可以更新费用接收者</li>
+</ul>
+<hr>
+<p dir="auto"><strong>✅ 验证新地址</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(_newRecipient <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Invalid fee recipient</span>"</span>);
+</pre></div>
+<ul dir="auto">
+<li>检查新地址<strong>不是</strong>零地址（<code>0x000...000</code>）。</li>
+<li>如果是，我们回滚交易以避免意外"燃烧"未来费用。</li>
+</ul>
+<blockquote>
+<p dir="auto">这是一个简单但重要的保护措施。</p>
+</blockquote>
+<hr>
+<p dir="auto"><strong>📝 保存新地址</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>feeRecipient <span class="pl-k">=</span> _newRecipient;
+</pre></div>
+<p dir="auto">我们更新合约的内部状态——现在所有未来的市场费用将被发送到这个新地址。</p>
+<hr>
+<p dir="auto"><strong>📢 发出更新事件</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">FeeUpdated</span>(marketplaceFeePercent, _newRecipient);
+</pre></div>
+<p dir="auto">这重用了<code>FeeUpdated</code>事件——即使只有接收者改变了。</p>
+<p dir="auto">这有助于：</p>
+<ul dir="auto">
+<li>前端立即反映更改</li>
+<li>索引器跟踪管理操作</li>
+<li>用户知道费用去哪里--</li>
+<li></li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">10. 🏷️ <code>listNFT()</code> — 列出你的NFT出售</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> listNFT</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-v">nftAddress</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">tokenId</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">price</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">royaltyReceiver</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">royaltyPercent</span>
+) <span class="pl-k">external</span> {
+    <span class="pl-k">require</span>(price <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Price must be above zero</span>"</span>);
+    <span class="pl-k">require</span>(royaltyPercent <span class="pl-k">&lt;=</span> <span class="pl-c1">1000</span>, <span class="pl-s">"<span class="pl-s">Max 10% royalty allowed</span>"</span>);
+    <span class="pl-k">require</span>(<span class="pl-k">!</span>listings[nftAddress][tokenId].isListed, <span class="pl-s">"<span class="pl-s">Already listed</span>"</span>);
+
+    <span class="pl-c1">IERC721</span> nft <span class="pl-k">=</span> <span class="pl-c1">IERC721</span>(nftAddress);
+    <span class="pl-k">require</span>(nft.<span class="pl-en">ownerOf</span>(tokenId) <span class="pl-k">==</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-s">"<span class="pl-s">Not the owner</span>"</span>);
+    <span class="pl-k">require</span>(
+        nft.<span class="pl-en">getApproved</span>(tokenId) <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-mi">this</span>) <span class="pl-k">||</span> nft.<span class="pl-en">isApprovedForAll</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>)),
+        <span class="pl-s">"<span class="pl-s">Marketplace not approved</span>"</span>
+    );
+
+    listings[nftAddress][tokenId] <span class="pl-k">=</span> <span class="pl-en">Listing</span>({
+        seller: <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>,
+        nftAddress: nftAddress,
+        tokenId: tokenId,
+        price: price,
+        royaltyReceiver: royaltyReceiver,
+        royaltyPercent: royaltyPercent,
+        isListed: <span class="pl-c1">true</span>
+    });
+
+    <span class="pl-k">emit</span> <span class="pl-en">Listed</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, nftAddress, tokenId, price, royaltyReceiver, royaltyPercent);
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🧠 它做什么？</strong></h3></div>
+<p dir="auto">这个函数允许任何用户<strong>列出他们拥有的NFT</strong>在市场上出售。</p>
+<p dir="auto">它检查：</p>
+<ul dir="auto">
+<li>用户拥有NFT</li>
+<li>NFT被批准用于市场转移</li>
+<li>价格和版税设置有效</li>
+</ul>
+<p dir="auto">一旦验证，它将列表存储在链上并发出事件，以便前端可以在市场UI中显示它。</p>
+<hr>
+<p dir="auto"><strong>📥 输入——函数接受什么</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> listNFT</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-v">nftAddress</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">tokenId</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">price</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">royaltyReceiver</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">royaltyPercent</span>
+)
+</pre></div>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>它代表什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nftAddress</code></td>
+<td>NFT的<strong>ERC-721合约</strong>地址</td>
+</tr>
+<tr>
+<td><code>tokenId</code></td>
+<td>你正在列出的NFT的<strong>唯一ID</strong></td>
+</tr>
+<tr>
+<td><code>price</code></td>
+<td>你想要出售的<strong>ETH数量（以wei为单位）</strong></td>
+</tr>
+<tr>
+<td><code>royaltyReceiver</code></td>
+<td>应该在销售中接收<strong>版税</strong>的地址</td>
+</tr>
+<tr>
+<td><code>royaltyPercent</code></td>
+<td>给予多少版税（以<strong>基点</strong>为单位，例如，500 = 5%）</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔍 逐行分解</h3></div>
+<p dir="auto"><strong>✅ 步骤1：基本验证</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(price <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Price must be above zero</span>"</span>);
+<span class="pl-k">require</span>(royaltyPercent <span class="pl-k">&lt;=</span> <span class="pl-c1">1000</span>, <span class="pl-s">"<span class="pl-s">Max 10% royalty allowed</span>"</span>);
+<span class="pl-k">require</span>(<span class="pl-k">!</span>listings[nftAddress][tokenId].isListed, <span class="pl-s">"<span class="pl-s">Already listed</span>"</span>);
+</pre></div>
+<ul dir="auto">
+<li>你必须以<strong>非零价格</strong>列出</li>
+<li>版税必须**≤10%**以保持合理</li>
+<li>NFT必须<strong>尚未列出</strong>（以避免覆盖或重复条目）</li>
+</ul>
+<hr>
+<p dir="auto"><strong>🔗 步骤2：与NFT交互</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">IERC721</span> nft <span class="pl-k">=</span> <span class="pl-c1">IERC721</span>(nftAddress);
+</pre></div>
+<p dir="auto">我们将地址转换为<code>IERC721</code>合约接口，以便我们可以调用标准ERC-721函数，如：</p>
+<ul dir="auto">
+<li><code>ownerOf</code></li>
+<li><code>getApproved</code></li>
+<li><code>isApprovedForAll</code></li>
+</ul>
+<hr>
+<p dir="auto"><strong>👑 步骤3：检查NFT所有权和批准</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(nft.<span class="pl-en">ownerOf</span>(tokenId) <span class="pl-k">==</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-s">"<span class="pl-s">Not the owner</span>"</span>);
+</pre></div>
+<p dir="auto">确保调用者<strong>实际拥有</strong>他们试图列出的NFT。</p>
+<p dir="auto">这防止有人列出他们不拥有的NFT。</p>
+<hr>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(
+    nft.<span class="pl-en">getApproved</span>(tokenId) <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-mi">this</span>) <span class="pl-k">||</span> nft.<span class="pl-en">isApprovedForAll</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>)),
+    <span class="pl-s">"<span class="pl-s">Marketplace not approved</span>"</span>
+);
+</pre></div>
+<p dir="auto">市场<strong>必须被批准</strong>代表用户转移NFT。</p>
+<p dir="auto">这是必需的，以便合约在出售时可以将NFT发送给买家。</p>
+<hr>
+<p dir="auto"><strong>📦 步骤4：在链上保存列表信息</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>listings[nftAddress][tokenId] <span class="pl-k">=</span> <span class="pl-en">Listing</span>({
+    seller: <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>,
+    nftAddress: nftAddress,
+    tokenId: tokenId,
+    price: price,
+    royaltyReceiver: royaltyReceiver,
+    royaltyPercent: royaltyPercent,
+    isListed: <span class="pl-c1">true</span>
+});
+</pre></div>
+<p dir="auto">我们创建一个<code>Listing</code>结构体并将其存储在我们的嵌套<code>listings</code>映射中。</p>
+<p dir="auto">这现在是市场上的<strong>实时列表</strong>——任何人都可以发现。</p>
+<hr>
+<p dir="auto"><strong>📢 步骤5：发出事件</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">Listed</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, nftAddress, tokenId, price, royaltyReceiver, royaltyPercent);
+</pre></div>
+<p dir="auto">这在链上记录列表，以便：</p>
+<ul dir="auto">
+<li>UI可以显示它</li>
+<li>索引器（如The Graph）可以跟踪它</li>
+<li>用户可以实时看到活动</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">11. 🛍️ <code>buyNFT()</code> — 用ETH购买NFT</h2></div>
+<p dir="auto">这就是市场的<strong>核心</strong>。</p>
+<p dir="auto">当有人找到他们喜欢的NFT并点击"购买"时，这个函数就是实际进行交易的。</p>
+<p dir="auto">让我们像向第一次购买NFT的人解释一样走过它——同时也编码后端使其工作。</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> buyNFT</span></span>(<span class="pl-c1">address</span> <span class="pl-v">nftAddress</span>, <span class="pl-c1">uint256</span> <span class="pl-v">tokenId</span>) <span class="pl-k">external</span> <span class="pl-k">payable</span> nonReentrant {
+    Listing <span class="pl-k">memory</span> item <span class="pl-k">=</span> listings[nftAddress][tokenId];
+    <span class="pl-k">require</span>(item.isListed, <span class="pl-s">"<span class="pl-s">Not listed</span>"</span>);
+    <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">==</span> item.price, <span class="pl-s">"<span class="pl-s">Incorrect ETH sent</span>"</span>);
+    <span class="pl-k">require</span>(
+        item.royaltyPercent <span class="pl-k">+</span> marketplaceFeePercent <span class="pl-k">&lt;=</span> <span class="pl-c1">10000</span>,
+        <span class="pl-s">"<span class="pl-s">Combined fees exceed 100%</span>"</span>
+    );
+
+    <span class="pl-c1">uint256</span> feeAmount <span class="pl-k">=</span> (<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">*</span> marketplaceFeePercent) <span class="pl-k">/</span> <span class="pl-c1">10000</span>;
+    <span class="pl-c1">uint256</span> royaltyAmount <span class="pl-k">=</span> (<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">*</span> item.royaltyPercent) <span class="pl-k">/</span> <span class="pl-c1">10000</span>;
+    <span class="pl-c1">uint256</span> sellerAmount <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">-</span> feeAmount <span class="pl-k">-</span> royaltyAmount;
+
+    <span class="pl-c">// 支付市场</span>
+    <span class="pl-k">if</span> (feeAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>) {
+        <span class="pl-c1">payable</span>(feeRecipient).<span class="pl-en">transfer</span>(feeAmount);
+    }
+
+    <span class="pl-c">// 支付创作者版税</span>
+    <span class="pl-k">if</span> (royaltyAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">&amp;&amp;</span> item.royaltyReceiver <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) {
+        <span class="pl-c1">payable</span>(item.royaltyReceiver).<span class="pl-en">transfer</span>(royaltyAmount);
+    }
+
+    <span class="pl-c">// 支付卖家</span>
+    <span class="pl-c1">payable</span>(item.seller).<span class="pl-en">transfer</span>(sellerAmount);
+
+    <span class="pl-c">// 将NFT转移给买家</span>
+    <span class="pl-c1">IERC721</span>(item.nftAddress).<span class="pl-en">safeTransferFrom</span>(item.seller, <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, item.tokenId);
+
+    <span class="pl-c">// 清理列表</span>
+    <span class="pl-k">delete</span> listings[nftAddress][tokenId];
+
+    <span class="pl-k">emit</span> <span class="pl-en">Purchase</span>(
+        <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>,
+        nftAddress,
+        tokenId,
+        <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>,
+        item.seller,
+        item.royaltyReceiver,
+        royaltyAmount,
+        feeAmount
+    );
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 它做什么？</h3></div>
+<p dir="auto">这个函数：</p>
+<ul dir="auto">
+<li>接受买家的ETH</li>
+<li>在卖家、创作者（版税）和平台（费用）之间分割</li>
+<li>将NFT转移给买家</li>
+<li>删除列表</li>
+<li>发出事件让世界知道购买发生了</li>
+</ul>
+<p dir="auto">全部在一个交易中。没有手动步骤。没有链下确认。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧩 让我们分解它</h3></div>
+<hr>
+<p dir="auto"><strong>🛡️ 函数头</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> buyNFT</span></span>(<span class="pl-c1">address</span> <span class="pl-v">nftAddress</span>, <span class="pl-c1">uint256</span> <span class="pl-v">tokenId</span>) <span class="pl-k">external</span> <span class="pl-k">payable</span> <span class="pl-v">nonReentrant</span>
+</pre></div>
+<ul dir="auto">
+<li><code>external</code>：由用户从合约外部调用。</li>
+<li><code>payable</code>：以便买家可以发送ETH。</li>
+<li><code>nonReentrant</code>：使用<code>ReentrancyGuard</code>防止重入攻击——发送ETH的函数中的常见漏洞。</li>
+</ul>
+<hr>
+<p dir="auto"><strong>📄 加载列表</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>Listing <span class="pl-k">memory</span> item <span class="pl-k">=</span> listings[nftAddress][tokenId];
+</pre></div>
+<p dir="auto">我们从存储中获取列表到内存中，以便我们可以读取其详细信息（价格、卖家、版税信息等）。</p>
+<hr>
+<p dir="auto"><strong>🔒 验证</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(item.isListed, <span class="pl-s">"<span class="pl-s">Not listed</span>"</span>);
+<span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">==</span> item.price, <span class="pl-s">"<span class="pl-s">Incorrect ETH sent</span>"</span>);
+<span class="pl-k">require</span>(
+    item.royaltyPercent <span class="pl-k">+</span> marketplaceFeePercent <span class="pl-k">&lt;=</span> <span class="pl-c1">10000</span>,
+    <span class="pl-s">"<span class="pl-s">Combined fees exceed 100%</span>"</span>
+);
+</pre></div>
+<ul dir="auto">
+<li>这个NFT甚至列出了吗？</li>
+<li>买家是否发送了<strong>确切</strong>所需的ETH数量？</li>
+<li>组合版税+平台费用是否保持在100%以下？</li>
+</ul>
+<blockquote>
+<p dir="auto">没有最后一个检查，有人可能将版税+费用设置为110%并破坏支付数学。</p>
+</blockquote>
+<hr>
+<p dir="auto"><strong>💰 计算支付</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">uint256</span> feeAmount <span class="pl-k">=</span> (<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">*</span> marketplaceFeePercent) <span class="pl-k">/</span> <span class="pl-c1">10000</span>;
+<span class="pl-c1">uint256</span> royaltyAmount <span class="pl-k">=</span> (<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">*</span> item.royaltyPercent) <span class="pl-k">/</span> <span class="pl-c1">10000</span>;
+<span class="pl-c1">uint256</span> sellerAmount <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">-</span> feeAmount <span class="pl-k">-</span> royaltyAmount;
+</pre></div>
+<p dir="auto">我们将总ETH（<code>msg.value</code>）分成三个桶：</p>
+<ul dir="auto">
+<li>市场费用</li>
+<li>创作者版税</li>
+<li>卖家的实际收入</li>
+</ul>
+<p dir="auto">全部以<strong>基点</strong>计算，用于精确的费用逻辑。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🏦 分配资金</h3></div>
+<p dir="auto"><strong>支付市场</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (feeAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>) {
+    <span class="pl-c1">payable</span>(feeRecipient).<span class="pl-en">transfer</span>(feeAmount);
+}
+</pre></div>
+<p dir="auto">ETH去<code>feeRecipient</code>——这可能是平台、DAO，甚至开发钱包。</p>
+<hr>
+<p dir="auto"><strong>支付创作者（可选）</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> (royaltyAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">&amp;&amp;</span> item.royaltyReceiver <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) {
+    <span class="pl-c1">payable</span>(item.royaltyReceiver).<span class="pl-en">transfer</span>(royaltyAmount);
+}
+</pre></div>
+<p dir="auto">如果列表有版税信息，指定地址获得一部分。</p>
+<blockquote>
+<p dir="auto">这支持创作者在二次销售中的收入——NFT领域的一个巨大功能。</p>
+</blockquote>
+<hr>
+<p dir="auto"><strong>支付卖家</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">payable</span>(item.seller).<span class="pl-en">transfer</span>(sellerAmount);
+</pre></div>
+<p dir="auto">费用和版税后剩下的任何东西都归列出NFT的人。</p>
+<hr>
+<p dir="auto"><strong>📦 转移NFT</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">IERC721</span>(item.nftAddress).<span class="pl-en">safeTransferFrom</span>(item.seller, <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, item.tokenId);
+</pre></div>
+<p dir="auto">合约使用标准ERC-721转移函数<strong>将NFT</strong>从卖家移动到买家。</p>
+<blockquote>
+<p dir="auto">这只有在卖家在列表期间批准市场时才有效。</p>
+</blockquote>
+<hr>
+<p dir="auto"><strong>🧹 清理列表</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">delete</span> listings[nftAddress][tokenId];
+</pre></div>
+<p dir="auto">一旦NFT被出售，我们从存储中删除列表，这样它就不再显示为"出售"。</p>
+<hr>
+<p dir="auto">📢 发出购买事件</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">Purchase</span>(
+    <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>,
+    nftAddress,
+    tokenId,
+    <span class="pl-c1">msg</span>.<span class="pl-c1">value</span>,
+    item.seller,
+    item.royaltyReceiver,
+    royaltyAmount,
+    feeAmount
+);
+</pre></div>
+<p dir="auto">这记录交易的完整详细信息——以便UI和索引器可以跟踪销售、费用和版税。---</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">12. ❌ <code>cancelListing()</code> — 从销售中移除NFT</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> cancelListing</span></span>(<span class="pl-c1">address</span> <span class="pl-v">nftAddress</span>, <span class="pl-c1">uint256</span> <span class="pl-v">tokenId</span>) <span class="pl-k">external</span> {
+    Listing <span class="pl-k">memory</span> item <span class="pl-k">=</span> listings[nftAddress][tokenId];
+    <span class="pl-k">require</span>(item.isListed, <span class="pl-s">"<span class="pl-s">Not listed</span>"</span>);
+    <span class="pl-k">require</span>(item.seller <span class="pl-k">==</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-s">"<span class="pl-s">Not the seller</span>"</span>);
+
+    <span class="pl-k">delete</span> listings[nftAddress][tokenId];
+    <span class="pl-k">emit</span> <span class="pl-en">Unlisted</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, nftAddress, tokenId);
+}
+</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 它做什么？</h3></div>
+<p dir="auto">这个函数让NFT的<strong>卖家</strong>在<strong>出售之前</strong>从市场中移除它。</p>
+<p dir="auto">它在以下情况下有用：</p>
+<ul dir="auto">
+<li>你改变了出售的想法</li>
+<li>你想以新价格重新列出</li>
+<li>你意外列出了错误的NFT</li>
+</ul>
+<p dir="auto">函数确保<strong>只有原始卖家</strong>可以取消列出——一旦完成，NFT将不再显示为可购买。</p>
+<hr>
+<p dir="auto"><strong>📥 输入</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>(<span class="pl-c1">address</span> <span class="pl-v">nftAddress</span>, <span class="pl-c1">uint256</span> <span class="pl-v">tokenId</span>)
+</pre></div>
+<p dir="auto">就像列出或购买一样：</p>
+<ul dir="auto">
+<li><code>nftAddress</code> = NFT的合约</li>
+<li><code>tokenId</code> = 被取消列出的特定NFT</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🔍 逐行分解</h3></div>
+<hr>
+<p dir="auto"><strong>📄 步骤1：加载列表</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre>Listing <span class="pl-k">memory</span> item <span class="pl-k">=</span> listings[nftAddress][tokenId];
+</pre></div>
+<p dir="auto">从存储中获取列表详细信息到内存中，以便我们可以检查它们。</p>
+<hr>
+<p dir="auto"><strong>🛡️ 步骤2：验证</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(item.isListed, <span class="pl-s">"<span class="pl-s">Not listed</span>"</span>);
+</pre></div>
+<ul dir="auto">
+<li>如果NFT没有列出，你不能取消它。</li>
+<li>这防止不必要的删除或误导性的UI更新。</li>
+</ul>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">require</span>(item.seller <span class="pl-k">==</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-s">"<span class="pl-s">Not the seller</span>"</span>);
+</pre></div>
+<ul dir="auto">
+<li>只有原始<strong>卖家</strong>可以取消他们的列表。</li>
+<li>这防止随机用户甚至买家试图搞乱列表。</li>
+</ul>
+<hr>
+<p dir="auto"><strong>🧹 步骤3：删除列表</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">delete</span> listings[nftAddress][tokenId];
+</pre></div>
+<p dir="auto">这完全从<code>listings</code>映射中删除列表。</p>
+<p dir="auto">在此之后，NFT不再出售，不会出现在前端市场或API中。</p>
+<hr>
+<p dir="auto"><strong>📢 步骤4：发出事件</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">emit</span> <span class="pl-en">Unlisted</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, nftAddress, tokenId);
+</pre></div>
+<p dir="auto">我们公开记录操作，这让：</p>
+<ul dir="auto">
+<li>UI实时更新</li>
+<li>用户看到清晰的交易历史</li>
+<li>索引器跟踪列表状态</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">13. 📦 <code>getListing()</code> — 查看列表详细信息</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> getListing</span></span>(<span class="pl-c1">address</span> <span class="pl-v">nftAddress</span>, <span class="pl-c1">uint256</span> <span class="pl-v">tokenId</span>) <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (Listing <span class="pl-k">memory</span>) {
+    <span class="pl-k">return</span> listings[nftAddress][tokenId];
+}
+</pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 它做什么</h3></div>
+<p dir="auto">这是一个<strong>只读辅助函数</strong>，让任何人（如前端或另一个合约）获取特定列表的详细信息。</p>
+<ul dir="auto">
+<li>外部调用时不消耗gas（因为它是<code>view</code>）</li>
+<li>它返回给定NFT的完整<code>Listing</code>结构体</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🖼️ 你什么时候会使用它？</h3></div>
+<ul dir="auto">
+<li>市场前端想要显示列出NFT的所有详细信息</li>
+<li>买家想要在购买前预览价格和版税</li>
+<li>脚本或机器人想要检查列出的内容并过滤交易</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">14. 🛑 <code>receive()</code> — 拒绝直接ETH转账</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">receive</span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+    <span class="pl-k">revert</span>(<span class="pl-s">"<span class="pl-s">Direct ETH not accepted</span>"</span>);
+}
+</pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 它做什么</h3></div>
+<p dir="auto">当有人<strong>直接向合约发送ETH</strong>而不调用函数时触发此函数。</p>
+<p dir="auto">默认情况下，Solidity允许合约以这种方式接收ETH——但在我们的情况下，我们<strong>不希望这样</strong>。</p>
+<p dir="auto">这个函数通过调用<code>revert()</code><strong>拒绝</strong>此类转账。</p>
+<blockquote>
+<p dir="auto">这防止：</p>
+<ul dir="auto">
+<li>意外的ETH转账</li>
+<li>用户认为他们只是通过发送ETH就在购买东西</li>
+<li>ETH永远卡在合约中</li>
+</ul>
+</blockquote>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">15. 🧟 <code>fallback()</code> — 拒绝未知函数调用</h2></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">fallback</span>() <span class="pl-k">external</span> <span class="pl-k">payable</span> {
+    <span class="pl-k">revert</span>(<span class="pl-s">"<span class="pl-s">Unknown function</span>"</span>);
+}
+</pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 它做什么</h3></div>
+<p dir="auto"><code>fallback()</code>函数在以下情况下被调用：</p>
+<ul dir="auto">
+<li>有人调用合约中不存在的函数</li>
+<li>或在不触发<code>receive()</code>的情况下发送ETH</li>
+</ul>
+<p dir="auto">在这两种情况下，我们<strong>不想接受调用或ETH</strong>，所以我们立即用错误回滚。</p>
+<blockquote>
+<p dir="auto">这防止意外误用，并确保用户不会因为调用像byuNFT()而不是buyNFT()这样的拼写错误而丢失ETH。</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">16. 🛠️ 在Remix上测试你的NFT市场</h2></div>
+<p dir="auto">你已经用智能合约构建了一个真正的数字商店。现在让我们启动它，看看它在Remix上的实际运行。</p>
+<p dir="auto">你将能够：</p>
+<ul dir="auto">
+<li>铸造NFT</li>
+<li>列出它们出售</li>
+<li>使用ETH购买它们</li>
+<li>取消列表</li>
+<li>实时观看一切更新</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📦 步骤1：加载你的合约</h3></div>
+<p dir="auto">你需要<strong>两个合约</strong>：</p>
+<p dir="auto"><strong>1. <code>SimpleNFT.sol</code>（你之前构建的那个）</strong></p>
+<blockquote>
+<p dir="auto">✅ 这让你向自己的钱包铸造NFT。</p>
+</blockquote>
+<hr>
+<p dir="auto"><strong>2. <code>NFTMarketplace.sol</code>（你的市场）</strong></p>
+<p dir="auto">粘贴你之前构建的<strong>完整市场合约</strong>。</p>
+<p dir="auto">✅ 确保两个合约都使用Solidity编译器标签编译无错误。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🚀 步骤2：部署合约</h3></div>
+<ol dir="auto">
+<li>转到Remix中的<strong>Deploy &amp; Run</strong>标签。</li>
+<li>将<strong>Environment</strong>设置为<code>Remix VM (London)</code>（用于本地测试）。</li>
+<li>部署<code>SimpleNFT</code>——复制其地址。</li>
+<li>使用这些构造函数值部署<code>NFTMarketplace</code>：
+<ul dir="auto">
+<li>费用百分比：<code>250</code>（2.5%）</li>
+<li>费用接收者：你自己的Remix钱包地址（你会在右上角看到它）</li>
+</ul>
+</li>
+</ol>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🎨 步骤3：铸造一些NFT</h3></div>
+<ol dir="auto">
+<li>展开你部署的<code>SimpleNFT</code>合约。</li>
+<li>调用<code>mint()</code>函数两次以铸造两个NFT（ID 0和1）。</li>
+<li>调用<code>ownerOf(0)</code>和<code>ownerOf(1)</code>以确认你拥有它们。</li>
+</ol>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">✅ 步骤4：批准市场</h3></div>
+<p dir="auto">在市场可以列出或出售你的NFT之前，你需要<strong>批准</strong>它。</p>
+<ol dir="auto">
+<li>在<code>SimpleNFT</code>中，调用：
+<ul dir="auto">
+<li><code>setApprovalForAll(marketplaceAddress, true)</code></li>
+<li>（用你部署的市场的实际地址替换<code>marketplaceAddress</code>）</li>
+</ul>
+</li>
+</ol>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🏷️ 步骤5：列出NFT出售</h3></div>
+<p dir="auto">现在转到你部署的<code>NFTMarketplace</code>合约。</p>
+<ol dir="auto">
+<li>使用以下参数调用<code>listNFT()</code>：
+<ul dir="auto">
+<li><code>nftAddress</code>：你的<code>SimpleNFT</code>合约地址</li>
+<li><code>tokenId</code>：<code>0</code></li>
+<li><code>price</code>：<code>1000000000000000000</code>（这是1 ETH以wei为单位）</li>
+<li><code>royaltyReceiver</code>：你自己的地址</li>
+<li><code>royaltyPercent</code>：<code>500</code>（5%）</li>
+</ul>
+</li>
+</ol>
+<p dir="auto"><strong>✅ 这个NFT现在是实时列出的。</strong></p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🛒 步骤6：购买NFT</h3></div>
+<p dir="auto">在Remix中切换到另一个账户（右上角下拉菜单）。</p>
+<p dir="auto">在<strong>Marketplace合约</strong>中，使用以下参数调用<code>buyNFT()</code>：</p>
+<ul dir="auto">
+<li><code>nftAddress</code>：你的<code>SimpleNFT</code>地址</li>
+<li><code>tokenId</code>：<code>0</code></li>
+</ul>
+<p dir="auto">👇 在调用按钮上方的值字段中：</p>
+<ul dir="auto">
+<li>输入<code>1</code> ETH：<code>1000000000000000000</code></li>
+</ul>
+<p dir="auto">✅ 砰——你的NFT被购买了！</p>
+<ul dir="auto">
+<li>卖家得到了报酬</li>
+<li>版税归创作者</li>
+<li>费用归平台</li>
+<li>NFT转移给买家</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">❌ 步骤7：尝试取消列表</h3></div>
+<ul dir="auto">
+<li>再次铸造第三个NFT（再次<code>mint()</code>）。</li>
+<li>如果需要，批准市场。</li>
+<li>列出<code>tokenId 2</code>。</li>
+</ul>
+<p dir="auto">然后使用以下参数调用<code>cancelListing()</code>：</p>
+<ul dir="auto">
+<li><code>nftAddress</code></li>
+<li><code>tokenId</code>：<code>2</code></li>
+</ul>
+<p dir="auto">✅ 你会看到列表消失（通过<code>getListing()</code>检查）。</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">🧠 可选调试提示</h3></div>
+<ul dir="auto">
+<li>使用<code>getListing(nftAddress, tokenId)</code>查看列表信息</li>
+<li>在<code>SimpleNFT</code>中使用<code>ownerOf(tokenId)</code>跟踪NFT转移</li>
+<li>检查Remix<strong>控制台日志和交易</strong>以了解所有ETH移动</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">🎉 你做到了</h2></div>
+<p dir="auto">你刚刚：</p>
+<ul dir="auto">
+<li>铸造了NFT</li>
+<li>列出它们出售</li>
+<li>用版税和费用购买了它们</li>
+<li>取消了列表</li>
+<li>完全测试了你自己的链上NFT商店</li>
+</ul>
+<p dir="auto">全部无需后端、数据库或前端。</p>
                     </div>
                 </div>
             </div>

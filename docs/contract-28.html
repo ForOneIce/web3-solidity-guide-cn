@@ -773,7 +773,109 @@
             }
         }
     </style>
-</head>
+
+        <style>
+        /* 隐藏 mermaid 渲染组件 */
+        .md-content section.js-render-needs-enrichment,
+        .md-content .js-render-enrichment-target,
+        .md-content .js-render-block-actions,
+        .md-content .render-container,
+        .md-content .js-render-enrichment-fallback,
+        .md-content details[class*="details"],
+        .md-content iframe[title="File display"] {
+            display: none !important;
+        }
+        
+        /* 修复 GitHub 代码块样式 */
+        .md-content .highlight,
+        .md-content .highlight-source-solidity,
+        .md-content .highlight-source-js,
+        .md-content .highlight-source-javascript {
+            background: #2d2a2e !important;
+            border-radius: 10px;
+            padding: 20px !important;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #3a363b;
+        }
+        
+        .md-content .highlight pre,
+        .md-content .highlight-source-solidity pre,
+        .md-content .highlight-source-js pre {
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
+        
+        /* 基础代码文字颜色 - 确保所有文字都可见 */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        .md-content .highlight code,
+        .md-content .highlight pre code,
+        .md-content .highlight pre span,
+        .md-content .highlight pre * {
+            /* Added to ensure all text in pre is visible */
+            color: #f8f8f2 !important;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* 确保代码块内所有文字（包括没有 span 包裹的文字）都可见 */
+        .md-content .highlight pre,
+        .md-content .highlight pre code {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特别处理代码块中的纯文本节点（没有被 span 包裹的文字，如变量名） */
+        .md-content .highlight pre {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 确保所有直接文本内容都可见 - 覆盖继承的颜色 */
+        .md-content .highlight pre * {
+            color: #f8f8f2 !important;
+        }
+        
+        /* 特别处理变量名 - 确保清晰可见 */
+        .md-content .highlight pre span.pl-v,
+        .md-content .highlight pre span.pl-en,
+        .md-content .highlight pre span.pl-e {
+            color: #dcdcaa !important;
+            font-weight: 500 !important;
+        }
+        
+        /* GitHub 语法高亮类颜色修复 */
+        .md-content .highlight [class*="pl-"] {
+            color: #f8f8f2 !important; /* Default to light color */
+        }
+        .md-content .highlight .pl-c { /* 注释 */
+            color: #6a9955 !important;
+        }
+        .md-content .highlight .pl-s, .md-content .highlight .pl-s1 { /* 字符串 */
+            color: #ce9178 !important;
+        }
+        .md-content .highlight .pl-k, .md-content .highlight .pl-c1 { /* 关键字/常量 */
+            color: #569cd6 !important;
+        }
+        .md-content .highlight .pl-v, .md-content .highlight .pl-en, .md-content .highlight .pl-e, .md-content .highlight .pl-ent { /* 变量/函数名/实体名 */
+            color: #dcdcaa !important;
+            font-weight: 500 !important;
+        }
+        .md-content code {
+            background-color: rgba(139, 115, 85, 0.15);
+            color: var(--warm-brown);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+        }
+        </style>
+        </head>
 <body>
     <div class="nav-bar">
         <div class="nav-left">
@@ -1275,12 +1377,1930 @@ function getVotingPower(address voter) public view returns (uint256) {
             </div>
             <div class="letter-body">
                 <div id="md-content" class="md-content">
-                    <div class="md-section">
-                        <h1>第28天内容</h1>
-                        <p style="text-align: center; padding: 40px; color: #999;">
-                            ⏳ 内容正在精心准备中...<br>
-                            敬请期待！
-                        </p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">去中心化管理DAO</h1></div>
+<p dir="auto">Day: Day 28
+ID: 28
+译者: 雷雷
+难度等级: 高级</p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto"><strong>学习内容</strong></h1></div>
+<p dir="auto">欢迎回到 <strong>30 Days of Solidity</strong>。</p>
+<p dir="auto">不久前，你写了你的第一份<strong>投票合同voting contract</strong> ——</p>
+<p dir="auto">一种简单、优雅的方式，让用户提出想法并让其他人投“是”或“否”票。</p>
+<p dir="auto">这是您进入链上决策世界的第一步。</p>
+<p dir="auto">但今天呢？</p>
+<p dir="auto">今天，我们将其提升到一个全新的水平。</p>
+<p dir="auto">因为真正的去中心化系统不仅仅停留在收集选票上。</p>
+<p dir="auto">他们需要真正的<strong>治理 governance</strong>——</p>
+<p dir="auto">具有规则、保护、问责制和执行功能——所有这些都直接内置于代码中。</p>
+<p dir="auto">这正是我们接下来要构建的。</p>
+<p dir="auto">在我们深入研究合约本身之前，让我们花点<strong>时间了解为什么</strong>治理很重要——</p>
+<p dir="auto">以及我们所说的 <strong>DAO</strong> 到底是什么意思。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">****</h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>什么是 DAO？</strong></h3></div>
+<p dir="auto">🌐</p>
+<p dir="auto"><strong>DAO</strong>—— <strong>去中心化自治组织Decentralized Autonomous Organization</strong>的缩写——</p>
+<p dir="auto">是一种由<strong>社区而不是公司</strong>来管理节目的新型系统。没有首席执行官。没有经理。没有律师闭门起草合同。相反，一切都在<strong>链上</strong>透明地发生，基于社区的投票。</p>
+<p dir="auto">想象一下一个在线俱乐部，其中：</p>
+<p dir="auto">每个持有代币的人都可以对发生的事情发表意见。</p>
+<p dir="auto">重大决策——例如如何使用资金、构建哪些功能或发生哪些升级——都是由投票决定的。</p>
+<p dir="auto">一旦投票通过，智能合约<strong>就会自动</strong>执行决定，无需等待人工批准。</p>
+<p dir="auto">这是<strong>纯粹的民主</strong> ，用 Solidity 编写。</p>
+<p dir="auto">如果你听说过像 <strong>Uniswap</strong>、<strong>Aave</strong> 或 <strong>Compound</strong> 这样的项目——它们都由他们的社区管理，使用与<strong>您将要构建的 DAO 系统一样</strong>运行的 DAO 系统。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>😎这与我们之前的投票合同有何不同？</strong></h3></div>
+<p dir="auto">✨</p>
+<p dir="auto">当你之前构建简单的投票系统时，你学会了如何收集选票和决定结果。</p>
+<p dir="auto">今天的项目增加了现实世界的复杂性——但以一种仍然对初学者友好的方式。</p>
+<p dir="auto">在这个升级后的 DAO 系统中：</p>
+<ul dir="auto">
+<li>用户在提出想法时会<strong>锁定一笔小额押金small deposit</strong> ，以防止垃圾邮件。</li>
+<li><strong>投票权Voting power</strong>将取决于某人拥有<strong>多少代币tokens</strong> ——这意味着更大的利益相关者拥有更大的发言权。</li>
+<li>提案必须<strong>达到法定人数meet a quorum</strong> （最低参与水平）才能有效。</li>
+<li>即使提案获胜，也无法立即执行。</li>
+<li><strong>时间锁timelock</strong>确保在任何事情发生之前有一个公开的等待期，让每个人都有时间在需要时做出反应。</li>
+</ul>
+<p dir="auto">而到时候，提案<strong>才会真正执行实际行动</strong> ——就像自动调用其他合约上的函数一样。</p>
+<p dir="auto">这不仅仅是“让我们投票”。这是<strong>让我们投票、验证、延迟和执行——完整的现实世界流程</strong> 。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>为什么这是如此巨大的一步</strong></h3></div>
+<p dir="auto">🚀</p>
+<p dir="auto">今天，你不仅仅是在学习 Solidity 语法。你正在学习<strong>区块链社会如何自我管理。</strong></p>
+<p dir="auto">你正在学习系统如何：</p>
+<p dir="auto">国库分配Treasury allocations</p>
+<p dir="auto">协议升级Protocol upgrades</p>
+<p dir="auto">功能更改Feature changes</p>
+<p dir="auto">生态系统资金Ecosystem funding</p>
+<p dir="auto"><strong>不是由公司</strong>决定的，而<strong>是由社区决定</strong>的，由不可阻挡的智能合约强制执行。</p>
+<p dir="auto">你正在学习<strong>权力是如何分配</strong>的，以及<strong>信任是如何从人转移到代码的。</strong></p>
+<p dir="auto">你正在学习如何构建一个不需要<strong>许可</strong>的系统——规则就在那里，清晰而自动，每个人都可以看到。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>您将要构建的内容</strong></h3></div>
+<p dir="auto">🎯</p>
+<p dir="auto">在此项目中，你将创建一个智能合约，让任何人：</p>
+<p dir="auto">提出一个想法（锁定代币存款后）</p>
+<p dir="auto">让社区根据他们持有的代币数量进行投票</p>
+<p dir="auto">确保参与的选民人数最少（法定人数）</p>
+<p dir="auto">在投票后添加等待期（时间锁）</p>
+<p dir="auto">如果投票通过，则自动执行获胜提案的作</p>
+<p dir="auto">所有这一切—— <strong>公平</strong> 、 <strong>透明</strong>和<strong>无需信任</strong> 。</p>
+<p dir="auto">这是真正的 DeFi 平台每天使用的系统——现在，你要亲手写出来。</p>
+<p dir="auto">🚀</p>
+<p dir="auto">🌾</p>
+<p dir="auto">总之，本去中心化治理合约构建了一个基于区块链的透明决策系统，通过智能合约实现提案创建、加权投票和时间锁执行的全流程自动化。该体系将治理规则编码于链上，确保投票过程公开可验证、结果不可篡改，并借助代币经济模型使投票权与持币利益相绑定。它不仅适用于DAO社区、DeFi协议升级等场景，更以代码之力保障了集体决策的公正性与执行效率，重新定义了数字时代的治理范式。</p>
+<p dir="auto"><strong>学习目标</strong>：掌握DAO治理机制和投票系统</p>
+<p dir="auto"><strong>核心技能</strong>：提案创建、加权投票、法定人数、时间锁</p>
+<p dir="auto"><strong>完整代码</strong>：<a href="https://www.notion.so/1e25720a23ef8014a8caf30dca28fb9b?pvs=21" rel="nofollow">DecentralisedGovernance Contract</a></p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto"><strong>1、产品需求书</strong></h1></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>a.用户路径图</strong></h3></div>
+<p dir="auto"><strong>👨‍💼 管理员路径 (Admin)</strong></p>
+<ol dir="auto">
+<li><strong>合约部署</strong>
+<ul dir="auto">
+<li>设置治理代币地址</li>
+<li>配置投票参数（时长、时间锁、法定人数比例）</li>
+<li>设置提案押金金额</li>
+<li>自动成为初始管理员</li>
+</ul>
+</li>
+<li><strong>系统管理</strong>
+<ul dir="auto">
+<li>调整法定人数百分比</li>
+<li>更新提案押金金额</li>
+<li>监控系统运行状态</li>
+</ul>
+</li>
+</ol>
+<p dir="auto"><strong>📝 提案者路径 (Proposer)</strong></p>
+<ol dir="auto">
+<li><strong>提案准备</strong>
+<ul dir="auto">
+<li>确保持有足够治理代币用于押金</li>
+<li>准备详细的提案描述</li>
+</ul>
+</li>
+<li><strong>创建提案</strong>
+<ul dir="auto">
+<li>调用<code>createProposal()</code>函数</li>
+<li>支付提案押金（如果设置）</li>
+<li>提案进入投票期</li>
+</ul>
+</li>
+<li><strong>结果跟踪</strong>
+<ul dir="auto">
+<li>监控投票进展</li>
+<li>等待提案最终化</li>
+<li>成功后退还押金</li>
+</ul>
+</li>
+</ol>
+<p dir="auto"><strong>🗳️ 投票者路径 (Voter)</strong></p>
+<ol dir="auto">
+<li>
+<p dir="auto"><strong>资格验证</strong></p>
+<ul dir="auto">
+<li>持有治理代币（投票权重基础）</li>
+<li>确认在投票期内</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>投票执行</strong></p>
+<ul dir="auto">
+<li>选择支持或反对</li>
+<li>基于代币余额计算投票权重</li>
+<li>确认投票交易</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>结果确认</strong></p>
+<ul dir="auto">
+<li>查看投票是否被记录</li>
+<li>跟踪提案最终结果</li>
+</ul>
+<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="/ForOneIce/web3-solidity-guide-cn/blob/main/Notes/Notes_Herstory/%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E7%AE%A1%E7%90%86DAO%2028c06421268880fb9753eea5876c2d21/image.png"><img src="/ForOneIce/web3-solidity-guide-cn/raw/main/Notes/Notes_Herstory/%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E7%AE%A1%E7%90%86DAO%2028c06421268880fb9753eea5876c2d21/image.png" alt="image.png" style="max-width: 100%;"></a></p>
+</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>b.数据库结构</strong></h3></div>
+<p dir="auto"><strong>合约基本信息</strong></p>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th><strong>Contract / 合约</strong></th>
+<th><strong>Type / 类型</strong></th>
+<th><strong>Bases / 基础合约</strong></th>
+<th><strong>含义 / Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DecentralizedGovernance</td>
+<td>Implementation / 实现合约</td>
+<td>ReentrancyGuard</td>
+<td>去中心化治理合约</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto"><strong>状态变量表</strong></p>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th><strong>L</strong></th>
+<th><strong>Field Name / 字段名</strong></th>
+<th><strong>Visibility / 可见性</strong></th>
+<th><strong>Mutability / 可变性</strong></th>
+<th><strong>Data Type / 数据类型</strong></th>
+<th><strong>Description / 描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L</td>
+<td>governanceToken</td>
+<td>Public / 公开</td>
+<td>view</td>
+<td>IERC20</td>
+<td>治理代币合约接口</td>
+</tr>
+<tr>
+<td>L</td>
+<td>nextProposalId</td>
+<td>Public / 公开</td>
+<td>view</td>
+<td>uint256</td>
+<td>下一个提案ID</td>
+</tr>
+<tr>
+<td>L</td>
+<td>votingDuration</td>
+<td>Public / 公开</td>
+<td>view</td>
+<td>uint256</td>
+<td>投票持续时间（秒）</td>
+</tr>
+<tr>
+<td>L</td>
+<td>timelockDuration</td>
+<td>Public / 公开</td>
+<td>view</td>
+<td>uint256</td>
+<td>时间锁持续时间（秒）</td>
+</tr>
+<tr>
+<td>L</td>
+<td>admin</td>
+<td>Public / 公开</td>
+<td>view</td>
+<td>address</td>
+<td>管理员地址</td>
+</tr>
+<tr>
+<td>L</td>
+<td>quorumPercentage</td>
+<td>Public / 公开</td>
+<td>view</td>
+<td>uint256</td>
+<td>法定人数百分比</td>
+</tr>
+<tr>
+<td>L</td>
+<td>proposalDepositAmount</td>
+<td>Public / 公开</td>
+<td>view</td>
+<td>uint256</td>
+<td>提案押金金额</td>
+</tr>
+<tr>
+<td>L</td>
+<td>proposals</td>
+<td>Public / 公开</td>
+<td>view</td>
+<td>mapping(uint256 ⇒ Proposal)</td>
+<td>提案ID到提案结构的映射</td>
+</tr>
+<tr>
+<td>L</td>
+<td>hasVoted</td>
+<td>Public / 公开</td>
+<td>view</td>
+<td>mapping(uint256 ⇒ mapping(address ⇒ bool))</td>
+<td>投票记录映射</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>结构体定义</strong></h3></div>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th><strong>L</strong></th>
+<th><strong>Struct Name / 结构体名</strong></th>
+<th><strong>Field / 字段</strong></th>
+<th><strong>Data Type / 数据类型</strong></th>
+<th><strong>Description / 描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L</td>
+<td>Proposal</td>
+<td>proposer</td>
+<td>address</td>
+<td>提案创建者地址</td>
+</tr>
+<tr>
+<td>L</td>
+<td>Proposal</td>
+<td>description</td>
+<td>string</td>
+<td>提案描述内容</td>
+</tr>
+<tr>
+<td>L</td>
+<td>Proposal</td>
+<td>forVotes</td>
+<td>uint256</td>
+<td>支持票数（加权）</td>
+</tr>
+<tr>
+<td>L</td>
+<td>Proposal</td>
+<td>againstVotes</td>
+<td>uint256</td>
+<td>反对票数（加权）</td>
+</tr>
+<tr>
+<td>L</td>
+<td>Proposal</td>
+<td>startTime</td>
+<td>uint256</td>
+<td>投票开始时间</td>
+</tr>
+<tr>
+<td>L</td>
+<td>Proposal</td>
+<td>endTime</td>
+<td>uint256</td>
+<td>投票结束时间</td>
+</tr>
+<tr>
+<td>L</td>
+<td>Proposal</td>
+<td>executed</td>
+<td>bool</td>
+<td>是否已执行</td>
+</tr>
+<tr>
+<td>L</td>
+<td>Proposal</td>
+<td>canceled</td>
+<td>bool</td>
+<td>是否已取消</td>
+</tr>
+<tr>
+<td>L</td>
+<td>Proposal</td>
+<td>timelockEnd</td>
+<td>uint256</td>
+<td>时间锁结束时间</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>函数接口表</strong></h3></div>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th><strong>L</strong></th>
+<th><strong>Function Name / 函数名</strong></th>
+<th><strong>Visibility / 可见性</strong></th>
+<th><strong>Mutability / 可变性</strong></th>
+<th><strong>Modifiers / 修饰器</strong></th>
+<th><strong>Description / 描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L</td>
+<td>constructor</td>
+<td>Internal / 内部</td>
+<td>state-changing</td>
+<td>NO</td>
+<td>合约构造函数</td>
+</tr>
+<tr>
+<td>L</td>
+<td>createProposal</td>
+<td>Public / 公开</td>
+<td>state-changing</td>
+<td>NO</td>
+<td>创建新提案</td>
+</tr>
+<tr>
+<td>L</td>
+<td>vote</td>
+<td>Public / 公开</td>
+<td>state-changing</td>
+<td>NO</td>
+<td>对提案投票</td>
+</tr>
+<tr>
+<td>L</td>
+<td>finalizeProposal</td>
+<td>Public / 公开</td>
+<td>state-changing</td>
+<td>NO</td>
+<td>最终确定提案结果</td>
+</tr>
+<tr>
+<td>L</td>
+<td>executeProposal</td>
+<td>Public / 公开</td>
+<td>state-changing</td>
+<td>NO</td>
+<td>执行通过时间锁的提案</td>
+</tr>
+<tr>
+<td>L</td>
+<td>getProposalResult</td>
+<td>Public / 公开</td>
+<td>view</td>
+<td>NO</td>
+<td>获取提案结果</td>
+</tr>
+<tr>
+<td>L</td>
+<td>setQuorumPercentage</td>
+<td>Public / 公开</td>
+<td>state-changing</td>
+<td>onlyAdmin</td>
+<td>设置法定人数百分比</td>
+</tr>
+<tr>
+<td>L</td>
+<td>setProposalDepositAmount</td>
+<td>Public / 公开</td>
+<td>state-changing</td>
+<td>onlyAdmin</td>
+<td>设置提案押金金额</td>
+</tr>
+<tr>
+<td>L</td>
+<td>_refundDeposit</td>
+<td>Internal / 内部</td>
+<td>state-changing</td>
+<td>NO</td>
+<td>内部退还押金函数</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto"><strong>事件日志表</strong></p>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th><strong>L</strong></th>
+<th><strong>Event Name / 事件名</strong></th>
+<th><strong>Parameters / 参数</strong></th>
+<th><strong>Description / 描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L</td>
+<td>ProposalCreated</td>
+<td>(uint256 proposalId, address proposer, string description)</td>
+<td>提案创建事件</td>
+</tr>
+<tr>
+<td>L</td>
+<td>Voted</td>
+<td>(uint256 proposalId, address voter, bool support, uint256 weight)</td>
+<td>投票事件</td>
+</tr>
+<tr>
+<td>L</td>
+<td>ProposalExecuted</td>
+<td>(uint256 proposalId)</td>
+<td>提案执行事件</td>
+</tr>
+<tr>
+<td>L</td>
+<td>QuorumNotMet</td>
+<td>(uint256 proposalId)</td>
+<td>法定人数不足事件</td>
+</tr>
+<tr>
+<td>L</td>
+<td>ProposalTimelockStarted</td>
+<td>(uint256 proposalId)</td>
+<td>时间锁启动事件</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto"><strong>修饰器表</strong></p>
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th><strong>L</strong></th>
+<th><strong>Modifier Name / 修饰器名</strong></th>
+<th><strong>Description / 描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L</td>
+<td>onlyAdmin</td>
+<td>仅管理员可调用</td>
+</tr>
+<tr>
+<td>L</td>
+<td>nonReentrant</td>
+<td>防重入攻击保护（继承自ReentrancyGuard）</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>🔄 治理流程关键节点</strong></h3></div>
+<p dir="auto"><strong>⏰ 时间节点控制</strong></p>
+<ol dir="auto">
+<li><strong>投票期</strong>：<code>startTime</code>&nbsp;→&nbsp;<code>endTime</code>（固定时长）</li>
+<li><strong>时间锁期</strong>：投票通过后 →&nbsp;<code>timelockEnd</code>（额外等待期）</li>
+<li><strong>执行窗口</strong>：时间锁结束后无限制</li>
+</ol>
+<p dir="auto"><strong>📊 投票权重计算</strong></p>
+<ul dir="auto">
+<li><strong>基础</strong>：治理代币余额</li>
+<li><strong>公式</strong>：<code>weight = governanceToken.balanceOf(voter)</code></li>
+<li><strong>特性</strong>：1代币 = 1投票权</li>
+</ul>
+<p dir="auto"><strong>✅ 通过条件</strong></p>
+<ol dir="auto">
+<li><strong>法定人数</strong>：<code>总票数 ≥ 总供应量 × 法定人数百分比</code></li>
+<li><strong>多数支持</strong>：<code>支持票 &gt; 反对票</code></li>
+<li><strong>时间要求</strong>：投票期结束且时间锁期满</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">2、细节拆解</h1></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>核心概念</strong></h3></div>
+<p dir="auto"><strong>🏛️ （1）DAO治理原理</strong></p>
+<p dir="auto">去中心化自治组织（DAO）通过智能合约实现民主治理：</p>
+<p dir="auto"><strong>✅ DAO核心特征</strong></p>
+<ul dir="auto">
+<li>代码即法律，规则透明</li>
+<li>代币持有者参与治理</li>
+<li>提案投票决定重大事项</li>
+<li>自动执行通过的提案</li>
+<li>无需中心化管理</li>
+</ul>
+<p dir="auto"><strong>治理流程：</strong></p>
+<p dir="auto"><code>创建提案 → 投票期 → 计票 → 时间锁 → 执行</code></p>
+<p dir="auto"><strong>🗳️ （2）加权投票机制</strong></p>
+<p dir="auto">基于代币持有量的加权投票确保利益相关者的话语权：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> vote</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">proposalId</span>, <span class="pl-c1">bool</span> <span class="pl-v">support</span>) <span class="pl-k">external</span> {
+    Proposal <span class="pl-k">storage</span> proposal <span class="pl-k">=</span> proposals[proposalId];
+    <span class="pl-k">require</span>(<span class="pl-k">!</span>hasVoted[proposalId][<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>], <span class="pl-s">"<span class="pl-s">Already voted</span>"</span>);
+
+    <span class="pl-c">// 投票权重 = 代币余额</span>
+    <span class="pl-c1">uint256</span> weight <span class="pl-k">=</span> governanceToken.<span class="pl-en">balanceOf</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+    <span class="pl-k">require</span>(weight <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">No voting power</span>"</span>);
+
+    hasVoted[proposalId][<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+
+    <span class="pl-k">if</span> (support) {
+        proposal.forVotes <span class="pl-k">+=</span> weight;
+    } <span class="pl-k">else</span> {
+        proposal.againstVotes <span class="pl-k">+=</span> weight;
+    }
+
+    <span class="pl-k">emit</span> <span class="pl-en">Voted</span>(proposalId, <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, support, weight);
+}</pre></div>
+<p dir="auto"><strong>投票权重计算：</strong></p>
+<ul dir="auto">
+<li>**持币投票：**代币数量 = 投票权重</li>
+<li>**防重复投票：**hasVoted映射记录</li>
+<li>**实时权重：**基于当前余额</li>
+<li>**透明记录：**所有投票公开可查</li>
+</ul>
+<p dir="auto">📊 <strong>（3）法定人数机制</strong></p>
+<p dir="auto">法定人数确保提案有足够的参与度才能通过：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> finalizeProposal</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">proposalId</span>) <span class="pl-k">external</span> {
+    Proposal <span class="pl-k">storage</span> proposal <span class="pl-k">=</span> proposals[proposalId];
+    <span class="pl-k">require</span>(<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">&gt;</span> proposal.endTime, <span class="pl-s">"<span class="pl-s">Voting not ended</span>"</span>);
+
+    <span class="pl-c1">uint256</span> totalVotes <span class="pl-k">=</span> proposal.forVotes <span class="pl-k">+</span> proposal.againstVotes;
+    <span class="pl-c1">uint256</span> totalSupply <span class="pl-k">=</span> governanceToken.<span class="pl-en">totalSupply</span>();
+    <span class="pl-c1">uint256</span> quorumRequired <span class="pl-k">=</span> (totalSupply <span class="pl-k">*</span> quorumPercentage) <span class="pl-k">/</span> <span class="pl-c1">100</span>;
+
+    <span class="pl-k">if</span> (totalVotes <span class="pl-k">&gt;=</span> quorumRequired <span class="pl-k">&amp;&amp;</span> proposal.forVotes <span class="pl-k">&gt;</span> proposal.againstVotes) {
+        <span class="pl-c">// 提案通过，进入时间锁</span>
+        proposal.timelockEnd <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">+</span> timelockDuration;
+        <span class="pl-k">emit</span> <span class="pl-en">ProposalTimelockStarted</span>(proposalId);
+    } <span class="pl-k">else</span> {
+        proposal.canceled <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+        <span class="pl-k">emit</span> <span class="pl-en">QuorumNotMet</span>(proposalId);
+    }
+}</pre></div>
+<p dir="auto"><strong>通过条件：</strong></p>
+<p dir="auto"><strong>双重检查机制</strong></p>
+<ol dir="auto">
+<li>总投票数 ≥ 法定人数</li>
+<li>赞成票 &gt; 反对票</li>
+</ol>
+<p dir="auto"><strong>⏰ （4）时间锁保护</strong></p>
+<p dir="auto">时间锁为社区提供反应时间，防止恶意提案：</p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function<span class="pl-en"> executeProposal</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">proposalId</span>) <span class="pl-k">external</span> {
+    Proposal <span class="pl-k">storage</span> proposal <span class="pl-k">=</span> proposals[proposalId];
+
+    <span class="pl-k">require</span>(proposal.timelockEnd <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">No timelock set</span>"</span>);
+    <span class="pl-k">require</span>(<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">&gt;=</span> proposal.timelockEnd, <span class="pl-s">"<span class="pl-s">Timelock not ended</span>"</span>);
+    <span class="pl-k">require</span>(<span class="pl-k">!</span>proposal.executed, <span class="pl-s">"<span class="pl-s">Already executed</span>"</span>);
+
+    proposal.executed <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+
+    <span class="pl-c">// 退还提案押金</span>
+    <span class="pl-k">if</span> (proposalDepositAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>) {
+        governanceToken.<span class="pl-en">transfer</span>(proposal.proposer, proposalDepositAmount);
+    }
+
+    <span class="pl-k">emit</span> <span class="pl-en">ProposalExecuted</span>(proposalId);
+}</pre></div>
+<p dir="auto"><strong>时间锁作用：</strong></p>
+<ul dir="auto">
+<li>**缓冲期：**给社区时间审查提案</li>
+<li>**退出机会：**不同意者可以退出</li>
+<li>**安全保障：**防止闪电攻击</li>
+<li>**透明执行：**执行时间可预期</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">完整代码详解</h2></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📄 DAO治理合约</h3></div>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-k">pragma solidity</span> <span class="pl-k">^</span><span class="pl-c1">0.8.0</span>;
+
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/token/ERC20/IERC20.sol</span>"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"<span class="pl-s">@openzeppelin/contracts/security/ReentrancyGuard.sol</span>"</span>;
+
+<span class="pl-k">contract</span> <span class="pl-en">DecentralizedGovernance</span> <span class="pl-k">is</span> <span class="pl-en">ReentrancyGuard</span> {
+    <span class="pl-c1">IERC20</span> <span class="pl-k">public</span> governanceToken;
+
+    <span class="pl-k">struct<span class="pl-en"> Proposal</span></span> {
+        <span class="pl-c1">address</span> proposer;
+        <span class="pl-c1">string</span> description;
+        <span class="pl-c1">uint256</span> forVotes;
+        <span class="pl-c1">uint256</span> againstVotes;
+        <span class="pl-c1">uint256</span> startTime;
+        <span class="pl-c1">uint256</span> endTime;
+        <span class="pl-c1">bool</span> executed;
+        <span class="pl-c1">bool</span> canceled;
+        <span class="pl-c1">uint256</span> timelockEnd;
+    }
+
+    <span class="pl-k">mapping</span>(<span class="pl-c1">uint256</span> <span class="pl-k">=&gt;</span> Proposal) <span class="pl-k">public</span> proposals;
+    <span class="pl-k">mapping</span>(<span class="pl-c1">uint256</span> <span class="pl-k">=&gt;</span> <span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">bool</span>)) <span class="pl-k">public</span> hasVoted;
+
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> nextProposalId;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> votingDuration;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> timelockDuration;
+    <span class="pl-c1">address</span> <span class="pl-k">public</span> admin;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> quorumPercentage;
+    <span class="pl-c1">uint256</span> <span class="pl-k">public</span> proposalDepositAmount;
+
+    <span class="pl-k">event <span class="pl-en">ProposalCreated</span></span>(<span class="pl-c1">uint256</span> <span class="pl-k">indexed</span> <span class="pl-v">proposalId</span>, <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">proposer</span>, <span class="pl-c1">string</span> <span class="pl-v">description</span>);
+    <span class="pl-k">event <span class="pl-en">Voted</span></span>(<span class="pl-c1">uint256</span> <span class="pl-k">indexed</span> <span class="pl-v">proposalId</span>, <span class="pl-c1">address</span> <span class="pl-k">indexed</span> <span class="pl-v">voter</span>, <span class="pl-c1">bool</span> <span class="pl-v">support</span>, <span class="pl-c1">uint256</span> <span class="pl-v">weight</span>);
+    <span class="pl-k">event <span class="pl-en">ProposalExecuted</span></span>(<span class="pl-c1">uint256</span> <span class="pl-k">indexed</span> <span class="pl-v">proposalId</span>);
+    <span class="pl-k">event <span class="pl-en">QuorumNotMet</span></span>(<span class="pl-c1">uint256</span> <span class="pl-k">indexed</span> <span class="pl-v">proposalId</span>);
+    <span class="pl-k">event <span class="pl-en">ProposalTimelockStarted</span></span>(<span class="pl-c1">uint256</span> <span class="pl-k">indexed</span> <span class="pl-v">proposalId</span>);
+
+    <span class="pl-k">modifier<span class="pl-en"> onlyAdmin</span></span>() {
+        <span class="pl-k">require</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> admin, <span class="pl-s">"<span class="pl-s">Not admin</span>"</span>);
+        <span class="pl-k">_;</span>
+    }
+
+    <span class="pl-k">constructor</span>(
+        <span class="pl-c1">address</span> <span class="pl-v">_governanceToken</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">_votingDuration</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">_timelockDuration</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">_quorumPercentage</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">_proposalDepositAmount</span>
+    ) {
+        <span class="pl-k">require</span>(_governanceToken <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>), <span class="pl-s">"<span class="pl-s">Invalid token</span>"</span>);
+        <span class="pl-k">require</span>(_votingDuration <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Invalid duration</span>"</span>);
+        <span class="pl-k">require</span>(_quorumPercentage <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">&amp;&amp;</span> _quorumPercentage <span class="pl-k">&lt;=</span> <span class="pl-c1">100</span>, <span class="pl-s">"<span class="pl-s">Invalid quorum</span>"</span>);
+
+        governanceToken <span class="pl-k">=</span> <span class="pl-c1">IERC20</span>(_governanceToken);
+        votingDuration <span class="pl-k">=</span> _votingDuration;
+        timelockDuration <span class="pl-k">=</span> _timelockDuration;
+        admin <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>;
+        quorumPercentage <span class="pl-k">=</span> _quorumPercentage;
+        proposalDepositAmount <span class="pl-k">=</span> _proposalDepositAmount;
+    }
+
+    <span class="pl-c">// 创建提案</span>
+    <span class="pl-k">function<span class="pl-en"> createProposal</span></span>(<span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">description</span>) <span class="pl-k">external</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+        <span class="pl-k">require</span>(<span class="pl-c1">bytes</span>(description).<span class="pl-mi">length</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">Empty description</span>"</span>);
+
+        <span class="pl-c">// 收取提案押金</span>
+        <span class="pl-k">if</span> (proposalDepositAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>) {
+            governanceToken.<span class="pl-en">transferFrom</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, <span class="pl-c1">address</span>(<span class="pl-mi">this</span>), proposalDepositAmount);
+        }
+
+        <span class="pl-c1">uint256</span> proposalId <span class="pl-k">=</span> nextProposalId<span class="pl-k">++</span>;
+
+        proposals[proposalId] <span class="pl-k">=</span> <span class="pl-en">Proposal</span>({
+            proposer: <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>,
+            description: description,
+            forVotes: <span class="pl-c1">0</span>,
+            againstVotes: <span class="pl-c1">0</span>,
+            startTime: <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>,
+            endTime: <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">+</span> votingDuration,
+            executed: <span class="pl-c1">false</span>,
+            canceled: <span class="pl-c1">false</span>,
+            timelockEnd: <span class="pl-c1">0</span>
+        });
+
+        <span class="pl-k">emit</span> <span class="pl-en">ProposalCreated</span>(proposalId, <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, description);
+        <span class="pl-k">return</span> proposalId;
+    }
+
+    <span class="pl-c">// 投票</span>
+    <span class="pl-k">function<span class="pl-en"> vote</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">proposalId</span>, <span class="pl-c1">bool</span> <span class="pl-v">support</span>) <span class="pl-k">external</span> {
+        Proposal <span class="pl-k">storage</span> proposal <span class="pl-k">=</span> proposals[proposalId];
+
+        <span class="pl-k">require</span>(<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">&gt;=</span> proposal.startTime, <span class="pl-s">"<span class="pl-s">Not started</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">&lt;=</span> proposal.endTime, <span class="pl-s">"<span class="pl-s">Ended</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-k">!</span>proposal.executed, <span class="pl-s">"<span class="pl-s">Already executed</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-k">!</span>proposal.canceled, <span class="pl-s">"<span class="pl-s">Canceled</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-k">!</span>hasVoted[proposalId][<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>], <span class="pl-s">"<span class="pl-s">Already voted</span>"</span>);
+
+        <span class="pl-c1">uint256</span> weight <span class="pl-k">=</span> governanceToken.<span class="pl-en">balanceOf</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+        <span class="pl-k">require</span>(weight <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">No voting power</span>"</span>);
+
+        hasVoted[proposalId][<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+
+        <span class="pl-k">if</span> (support) {
+            proposal.forVotes <span class="pl-k">+=</span> weight;
+        } <span class="pl-k">else</span> {
+            proposal.againstVotes <span class="pl-k">+=</span> weight;
+        }
+
+        <span class="pl-k">emit</span> <span class="pl-en">Voted</span>(proposalId, <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, support, weight);
+    }
+
+    <span class="pl-c">// 完成提案（进入时间锁或取消）</span>
+    <span class="pl-k">function<span class="pl-en"> finalizeProposal</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">proposalId</span>) <span class="pl-k">external</span> {
+        Proposal <span class="pl-k">storage</span> proposal <span class="pl-k">=</span> proposals[proposalId];
+
+        <span class="pl-k">require</span>(<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">&gt;</span> proposal.endTime, <span class="pl-s">"<span class="pl-s">Voting not ended</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-k">!</span>proposal.executed, <span class="pl-s">"<span class="pl-s">Already executed</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-k">!</span>proposal.canceled, <span class="pl-s">"<span class="pl-s">Canceled</span>"</span>);
+
+        <span class="pl-c1">uint256</span> totalVotes <span class="pl-k">=</span> proposal.forVotes <span class="pl-k">+</span> proposal.againstVotes;
+        <span class="pl-c1">uint256</span> totalSupply <span class="pl-k">=</span> governanceToken.<span class="pl-en">totalSupply</span>();
+        <span class="pl-c1">uint256</span> quorumRequired <span class="pl-k">=</span> (totalSupply <span class="pl-k">*</span> quorumPercentage) <span class="pl-k">/</span> <span class="pl-c1">100</span>;
+
+        <span class="pl-k">if</span> (totalVotes <span class="pl-k">&gt;=</span> quorumRequired <span class="pl-k">&amp;&amp;</span> proposal.forVotes <span class="pl-k">&gt;</span> proposal.againstVotes) {
+            <span class="pl-k">if</span> (timelockDuration <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>) {
+                proposal.timelockEnd <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">+</span> timelockDuration;
+                <span class="pl-k">emit</span> <span class="pl-en">ProposalTimelockStarted</span>(proposalId);
+            } <span class="pl-k">else</span> {
+                proposal.executed <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+                <span class="pl-en">_refundDeposit</span>(proposalId);
+                <span class="pl-k">emit</span> <span class="pl-en">ProposalExecuted</span>(proposalId);
+            }
+        } <span class="pl-k">else</span> {
+            proposal.canceled <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+            <span class="pl-k">emit</span> <span class="pl-en">QuorumNotMet</span>(proposalId);
+        }
+    }
+
+    <span class="pl-c">// 执行提案</span>
+    <span class="pl-k">function<span class="pl-en"> executeProposal</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">proposalId</span>) <span class="pl-k">external</span> {
+        Proposal <span class="pl-k">storage</span> proposal <span class="pl-k">=</span> proposals[proposalId];
+
+        <span class="pl-k">require</span>(proposal.timelockEnd <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>, <span class="pl-s">"<span class="pl-s">No timelock set</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">&gt;=</span> proposal.timelockEnd, <span class="pl-s">"<span class="pl-s">Timelock not ended</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-k">!</span>proposal.executed, <span class="pl-s">"<span class="pl-s">Already executed</span>"</span>);
+        <span class="pl-k">require</span>(<span class="pl-k">!</span>proposal.canceled, <span class="pl-s">"<span class="pl-s">Canceled</span>"</span>);
+
+        proposal.executed <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+        <span class="pl-en">_refundDeposit</span>(proposalId);
+
+        <span class="pl-k">emit</span> <span class="pl-en">ProposalExecuted</span>(proposalId);
+    }
+
+    <span class="pl-c">// 退还押金</span>
+    <span class="pl-k">function<span class="pl-en"> _refundDeposit</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">proposalId</span>) <span class="pl-k">internal</span> {
+        <span class="pl-k">if</span> (proposalDepositAmount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>) {
+            Proposal <span class="pl-k">storage</span> proposal <span class="pl-k">=</span> proposals[proposalId];
+            governanceToken.<span class="pl-en">transfer</span>(proposal.proposer, proposalDepositAmount);
+        }
+    }
+
+    <span class="pl-c">// 获取提案结果</span>
+    <span class="pl-k">function<span class="pl-en"> getProposalResult</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">proposalId</span>) <span class="pl-k">external</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (
+        <span class="pl-c1">bool</span> <span class="pl-v">passed</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">forVotes</span>,
+        <span class="pl-c1">uint256</span> <span class="pl-v">againstVotes</span>,
+        <span class="pl-c1">bool</span> <span class="pl-v">executed</span>
+    ) {
+        Proposal <span class="pl-k">memory</span> proposal <span class="pl-k">=</span> proposals[proposalId];
+        passed <span class="pl-k">=</span> proposal.forVotes <span class="pl-k">&gt;</span> proposal.againstVotes;
+        <span class="pl-k">return</span> (passed, proposal.forVotes, proposal.againstVotes, proposal.executed);
+    }
+
+    <span class="pl-c">// 管理员设置参数</span>
+    <span class="pl-k">function<span class="pl-en"> setQuorumPercentage</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">_newQuorum</span>) <span class="pl-k">external</span> onlyAdmin {
+        <span class="pl-k">require</span>(_newQuorum <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">&amp;&amp;</span> _newQuorum <span class="pl-k">&lt;=</span> <span class="pl-c1">100</span>, <span class="pl-s">"<span class="pl-s">Invalid quorum</span>"</span>);
+        quorumPercentage <span class="pl-k">=</span> _newQuorum;
+    }
+
+    <span class="pl-k">function<span class="pl-en"> setProposalDepositAmount</span></span>(<span class="pl-c1">uint256</span> <span class="pl-v">_newAmount</span>) <span class="pl-k">external</span> onlyAdmin {
+        proposalDepositAmount <span class="pl-k">=</span> _newAmount;
+    }
+}</pre></div>
+<p dir="auto"><strong>✅ DAO治理流程</strong></p>
+<p dir="auto">任何人创建提案 → 代币持有者投票 → 达到法定人数且多数赞成 → 进入时间锁 → 社区审查期 → 自动执行。整个过程透明、民主、不可篡改。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>（1）导入 — 引入我们需要的工具Imports — Bringing in the Tools</strong></h2></div>
+<p dir="auto">在我们开始构建实际的治理逻辑之前，</p>
+<p dir="auto">我们从 OpenZeppelin 中提取了一些重要的工具——</p>
+<p dir="auto">用于安全、经过审计的智能合约代码的可信库。</p>
+<p dir="auto">您可以将这些进口物品想象成在开始建造严肃的东西之前拿起你的<strong>锤子、扳手和头盔</strong> 。</p>
+<p dir="auto">以下是我们要导入的内容：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">import</span> <span class="pl-s">"@openzeppelin/contracts/token/ERC20/IERC20.sol"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-s">"@openzeppelin/contracts/utils/math/SafeCast.sol"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-s">"@openzeppelin/contracts/security/ReentrancyGuard.sol"</span><span class="pl-kos">;</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>每个导入的作用</strong></h3></div>
+<p dir="auto">🔍</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong><code>IERC20.sol</code></strong></h3></div>
+<p dir="auto">🪙</p>
+<p dir="auto">这带来了 ERC-20 代币的<strong>接口</strong> ——</p>
+<p dir="auto">这意味着它定义了任何 ERC-20 代币必须具备的基本功能（balanceOf、transfer、transferFrom 等）。</p>
+<p dir="auto">我们使用它，以便我们的治理合约可以与任何用于投票权的 ERC-20 代币<strong>进行对话</strong> ——</p>
+<p dir="auto">而不关心其完整的内部实现。</p>
+<p dir="auto">无论您的代币是简单、复杂还是花哨——</p>
+<p dir="auto">✅</p>
+<p dir="auto">只要遵循 ERC-20，我们的合约就可以与之交互。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong><code>SafeCast.sol</code></strong></h3></div>
+<p dir="auto">🔢</p>
+<p dir="auto">此实用程序有助于<strong>进行安全的类型转换</strong> 。</p>
+<p dir="auto">在 Solidity 中，有时您需要在 uint256 和较小的类型（如 uint32、uint64 等）之间进行转换。</p>
+<p dir="auto">如果没有安全检查，错误的转换可能会导致<strong>溢出</strong>或<strong>静默的错误</strong> 。</p>
+<p dir="auto">SafeCast 确保您缩小的任何号码都<strong>不会丢失重要数据</strong> ——否则，交易将自动恢复。</p>
+<p dir="auto">✅</p>
+<p dir="auto">在我们的例子中，它主要作为最佳实践在这里——因为我们处理的是时间、投票和其他需要安全的数值操作。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong><code>ReentrancyGuard.sol</code></strong></h3></div>
+<p dir="auto">🛡️</p>
+<p dir="auto">这增加了对称为<strong>重入攻击</strong>的讨厌类别攻击的保护。</p>
+<p dir="auto">快速复习：</p>
+<p dir="auto">当智能合约在更新自己的内部状态之前调用外部地址时，就会发生重入攻击——</p>
+<p dir="auto">并且该外部地址恶意<strong>回调</strong>合约并<strong>滥用</strong>未完成的逻辑。</p>
+<p dir="auto">通过使用 <code>ReentrancyGuard</code>，我们可以<strong>锁定</strong>像 <code>executeProposal（）</code> 这样的函数，这样在第一次调用完成之前<strong>就无法再次输入</strong>它们。</p>
+<p dir="auto">✅</p>
+<p dir="auto">这在移动代币或执行外部调用时绝对至关重要。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">（2）<strong>合约声明 — 奠定基础Contract Declaration — Laying the Foundation</strong></h2></div>
+<p dir="auto">现在我们已经导入了所有基本工具，是时候为我们的治理体系奠定<strong>基础</strong>了。</p>
+<p dir="auto">以下是我们正式开始构建合同的方式：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">contract</span> <span class="pl-v">DecentralizedGovernance</span> <span class="pl-s1">is</span> <span class="pl-v">ReentrancyGuard</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">using</span> <span class="pl-v">SafeCast</span> <span class="pl-k">for</span> <span class="pl-s1">uint256</span><span class="pl-kos">;</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>这是怎么回事？</strong></h3></div>
+<p dir="auto">🔍</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong><code>contract DecentralizedGovernance is ReentrancyGuard</code></strong></h3></div>
+<p dir="auto">🏗️</p>
+<p dir="auto">这一行<strong>声明</strong>了我们的智能合约并为其命名：</p>
+<p dir="auto"><code>DecentralizedGovernance</code> 的。</p>
+<p dir="auto">👉</p>
+<p dir="auto">它还<strong>继承自</strong>  <code>ReentrancyGuard</code>，</p>
+<p dir="auto">这意味着我们的合约会自动获得关键功能的重入保护——尤其是当我们执行可能调用其他合约的提案时。</p>
+<p dir="auto">这可以保护我们免受攻击者在执行过程中尝试双花或递归调用等偷偷摸摸的伎俩。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong><code>using SafeCast for uint256</code></strong></h3></div>
+<p dir="auto">🧹</p>
+<p dir="auto">这句话说：</p>
+<p dir="auto">“嘿，Solidity——只要我有 uint256，让我自动访问 <strong>SafeCast</strong> 功能。</p>
+<p dir="auto">这就像赋予 <code>uint256</code> 变量额外的<strong>超能力</strong> ——</p>
+<p dir="auto">允许他们在需要时安全地将自己降级到更小的类型（<code>uint32、uint64</code> 等），</p>
+<p dir="auto">而不必每次都手动调用 <code>SafeCast.safeCastFunction（value）</code>。</p>
+<p dir="auto">更干净的代码。更安全的数学运算。</p>
+<p dir="auto">✅</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>（3） 设置核心数据：提案和投票记录Setting Up the Core Data: Proposals and Voting Records</strong></h2></div>
+<p dir="auto">🧩</p>
+<p dir="auto">现在合同已经声明，</p>
+<p dir="auto">下一步是定义我们的 DAO 将管理<strong>什么样的信息</strong> 。任何治理系统的核心都有一个关键： <strong>提案</strong> 。</p>
+<p dir="auto">我们需要一种存储方式：</p>
+<p dir="auto">该提案的内容、谁创造了它、人们如何投票、无论通过还是失败</p>
+<p dir="auto">如果成功，应该采取什么行动</p>
+<p dir="auto">现在让我们为所有这些设置结构。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>结构体 + 映射  的完整代码Full Code for Struct + Mappings</strong></h3></div>
+<p dir="auto">📜</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">struct</span> <span class="pl-v">Proposal</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">uint256</span> <span class="pl-s1">id</span><span class="pl-kos">;</span>
+    <span class="pl-s1">string</span><span class="pl-kos"></span> <span class="pl-s1">description</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint256</span> <span class="pl-s1">deadline</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint256</span> <span class="pl-s1">votesFor</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint256</span><span class="pl-kos"></span> <span class="pl-s1">votesAgainst</span><span class="pl-kos">;</span>
+    <span class="pl-s1">bool</span> <span class="pl-s1">executed</span><span class="pl-kos">;</span>
+    <span class="pl-s1">address</span> <span class="pl-s1">proposer</span><span class="pl-kos">;</span>
+    <span class="pl-s1">bytes</span><span class="pl-kos">[</span><span class="pl-kos">]</span> <span class="pl-s1">executionData</span><span class="pl-kos">;</span>
+    <span class="pl-s1">address</span><span class="pl-kos">[</span><span class="pl-kos">]</span> <span class="pl-s1">executionTargets</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint256</span> <span class="pl-s1">executionTime</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-en">mapping</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Proposal</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">proposals</span><span class="pl-kos">;</span>
+<span class="pl-en">mapping</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-c1">=&gt;</span> <span class="pl-en">mapping</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-c1">=&gt;</span> <span class="pl-s1">bool</span><span class="pl-kos">)</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">hasVoted</span><span class="pl-kos"></span><span class="pl-kos">;</span><span class="pl-kos"></span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>深入探讨：逐行细分</strong></h3></div>
+<p dir="auto">🔍</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong><code>struct Proposal</code></strong></h3></div>
+<p dir="auto">🏛️</p>
+<p dir="auto">此<strong>蓝图</strong>定义了<strong>单个提案</strong>在合同中的外观。</p>
+<p dir="auto">每个提案都有：</p>
+<p dir="auto"><strong><code>id</code></strong>：用于跟踪的唯一 ID 号。</p>
+<p dir="auto"><strong><code>description</code></strong>：对提案内容的人类可读解释。</p>
+<p dir="auto"><strong><code>deadline</code></strong>：投票结束时的时间戳标记。</p>
+<p dir="auto"><strong><code>votesFor</code></strong>：有多少票投了赞成票。</p>
+<p dir="auto"><strong><code>votesAgainst</code></strong>：有多少票投了反对票。</p>
+<p dir="auto"><strong><code>executed</code></strong>：一个布尔值（true/false），用于跟踪提案是否已执行。</p>
+<p dir="auto"><strong><code>proposer</code></strong>：创建提案的人的地址。</p>
+<p dir="auto"><strong><code>executionData</code></strong>：如果提案通过，将在其他合约上调用的实际数据有效负载。</p>
+<p dir="auto"><strong><code>executionTargets</code></strong>：这些有效负载应发送到的合约地址列表。</p>
+<p dir="auto"><strong><code>executionTime</code></strong>：时间锁后提案可以正式执行的未来时间戳。</p>
+<p dir="auto">这个结构包含了我们从头到尾完全管理 DAO 提案所需的<strong>一切</strong> ——</p>
+<p dir="auto">✅</p>
+<p dir="auto">从创建→投票→执行。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">mapping</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Proposal</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">proposals</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这将<strong>设置映射或查找表</strong> ，</p>
+<p dir="auto">其中每个 Proposal 结构都通过其唯一 ID 存储和访问。</p>
+<p dir="auto">可以这样想：</p>
+<p dir="auto">“提案 ID #2 →整个提案结构体”</p>
+<p dir="auto">这允许合约（和用户）仅通过其 ID 号快速获取有关任何提案的详细信息。</p>
+<p dir="auto">✅</p>
+<p dir="auto">标记为<strong>公共</strong> ，因此外部用户和前端可以轻松获取提案数据，而无需编写额外的 getter 函数。</p>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">mapping</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-c1">=&gt;</span> <span class="pl-en">mapping</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-c1">=&gt;</span> <span class="pl-s1">bool</span><span class="pl-kos">)</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">hasVoted</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这是一个<strong>双重映射</strong> ——有点棘手，但非常重要。</p>
+<p dir="auto">第一个键是 <code>proposalId</code></p>
+<p dir="auto">第二个关键是选民的地址<code>voter's address</code></p>
+<p dir="auto">该值是一个简单的布尔<code>bool</code> 值（true/false）</p>
+<p dir="auto">这使我们<strong>能够跟踪特定用户是否已经</strong>对特定提案进行了投票。</p>
+<p dir="auto">它可以防止重复投票。</p>
+<p dir="auto">✅</p>
+<p dir="auto">它保持投票过程的公平和干净。</p>
+<p dir="auto">✅</p>
+<p dir="auto"><strong>设置治理规则</strong></p>
+<p dir="auto">🏗️</p>
+<p dir="auto">现在我们已经定义了提案的存储<strong>和跟踪方式</strong> ，</p>
+<p dir="auto">下一步是建立控制<strong>治理实际运作方式</strong>的<strong>规则</strong> 。</p>
+<p dir="auto">每个 DAO 都需要回答以下重要问题：</p>
+<p dir="auto">谁可以投票？</p>
+<p dir="auto">投票开放多长时间？</p>
+<p dir="auto">谁可以创建提案？</p>
+<p dir="auto">提案需要多少人参与才能有效？</p>
+<p dir="auto">下一组变量定义了所有这些。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">****</h3></div>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>（4）治理设置的完整代码Setting Up the Governance Rules</strong></h2></div>
+<p dir="auto">📜</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">IERC20</span> <span class="pl-s1">public</span> <span class="pl-s1">governanceToken</span><span class="pl-kos">;</span>
+<span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">nextProposalId</span><span class="pl-kos">;</span>
+<span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">votingDuration</span><span class="pl-kos">;</span>
+<span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">timelockDuration</span><span class="pl-kos">;</span>
+<span class="pl-s1">address</span> <span class="pl-s1">public</span> <span class="pl-s1">admin</span><span class="pl-kos">;</span>
+<span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">quorumPercentage</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span><span class="pl-kos">;</span>
+<span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">proposalDepositAmount</span> <span class="pl-c1">=</span> <span class="pl-c1">10</span><span class="pl-kos">;</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>深入探讨：逐行细分</strong></h3></div>
+<p dir="auto">🔍</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">IERC20</span> <span class="pl-s1">public</span> <span class="pl-s1">governanceToken</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这是整个系统中<strong>最重要的部分之一</strong> 。</p>
+<p dir="auto"><strong>governanceToken</strong> 是代表<strong>投票权</strong>的 <strong>ERC-20 代币</strong> 。</p>
+<p dir="auto">持有此代币的人有权对提案进行<strong>投票</strong> 。</p>
+<p dir="auto">你拥有<strong>的代币越多</strong> ，您的投票权重就越<strong>强</strong> 。</p>
+<p dir="auto">如果你不持有任何治理代币，则无法投票。</p>
+<p dir="auto">该代币成为你 DAO 的“公民徽章”。</p>
+<p dir="auto">✅</p>
+<p dir="auto">它赋予用户提出想法、对更改进行投票并拥有真正发言权的权利。</p>
+<p dir="auto">✅</p>
+<p dir="auto">重要：这个代币可以是任何东西——它可以是自定义 DAO 代币、包装质押代币，甚至是真实 DAO 中的 UNI（Uniswap）或 COMP（Compound）之类的东西。</p>
+<p dir="auto">🔥</p>
+<p dir="auto">我们的合约通过标准 ERC-20 接口 （<code>IERC20</code>） 与它<strong>通信</strong> ，</p>
+<p dir="auto">这意味着它不关心代币的内部逻辑——</p>
+<p dir="auto">只要它的行为像标准 ERC-20。</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">nextProposalId</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这会跟踪当有人创建新提案时将分配的<strong>下一个 ID</strong>。</p>
+<p dir="auto">默认情况下，它从 <code>0</code> 开始，每次创建新提案时递<strong>增 1</strong>。</p>
+<p dir="auto">这可确保每个提案都获得<strong>唯一的 ID</strong>，而不会发生冲突。</p>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">votingDuration</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这定义了每个提案开放投票<strong>的时间</strong> 。</p>
+<p dir="auto">它以<strong>秒</strong>为单位（因为这就是时间戳在 Solidity 中的工作方式）。</p>
+<p dir="auto">一旦达到提案的截止日期（block.timestamp + votingDuration），就不允许再进行投票。</p>
+<p dir="auto">保持投票期的<strong>有限性和可预测</strong>性。</p>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">timelockDuration</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这是提案获胜<strong>后</strong>实际执行之前的<strong>等待期</strong> 。</p>
+<p dir="auto">时间锁让用户有时间：</p>
+<p dir="auto">查看结果</p>
+<p dir="auto">发现任何恶意提案</p>
+<p dir="auto">如果需要，退出系统（如果发生重大变化）</p>
+<p dir="auto">它在真正的链上作发生之前增加了<strong>一个关键的安全缓冲区</strong> 。</p>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">address</span> <span class="pl-s1">public</span> <span class="pl-s1">admin</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这存储<strong>了管理员地址</strong> ——部署合约的钱包。</p>
+<p dir="auto">管理员具有一些<strong>特殊权限</strong> ，例如：</p>
+<p dir="auto">更改仲裁百分比</p>
+<p dir="auto">调整提案存款金额</p>
+<p dir="auto">调整时间锁持续时间</p>
+<p dir="auto">管理员控制是有限的，主要集中在<strong>设置参数</strong>上，而不是干扰投票本身。</p>
+<p dir="auto">✅</p>
+<p dir="auto">在现实世界的 DAO 中，随着时间的推移，管理控制权通常会减少甚至被删除（逐渐去中心化治理）。</p>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">quorumPercentage</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这设置了提案必须参与<strong>的总票数的最小百分比</strong>才能有效。</p>
+<p dir="auto">例如：</p>
+<p dir="auto">如果 <code>quorumPercentage = 5</code></p>
+<p dir="auto">代币的总供应量为 1,000,000 枚</p>
+<p dir="auto">然后至少有 5%（价值 50,000 个代币的选票）必须参与</p>
+<p dir="auto">如果没有法定人数，一小部分选民可能会不公平地通过决定。</p>
+<p dir="auto">✅</p>
+<p dir="auto">法定人数确保在重大变化发生之前有<strong>足够多的社区参与进来</strong> 。</p>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">proposalDepositAmount</span> <span class="pl-c1">=</span> <span class="pl-c1">10</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这定义了用户在创建提案时必须锁定<strong>多少个治理令牌governance tokens</strong> 。</p>
+<p dir="auto">它充当<strong>垃圾邮件过滤器spam filter</strong> ——</p>
+<p dir="auto">防止人们用随机提案淹没系统而没有后果。</p>
+<p dir="auto">如果您的提案获胜并执行，您将取回押金。</p>
+<p dir="auto">✅</p>
+<p dir="auto">如果您的提案失败，押金就会丢失或被锁定——从而阻止低质量或巨魔提案。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>（5）活动 — 广播重要时刻</strong>Events — Broadcasting Important Moments</h2></div>
+<p dir="auto">在真正的 DAO 中，仅仅将信息存储在链上是不够的。</p>
+<p dir="auto">你还想向外界<strong>广播重要的里程碑</strong> ——</p>
+<p dir="auto">以便前端、应用程序、资源管理器和用户可以<strong>监听</strong> 、 <strong>做出反应</strong>和<strong>显示</strong>最新更新。</p>
+<p dir="auto">这正是<strong>事件</strong>的作用。</p>
+<p dir="auto">您可以将它们视为合同每次发生关键事件时发出<strong>的响亮公告</strong> 。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>完整活动列表</strong></h3></div>
+<p dir="auto">📜</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">event</span> <span class="pl-v">ProposalCreated</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">id</span><span class="pl-kos">,</span> <span class="pl-s1">string</span> <span class="pl-s1">description</span><span class="pl-kos">,</span> <span class="pl-s1">address</span> <span class="pl-s1">proposer</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">depositAmount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">event</span> <span class="pl-v">Voted</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-s1">address</span> <span class="pl-s1">voter</span><span class="pl-kos">,</span> <span class="pl-s1">bool</span> <span class="pl-s1">support</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">weight</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">event</span> <span class="pl-v">ProposalExecuted</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">id</span><span class="pl-kos">,</span> <span class="pl-s1">bool</span> <span class="pl-s1">passed</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">event</span> <span class="pl-v">QuorumNotMet</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">id</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">votesTotal</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">quorumNeeded</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">event</span> <span class="pl-v">ProposalDepositPaid</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">proposer</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">amount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">event</span> <span class="pl-v">ProposalDepositRefunded</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">proposer</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">amount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">event</span> <span class="pl-v">TimelockSet</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">duration</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">event</span> <span class="pl-v">ProposalTimelockStarted</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">executionTime</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>深入探讨：每个事件的含义</strong></h3></div>
+<p dir="auto">🔍</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>提案创建</strong><code>ProposalCreated</code></h3></div>
+<p dir="auto">🧱</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">event</span> <span class="pl-v">ProposalCreated</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">id</span><span class="pl-kos">,</span> <span class="pl-s1">string</span> <span class="pl-s1">description</span><span class="pl-kos">,</span> <span class="pl-s1">address</span> <span class="pl-s1">proposer</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">depositAmount</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">每当创建新提案时，</p>
+<p dir="auto">此活动启动 — 宣布：</p>
+<p dir="auto">提案的 <strong>ID</strong></p>
+<p dir="auto">简<strong>短</strong>描述其内容</p>
+<p dir="auto">提议者的<strong>地址</strong></p>
+<p dir="auto">他们锁定了多少<strong>存款</strong>来创建它</p>
+<p dir="auto">前端使用它来<strong>在创建新提案时实时列出它们</strong> 。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>投票</strong><code>Voted</code></h3></div>
+<p dir="auto">🗳️</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">event</span> <span class="pl-v">Voted</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-s1">address</span> <span class="pl-s1">voter</span><span class="pl-kos">,</span> <span class="pl-s1">bool</span> <span class="pl-s1">support</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">weight</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">每当有人投票时，</p>
+<p dir="auto">本次活动直播：</p>
+<p dir="auto">他们投票支持哪个<strong>提案</strong></p>
+<p dir="auto">哪个<strong>地址</strong>投票了</p>
+<p dir="auto">无论他们投<strong>了赞成</strong>票还是<strong>反对</strong>票</p>
+<p dir="auto">他们使用了多少<strong>投票权</strong> （代币权重）</p>
+<p dir="auto">前端可以显示基于此事件的<strong>实时投票更新</strong> ！</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>提案已执行</strong><code>ProposalExecuted</code></h3></div>
+<p dir="auto">🏁</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">event</span> <span class="pl-v">ProposalExecuted</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">id</span><span class="pl-kos">,</span> <span class="pl-s1">bool</span> <span class="pl-s1">passed</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">当提案最终执行时——</p>
+<p dir="auto">无论通过还是失败——</p>
+<p dir="auto">这个事件火了，让大家知道：</p>
+<p dir="auto">哪项<strong>提案</strong>已最终确定</p>
+<p dir="auto">是<strong>通过</strong>  （true） 还是<strong>失败</strong>  （false）</p>
+<p dir="auto">帮助跟踪哪些提案实际<strong>完成</strong> 。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>法定人数未满足</strong><code>QuorumNotMet</code></h3></div>
+<p dir="auto">📉</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">event</span> <span class="pl-v">QuorumNotMet</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">id</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">votesTotal</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">quorumNeeded</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">如果提案因参与人数不足（未达到法定人数）而<strong>失败</strong> ，</p>
+<p dir="auto">这个事件确切地解释了：</p>
+<p dir="auto">哪个<strong>提案</strong>失败了</p>
+<p dir="auto">收集了多少<strong>票</strong></p>
+<p dir="auto">需要多少<strong>票</strong>才能达到法定人数</p>
+<p dir="auto">对于分析选民投票率和 DAO 健康状况非常有用！</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>提案定金已付</strong><code>ProposalDepositPaid</code></h3></div>
+<p dir="auto">💰</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">event</span> <span class="pl-v">ProposalDepositPaid</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">proposer</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">amount</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">当有人提交提案并支付押金时，</p>
+<p dir="auto">此事件记录：</p>
+<p dir="auto"><strong>提议者地址</strong></p>
+<p dir="auto">锁定的代币<strong>数量</strong></p>
+<p dir="auto">前端可以显示存款跟踪和承诺证明。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>提案定金已退还</strong><code>ProposalDepositRefunded</code></h3></div>
+<p dir="auto">🎁</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">event</span> <span class="pl-v">ProposalDepositRefunded</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">proposer</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">amount</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">如果提案<strong>通过并执行</strong> ，</p>
+<p dir="auto">提议者<strong>拿回他们的押金</strong> ——</p>
+<p dir="auto">并且此事件记录了退款的发生。</p>
+<p dir="auto">有助于证明获胜的提议者会得到奖励。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>时间锁集</strong><code>TimelockSet</code></h3></div>
+<p dir="auto">⏰</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">event</span> <span class="pl-v">TimelockSet</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">duration</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">当管理员<strong>更改时间锁持续时间</strong> （从传递到执行之间的等待时间）时，</p>
+<p dir="auto">此事件宣布<strong>新的时间锁时间</strong> 。</p>
+<p dir="auto">保持治理透明 — 没有隐藏的参数更改。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>提案时间锁已开始</strong><code>ProposalTimelockStarted</code></h3></div>
+<p dir="auto">⏳</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">event</span> <span class="pl-v">ProposalTimelockStarted</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">executionTime</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">当提案<strong>赢得投票</strong>但在执行前进入<strong>时间锁延迟</strong>时，</p>
+<p dir="auto">本次活动宣布：</p>
+<p dir="auto">哪个<strong>提案</strong>正在进入时间锁</p>
+<p dir="auto">它何时有<strong>资格执行</strong></p>
+<p dir="auto">对于显示提案何时处于等待区非常重要。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>（6）仅限管理员访问</strong>Admin-Only Access**（最后一次！**</h2></div>
+<p dir="auto">🛡️</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">modifier</span> <span class="pl-en">onlyAdmin</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span> <span class="pl-c1">==</span> <span class="pl-s1">admin</span><span class="pl-kos">,</span> <span class="pl-s">"Only admin can call this"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">_</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">这是我们经典的 <strong>onlyAdmin</strong> 修饰符。</p>
+<p dir="auto">它只是<strong>检查</strong>调用某个函数的人是否是<strong>管理员</strong> ——</p>
+<p dir="auto">部署合约的人。</p>
+<p dir="auto">如果您不是管理员，则呼叫<strong>将恢复</strong>并出现错误。</p>
+<p dir="auto">如果您是管理员，则该函数将继续正常运行（_ 表示“继续该函数”）。</p>
+<p dir="auto">我们使用它来<strong>保护敏感设置</strong>  —</p>
+<p dir="auto">✅</p>
+<p dir="auto">比如更改法定人数百分比或更新时间锁持续时间——</p>
+<p dir="auto">这样随机用户就无法弄乱治理规则。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>（7）构造函数 — 设置 DAO 的核心设置</strong>Constructor — Setting Up the DAO's Core Settings</h2></div>
+<p dir="auto">🏗️</p>
+<p dir="auto">在我们的治理系统开始运行之前，</p>
+<p dir="auto">我们需要<strong>设置一些起始参数 starting parameters</strong>——</p>
+<p dir="auto">例如我们将使用哪种代币进行投票、投票开放多长时间以及第一个管理员是谁。</p>
+<p dir="auto">构造函数在<strong>部署合约时</strong>处理所有这些问题。</p>
+<p dir="auto">它看起来像这样：</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>完整代码</strong></h3></div>
+<p dir="auto">📜</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">constructor</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">_governanceToken</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">_votingDuration</span><span class="pl-kos">,</span> <span class="pl-s1">uint256</span> <span class="pl-s1">_timelockDuration</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-kos">{</span>
+    <span class="pl-s1">governanceToken</span> <span class="pl-c1">=</span> <span class="pl-c1">IERC20</span><span class="pl-kos">(</span><span class="pl-s1">_governanceToken</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">votingDuration</span> <span class="pl-c1">=</span> <span class="pl-s1">_votingDuration</span><span class="pl-kos">;</span>
+    <span class="pl-s1">timelockDuration</span> <span class="pl-c1">=</span> <span class="pl-s1">_timelockDuration</span><span class="pl-kos">;</span>
+    <span class="pl-s1">admin</span> <span class="pl-c1">=</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">;</span>
+    <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">TimelockSet</span><span class="pl-kos">(</span><span class="pl-s1">_timelockDuration</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>逐行细分</strong></h2></div>
+<p dir="auto">🔍</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">governanceToken</span> <span class="pl-c1">=</span> <span class="pl-c1">IERC20</span><span class="pl-kos">(</span><span class="pl-s1">_governanceToken</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">当合约部署时，</p>
+<p dir="auto">我们希望部署者<strong>告诉我们</strong>将用于治理投票的 ERC-20 代币的地址。</p>
+<p dir="auto">我们将该代币的地址保存在合约中，以便：</p>
+<p dir="auto">我们知道在哪里检查人们的余额。</p>
+<p dir="auto">我们知道哪个代币赋予用户投票权。</p>
+<p dir="auto">这锁定了<strong>哪个代币控制了 DAO</strong>。</p>
+<p dir="auto">✅</p>
+<p dir="auto">votingDuration = _votingDuration;</p>
+<p dir="auto">这设置了每个提案将保持开放投票<strong>的秒数</strong> 。</p>
+<p dir="auto">创建提案  后，它将在经过这么长时间后自动<strong>过期</strong> 。</p>
+<p dir="auto">✅</p>
+<p dir="auto">确保投票期不是无止境的。</p>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">timelockDuration</span> <span class="pl-c1">=</span> <span class="pl-s1">_timelockDuration</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">这设置了<strong>强制等待时间</strong></p>
+<p dir="auto">在提案<em>获胜</em>和实际<strong>执行</strong>之间。</p>
+<p dir="auto">这通过让用户有时间在最终确定之前退出或对重大更改做出反应来保护用户。</p>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">admin</span> <span class="pl-c1">=</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">部署合同的人员将成为<strong>管理员</strong> 。</p>
+<p dir="auto">管理员可以稍后调整治理设置（如仲裁百分比、存款规模、时间锁持续时间）。</p>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">emit</span> <span class="pl-v">TimelockSet</span><span class="pl-kos">(</span><span class="pl-s1">_timelockDuration</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">合约一部署，</p>
+<p dir="auto">我们<strong>发出一个事件</strong> ，向世界宣布时间锁设置。</p>
+<p dir="auto">这使一切<strong>保持透明</strong> ——</p>
+<p dir="auto">✅</p>
+<p dir="auto">任何关注区块链的人都会立即知道起始时间锁是什么。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">****</h2></div>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>（8）更新仲裁百分比</strong>Updating the Quorum Percentage</h2></div>
+<p dir="auto">🛠️</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-en">setQuorumPercentage</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">_quorumPercentage</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-s1">onlyAdmin</span> <span class="pl-kos">{</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">_quorumPercentage</span> <span class="pl-c1">&lt;=</span> <span class="pl-c1">100</span><span class="pl-kos">,</span> <span class="pl-s">"Quorum percentage must be between 0 and 100"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">quorumPercentage</span> <span class="pl-c1">=</span> <span class="pl-s1">_quorumPercentage</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>这是怎么回事？</strong></h3></div>
+<p dir="auto">🔍</p>
+<p dir="auto">此功能允许<strong>管理员</strong>更改<strong>仲裁百分比</strong>  —</p>
+<p dir="auto">这是必须投票才能使提案有效的代币<strong>总数的最小百分比</strong> 。</p>
+<p dir="auto">只有管理员可以调用此函数（感谢 <code>onlyAdmin</code> 修饰符）。</p>
+<p dir="auto">✅</p>
+<p dir="auto">新法定人数必须<strong>介于 0% 到 100% 之间</strong> ——</p>
+<p dir="auto">✅</p>
+<p dir="auto">否则，它会恢复并出现错误。</p>
+<p dir="auto">设置后，新的 <code>quorumPercentage</code> 将应用于<strong>所有未来的提案</strong> 。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>（9） 更新提案存款金额</strong>Updating the Proposal Deposit Amount</h2></div>
+<p dir="auto">💰</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-en">setProposalDepositAmount</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">_proposalDepositAmount</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-s1">onlyAdmin</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">proposalDepositAmount</span> <span class="pl-c1">=</span> <span class="pl-s1">_proposalDepositAmount</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>这是 怎么回事？</strong></h3></div>
+<p dir="auto">🔍</p>
+<p dir="auto">此功能允许<strong>管理员</strong>更改用户必须存入的<strong>代币数量</strong>才能创建提案。</p>
+<p dir="auto">只有管理员可以调用此命令（因为 <code>onlyAdmin</code> 修饰符）。</p>
+<p dir="auto">✅</p>
+<p dir="auto">这里没有范围检查——管理员应该根据 DAO 的需求负责任地设置它。</p>
+<p dir="auto">✅</p>
+<p dir="auto">如果存款太小，垃圾邮件提案可能会淹没系统。</p>
+<p dir="auto">如果太高，可能会阻碍参与。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>（10）更新时间锁持续时间</strong> Updating the Timelock Duration</h2></div>
+<p dir="auto">⏳</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-en">setTimelockDuration</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">_timelockDuration</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-s1">onlyAdmin</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">timelockDuration</span> <span class="pl-c1">=</span> <span class="pl-s1">_timelockDuration</span><span class="pl-kos">;</span>
+    <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">TimelockSet</span><span class="pl-kos">(</span><span class="pl-s1">_timelockDuration</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>这是怎么回事？</strong></h3></div>
+<p dir="auto">🔍</p>
+<p dir="auto">此功能允许<strong>管理员</strong>更新<strong>时间锁持续时间</strong>  —</p>
+<p dir="auto">提案通过和执行之间的等待期。</p>
+<p dir="auto">只有管理员可以调用它（再次使用 <code>onlyAdmin</code> 修饰符）。</p>
+<p dir="auto">✅</p>
+<p dir="auto">设置新的时间锁  后，它<strong>会发出一个事件</strong> （<code>TimelockSet</code>）来公开宣布更改。</p>
+<p dir="auto">✅</p>
+<p dir="auto">这使一切都<strong>保持透明</strong> ，因此用户知道治理过程是加快还是减慢。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>为什么这很重要</strong></h3></div>
+<p dir="auto">🌟</p>
+<p dir="auto">时间锁让社区有时间在提案通过后<strong>做出反应</strong> 。</p>
+<p dir="auto">如果时间锁太短，决策可能会让人感觉仓促。</p>
+<p dir="auto">如果时间太长，执行可能会令人沮丧地延迟。</p>
+<p dir="auto">能够调整它使 DAO 在成长和发展过程中保持<strong>灵活性</strong> 。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">（11）**创建提案 — 让我们做出一些决定！**Creating a Proposal — Let’s Make Some Decisions!</h2></div>
+<p dir="auto">在去中心化的治理体系中，</p>
+<p dir="auto"><strong>一切都从提案开始</strong> 。</p>
+<p dir="auto">无论是建议新功能、升级合同还是更改设置——</p>
+<p dir="auto">当<strong>有人提出一个想法</strong>并要求社区投票时，这一切都始于。</p>
+<p dir="auto">这个函数 <code>createProposal（）</code> 是用户正式向 DAO  <strong>提交提案</strong>的地方——锁定存款，定义如果提案获胜应采取的行动，并设定投票截止日期。</p>
+<p dir="auto">让我们来看看它是如何工作的。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>完整代码</strong></h3></div>
+<p dir="auto">📜</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-s1">createProposal</span><span class="pl-kos">(</span>
+    <span class="pl-s1">string</span> <span class="pl-s1">calldata</span> <span class="pl-s1">_description</span><span class="pl-kos">,</span>
+    <span class="pl-s1">address</span><span class="pl-kos">[</span><span class="pl-kos">]</span> <span class="pl-s1">calldata</span> <span class="pl-s1">_targets</span><span class="pl-kos">,</span>
+    <span class="pl-s1">bytes</span><span class="pl-kos">[</span><span class="pl-kos">]</span> <span class="pl-s1">calldata</span> <span class="pl-s1">_calldatas</span>
+<span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-en">returns</span> <span class="pl-kos">(</span><span class="pl-s1">uint256</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-c1">require</span><span class="pl-kos">(</span><span class="pl-s1">governanceToken</span><span class="pl-kos">.</span><span class="pl-en">balanceOf</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">)</span> <span class="pl-c1">&gt;=</span> <span class="pl-s1">proposalDepositAmount</span><span class="pl-kos">,</span> <span class="pl-s">"Insufficient tokens for deposit"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">_targets</span><span class="pl-kos">.</span><span class="pl-c1">length</span> <span class="pl-c1">==</span> <span class="pl-s1">_calldatas</span><span class="pl-kos">.</span><span class="pl-c1">length</span><span class="pl-kos">,</span> <span class="pl-s">"Targets and calldatas length mismatch"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">governanceToken</span><span class="pl-kos">.</span><span class="pl-en">transferFrom</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-en">address</span><span class="pl-kos">(</span><span class="pl-smi">this</span><span class="pl-kos">)</span><span class="pl-kos">,</span> <span class="pl-s1">proposalDepositAmount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">emit</span> <span class="pl-v">ProposalDepositPaid</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-s1">proposalDepositAmount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">proposals</span><span class="pl-kos">[</span><span class="pl-s1">nextProposalId</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-v">Proposal</span><span class="pl-kos">(</span><span class="pl-kos">{</span>
+        <span class="pl-c1">id</span>: <span class="pl-s1">nextProposalId</span><span class="pl-kos">,</span>
+        <span class="pl-c1">description</span>: <span class="pl-s1">_description</span><span class="pl-kos">,</span>
+        <span class="pl-c1">deadline</span>: <span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span> <span class="pl-c1">+</span> <span class="pl-s1">votingDuration</span><span class="pl-kos">,</span>
+        <span class="pl-c1">votesFor</span>: <span class="pl-c1">0</span><span class="pl-kos">,</span>
+        <span class="pl-c1">votesAgainst</span>: <span class="pl-c1">0</span><span class="pl-kos">,</span>
+        <span class="pl-c1">executed</span>: <span class="pl-c1">false</span><span class="pl-kos">,</span>
+        <span class="pl-c1">proposer</span>: <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span>
+        <span class="pl-c1">executionData</span>: <span class="pl-s1">_calldatas</span><span class="pl-kos">,</span>
+        <span class="pl-c1">executionTargets</span>: <span class="pl-s1">_targets</span><span class="pl-kos">,</span>
+        <span class="pl-c1">executionTime</span>: <span class="pl-c1">0</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">emit</span> <span class="pl-v">ProposalCreated</span><span class="pl-kos">(</span><span class="pl-s1">nextProposalId</span><span class="pl-kos">,</span> <span class="pl-s1">_description</span><span class="pl-kos">,</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-s1">proposalDepositAmount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">nextProposalId</span><span class="pl-c1">++</span><span class="pl-kos">;</span>
+    <span class="pl-k">return</span> <span class="pl-s1">nextProposalId</span> <span class="pl-c1">-</span> <span class="pl-c1">1</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>分步细分</strong></h3></div>
+<p dir="auto">🔍</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>需要什么输入？</strong></h3></div>
+<p dir="auto">📜</p>
+<p dir="auto"><code>string calldata _description</code> — 描述提案内容的简短文本。</p>
+<p dir="auto"><code>address[] calldata _targets</code> — 该提案将与之交互的合约地址（如果通过）。</p>
+<p dir="auto"><code>bytes[] calldata _calldatas</code> — 将发送到每个目标的实际函数调用数据（例如打包成字节的函数调用）。</p>
+<p dir="auto">这些输入定义了<strong>提案的含义</strong>以及如果获得批准后<strong>将做什么</strong> 。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 1 步：检查用户是否有足够的令牌</strong></h3></div>
+<p dir="auto">🛡️</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">governanceToken</span><span class="pl-kos">.</span><span class="pl-en">balanceOf</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">)</span> <span class="pl-c1">&gt;=</span> <span class="pl-s1">proposalDepositAmount</span><span class="pl-kos">,</span> <span class="pl-s">"Insufficient tokens for deposit"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">在某人可以创建提案之前，</p>
+<p dir="auto">他们必须<strong>至少</strong>有足够的治理代币来支付<strong>提案押金</strong> 。</p>
+<p dir="auto">这可以防止垃圾邮件——人们需要真正的“游戏皮肤”来提出一些东西。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 2 步：确保目标和调用数据匹配</strong></h3></div>
+<p dir="auto">📏</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">_targets</span><span class="pl-kos">.</span><span class="pl-c1">length</span> <span class="pl-c1">==</span> <span class="pl-s1">_calldatas</span><span class="pl-kos">.</span><span class="pl-c1">length</span><span class="pl-kos">,</span> <span class="pl-s">"Targets and calldatas length mismatch"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">每个目标合约必须有一个<strong>相应的函数调用</strong> （calldata）。</p>
+<p dir="auto">我们检查以确保列表的<strong>长度相同</strong> 。</p>
+<p dir="auto">这可以防止以后出现执行错误。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 3 步：收取提案押金</strong></h3></div>
+<p dir="auto">💸</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">governanceToken</span><span class="pl-kos">.</span><span class="pl-en">transferFrom</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-en">address</span><span class="pl-kos">(</span><span class="pl-smi">this</span><span class="pl-kos">)</span><span class="pl-kos">,</span> <span class="pl-s1">proposalDepositAmount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">ProposalDepositPaid</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-s1">proposalDepositAmount</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们将提议者的存款代币<strong>转移到</strong>  DAO 合约中。</p>
+<p dir="auto">然后我们<strong>发出一个事件</strong> ，宣布付款。</p>
+<p dir="auto">现在系统知道提议者是认真的。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 4 步：保存新提案</strong></h3></div>
+<p dir="auto">🏗️</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">proposals</span><span class="pl-kos">[</span><span class="pl-s1">nextProposalId</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-v">Proposal</span><span class="pl-kos">(</span><span class="pl-kos">{</span>...<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们创建一个新的 <code>Proposal</code> 结构体，并填充：</p>
+<p dir="auto">其唯一 ID （<code>nextProposalId</code>）</p>
+<p dir="auto">用户提供的描述</p>
+<p dir="auto">截止日期（现在 + 投票持续时间）</p>
+<p dir="auto">最初零票</p>
+<p dir="auto">提议者地址</p>
+<p dir="auto">目标地址和呼叫数据列表</p>
+<p dir="auto">尚无执行时间（如果提案获胜，则稍后设置）</p>
+<p dir="auto">这正式将提案存储在我们 DAO 的内存中。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 5  步：宣布新提案</strong></h3></div>
+<p dir="auto">📢</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">emit</span> <span class="pl-v">ProposalCreated</span><span class="pl-kos">(</span><span class="pl-s1">nextProposalId</span><span class="pl-kos">,</span> <span class="pl-s1">_description</span><span class="pl-kos">,</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-s1">proposalDepositAmount</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们触发一个事件，以便前端和用户<strong>可以看到</strong>已创建新提案。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 6 步：更新提案计数器</strong></h3></div>
+<p dir="auto">🆔</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">nextProposalId</span><span class="pl-c1">++</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们递增计数器，因此下一个提案将获得一个新的唯一 ID。</p>
+<p dir="auto">最后，该函数返回新创建的提案的 <strong>ID</strong>。</p>
+<p dir="auto">现在该提案已上线，可供社区开始投票！</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>为什么这个函数很重要</strong></h3></div>
+<p dir="auto">🌟</p>
+<p dir="auto">此功能是治理的<strong>开始</strong> 。</p>
+<p dir="auto">它确保：</p>
+<p dir="auto">只有认真的用户才能提出更改。</p>
+<p dir="auto">提案与实际行动（而不仅仅是想法）适当地联系在一起。</p>
+<p dir="auto">一切都记录在链上，可见且透明。</p>
+<p dir="auto">没有这个功能，就没有可以投票的决定！</p>
+<p dir="auto">✅</p>
+<p dir="auto">这是<strong>社区驱动控制community-driven control</strong>的第一步。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">****</h2></div>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>（12）投票——在 DAO 中发表你的意见</strong>Casting Your Vote — Have Your Say in the DAO</h2></div>
+<p dir="auto">🗳️</p>
+<p dir="auto">现在用户可以创建提案，</p>
+<p dir="auto">下一步是<strong>让社区有发言权</strong> 。</p>
+<p dir="auto">这个函数 <code>vote（）</code> 是用户正式<strong>投票</strong>的地方——</p>
+<p dir="auto">支持或反对某项提案——</p>
+<p dir="auto">他们的投票权基于他们持有的治理代币数量。</p>
+<p dir="auto">投票是想法转化为决策的方式。</p>
+<p dir="auto">让我们深入了解它是如何工作的。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>完整代码</strong></h3></div>
+<p dir="auto">📜</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-en">vote</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-s1">bool</span> <span class="pl-s1">support</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-kos">{</span>
+    <span class="pl-v">Proposal</span> <span class="pl-s1">storage</span> <span class="pl-s1">proposal</span> <span class="pl-c1">=</span> <span class="pl-s1">proposals</span><span class="pl-kos">[</span><span class="pl-s1">proposalId</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">deadline</span><span class="pl-kos">,</span> <span class="pl-s">"Voting period over"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">governanceToken</span><span class="pl-kos">.</span><span class="pl-en">balanceOf</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">)</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-s">"No governance tokens"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-c1">!</span><span class="pl-s1">hasVoted</span><span class="pl-kos">[</span><span class="pl-s1">proposalId</span><span class="pl-kos">]</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-s">"Already voted"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">uint256</span> <span class="pl-s1">weight</span> <span class="pl-c1">=</span> <span class="pl-s1">governanceToken</span><span class="pl-kos">.</span><span class="pl-en">balanceOf</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">support</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesFor</span> <span class="pl-c1">+=</span> <span class="pl-s1">weight</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesAgainst</span> <span class="pl-c1">+=</span> <span class="pl-s1">weight</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-s1">hasVoted</span><span class="pl-kos">[</span><span class="pl-s1">proposalId</span><span class="pl-kos">]</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span>
+
+    <span class="pl-en">emit</span> <span class="pl-v">Voted</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-s1">support</span><span class="pl-kos">,</span> <span class="pl-s1">weight</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>分步细分</strong></h3></div>
+<p dir="auto">🔍</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 1 步：加载提案</strong></h3></div>
+<p dir="auto">📜</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-v">Proposal</span> <span class="pl-s1">storage</span> <span class="pl-s1">proposal</span> <span class="pl-c1">=</span> <span class="pl-s1">proposals</span><span class="pl-kos">[</span><span class="pl-s1">proposalId</span><span class="pl-kos">]</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们首先<strong>加载</strong>用户想要投票的提案，</p>
+<p dir="auto">使用提案的 ID。</p>
+<p dir="auto">现在，我们拥有触手可及的所有信息（截止日期、投票、提议者等）。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 2 步：确保投票仍然开放</strong></h3></div>
+<p dir="auto">🛑</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">deadline</span><span class="pl-kos">,</span> <span class="pl-s">"Voting period over"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">仅允许在提案截止日期<strong>之前</strong>进行投票。</p>
+<p dir="auto">如果投票窗口已关闭，则函数<strong>将恢复</strong> 。</p>
+<p dir="auto">这确保了选票仅在正式投票期间计算。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 3 步：确保用户持有治理代币</strong></h3></div>
+<p dir="auto">🪙</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">governanceToken</span><span class="pl-kos">.</span><span class="pl-en">balanceOf</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">)</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-s">"No governance tokens"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">如果您不持有任何治理代币，</p>
+<p dir="auto">你没有机会投票。</p>
+<p dir="auto">这保持了投票的公平性——只有真正的利益相关者才能参与。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 4 步：防止重复投票</strong></h3></div>
+<p dir="auto">🚫</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-c1">!</span><span class="pl-s1">hasVoted</span><span class="pl-kos">[</span><span class="pl-s1">proposalId</span><span class="pl-kos">]</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-s">"Already voted"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">每个地址每个提案<strong>只能投票一次</strong> 。</p>
+<p dir="auto">没有垃圾邮件，以后不会改变主意。</p>
+<p dir="auto">✅</p>
+<p dir="auto">一旦你投票，它就被锁定了！</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 5  步：计算投票权</strong></h3></div>
+<p dir="auto">⚖️</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">uint256</span> <span class="pl-s1">weight</span> <span class="pl-c1">=</span> <span class="pl-s1">governanceToken</span><span class="pl-kos">.</span><span class="pl-en">balanceOf</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">您拥有<strong>的代币越多</strong> ，您的投票<strong>就越重要</strong> 。</p>
+<p dir="auto">更大的代币持有者具有更大的影响力。</p>
+<p dir="auto">✅</p>
+<p dir="auto">（这就是为什么治理代币很有价值——它们代表着真正的权力。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 6  步：计票</strong></h3></div>
+<p dir="auto">🗳️</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">support</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesFor</span> <span class="pl-c1">+=</span> <span class="pl-s1">weight</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesAgainst</span> <span class="pl-c1">+=</span> <span class="pl-s1">weight</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">根据用户是支持还是反对该提案：</p>
+<p dir="auto">我们将他们的权重添加到 <code>votesFor</code> 中</p>
+<p dir="auto">或者我们将其添加到 <code>votesAgainst</code> 中</p>
+<p dir="auto">每一次投票都会改变平衡！</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 7 步：将用户标记为已投票</strong></h3></div>
+<p dir="auto">📝</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">hasVoted</span><span class="pl-kos">[</span><span class="pl-s1">proposalId</span><span class="pl-kos">]</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们记录该用户<strong>现已</strong>对该提案进行了投票。</p>
+<p dir="auto">他们不能再投票了。</p>
+<p dir="auto">保持一切清洁和防篡改。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 8 步：发出投票事件</strong></h3></div>
+<p dir="auto">📢</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">emit</span> <span class="pl-v">Voted</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-s1">support</span><span class="pl-kos">,</span> <span class="pl-s1">weight</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">最后，我们<strong>播报一个事件</strong> ——</p>
+<p dir="auto">告诉外界谁投票了，投票了哪个提案，权力有多大。</p>
+<p dir="auto">前端可以实时更新投票统计！</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>为什么这个函数很重要</strong></h3></div>
+<p dir="auto">🌟</p>
+<p dir="auto">这一职能是<strong>治理的命脉</strong> 。</p>
+<p dir="auto">没有它，提案就会积满灰尘。</p>
+<p dir="auto">它使投票具有加权、公平、安全和可审计性——</p>
+<p dir="auto">✅</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>     这正是真正的 DAO 运作所需要的。
+
+     它确保每个选民都有**一个与实际利害关系**相关的声音。
+</code></pre></div>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>（13）敲定提案——决定命运</strong>Finalizing a Proposal — Deciding the Fate</h2></div>
+<p dir="auto">好吧——</p>
+<p dir="auto">投票结束了。</p>
+<p dir="auto">社区已经发声了。</p>
+<p dir="auto">现在最大的问题是：</p>
+<p dir="auto"><strong>提案通过了吗？</strong></p>
+<p dir="auto"><strong>失败了吗？</strong></p>
+<p dir="auto"><strong>是否有足够的参与甚至使其有效？</strong></p>
+<p dir="auto">这个函数 <code>finalizeProposal（）</code> 是 DAO 检查最终结果的地方——</p>
+<p dir="auto">并将提案移至执行阶段（如果通过）或将其标记为失败（如果未通过）。</p>
+<p dir="auto">让我们来看看。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>完整代码</strong></h3></div>
+<p dir="auto">📜</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-en">finalizeProposal</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">proposalId</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-kos">{</span>
+    <span class="pl-v">Proposal</span> <span class="pl-s1">storage</span> <span class="pl-s1">proposal</span> <span class="pl-c1">=</span> <span class="pl-s1">proposals</span><span class="pl-kos">[</span><span class="pl-s1">proposalId</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span> <span class="pl-c1">&gt;=</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">deadline</span><span class="pl-kos">,</span> <span class="pl-s">"Voting period not yet over"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-c1">!</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executed</span><span class="pl-kos">,</span> <span class="pl-s">"Proposal already executed"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionTime</span> <span class="pl-c1">==</span> <span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-s">"Execution time already set"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">uint256</span><span class="pl-kos"></span> <span class="pl-s1">totalSupply</span> <span class="pl-c1">=</span> <span class="pl-s1">governanceToken</span><span class="pl-kos">.</span><span class="pl-en">totalSupply</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint256</span> <span class="pl-s1">totalVotes</span> <span class="pl-c1">=</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesFor</span> <span class="pl-c1">+</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesAgainst</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint256</span><span class="pl-kos"></span> <span class="pl-s1">quorumNeeded</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-s1">totalSupply</span> <span class="pl-c1">*</span> <span class="pl-s1">quorumPercentage</span><span class="pl-kos">)</span> <span class="pl-c1">/</span> <span class="pl-c1">100</span><span class="pl-kos">;</span>
+
+    <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">totalVotes</span> <span class="pl-c1">&gt;=</span> <span class="pl-s1">quorumNeeded</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesFor</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesAgainst</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionTime</span> <span class="pl-c1">=</span> <span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span> <span class="pl-c1">+</span> <span class="pl-s1">timelockDuration</span><span class="pl-kos">;</span>
+        <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">ProposalTimelockStarted</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionTime</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executed</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span>
+        <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">ProposalExecuted</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-c1">false</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">totalVotes</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">quorumNeeded</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+            <span class="pl-s1">emit</span> <span class="pl-v">QuorumNotMet</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-s1">totalVotes</span><span class="pl-kos">,</span> <span class="pl-s1">quorumNeeded</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span>
+        <span class="pl-c">// Deposit is NOT refunded here for failed proposals.</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>分步细分</strong></h3></div>
+<p dir="auto">🔍</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 1 步：加载提案</strong></h3></div>
+<p dir="auto">📜</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-v">Proposal</span> <span class="pl-s1">storage</span> <span class="pl-s1">proposal</span> <span class="pl-c1">=</span> <span class="pl-s1">proposals</span><span class="pl-kos">[</span><span class="pl-s1">proposalId</span><span class="pl-kos">]</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们拉出用户想要最终确定的提案。</p>
+<p dir="auto">现在我们可以访问其全部详细信息。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 2  步：确保投票结束</strong></h3></div>
+<p dir="auto">⏳</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span> <span class="pl-c1">&gt;=</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">deadline</span><span class="pl-kos">,</span> <span class="pl-s">"Voting period not yet over"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们<strong>必须等到</strong>正式投票期结束。</p>
+<p dir="auto">这可以防止某人在投票仍在进行时进行最终确定。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 3 步：确保尚未最终确定</strong></h3></div>
+<p dir="auto">🚫</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-c1">!</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executed</span><span class="pl-kos">,</span> <span class="pl-s">"Proposal already executed"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">如果提案已经执行或最终确定，</p>
+<p dir="auto">我们<strong>阻止</strong>调用以避免双重终结。</p>
+<p dir="auto">防止事故和重播。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 4 步：确保它尚未进入时间锁</strong></h3></div>
+<p dir="auto">🕰️</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionTime</span> <span class="pl-c1">==</span> <span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-s">"Execution time already set"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">如果提案已经进入“等待执行”阶段，</p>
+<p dir="auto">没有必要再次敲定。</p>
+<p dir="auto">这使得逻辑干净且防弹。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 5 步：计算法定人数和总票数</strong></h3></div>
+<p dir="auto">📈</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">uint256</span> <span class="pl-s1">totalSupply</span> <span class="pl-c1">=</span> <span class="pl-s1">governanceToken</span><span class="pl-kos">.</span><span class="pl-en">totalSupply</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">uint256</span> <span class="pl-s1">totalVotes</span> <span class="pl-c1">=</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesFor</span> <span class="pl-c1">+</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesAgainst</span><span class="pl-kos">;</span>
+<span class="pl-s1">uint256</span> <span class="pl-s1">quorumNeeded</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-s1">totalSupply</span> <span class="pl-c1">*</span> <span class="pl-s1">quorumPercentage</span><span class="pl-kos">)</span> <span class="pl-c1">/</span> <span class="pl-c1">100</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们现在检查：</p>
+<p dir="auto"><strong>总共有多少个代币</strong> （totalSupply）</p>
+<p dir="auto"><strong>投了多少票</strong> （totalVotes）</p>
+<p dir="auto"><strong>需要多少票</strong>数（法定人数）</p>
+<p dir="auto">这就是我们验证是否有足够多的人参与的方式。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>步骤 6A：如果提案获得通过并达到法定人数</strong></h3></div>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">totalVotes</span> <span class="pl-c1">&gt;=</span> <span class="pl-s1">quorumNeeded</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesFor</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesAgainst</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionTime</span> <span class="pl-c1">=</span> <span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span> <span class="pl-c1">+</span> <span class="pl-s1">timelockDuration</span><span class="pl-kos">;</span>
+    <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">ProposalTimelockStarted</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionTime</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">如果有足够多的人投票 <strong>，</strong> 并且<strong>投票赞成</strong>的人多于<strong>反对</strong>的人......</p>
+<p dir="auto">然后，提案<strong>进入时间锁定期</strong> 。</p>
+<p dir="auto"><strong>executionTime</strong> 设置为 <strong>now + timelockDuration</strong>，</p>
+<p dir="auto">这意味着它只有在等待期后才能执行。</p>
+<p dir="auto">这使社区有时间为变更做准备或在需要时做出响应。</p>
+<p dir="auto">✅</p>
+<p dir="auto">我们发出一个事件，以便每个人都知道时间锁何时开始以及何时允许执行。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>步骤 6B：如果提案失败</strong></h3></div>
+<p dir="auto">❌</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">else</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executed</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span>
+    <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">ProposalExecuted</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-c1">false</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">totalVotes</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">quorumNeeded</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">emit</span> <span class="pl-v">QuorumNotMet</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-s1">totalVotes</span><span class="pl-kos">,</span> <span class="pl-s1">quorumNeeded</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">如果提案<strong>失败</strong> （没有足够的票数，或者有更多的反对票）：</p>
+<p dir="auto">我们立即将其标记为<strong>已执行</strong> （不会发生进一步的作）。</p>
+<p dir="auto">发出一个事件，说提案失败了。</p>
+<p dir="auto">如果问题在于<strong>没有足够的选民参与</strong> ，</p>
+<p dir="auto">我们发出一个额外的事件 <code>QuorumNotMet</code> 来解释它失败的确切原因。</p>
+<p dir="auto">这使治理过程<strong>保持透明和可审计</strong> 。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>为什么这个函数很重要</strong></h3></div>
+<p dir="auto">🌟</p>
+<p dir="auto">这是关键检查点，其中：</p>
+<p dir="auto">社区决定得到尊重。</p>
+<p dir="auto">垃圾邮件和低参与度提案将被过滤掉。</p>
+<p dir="auto">获胜提案被<strong>锁定</strong>并准备安全执行。</p>
+<p dir="auto">如果没有这一步，投票将毫无意义。</p>
+<p dir="auto">✅</p>
+<p dir="auto">这就是将选票转化为<strong>实际后果</strong>的原因。</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>（14）执行提案——使决策成为现实</strong>Executing a Proposal — Making the Decision Real</h2></div>
+<p dir="auto">✅</p>
+<p dir="auto">🏗️</p>
+<p dir="auto">所以，社区已经投票了。</p>
+<p dir="auto">该提案获得通过。</p>
+<p dir="auto">时间锁定期结束。</p>
+<p dir="auto">现在是合同做<strong>社区决定的时候</strong>了——</p>
+<p dir="auto">无论是转移资金、调用其他合约上的函数，还是升级系统的某些部分。</p>
+<p dir="auto">这个函数 <code>executeProposal（）</code> 是 DAO  <strong>实际执行</strong>选民意愿的地方。</p>
+<p dir="auto">让我们来看看。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>完整代码</strong></h3></div>
+<p dir="auto">📜</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-en">executeProposal</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">proposalId</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-s1">nonReentrant</span> <span class="pl-kos">{</span>
+    <span class="pl-v">Proposal</span> <span class="pl-s1">storage</span> <span class="pl-s1">proposal</span> <span class="pl-c1">=</span> <span class="pl-s1">proposals</span><span class="pl-kos">[</span><span class="pl-s1">proposalId</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-c1">!</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executed</span><span class="pl-kos">,</span> <span class="pl-s">"Proposal already executed"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionTime</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">0</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span> <span class="pl-c1">&gt;=</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionTime</span><span class="pl-kos">,</span> <span class="pl-s">"Timelock not yet expired"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executed</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span> <span class="pl-c">// set executed early to prevent reentrancy</span>
+
+    <span class="pl-s1">bool</span> <span class="pl-s1">passed</span> <span class="pl-c1">=</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesFor</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesAgainst</span><span class="pl-kos">;</span>
+
+    <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">passed</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-k">for</span> <span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">i</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">;</span> <span class="pl-s1">i</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionTargets</span><span class="pl-kos">.</span><span class="pl-c1">length</span><span class="pl-kos">;</span> <span class="pl-s1">i</span><span class="pl-c1">++</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+            <span class="pl-kos">(</span><span class="pl-s1">bool</span> <span class="pl-s1">success</span><span class="pl-kos">,</span> <span class="pl-s1">bytes</span> <span class="pl-s1">memory</span> <span class="pl-s1">returnData</span><span class="pl-kos">)</span> <span class="pl-c1">=</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionTargets</span><span class="pl-kos">[</span><span class="pl-s1">i</span><span class="pl-kos">]</span><span class="pl-kos">.</span><span class="pl-en">call</span><span class="pl-kos">(</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionData</span><span class="pl-kos">[</span><span class="pl-s1">i</span><span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+            <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">success</span><span class="pl-kos">,</span> <span class="pl-en">string</span><span class="pl-kos">(</span><span class="pl-s1">returnData</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span>
+        <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">ProposalExecuted</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-c1">true</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-s1">governanceToken</span><span class="pl-kos">.</span><span class="pl-en">transfer</span><span class="pl-kos">(</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">proposer</span><span class="pl-kos">,</span> <span class="pl-s1">proposalDepositAmount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">ProposalDepositRefunded</span><span class="pl-kos">(</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">proposer</span><span class="pl-kos">,</span> <span class="pl-s1">proposalDepositAmount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">emit</span> <span class="pl-v">ProposalExecuted</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-c1">false</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-c">// Deposit is NOT refunded here for failed proposals; it was not refunded in finalizeProposal either.</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>分步细分</strong></h3></div>
+<p dir="auto">🔍</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 1 步：加载提案</strong></h3></div>
+<p dir="auto">📜</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-v">Proposal</span> <span class="pl-s1">storage</span> <span class="pl-s1">proposal</span> <span class="pl-c1">=</span> <span class="pl-s1">proposals</span><span class="pl-kos">[</span><span class="pl-s1">proposalId</span><span class="pl-kos">]</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们首先使用提案的 ID 提取提案数据。</p>
+<p dir="auto">现在我们拥有检查它是否准备好执行所需的所有详细信息。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 2 步：确保它尚未执行</strong></h3></div>
+<p dir="auto">🚫</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-c1">!</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executed</span><span class="pl-kos">,</span> <span class="pl-s">"Proposal already executed"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">如果有人尝试执行<strong>两次</strong>提案，</p>
+<p dir="auto">此检查<strong>会立即阻止</strong>它们。</p>
+<p dir="auto">双重执行 = 避免灾难。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 3 步：确保时间锁结束</strong></h3></div>
+<p dir="auto">⏳</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionTime</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">0</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">timestamp</span> <span class="pl-c1">&gt;=</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionTime</span><span class="pl-kos">,</span> <span class="pl-s">"Timelock not yet expired"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">必须有两件事是正确的：</p>
+<p dir="auto"><strong>必须</strong>设置时间锁执行时间（意味着提案通过投票）。</p>
+<p dir="auto"><strong>当前时间</strong>必须在执行时间<strong>之后</strong> 。</p>
+<p dir="auto">这确保用户不会在社区有时间做出反应之前匆忙通过提案。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 4 步：在执行任何其他作<em>之前</em>将提案标记为已执行</strong></h3></div>
+<p dir="auto">🔒</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executed</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span> <span class="pl-c">// set executed early to prevent reentrancy</span></pre></div>
+<p dir="auto">这是一个<strong>非常重要的安全举措</strong> 。</p>
+<p dir="auto">在调用任何外部合约之前，我们将<strong>提案标记为已执行</strong> ——</p>
+<p dir="auto">这样，如果发生奇怪的事情，提案就无法通过重入重新执行或攻击。</p>
+<p dir="auto">这遵循了 Solidity 安全合约设计的最佳实践。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 5 步：检查提案是否实际通过</strong></h3></div>
+<p dir="auto">⚖️</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">bool</span> <span class="pl-s1">passed</span> <span class="pl-c1">=</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesFor</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesAgainst</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">即使我们在这里，</p>
+<p dir="auto">我们<strong>仔细检查</strong>社区是否真的批准了该提案。</p>
+<p dir="auto">只有通过的提案才能实际执行作。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 6A 步：执行提案（如果通过）</strong></h3></div>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">passed</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">for</span> <span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">i</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">;</span> <span class="pl-s1">i</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionTargets</span><span class="pl-kos">.</span><span class="pl-c1">length</span><span class="pl-kos">;</span> <span class="pl-s1">i</span><span class="pl-c1">++</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-kos">(</span><span class="pl-s1">bool</span> <span class="pl-s1">success</span><span class="pl-kos">,</span> <span class="pl-s1">bytes</span> <span class="pl-s1">memory</span> <span class="pl-s1">returnData</span><span class="pl-kos">)</span> <span class="pl-c1">=</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionTargets</span><span class="pl-kos">[</span><span class="pl-s1">i</span><span class="pl-kos">]</span><span class="pl-kos">.</span><span class="pl-en">call</span><span class="pl-kos">(</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executionData</span><span class="pl-kos">[</span><span class="pl-s1">i</span><span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">success</span><span class="pl-kos">,</span> <span class="pl-en">string</span><span class="pl-kos">(</span><span class="pl-s1">returnData</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+    <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">ProposalExecuted</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-c1">true</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">governanceToken</span><span class="pl-kos">.</span><span class="pl-en">transfer</span><span class="pl-kos">(</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">proposer</span><span class="pl-kos">,</span> <span class="pl-s1">proposalDepositAmount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">ProposalDepositRefunded</span><span class="pl-kos">(</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">proposer</span><span class="pl-kos">,</span> <span class="pl-s1">proposalDepositAmount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">如果提案获得通过：</p>
+<p dir="auto">我们<strong>循环遍历</strong>所有目标合约。</p>
+<p dir="auto">我们使用存储的 calldata 在每个目标上<strong>调用</strong>相应的函数。</p>
+<p dir="auto">如果任何调用<strong>失败</strong> ，则整个执行<strong>将恢复</strong> （以保持一致和安全）。</p>
+<p dir="auto">这是真正发生变化的地方——升级、转移、新设置，以及提案想要做的任何事情！</p>
+<p dir="auto">✅</p>
+<p dir="auto">成功执行后：</p>
+<p dir="auto">我们<strong>发出一个事件</strong> ，将提案标记为已通过并已执行。</p>
+<p dir="auto">我们<strong>退还</strong>提议者的代币押金（因为他们贡献了一个成功的想法）。</p>
+<p dir="auto">好的提案有回报！</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>步骤 6B：如果提案失败</strong></h3></div>
+<p dir="auto">❌</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">else</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">emit</span> <span class="pl-v">ProposalExecuted</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-c1">false</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">如果提案失败（目前很少见，但仍然有可能），</p>
+<p dir="auto">我们只是<strong>发出一个事件</strong> ，说它失败了。</p>
+<p dir="auto">在这种情况下，押金  不予退还——它保留在合同中，作为对失败想法的惩罚。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>为什么这个函数很重要</strong></h3></div>
+<p dir="auto">🌟</p>
+<p dir="auto">这是将<strong>选票转化为实际行动</strong>的<strong>最后一步</strong> 。</p>
+<p dir="auto">它尊重社区做出的决定。</p>
+<p dir="auto">✅</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>   它自动执行——不需要可信的中间人。
+</code></pre></div>
+<p dir="auto">✅</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>   它会自动处理对好提案的奖励（退款）和对坏提案的惩罚。
+</code></pre></div>
+<p dir="auto">✅</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>   它使整个过程**安全** 、 **透明**且**无需信任** 。
+</code></pre></div>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">**（15）检查提案结果——它是通过还是失败？**Checking Proposal Results — Did It Pass or Fail?</h2></div>
+<p dir="auto">提案最终确定并执行后，</p>
+<p dir="auto">用户可能希望<strong>检查结果</strong> ，而无需手动挖掘事件。</p>
+<p dir="auto">这个函数 <code>getProposalResult（）</code> 给出了一个<strong>简单的摘要</strong> ：</p>
+<p dir="auto">提案是否<strong>通过</strong> 、 <strong>失败</strong>或<strong>未达到法定人数</strong> 。</p>
+<p dir="auto">让我们看看它是如何工作的。</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>完整代码</strong></h3></div>
+<p dir="auto">📜</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-en">getProposalResult</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">proposalId</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-s1">view</span> <span class="pl-s1">returns</span> <span class="pl-kos">(</span><span class="pl-s1">string</span> <span class="pl-s1">memory</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-v">Proposal</span> <span class="pl-s1">storage</span> <span class="pl-s1">proposal</span> <span class="pl-c1">=</span> <span class="pl-s1">proposals</span><span class="pl-kos">[</span><span class="pl-s1">proposalId</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executed</span><span class="pl-kos">,</span> <span class="pl-s">"Proposal not yet executed"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">uint256</span> <span class="pl-s1">totalSupply</span> <span class="pl-c1">=</span> <span class="pl-s1">governanceToken</span><span class="pl-kos">.</span><span class="pl-en">totalSupply</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint256</span> <span class="pl-s1">totalVotes</span> <span class="pl-c1">=</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesFor</span> <span class="pl-c1">+</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesAgainst</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint256</span> <span class="pl-s1">quorumNeeded</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-s1">totalSupply</span> <span class="pl-c1">*</span> <span class="pl-s1">quorumPercentage</span><span class="pl-kos">)</span> <span class="pl-c1">/</span> <span class="pl-c1">100</span><span class="pl-kos">;</span>
+
+    <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">totalVotes</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">quorumNeeded</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-k">return</span> <span class="pl-s">"Proposal FAILED - Quorum not met"</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesFor</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesAgainst</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-k">return</span> <span class="pl-s">"Proposal PASSED"</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-kos">{</span>
+        <span class="pl-k">return</span> <span class="pl-s">"Proposal REJECTED"</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>分步细分</strong></h3></div>
+<p dir="auto">🔍</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 1 步：加载提案</strong></h3></div>
+<p dir="auto">📜</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-v">Proposal</span> <span class="pl-s1">storage</span> <span class="pl-s1">proposal</span> <span class="pl-c1">=</span> <span class="pl-s1">proposals</span><span class="pl-kos">[</span><span class="pl-s1">proposalId</span><span class="pl-kos">]</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们按其 ID 提取提案详细信息。</p>
+<p dir="auto">现在我们可以访问其投票结果和截止日期信息。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 2 步：确保它已经执行</strong></h3></div>
+<p dir="auto">⏳</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">executed</span><span class="pl-kos">,</span> <span class="pl-s">"Proposal not yet executed"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">我们只允许在提案最终确定并标记为已执行<strong>后检查</strong>结果。</p>
+<p dir="auto">这可以防止人们在<strong>投票仍在进行时</strong>询问结果。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 3 步：计算所需的总票数和法定人数</strong></h3></div>
+<p dir="auto">🧮</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">uint256</span> <span class="pl-s1">totalSupply</span> <span class="pl-c1">=</span> <span class="pl-s1">governanceToken</span><span class="pl-kos">.</span><span class="pl-en">totalSupply</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">uint256</span> <span class="pl-s1">totalVotes</span> <span class="pl-c1">=</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesFor</span> <span class="pl-c1">+</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesAgainst</span><span class="pl-kos">;</span>
+<span class="pl-s1">uint256</span> <span class="pl-s1">quorumNeeded</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-s1">totalSupply</span> <span class="pl-c1">*</span> <span class="pl-s1">quorumPercentage</span><span class="pl-kos">)</span> <span class="pl-c1">/</span> <span class="pl-c1">100</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto"><strong>totalSupply</strong>：总共存在多少治理代币。</p>
+<p dir="auto"><strong>totalVotes</strong>：该提案实际投了多少票。</p>
+<p dir="auto"><strong>quorumNeeded</strong>：提案需要多少票才能被视为有效。</p>
+<p dir="auto">这些数字有助于确定该提案是否合法。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 4A 步：如果参与不足</strong></h3></div>
+<p dir="auto">🛑</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">totalVotes</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">quorumNeeded</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-s">"Proposal FAILED - Quorum not met"</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">如果没有投出足够的票数（未达到法定人数），</p>
+<p dir="auto">该提案自动<strong>失败</strong> ，即使有更多的“赞成”票。</p>
+<p dir="auto">防止一小群人不公平地控制系统。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>步骤 4B：如果通过</strong></h3></div>
+<p dir="auto">✅</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">else</span> <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesFor</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">proposal</span><span class="pl-kos">.</span><span class="pl-c1">votesAgainst</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-s">"Proposal PASSED"</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">如果<strong>赞成</strong>票多于<strong>反对</strong>票，</p>
+<p dir="auto">并达到法定人数，提案顺利<strong>通过</strong> 。</p>
+<p dir="auto">准备执行作！</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 4C 步：如果被拒绝</strong></h3></div>
+<p dir="auto">❌</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-s1">else</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-s">"Proposal REJECTED"</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">如果<strong>反对</strong>票多于<strong>赞成</strong>票，</p>
+<p dir="auto">该提案被<strong>拒绝</strong> 。</p>
+<p dir="auto">不会对系统进行  任何更改。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>为什么这个函数很重要</strong></h3></div>
+<p dir="auto">🌟</p>
+<p dir="auto">此函数提供：</p>
+<p dir="auto">一个<strong>简单易读的答案</strong> ，回答“这个提案发生了什么？</p>
+<p dir="auto">📜</p>
+<p dir="auto">保证只能检查<strong>已完成的提案</strong> 。</p>
+<p dir="auto">🚫</p>
+<p dir="auto">透明度，无需用户手动挖掘区块链事件。</p>
+<p dir="auto">✅</p>
+<p dir="auto">对于希望了解治理结果的前端、浏览器和用户非常有帮助。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><strong>（16）查看完整的提案详细信息</strong>Viewing Full Proposal Details</h2></div>
+<p dir="auto">📋</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">function</span> <span class="pl-en">getProposalDetails</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">proposalId</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-s1">view</span> <span class="pl-s1">returns</span> <span class="pl-kos">(</span><span class="pl-v">Proposal</span> <span class="pl-s1">memory</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-s1">proposals</span><span class="pl-kos">[</span><span class="pl-s1">proposalId</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>这是 怎么回事？</strong></h3></div>
+<p dir="auto">🔍</p>
+<p dir="auto">此功能允许<strong>任何人</strong>查找有关特定提案的完整<strong>信息</strong> 。</p>
+<p dir="auto">您传入 proposalId。</p>
+<p dir="auto">合约返回<strong>整个 Proposal 结构体</strong>  —</p>
+<p dir="auto">包括其描述、投票、提议者、目标、执行数据等。</p>
+<p dir="auto">没有复杂的逻辑。</p>
+<p dir="auto">✅</p>
+<p dir="auto">没有限制。</p>
+<p dir="auto">✅</p>
+<p dir="auto">只是一种简单、公开的方式来查看有关提案的所有内容。</p>
+<p dir="auto">✅</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">Remix实战步骤</h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 1 步：部署治理令牌</strong></h3></div>
+<p dir="auto">首先，我们需要一个代表<strong>投票权</strong>的<strong>代币</strong> 。</p>
+<p dir="auto">为此，您可以使用简单的 ERC-20 代币。</p>
+<p dir="auto">下面是可以快速部署的<strong>最小令牌</strong> ：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-s1">pragma</span> <span class="pl-s1">solidity</span> <span class="pl-c1">^</span><span class="pl-c1">0.8</span><span class="pl-c1">.20</span><span class="pl-kos">;</span>
+
+<span class="pl-k">import</span> <span class="pl-s">"@openzeppelin/contracts/token/ERC20/ERC20.sol"</span><span class="pl-kos">;</span>
+
+<span class="pl-s1">contract</span> <span class="pl-v">GovernanceToken</span> <span class="pl-s1">is</span> <span class="pl-c1">ERC20</span> <span class="pl-kos">{</span>
+    <span class="pl-c1">constructor</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">ERC20</span><span class="pl-kos">(</span><span class="pl-s">"GovernanceToken"</span><span class="pl-kos">,</span> <span class="pl-s">"GT"</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-en">_mint</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-c1">1000000</span> <span class="pl-c1">*</span> <span class="pl-c1">10</span> <span class="pl-c1">**</span> <span class="pl-en">decimals</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Mint 1 million tokens to yourself</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">首先部署此 <code>GovernanceToken</code> 合约。</p>
+<p dir="auto">✅</p>
+<p dir="auto">部署后，您的钱包中将有一堆代币。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 2 步：部署治理合约</strong></h3></div>
+<p dir="auto">🏗️</p>
+<p dir="auto">现在部署 <code>DecentralizedGovernance</code> 合约。</p>
+<p dir="auto"><strong>所需的构造函数参数：</strong></p>
+<p dir="auto"><code>governanceToken</code> 地址 — 您刚刚部署的 <code>GovernanceToken</code> 的地址。</p>
+<p dir="auto"><code>votingDuration</code> — 提案开放投票的时间（例如：<code>600</code> 秒 10 分钟）。</p>
+<p dir="auto"><code>timelockDuration</code> — 提案通过后等待多长时间才能执行（例如：<code>300</code> 秒 5 分钟）。</p>
+<p dir="auto">使用这些值部署它，您的治理系统就会上线！</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 3 步：批准治理合约以使用您的代币</strong></h3></div>
+<p dir="auto">🔓</p>
+<p dir="auto">在创建提案之前，您需要<strong>批准</strong>治理合约以<strong>使用您的代币</strong>进行存款。</p>
+<p dir="auto">转到 Remix 中的 <code>GovernanceToken</code> 合约并调用：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">approve</span><span class="pl-kos">(</span><span class="pl-s1">governanceContractAddress</span><span class="pl-kos">,</span> <span class="pl-s1">amount</span><span class="pl-kos">)</span></pre></div>
+<p dir="auto">其中：</p>
+<p dir="auto"><code>governanceContractAddress</code> = 你的 DAO 合约地址</p>
+<p dir="auto"><code>amount</code> = 足够的代币来支付 <code>proposalDepositAmount</code> 以及稍后的投票费（例如：批准 100 个代币）。</p>
+<p dir="auto">如果没有这一步，您的提案将失败，因为合约无法提取您的代币！</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 4 步：创建一个有趣的目标合约以供稍后执行</strong></h3></div>
+<p dir="auto">🎯</p>
+<p dir="auto">现在为了让演示更加<strong>精彩</strong> ，</p>
+<p dir="auto">让我们创建一个 <strong>FunTransfer 合约</strong>  —</p>
+<p dir="auto">如果提案通过，这将使我们<strong>能够移动以太币</strong> ！</p>
+<p dir="auto">这是一个超级简单的：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c">// SPDX-License-Identifier: MIT</span>
+<span class="pl-s1">pragma</span> <span class="pl-s1">solidity</span> <span class="pl-c1">^</span><span class="pl-c1">0.8</span><span class="pl-c1">.20</span><span class="pl-kos">;</span>
+
+<span class="pl-s1">contract</span> <span class="pl-v">FunTransfer</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">address</span> <span class="pl-s1">public</span> <span class="pl-s1">owner</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint256</span> <span class="pl-s1">public</span> <span class="pl-s1">received</span><span class="pl-kos">;</span>
+
+    <span class="pl-en">constructor</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-kos">{</span>
+        <span class="pl-s1">owner</span> <span class="pl-c1">=</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-en">receiveEther</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-s1">payable</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">received</span> <span class="pl-c1">+=</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">value</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-en">withdrawEther</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-kos">{</span>
+        <span class="pl-en">payable</span><span class="pl-kos">(</span><span class="pl-s1">owner</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">transfer</span><span class="pl-kos">(</span><span class="pl-en">address</span><span class="pl-kos">(</span><span class="pl-smi">this</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-c1">balance</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-en">getBalance</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-s1">external</span> <span class="pl-s1">view</span> <span class="pl-s1">returns</span> <span class="pl-kos">(</span><span class="pl-s1">uint256</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-k">return</span> <span class="pl-en">address</span><span class="pl-kos">(</span><span class="pl-smi">this</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-c1">balance</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">也部署这个 <code>FunTransfer</code> 合约。</p>
+<p dir="auto">✅</p>
+<p dir="auto">您甚至可以手动向它发送一些以太币（通过 Remix UI），以便它保持平衡。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 5 步：创建提案</strong></h3></div>
+<p dir="auto">📝</p>
+<p dir="auto">现在我们创建一个提案，该<strong>提案</strong>将触发对 <code>FunTransfer</code> 合约的作。</p>
+<p dir="auto">您需要：</p>
+<p dir="auto">以 <code>FunTransfer</code> 合约的地址为<strong>目标</strong> 。</p>
+<p dir="auto"><strong>Calldata</strong> 来调用类似 <code>withdrawEther（）</code> 的函数。</p>
+<p dir="auto">如何轻松获取调用数据：</p>
+<p dir="auto">在 Remix 中创建新的 script.js 文件</p>
+<p dir="auto">粘贴以下代码：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">const</span> <span class="pl-kos">{</span> ethers <span class="pl-kos">}</span> <span class="pl-c1">=</span> <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s">'ethers'</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-k">const</span> <span class="pl-s1">abi</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span>
+  <span class="pl-s">"function withdrawEther()"</span>
+<span class="pl-kos">]</span><span class="pl-kos">;</span>
+
+<span class="pl-k">const</span> <span class="pl-s1">iface</span> <span class="pl-c1">=</span> <span class="pl-k">new</span> <span class="pl-s1">ethers</span><span class="pl-kos">.</span><span class="pl-c1">utils</span><span class="pl-kos">.</span><span class="pl-c1">Interface</span><span class="pl-kos">(</span><span class="pl-s1">abi</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-k">const</span> <span class="pl-s1">data</span> <span class="pl-c1">=</span> <span class="pl-s1">iface</span><span class="pl-kos">.</span><span class="pl-en">encodeFunctionData</span><span class="pl-kos">(</span><span class="pl-s">"withdrawEther"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s1">data</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">运行脚本</p>
+<p dir="auto">复制该字节输出。</p>
+<p dir="auto">现在通过调用以下命令创建提案：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">createProposal</span><span class="pl-kos">(</span>
+    <span class="pl-s">"Proposal to withdraw Ether from FunTransfer"</span><span class="pl-kos">,</span>
+    <span class="pl-kos">[</span><span class="pl-s">"0xd8b8A44ce1fB552f4A4dE0cb074EeBf5A24a2..."</span><span class="pl-kos">]</span><span class="pl-kos">,</span>
+    <span class="pl-kos">[</span><span class="pl-s">"0x736237.."</span><span class="pl-kos">]</span>
+<span class="pl-kos">)</span></pre></div>
+<p dir="auto">治理合约将存储您的提案。</p>
+<p dir="auto">✅</p>
+<p dir="auto">它还将扣除您的押金！</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 6  步：对提案进行投票</strong></h3></div>
+<p dir="auto">🗳️</p>
+<p dir="auto">现在， <strong>要投票</strong> ，</p>
+<p dir="auto">只需调用：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">vote</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">,</span> <span class="pl-c1">true</span><span class="pl-kos">)</span>  <span class="pl-c">// Vote FOR</span></pre></div>
+<p dir="auto">您需要使用拥有治理代币的地址进行投票。</p>
+<p dir="auto">✅</p>
+<p dir="auto">请记住，您拥有的代币越多，您的投票权重就越大！</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 7  步：等待投票结束并最终确定</strong></h3></div>
+<p dir="auto">⏳</p>
+<p dir="auto">等待 <strong>votingDuration</strong> 到期。</p>
+<p dir="auto">然后调用：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">finalizeProposal</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">)</span></pre></div>
+<p dir="auto">这将检查它是否通过、满足仲裁，并计划执行。</p>
+<p dir="auto">✅</p>
+<p dir="auto">它将在 <code>timelockDuration</code> 之后设置一个 <code>executionTime</code>。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><strong>第 8 步：等待时间锁并执行！</strong></h3></div>
+<p dir="auto">🛡️</p>
+<p dir="auto">时间锁到期后，调用：</p>
+<div class="highlight highlight-source-js notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-en">executeProposal</span><span class="pl-kos">(</span><span class="pl-s1">proposalId</span><span class="pl-kos">)</span></pre></div>
+<p dir="auto">如果提案获得通过，</p>
+<p dir="auto">✅</p>
+<p dir="auto">治理合约将在 <code>FunTransfer</code> 上调用 <code>withdrawEther（）</code> 函数。</p>
+<p dir="auto">以太币将转入所有者钱包！</p>
+<p dir="auto">✅</p>
+<p dir="auto">提案创建  者也将退还他们的押金。</p>
+<p dir="auto">✅</p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">简化步骤参考</h3></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤1: 准备治理代币</h3></div>
+<ol dir="auto">
+<li>部署ERC-20治理代币（如GOV）</li>
+<li>给多个账户分发代币</li>
+<li>确保代币分布合理</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤2: 部署DAO合约</h3></div>
+<ol dir="auto">
+<li>设置投票期（如3600秒）</li>
+<li>设置时间锁（如1800秒）</li>
+<li>设置法定人数（如20%）</li>
+<li>设置提案押金（如100个代币）</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤3: 创建提案</h3></div>
+<ol dir="auto">
+<li>批准DAO合约使用治理代币</li>
+<li>调用<code>createProposal("增加开发预算")</code></li>
+<li>检查提案ID和详情</li>
+<li>验证押金被扣除</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤4: 投票测试</h3></div>
+<ol dir="auto">
+<li>使用不同账户调用<code>vote(0, true)</code></li>
+<li>观察投票权重和累积票数</li>
+<li>测试重复投票保护</li>
+<li>确保达到法定人数</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">步骤5: 执行流程</h3></div>
+<ol dir="auto">
+<li>投票期结束后调用<code>finalizeProposal(0)</code></li>
+<li>观察提案进入时间锁状态</li>
+<li>等待时间锁结束</li>
+<li>调用<code>executeProposal(0)</code>完成执行</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto">3、下一步</h1></div>
+<p dir="auto"><strong>尝试以下改进:</strong></p>
+<ol dir="auto">
+<li>实现委托投票机制</li>
+<li>添加提案类别和不同投票规则</li>
+<li>实现链上提案执行（调用其他合约）</li>
+<li>添加紧急暂停功能</li>
+<li>实现多签管理员机制</li>
+<li>创建DAO财库管理</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">📚 扩展知识</h3></div>
+<p dir="auto"><strong>委托投票实现</strong></p>
+<div class="highlight highlight-source-solidity notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">mapping</span>(<span class="pl-c1">address</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">address</span>) <span class="pl-k">public</span> delegates;
+
+<span class="pl-k">function<span class="pl-en"> delegate</span></span>(<span class="pl-c1">address</span> <span class="pl-v">delegatee</span>) <span class="pl-k">external</span> {
+    delegates[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> delegatee;
+    <span class="pl-k">emit</span> <span class="pl-en">DelegateChanged</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, delegatee);
+}
+
+<span class="pl-k">function<span class="pl-en"> getVotingPower</span></span>(<span class="pl-c1">address</span> <span class="pl-v">voter</span>) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    <span class="pl-c1">uint256</span> power <span class="pl-k">=</span> governanceToken.<span class="pl-en">balanceOf</span>(voter);
+
+    <span class="pl-c">// 加上委托给该地址的投票权</span>
+    <span class="pl-c">// 这里需要遍历或使用更复杂的数据结构</span>
+    <span class="pl-k">return</span> power;
+}</pre></div>
+<p dir="auto">委托投票允许代币持有者将投票权委托给专业的治理参与者。</p>
                     </div>
                 </div>
             </div>
